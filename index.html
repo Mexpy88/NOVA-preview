@@ -7667,35 +7667,33 @@ body.desktop-mode .activity-desktop .activity-kpi.wide{grid-column:auto!importan
   }
 }
 </style>
-<style id="r31-7-admin-header-cleanup">
-/* ===== R31.7 · ADMINISTRATION — SINGLE HIERARCHY HEADER ===== */
+<style id="r31-8-admin-premium-interactions">
+/* ===== R31.8 · ADMINISTRATION — CLEAN HEADER + PREMIUM CARD INTERACTIONS ===== */
 .admin-control-center{
   --ac-ink:#244363;
   --ac-muted:#71879a;
   --ac-line:#d7e2ea;
-  --ac-blue:#53799a;
-  --ac-green:#3c8e70;
-  --ac-purple:#6970bd;
+
+  --ac-blue:#527a9d;
+  --ac-blue-soft:#eef4f8;
+  --ac-blue-hover:#e8f1f7;
+  --ac-blue-line:#b8cedd;
+
+  --ac-green:#3f8d70;
+  --ac-green-soft:#edf7f2;
+  --ac-green-hover:#e7f5ed;
+  --ac-green-line:#b9d9ca;
+
+  --ac-purple:#676dc1;
+  --ac-purple-soft:#f0f0fb;
+  --ac-purple-hover:#ececfa;
+  --ac-purple-line:#c9c9ea;
 }
 
-/* One hierarchy only: eyebrow + icon + title + subtitle + compact stats. */
+/* ---------- HEADER: one clean hierarchy ---------- */
 .admin-control-header{
-  display:flex!important;
-  align-items:flex-end!important;
-  justify-content:space-between!important;
-  gap:28px!important;
-  margin:0 0 24px!important;
-}
-.admin-control-titleblock{
-  min-width:0!important;
-}
-.admin-control-eyebrow{
-  margin:0 0 8px 2px!important;
-  color:#3269ad!important;
-  font-size:13px!important;
-  line-height:1!important;
-  font-weight:950!important;
-  letter-spacing:.14em!important;
+  display:block!important;
+  margin:0 0 26px!important;
 }
 .admin-control-titleline{
   display:flex!important;
@@ -7704,19 +7702,19 @@ body.desktop-mode .activity-desktop .activity-kpi.wide{grid-column:auto!importan
   min-width:0!important;
 }
 .admin-control-title-icon{
-  width:60px!important;
-  height:60px!important;
-  flex:0 0 60px!important;
+  width:58px!important;
+  height:58px!important;
+  flex:0 0 58px!important;
   display:grid!important;
   place-items:center!important;
   border:1px solid #d7e3eb!important;
-  border-radius:18px!important;
+  border-radius:17px!important;
   background:#edf3f7!important;
   color:#567895!important;
-  box-shadow:0 6px 18px rgba(31,62,86,.045)!important;
+  box-shadow:0 6px 18px rgba(31,62,86,.04)!important;
 }
 .admin-control-title-icon>.ph{
-  font-size:31px!important;
+  font-size:30px!important;
 }
 .admin-control-titleline>div{
   min-width:0!important;
@@ -7724,93 +7722,105 @@ body.desktop-mode .activity-desktop .activity-kpi.wide{grid-column:auto!importan
 .admin-control-titleline h1{
   margin:0!important;
   color:#213f63!important;
-  font-size:clamp(42px,4.2vw,62px)!important;
-  line-height:.98!important;
+  font-size:clamp(34px,3.1vw,46px)!important;
+  line-height:1!important;
   font-weight:900!important;
-  letter-spacing:-.045em!important;
+  letter-spacing:-.038em!important;
 }
 .admin-control-titleline p{
-  margin:9px 0 0!important;
+  margin:8px 0 0!important;
   color:#6f8496!important;
   font-size:13px!important;
   line-height:1.4!important;
   font-weight:700!important;
 }
-.admin-control-header-stats{
-  flex:0 0 auto!important;
-  display:grid!important;
-  grid-template-columns:repeat(3,minmax(122px,1fr))!important;
-  gap:8px!important;
-}
-.admin-control-header-stats>span{
-  min-height:66px!important;
-  display:grid!important;
-  grid-template-columns:24px auto!important;
-  grid-template-rows:auto auto!important;
-  align-items:center!important;
-  column-gap:9px!important;
-  padding:10px 13px!important;
-  border:1px solid #dce6ed!important;
-  border-radius:15px!important;
-  background:rgba(255,255,255,.74)!important;
-  box-shadow:0 4px 14px rgba(30,62,86,.025)!important;
-  backdrop-filter:blur(8px)!important;
-}
-.admin-control-header-stats .ph{
-  grid-row:1/3!important;
-  font-size:20px!important;
-  color:#68849a!important;
-}
-.admin-control-header-stats b{
-  color:#294f6d!important;
-  font-size:18px!important;
-  line-height:1!important;
-  font-weight:900!important;
-}
-.admin-control-header-stats small{
-  color:#7f92a0!important;
-  font-size:8.5px!important;
-  line-height:1.1!important;
-  font-weight:850!important;
-  white-space:nowrap!important;
-}
 
-/* Operational cards */
+/* ---------- GRID ---------- */
 .admin-control-grid{
   display:grid!important;
   grid-template-columns:repeat(3,minmax(0,1fr))!important;
-  gap:14px!important;
+  gap:16px!important;
 }
+
+/* ---------- CARD BASE ---------- */
 .admin-control-card{
+  --card-accent:var(--ac-blue);
+  --card-soft:var(--ac-blue-soft);
+  --card-hover:var(--ac-blue-hover);
+  --card-line:var(--ac-blue-line);
+
   position:relative!important;
   min-width:0!important;
-  min-height:292px!important;
+  min-height:300px!important;
   display:grid!important;
   grid-template-columns:64px minmax(0,1fr)!important;
   grid-template-rows:auto 1fr auto auto!important;
-  column-gap:17px!important;
+  column-gap:18px!important;
   row-gap:0!important;
   align-items:start!important;
-  padding:22px!important;
+  padding:23px!important;
   border:1px solid var(--ac-line)!important;
-  border-radius:22px!important;
+  border-radius:23px!important;
   background:#fff!important;
-  text-align:left!important;
   color:var(--ac-ink)!important;
-  box-shadow:0 7px 22px rgba(30,62,86,.05)!important;
+  text-align:left!important;
+  box-shadow:0 8px 24px rgba(30,62,86,.055)!important;
   overflow:hidden!important;
-  transition:transform .14s ease,border-color .14s ease,box-shadow .14s ease!important;
+  isolation:isolate!important;
+  outline:none!important;
+  transition:
+    transform .18s cubic-bezier(.2,.7,.2,1),
+    border-color .18s ease,
+    background .18s ease,
+    box-shadow .18s ease!important;
 }
+.admin-control-card.sites{
+  --card-accent:var(--ac-green);
+  --card-soft:var(--ac-green-soft);
+  --card-hover:var(--ac-green-hover);
+  --card-line:var(--ac-green-line);
+}
+.admin-control-card.roles{
+  --card-accent:var(--ac-purple);
+  --card-soft:var(--ac-purple-soft);
+  --card-hover:var(--ac-purple-hover);
+  --card-line:var(--ac-purple-line);
+}
+
+/* Left semantic rail */
 .admin-control-card:before{
   content:""!important;
   position:absolute!important;
   inset:0 auto 0 0!important;
   width:4px!important;
-  background:var(--ac-blue)!important;
+  background:var(--card-accent)!important;
+  transition:width .18s ease,opacity .18s ease!important;
+  z-index:0!important;
 }
-.admin-control-card.sites:before{background:var(--ac-green)!important}
-.admin-control-card.roles:before{background:var(--ac-purple)!important}
 
+/* Very subtle colored glow, visible only on interaction */
+.admin-control-card:after{
+  content:""!important;
+  position:absolute!important;
+  width:220px!important;
+  height:220px!important;
+  right:-110px!important;
+  top:-125px!important;
+  border-radius:50%!important;
+  background:var(--card-accent)!important;
+  opacity:0!important;
+  filter:blur(4px)!important;
+  transform:scale(.86)!important;
+  transition:opacity .18s ease,transform .18s ease!important;
+  z-index:-1!important;
+}
+
+.admin-control-card>*{
+  position:relative!important;
+  z-index:1!important;
+}
+
+/* ---------- CARD ICON ---------- */
 .admin-control-card-icon{
   grid-column:1!important;
   grid-row:1/3!important;
@@ -7818,22 +7828,23 @@ body.desktop-mode .activity-desktop .activity-kpi.wide{grid-column:auto!importan
   height:64px!important;
   display:grid!important;
   place-items:center!important;
+  border:1px solid color-mix(in srgb,var(--card-accent) 12%,transparent)!important;
   border-radius:18px!important;
-  background:#eef3f7!important;
-  color:var(--ac-blue)!important;
-}
-.admin-control-card.sites .admin-control-card-icon{
-  background:#edf7f2!important;
-  color:var(--ac-green)!important;
-}
-.admin-control-card.roles .admin-control-card-icon{
-  background:#f0f0fb!important;
-  color:var(--ac-purple)!important;
+  background:var(--card-soft)!important;
+  color:var(--card-accent)!important;
+  transition:
+    transform .18s cubic-bezier(.2,.7,.2,1),
+    background .18s ease,
+    color .18s ease,
+    border-color .18s ease,
+    box-shadow .18s ease!important;
 }
 .admin-control-card-icon>.ph{
   font-size:31px!important;
+  transition:transform .18s cubic-bezier(.2,.7,.2,1)!important;
 }
 
+/* ---------- CARD COPY ---------- */
 .admin-control-card-head{
   grid-column:2!important;
   min-width:0!important;
@@ -7849,9 +7860,10 @@ body.desktop-mode .activity-desktop .activity-kpi.wide{grid-column:auto!importan
 .admin-control-card-head>b{
   display:block!important;
   color:var(--ac-ink)!important;
-  font-size:20px!important;
+  font-size:21px!important;
   line-height:1.15!important;
   font-weight:950!important;
+  transition:color .18s ease!important;
 }
 .admin-control-card-head>span{
   display:block!important;
@@ -7860,35 +7872,38 @@ body.desktop-mode .activity-desktop .activity-kpi.wide{grid-column:auto!importan
   font-size:12px!important;
   line-height:1.45!important;
   font-weight:700!important;
+  transition:color .18s ease!important;
 }
 
+/* ---------- CARD METRICS ---------- */
 .admin-control-card-stats{
   grid-column:1/-1!important;
   display:grid!important;
   grid-template-columns:1fr 1fr!important;
-  gap:8px!important;
-  margin-top:22px!important;
-  padding-top:16px!important;
+  gap:9px!important;
+  margin-top:23px!important;
+  padding-top:17px!important;
   border-top:1px solid #e7edf1!important;
+  transition:border-color .18s ease!important;
 }
 .admin-control-card-stats.single{
   grid-template-columns:1fr!important;
 }
 .admin-control-card-stats>span{
-  min-height:62px!important;
+  min-height:64px!important;
   padding:11px 12px!important;
+  border:1px solid transparent!important;
   border-radius:14px!important;
   background:#f7fafc!important;
+  transition:background .18s ease,border-color .18s ease!important;
 }
 .admin-control-card-stats strong{
   display:block!important;
-  color:#31536e!important;
-  font-size:24px!important;
+  color:var(--card-accent)!important;
+  font-size:25px!important;
   line-height:1!important;
   font-weight:900!important;
 }
-.admin-control-card.sites .admin-control-card-stats strong{color:#31775e!important}
-.admin-control-card.roles .admin-control-card-stats strong{color:#5c63ae!important}
 .admin-control-card-stats small{
   display:block!important;
   margin-top:6px!important;
@@ -7898,19 +7913,25 @@ body.desktop-mode .activity-desktop .activity-kpi.wide{grid-column:auto!importan
   letter-spacing:.09em!important;
 }
 
+/* ---------- CTA ---------- */
 .admin-control-card-action{
   grid-column:1/-1!important;
-  min-height:48px!important;
+  min-height:50px!important;
   display:flex!important;
   align-items:center!important;
   justify-content:space-between!important;
   gap:12px!important;
-  margin-top:12px!important;
-  padding:0 14px!important;
-  border:1px solid #dfe7ec!important;
-  border-radius:13px!important;
-  background:#f8fafc!important;
-  color:#486982!important;
+  margin-top:13px!important;
+  padding:0 15px!important;
+  border:1px solid color-mix(in srgb,var(--card-accent) 18%,#dfe7ec)!important;
+  border-radius:14px!important;
+  background:color-mix(in srgb,var(--card-soft) 70%,#fff)!important;
+  color:var(--card-accent)!important;
+  transition:
+    background .18s ease,
+    border-color .18s ease,
+    color .18s ease,
+    box-shadow .18s ease!important;
 }
 .admin-control-card-action b{
   font-size:10.5px!important;
@@ -7919,50 +7940,107 @@ body.desktop-mode .activity-desktop .activity-kpi.wide{grid-column:auto!importan
 }
 .admin-control-card-action>.ph{
   font-size:17px!important;
-  transition:transform .14s ease!important;
-}
-.admin-control-card.sites .admin-control-card-action{
-  background:#f4faf7!important;
-  border-color:#deebe4!important;
-  color:#39755f!important;
-}
-.admin-control-card.roles .admin-control-card-action{
-  background:#f7f7fc!important;
-  border-color:#e3e3f1!important;
-  color:#5d64aa!important;
+  transition:transform .18s cubic-bezier(.2,.7,.2,1)!important;
 }
 
+/* ---------- DESKTOP INTERACTION ---------- */
 @media(hover:hover) and (pointer:fine){
   .admin-control-card:hover{
-    transform:translateY(-2px)!important;
-    border-color:#c8d7e1!important;
-    box-shadow:0 13px 30px rgba(30,62,86,.085)!important;
+    transform:translateY(-4px)!important;
+    border-color:var(--card-line)!important;
+    background:
+      linear-gradient(180deg,color-mix(in srgb,var(--card-hover) 68%,#fff) 0%,#fff 62%)!important;
+    box-shadow:
+      0 16px 38px rgba(30,62,86,.11),
+      0 0 0 1px color-mix(in srgb,var(--card-accent) 8%,transparent)!important;
   }
-  .admin-control-card.sites:hover{border-color:#c9ded3!important}
-  .admin-control-card.roles:hover{border-color:#d6d6eb!important}
+  .admin-control-card:hover:before{
+    width:6px!important;
+  }
+  .admin-control-card:hover:after{
+    opacity:.055!important;
+    transform:scale(1)!important;
+  }
+  .admin-control-card:hover .admin-control-card-icon{
+    transform:translateY(-2px)!important;
+    background:var(--card-accent)!important;
+    color:#fff!important;
+    border-color:var(--card-accent)!important;
+    box-shadow:0 8px 18px color-mix(in srgb,var(--card-accent) 20%,transparent)!important;
+  }
+  .admin-control-card:hover .admin-control-card-icon>.ph{
+    transform:scale(1.06)!important;
+  }
+  .admin-control-card:hover .admin-control-card-head>b{
+    color:var(--card-accent)!important;
+  }
+  .admin-control-card:hover .admin-control-card-stats{
+    border-top-color:color-mix(in srgb,var(--card-accent) 18%,#e7edf1)!important;
+  }
+  .admin-control-card:hover .admin-control-card-stats>span{
+    background:color-mix(in srgb,var(--card-soft) 72%,#fff)!important;
+    border-color:color-mix(in srgb,var(--card-accent) 10%,transparent)!important;
+  }
+  .admin-control-card:hover .admin-control-card-action{
+    background:var(--card-accent)!important;
+    border-color:var(--card-accent)!important;
+    color:#fff!important;
+    box-shadow:0 7px 16px color-mix(in srgb,var(--card-accent) 18%,transparent)!important;
+  }
   .admin-control-card:hover .admin-control-card-action>.ph{
-    transform:translateX(3px)!important;
+    transform:translateX(4px)!important;
   }
 }
 
+/* Keyboard: same semantic emphasis without relying on hover. */
+.admin-control-card:focus-visible{
+  border-color:var(--card-line)!important;
+  background:linear-gradient(180deg,color-mix(in srgb,var(--card-hover) 58%,#fff),#fff 68%)!important;
+  box-shadow:
+    0 0 0 4px color-mix(in srgb,var(--card-accent) 16%,transparent),
+    0 14px 34px rgba(30,62,86,.10)!important;
+}
+.admin-control-card:focus-visible .admin-control-card-icon{
+  background:var(--card-accent)!important;
+  border-color:var(--card-accent)!important;
+  color:#fff!important;
+}
+.admin-control-card:focus-visible .admin-control-card-action{
+  background:var(--card-accent)!important;
+  border-color:var(--card-accent)!important;
+  color:#fff!important;
+}
+
+/* Click/tap feedback. */
+.admin-control-card:active{
+  transform:translateY(-1px) scale(.995)!important;
+  transition-duration:70ms!important;
+}
+.admin-control-card:active .admin-control-card-action{
+  filter:brightness(.96)!important;
+}
+
+/* ---------- LARGE DESKTOP ---------- */
 @media(min-width:1500px){
   .admin-control-header{
-    margin-bottom:26px!important;
+    margin-bottom:28px!important;
   }
   .admin-control-title-icon{
-    width:66px!important;
-    height:66px!important;
-    flex-basis:66px!important;
-    border-radius:19px!important;
+    width:62px!important;
+    height:62px!important;
+    flex-basis:62px!important;
+    border-radius:18px!important;
   }
-  .admin-control-title-icon>.ph{font-size:34px!important}
+  .admin-control-title-icon>.ph{font-size:32px!important}
   .admin-control-titleline{gap:18px!important}
-  .admin-control-titleline p{font-size:13.5px!important}
-  .admin-control-header-stats{
-    grid-template-columns:repeat(3,minmax(130px,1fr))!important;
+  .admin-control-titleline h1{
+    font-size:46px!important;
+  }
+  .admin-control-titleline p{
+    font-size:13.5px!important;
   }
   .admin-control-card{
-    min-height:320px!important;
+    min-height:324px!important;
     padding:25px!important;
     grid-template-columns:70px minmax(0,1fr)!important;
     column-gap:19px!important;
@@ -7978,35 +8056,21 @@ body.desktop-mode .activity-desktop .activity-kpi.wide{grid-column:auto!importan
   .admin-control-card-action{min-height:52px!important}
 }
 
-@media(max-width:1180px){
-  .admin-control-header{
-    align-items:flex-start!important;
-    flex-direction:column!important;
-    gap:18px!important;
-  }
-  .admin-control-header-stats{
-    width:100%!important;
-  }
-}
-
+/* ---------- MEDIUM ---------- */
 @media(max-width:1100px){
   .admin-control-grid{
     grid-template-columns:1fr 1fr!important;
   }
   .admin-control-card.roles{
     grid-column:1/-1!important;
-    min-height:230px!important;
+    min-height:238px!important;
   }
 }
 
+/* ---------- MOBILE ---------- */
 @media(max-width:700px){
   .admin-control-header{
     margin-bottom:18px!important;
-    gap:14px!important;
-  }
-  .admin-control-eyebrow{
-    margin-left:0!important;
-    font-size:11px!important;
   }
   .admin-control-titleline{
     align-items:flex-start!important;
@@ -8020,22 +8084,16 @@ body.desktop-mode .activity-desktop .activity-kpi.wide{grid-column:auto!importan
   }
   .admin-control-title-icon>.ph{font-size:25px!important}
   .admin-control-titleline h1{
-    font-size:clamp(31px,9vw,42px)!important;
-    line-height:1!important;
+    font-size:clamp(29px,8.5vw,38px)!important;
+    line-height:1.02!important;
   }
   .admin-control-titleline p{
     margin-top:7px!important;
     font-size:10.5px!important;
   }
-  .admin-control-header-stats{
-    grid-template-columns:1fr!important;
-    gap:7px!important;
-  }
-  .admin-control-header-stats>span{
-    min-height:52px!important;
-  }
   .admin-control-grid{
     grid-template-columns:1fr!important;
+    gap:11px!important;
   }
   .admin-control-card,
   .admin-control-card.roles{
@@ -9019,7 +9077,7 @@ class UI{
     const operatorCard=this.auth.canManageOperators()?`<button class="admin-control-card operators" data-action="admin-operators"><span class="admin-control-card-icon">${phRegular('users-three')}</span><span class="admin-control-card-head"><small>ACCESSI E PROFILI</small><b>Operatori</b><span>Crea e gestisci gli accessi, assegna sedi, ruoli e PIN.</span></span><span class="admin-control-card-stats"><span><strong>${activeOps}</strong><small>ATTIVI</small></span><span><strong>${inactiveOps}</strong><small>DISATTIVATI</small></span></span><span class="admin-control-card-action"><b>GESTISCI OPERATORI</b>${phRegular('arrow-right')}</span></button>`:''; 
     const siteCard=this.auth.canManageSites()?`<button class="admin-control-card sites" data-action="admin-sites"><span class="admin-control-card-icon">${phRegular('buildings')}</span><span class="admin-control-card-head"><small>STRUTTURA OPERATIVA</small><b>Sedi</b><span>Gestisci sedi e magazzini operativi disponibili in SOMA HUB.</span></span><span class="admin-control-card-stats"><span><strong>${activeSites}</strong><small>ATTIVE</small></span><span><strong>${inactiveSites}</strong><small>DISATTIVATE</small></span></span><span class="admin-control-card-action"><b>GESTISCI SEDI</b>${phRegular('arrow-right')}</span></button>`:''; 
     const roleCard=this.auth.canManageRoles()?`<button class="admin-control-card roles" data-action="admin-roles"><span class="admin-control-card-icon">${phRegular('shield-check')}</span><span class="admin-control-card-head"><small>REGOLE DI ACCESSO</small><b>Ruoli e permessi</b><span>Definisci cosa può vedere e fare ogni profilo operativo.</span></span><span class="admin-control-card-stats single"><span><strong>${roleCount}</strong><small>RUOLI CONFIGURATI</small></span></span><span class="admin-control-card-action"><b>GESTISCI RUOLI</b>${phRegular('arrow-right')}</span></button>`:''; 
-    return `<section class="admin-control-center"><header class="admin-control-header"><div class="admin-control-titleblock"><div class="admin-control-eyebrow">AMMINISTRAZIONE</div><div class="admin-control-titleline"><span class="admin-control-title-icon">${phRegular('gear-six')}</span><div><h1>Amministrazione SOMA HUB</h1><p>Gestisci accessi, sedi e autorizzazioni da un unico punto.</p></div></div></div><div class="admin-control-header-stats"><span>${phRegular('users-three')}<b>${activeOps}</b><small>operatori attivi</small></span><span>${phRegular('buildings')}<b>${activeSites}</b><small>sedi attive</small></span><span>${phRegular('shield-check')}<b>${roleCount}</b><small>ruoli</small></span></div></header><div class="admin-control-grid">${operatorCard}${siteCard}${roleCard}</div></section>`
+    return `<section class="admin-control-center"><header class="admin-control-header"><div class="admin-control-titleline"><span class="admin-control-title-icon">${phRegular('gear-six')}</span><div><h1>Amministrazione SOMA HUB</h1><p>Gestisci accessi, sedi e autorizzazioni da un unico punto.</p></div></div></header><div class="admin-control-grid">${operatorCard}${siteCard}${roleCard}</div></section>`
   }
   adminOperatorSiteNames(op){const ids=allowedSiteIdsFor(op);return ids.length?ids.map(id=>SITES[id]?.name||id).join(' · '):'Nessuna sede'}
   adminOperators(){
