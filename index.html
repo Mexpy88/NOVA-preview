@@ -7889,28 +7889,26 @@ class UI{
     if(entering)this.masterView={...this.masterView,location:'',pallet:'',sort:'article',page:1};
     document.getElementById('masterRequestDialog')?.close();this.renderView()
   }
+  renderMasterViewerBodyPreserveScroll(){
+    const list=document.querySelector('.master-request-aggregate-list'),top=list?.scrollTop||0;this.renderMasterViewerBody();const next=document.querySelector('.master-request-aggregate-list');if(next)next.scrollTop=top
+  }
   toggleMasterRequestLocations(encoded,el){
     if(!this.masterRequestMode||!this.auth.can('REQUEST_CREATE'))return;
     const item=this.decodeMasterRequestItem(encoded);if(!item.article)return;
-    const key=this.masterRequestKey(item.article,item.size),next=this.masterRequestOpenKey===key?'':key;this.masterRequestOpenKey=next;
-    const list=el?.closest('.master-request-aggregate-list');if(!list){this.renderMasterViewerBody();return}
-    for(const card of list.querySelectorAll('.master-request-aggregate-card.locations-open')){
-      if(card===el.closest('.master-request-aggregate-card'))continue;
-      card.classList.remove('locations-open');card.querySelector('.master-request-locations-panel')?.remove();const btn=card.querySelector('[data-action="master-request-locations"]');btn?.classList.remove('active');btn?.setAttribute('aria-expanded','false')
-    }
-    const card=el.closest('.master-request-aggregate-card');if(!card)return;
-    if(!next){
-      card.classList.remove('locations-open');card.querySelector('.master-request-locations-panel')?.remove();el.classList.remove('active');el.setAttribute('aria-expanded','false');return
-    }
-    const scrollTop=list.scrollTop;this.renderMasterViewerBody();const nextList=document.querySelector('.master-request-aggregate-list');if(nextList)nextList.scrollTop=scrollTop
+    const key=this.masterRequestKey(item.article,item.size),next=this.masterRequestOpenKey===key?'':key,list=el?.closest('.master-request-aggregate-list'),card=el?.closest('.master-request-aggregate-card'),anchorTop=card?.getBoundingClientRect?.().top??null;
+    this.masterRequestOpenKey=next;
+    if(!list){this.renderMasterViewerBody();return}
+    const oldScroll=list.scrollTop;this.renderMasterViewerBody();const nextList=document.querySelector('.master-request-aggregate-list');if(!nextList)return;nextList.scrollTop=oldScroll;
+    const nextBtn=[...nextList.querySelectorAll('[data-action="master-request-locations"]')].find(x=>x.dataset.item===encoded),nextCard=nextBtn?.closest('.master-request-aggregate-card');
+    if(anchorTop!=null&&nextCard){const afterTop=nextCard.getBoundingClientRect().top;nextList.scrollTop+=afterTop-anchorTop}
   }
   toggleMasterRequestItem(encoded){
     if(!this.masterRequestMode||!this.auth.can('REQUEST_CREATE'))return;const item=this.decodeMasterRequestItem(encoded);if(!item.article)throw new Error('Articolo non valido.');const key=this.masterRequestKey(item.article,item.size),idx=this.masterRequestItems.findIndex(x=>x.key===key);
     if(idx>=0)this.masterRequestItems.splice(idx,1);else{const available=this.domain.stock.total(item.article,item.size);if(available<=0)throw new Error('Questo articolo non è più disponibile in magazzino.');this.masterRequestItems.push({key,article:item.article,size:item.size,cartonsRequested:1})}
-    this.renderMasterViewerBody()
+    this.renderMasterViewerBodyPreserveScroll()
   }
   updateMasterRequestQty(el,finalize=false){
-    if(!el?.dataset?.masterRequestQty)return;const item=this.decodeMasterRequestItem(el.dataset.masterRequestQty),found=this.masterRequestFind(item.article,item.size);if(!found)return;const raw=String(el.value??'').trim();if(!raw&&!finalize)return;let qty=Math.floor(Number(raw));if(!Number.isFinite(qty)||qty<1)qty=1;qty=Math.min(999,qty);found.cartonsRequested=qty;if(finalize){el.value=String(qty);this.renderMasterViewerBody()}else this.renderMasterRequestDock()
+    if(!el?.dataset?.masterRequestQty)return;const item=this.decodeMasterRequestItem(el.dataset.masterRequestQty),found=this.masterRequestFind(item.article,item.size);if(!found)return;const raw=String(el.value??'').trim();if(!raw&&!finalize)return;let qty=Math.floor(Number(raw));if(!Number.isFinite(qty)||qty<1)qty=1;qty=Math.min(999,qty);found.cartonsRequested=qty;if(finalize){el.value=String(qty);this.renderMasterViewerBodyPreserveScroll()}else this.renderMasterRequestDock()
   }
   adjustMasterRequestQty(encoded,delta){
     const item=this.decodeMasterRequestItem(encoded),found=this.masterRequestFind(item.article,item.size);if(!found)return;found.cartonsRequested=Math.max(1,Math.min(999,Math.floor(Number(found.cartonsRequested)||1)+delta));this.openMasterRequestReview()
