@@ -3942,6 +3942,95 @@ body.desktop-mode .activity-desktop .activity-kpi.wide{grid-column:auto!importan
   }
 }
 </style>
+
+<style id="r29-3-module-color-state-fix">
+/* ===== R29.3 · MODULE COLOR / INTERACTION STATE FIX ===== */
+
+/* A module header must always inherit its SECTION color.
+   This intentionally overrides semantic action colors such as data-action="issue". */
+.module .module-head{
+  --action-color:var(--accent)!important;
+  --action-soft:var(--tint)!important;
+}
+
+/* Explicit section identities */
+.module.receiving .module-head,
+.module.receiving .module-action{
+  --action-color:var(--section-receiving)!important;
+  --action-soft:var(--section-receiving-soft)!important;
+}
+.module.movement .module-head,
+.module.movement .module-action{
+  --action-color:var(--section-movement)!important;
+  --action-soft:var(--section-movement-soft)!important;
+}
+.module.stock .module-head,
+.module.stock .module-action{
+  --action-color:var(--section-stock)!important;
+  --action-soft:var(--section-stock-soft)!important;
+}
+.module.requests .module-head,
+.module.requests .module-action{
+  --action-color:var(--section-requests)!important;
+  --action-soft:var(--section-requests-soft)!important;
+}
+.module.registry .module-head,
+.module.registry .module-action,
+.module.administration .module-head,
+.module.administration .module-action{
+  --action-color:var(--nova-slate)!important;
+  --action-soft:var(--nova-slate-soft)!important;
+}
+
+/* Keep the resting state clean and section-consistent */
+.module-head{
+  background:#fff!important;
+}
+.module-action{
+  background:#fff!important;
+  transition:
+    background-color 150ms ease,
+    box-shadow 150ms ease,
+    transform 120ms ease!important;
+}
+
+/* Desktop: clearly visible cell colour on hover */
+@media(hover:hover) and (pointer:fine){
+  .module-head:hover{
+    background:color-mix(in srgb,var(--action-color) 11%,#fff)!important;
+  }
+  .module-head:hover .module-open{
+    color:var(--action-color)!important;
+  }
+  .module-action:hover{
+    background:color-mix(in srgb,var(--action-color) 14%,#fff)!important;
+    box-shadow:inset 0 0 0 1px color-mix(in srgb,var(--action-color) 20%,var(--nova-line))!important;
+    transform:none!important;
+  }
+  .module-action:hover::after{
+    opacity:.9!important;
+    transform:scaleX(1)!important;
+  }
+}
+
+/* Mouse click / touch: stronger state */
+.module-head:active{
+  background:color-mix(in srgb,var(--action-color) 18%,#fff)!important;
+}
+.module-action:active{
+  background:color-mix(in srgb,var(--action-color) 22%,#fff)!important;
+  box-shadow:inset 0 0 0 1px color-mix(in srgb,var(--action-color) 30%,var(--nova-line))!important;
+}
+
+/* Icons and labels always stay tied to the parent section */
+.module-action>.ph,
+.module-action>.ph-duotone,
+.module-action b,
+.module-head .module-icon,
+.module-head .module-open{
+  color:var(--action-color)!important;
+}
+</style>
 </head>
 <body>
 <header id="topbar" class="topbar"></header>
