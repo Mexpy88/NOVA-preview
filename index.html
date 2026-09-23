@@ -7667,116 +7667,115 @@ body.desktop-mode .activity-desktop .activity-kpi.wide{grid-column:auto!importan
   }
 }
 </style>
-<style id="r31-6-admin-control-center-redesign">
-/* ===== R31.6 · ADMINISTRATION CONTROL CENTER ===== */
+<style id="r31-7-admin-header-cleanup">
+/* ===== R31.7 · ADMINISTRATION — SINGLE HIERARCHY HEADER ===== */
 .admin-control-center{
   --ac-ink:#244363;
   --ac-muted:#71879a;
   --ac-line:#d7e2ea;
-  --ac-soft:#f7fafc;
   --ac-blue:#53799a;
   --ac-green:#3c8e70;
   --ac-purple:#6970bd;
 }
-.admin-control-center>.page-title{
-  margin-bottom:18px!important;
-}
 
-/* Compact global overview replaces the oversized KPI row. */
-.admin-control-overview{
-  min-height:118px!important;
+/* One hierarchy only: eyebrow + icon + title + subtitle + compact stats. */
+.admin-control-header{
   display:flex!important;
-  align-items:center!important;
+  align-items:flex-end!important;
   justify-content:space-between!important;
-  gap:24px!important;
-  margin-bottom:18px!important;
-  padding:20px 22px!important;
-  border:1px solid var(--ac-line)!important;
-  border-radius:22px!important;
-  background:linear-gradient(180deg,#fff,#f9fbfc)!important;
-  box-shadow:0 8px 26px rgba(31,62,86,.055)!important;
+  gap:28px!important;
+  margin:0 0 24px!important;
 }
-.admin-control-overview-main{
+.admin-control-titleblock{
   min-width:0!important;
+}
+.admin-control-eyebrow{
+  margin:0 0 8px 2px!important;
+  color:#3269ad!important;
+  font-size:13px!important;
+  line-height:1!important;
+  font-weight:950!important;
+  letter-spacing:.14em!important;
+}
+.admin-control-titleline{
   display:flex!important;
   align-items:center!important;
-  gap:17px!important;
+  gap:16px!important;
+  min-width:0!important;
 }
-.admin-control-overview-icon{
+.admin-control-title-icon{
   width:60px!important;
   height:60px!important;
   flex:0 0 60px!important;
   display:grid!important;
   place-items:center!important;
+  border:1px solid #d7e3eb!important;
   border-radius:18px!important;
   background:#edf3f7!important;
   color:#567895!important;
+  box-shadow:0 6px 18px rgba(31,62,86,.045)!important;
 }
-.admin-control-overview-icon>.ph{
+.admin-control-title-icon>.ph{
   font-size:31px!important;
 }
-.admin-control-overview-main>div{
+.admin-control-titleline>div{
   min-width:0!important;
 }
-.admin-control-overview-main small{
-  display:block!important;
-  margin-bottom:5px!important;
-  color:#71889a!important;
-  font-size:9.5px!important;
-  font-weight:950!important;
-  letter-spacing:.12em!important;
-}
-.admin-control-overview-main b{
-  display:block!important;
-  color:var(--ac-ink)!important;
-  font-size:20px!important;
-  line-height:1.15!important;
+.admin-control-titleline h1{
+  margin:0!important;
+  color:#213f63!important;
+  font-size:clamp(42px,4.2vw,62px)!important;
+  line-height:.98!important;
   font-weight:900!important;
+  letter-spacing:-.045em!important;
 }
-.admin-control-overview-main div>span{
-  display:block!important;
-  margin-top:6px!important;
-  color:var(--ac-muted)!important;
-  font-size:12px!important;
+.admin-control-titleline p{
+  margin:9px 0 0!important;
+  color:#6f8496!important;
+  font-size:13px!important;
   line-height:1.4!important;
   font-weight:700!important;
 }
-.admin-control-overview-stats{
+.admin-control-header-stats{
   flex:0 0 auto!important;
   display:grid!important;
-  grid-template-columns:repeat(3,minmax(112px,1fr))!important;
+  grid-template-columns:repeat(3,minmax(122px,1fr))!important;
   gap:8px!important;
 }
-.admin-control-overview-stats>span{
+.admin-control-header-stats>span{
   min-height:66px!important;
   display:grid!important;
   grid-template-columns:24px auto!important;
   grid-template-rows:auto auto!important;
   align-items:center!important;
-  column-gap:8px!important;
-  padding:10px 12px!important;
-  border:1px solid #e0e8ee!important;
-  border-radius:14px!important;
-  background:#f7fafc!important;
+  column-gap:9px!important;
+  padding:10px 13px!important;
+  border:1px solid #dce6ed!important;
+  border-radius:15px!important;
+  background:rgba(255,255,255,.74)!important;
+  box-shadow:0 4px 14px rgba(30,62,86,.025)!important;
+  backdrop-filter:blur(8px)!important;
 }
-.admin-control-overview-stats .ph{
+.admin-control-header-stats .ph{
   grid-row:1/3!important;
   font-size:20px!important;
   color:#68849a!important;
 }
-.admin-control-overview-stats b{
+.admin-control-header-stats b{
   color:#294f6d!important;
   font-size:18px!important;
   line-height:1!important;
+  font-weight:900!important;
 }
-.admin-control-overview-stats small{
+.admin-control-header-stats small{
   color:#7f92a0!important;
   font-size:8.5px!important;
+  line-height:1.1!important;
   font-weight:850!important;
   white-space:nowrap!important;
 }
 
-/* Three operational cards: one destination, one clear CTA. */
+/* Operational cards */
 .admin-control-grid{
   display:grid!important;
   grid-template-columns:repeat(3,minmax(0,1fr))!important;
@@ -7811,6 +7810,7 @@ body.desktop-mode .activity-desktop .activity-kpi.wide{grid-column:auto!importan
 }
 .admin-control-card.sites:before{background:var(--ac-green)!important}
 .admin-control-card.roles:before{background:var(--ac-purple)!important}
+
 .admin-control-card-icon{
   grid-column:1!important;
   grid-row:1/3!important;
@@ -7833,6 +7833,7 @@ body.desktop-mode .activity-desktop .activity-kpi.wide{grid-column:auto!importan
 .admin-control-card-icon>.ph{
   font-size:31px!important;
 }
+
 .admin-control-card-head{
   grid-column:2!important;
   min-width:0!important;
@@ -7860,6 +7861,7 @@ body.desktop-mode .activity-desktop .activity-kpi.wide{grid-column:auto!importan
   line-height:1.45!important;
   font-weight:700!important;
 }
+
 .admin-control-card-stats{
   grid-column:1/-1!important;
   display:grid!important;
@@ -7895,6 +7897,7 @@ body.desktop-mode .activity-desktop .activity-kpi.wide{grid-column:auto!importan
   font-weight:950!important;
   letter-spacing:.09em!important;
 }
+
 .admin-control-card-action{
   grid-column:1/-1!important;
   min-height:48px!important;
@@ -7928,6 +7931,7 @@ body.desktop-mode .activity-desktop .activity-kpi.wide{grid-column:auto!importan
   border-color:#e3e3f1!important;
   color:#5d64aa!important;
 }
+
 @media(hover:hover) and (pointer:fine){
   .admin-control-card:hover{
     transform:translateY(-2px)!important;
@@ -7941,15 +7945,20 @@ body.desktop-mode .activity-desktop .activity-kpi.wide{grid-column:auto!importan
   }
 }
 
-/* Large desktop: use the available space, but keep reading widths controlled. */
 @media(min-width:1500px){
-  .admin-control-overview{
-    min-height:126px!important;
-    padding:23px 26px!important;
+  .admin-control-header{
+    margin-bottom:26px!important;
   }
-  .admin-control-overview-main b{font-size:22px!important}
-  .admin-control-overview-main div>span{font-size:13px!important}
-  .admin-control-overview-stats{
+  .admin-control-title-icon{
+    width:66px!important;
+    height:66px!important;
+    flex-basis:66px!important;
+    border-radius:19px!important;
+  }
+  .admin-control-title-icon>.ph{font-size:34px!important}
+  .admin-control-titleline{gap:18px!important}
+  .admin-control-titleline p{font-size:13.5px!important}
+  .admin-control-header-stats{
     grid-template-columns:repeat(3,minmax(130px,1fr))!important;
   }
   .admin-control-card{
@@ -7969,15 +7978,18 @@ body.desktop-mode .activity-desktop .activity-kpi.wide{grid-column:auto!importan
   .admin-control-card-action{min-height:52px!important}
 }
 
-/* Medium desktop / tablet landscape. */
-@media(max-width:1100px){
-  .admin-control-overview{
+@media(max-width:1180px){
+  .admin-control-header{
     align-items:flex-start!important;
     flex-direction:column!important;
+    gap:18px!important;
   }
-  .admin-control-overview-stats{
+  .admin-control-header-stats{
     width:100%!important;
   }
+}
+
+@media(max-width:1100px){
   .admin-control-grid{
     grid-template-columns:1fr 1fr!important;
   }
@@ -7987,33 +7999,39 @@ body.desktop-mode .activity-desktop .activity-kpi.wide{grid-column:auto!importan
   }
 }
 
-/* Mobile: one clear vertical path, preserving tap targets. */
 @media(max-width:700px){
-  .admin-control-center>.page-title{margin-bottom:14px!important}
-  .admin-control-overview{
-    min-height:0!important;
-    padding:15px!important;
+  .admin-control-header{
+    margin-bottom:18px!important;
     gap:14px!important;
-    border-radius:18px!important;
   }
-  .admin-control-overview-main{
+  .admin-control-eyebrow{
+    margin-left:0!important;
+    font-size:11px!important;
+  }
+  .admin-control-titleline{
     align-items:flex-start!important;
     gap:12px!important;
   }
-  .admin-control-overview-icon{
+  .admin-control-title-icon{
     width:48px!important;
     height:48px!important;
     flex-basis:48px!important;
     border-radius:14px!important;
   }
-  .admin-control-overview-icon>.ph{font-size:25px!important}
-  .admin-control-overview-main b{font-size:17px!important}
-  .admin-control-overview-main div>span{font-size:10.5px!important}
-  .admin-control-overview-stats{
+  .admin-control-title-icon>.ph{font-size:25px!important}
+  .admin-control-titleline h1{
+    font-size:clamp(31px,9vw,42px)!important;
+    line-height:1!important;
+  }
+  .admin-control-titleline p{
+    margin-top:7px!important;
+    font-size:10.5px!important;
+  }
+  .admin-control-header-stats{
     grid-template-columns:1fr!important;
     gap:7px!important;
   }
-  .admin-control-overview-stats>span{
+  .admin-control-header-stats>span{
     min-height:52px!important;
   }
   .admin-control-grid{
@@ -8041,9 +8059,7 @@ body.desktop-mode .activity-desktop .activity-kpi.wide{grid-column:auto!importan
     padding-top:13px!important;
   }
   .admin-control-card-stats strong{font-size:22px!important}
-  .admin-control-card-action{
-    min-height:46px!important;
-  }
+  .admin-control-card-action{min-height:46px!important}
 }
 </style>
 </head>
@@ -9003,7 +9019,7 @@ class UI{
     const operatorCard=this.auth.canManageOperators()?`<button class="admin-control-card operators" data-action="admin-operators"><span class="admin-control-card-icon">${phRegular('users-three')}</span><span class="admin-control-card-head"><small>ACCESSI E PROFILI</small><b>Operatori</b><span>Crea e gestisci gli accessi, assegna sedi, ruoli e PIN.</span></span><span class="admin-control-card-stats"><span><strong>${activeOps}</strong><small>ATTIVI</small></span><span><strong>${inactiveOps}</strong><small>DISATTIVATI</small></span></span><span class="admin-control-card-action"><b>GESTISCI OPERATORI</b>${phRegular('arrow-right')}</span></button>`:''; 
     const siteCard=this.auth.canManageSites()?`<button class="admin-control-card sites" data-action="admin-sites"><span class="admin-control-card-icon">${phRegular('buildings')}</span><span class="admin-control-card-head"><small>STRUTTURA OPERATIVA</small><b>Sedi</b><span>Gestisci sedi e magazzini operativi disponibili in SOMA HUB.</span></span><span class="admin-control-card-stats"><span><strong>${activeSites}</strong><small>ATTIVE</small></span><span><strong>${inactiveSites}</strong><small>DISATTIVATE</small></span></span><span class="admin-control-card-action"><b>GESTISCI SEDI</b>${phRegular('arrow-right')}</span></button>`:''; 
     const roleCard=this.auth.canManageRoles()?`<button class="admin-control-card roles" data-action="admin-roles"><span class="admin-control-card-icon">${phRegular('shield-check')}</span><span class="admin-control-card-head"><small>REGOLE DI ACCESSO</small><b>Ruoli e permessi</b><span>Definisci cosa può vedere e fare ogni profilo operativo.</span></span><span class="admin-control-card-stats single"><span><strong>${roleCount}</strong><small>RUOLI CONFIGURATI</small></span></span><span class="admin-control-card-action"><b>GESTISCI RUOLI</b>${phRegular('arrow-right')}</span></button>`:''; 
-    return `<section class="admin-control-center">${this.sectionTitle('AMMINISTRAZIONE','Centro di controllo')}<section class="admin-control-overview"><div class="admin-control-overview-main"><span class="admin-control-overview-icon">${phRegular('gear-six')}</span><div><small>CONFIGURAZIONE GLOBALE</small><b>Amministrazione SOMA HUB</b><span>Gestisci accessi, sedi e autorizzazioni da un unico punto.</span></div></div><div class="admin-control-overview-stats"><span>${phRegular('users-three')}<b>${activeOps}</b><small>operatori attivi</small></span><span>${phRegular('buildings')}<b>${activeSites}</b><small>sedi attive</small></span><span>${phRegular('shield-check')}<b>${roleCount}</b><small>ruoli</small></span></div></section><div class="admin-control-grid">${operatorCard}${siteCard}${roleCard}</div></section>`
+    return `<section class="admin-control-center"><header class="admin-control-header"><div class="admin-control-titleblock"><div class="admin-control-eyebrow">AMMINISTRAZIONE</div><div class="admin-control-titleline"><span class="admin-control-title-icon">${phRegular('gear-six')}</span><div><h1>Amministrazione SOMA HUB</h1><p>Gestisci accessi, sedi e autorizzazioni da un unico punto.</p></div></div></div><div class="admin-control-header-stats"><span>${phRegular('users-three')}<b>${activeOps}</b><small>operatori attivi</small></span><span>${phRegular('buildings')}<b>${activeSites}</b><small>sedi attive</small></span><span>${phRegular('shield-check')}<b>${roleCount}</b><small>ruoli</small></span></div></header><div class="admin-control-grid">${operatorCard}${siteCard}${roleCard}</div></section>`
   }
   adminOperatorSiteNames(op){const ids=allowedSiteIdsFor(op);return ids.length?ids.map(id=>SITES[id]?.name||id).join(' · '):'Nessuna sede'}
   adminOperators(){
