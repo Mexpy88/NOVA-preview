@@ -7292,6 +7292,381 @@ body.desktop-mode .activity-desktop .activity-kpi.wide{grid-column:auto!importan
   }
 }
 </style>
+<style id="r31-5-registry-home-redesign">
+/* ===== R31.5 · REGISTRY HOME ===== */
+.registry-hub{
+  --rh-ink:#244363;
+  --rh-muted:#71879a;
+  --rh-line:#d7e2ea;
+  --rh-soft:#f7fafc;
+  --rh-slate:#5d7890;
+  --rh-audit:#6670c9;
+  --rh-excel:#2f9b63;
+}
+.registry-hub>.page-title{
+  margin-bottom:18px!important;
+}
+.registry-hub-overview{
+  min-height:116px!important;
+  display:flex!important;
+  align-items:center!important;
+  justify-content:space-between!important;
+  gap:24px!important;
+  margin-bottom:18px!important;
+  padding:20px 22px!important;
+  border:1px solid var(--rh-line)!important;
+  border-radius:22px!important;
+  background:linear-gradient(180deg,#fff,#f9fbfc)!important;
+  box-shadow:0 8px 26px rgba(31,62,86,.055)!important;
+}
+.registry-hub-overview-copy{
+  min-width:0!important;
+  display:flex!important;
+  align-items:center!important;
+  gap:17px!important;
+}
+.registry-hub-overview-icon{
+  width:58px!important;
+  height:58px!important;
+  flex:0 0 58px!important;
+  display:grid!important;
+  place-items:center!important;
+  border-radius:17px!important;
+  background:#edf3f7!important;
+  color:var(--rh-slate)!important;
+}
+.registry-hub-overview-icon>.ph{
+  font-size:30px!important;
+}
+.registry-hub-overview-copy>div{
+  min-width:0!important;
+}
+.registry-hub-overview-copy small{
+  display:block!important;
+  margin-bottom:5px!important;
+  color:#71889a!important;
+  font-size:9.5px!important;
+  font-weight:950!important;
+  letter-spacing:.12em!important;
+}
+.registry-hub-overview-copy b{
+  display:block!important;
+  color:var(--rh-ink)!important;
+  font-size:19px!important;
+  line-height:1.15!important;
+}
+.registry-hub-overview-copy div>span{
+  display:block!important;
+  margin-top:5px!important;
+  color:var(--rh-muted)!important;
+  font-size:12px!important;
+  line-height:1.4!important;
+  font-weight:700!important;
+}
+.registry-hub-last{
+  flex:0 0 auto!important;
+  min-width:230px!important;
+  padding:13px 15px!important;
+  border:1px solid #e0e8ee!important;
+  border-radius:15px!important;
+  background:#f7fafc!important;
+}
+.registry-hub-last>small{
+  display:block!important;
+  margin-bottom:5px!important;
+  color:#8092a0!important;
+  font-size:8.5px!important;
+  font-weight:950!important;
+  letter-spacing:.11em!important;
+}
+.registry-hub-last>b{
+  display:block!important;
+  color:#31536e!important;
+  font-size:13px!important;
+  line-height:1.25!important;
+}
+.registry-hub-last>span{
+  display:flex!important;
+  align-items:center!important;
+  gap:6px!important;
+  margin-top:7px!important;
+  color:#7890a2!important;
+  font-size:10px!important;
+  font-weight:800!important;
+}
+.registry-hub-last .ph{font-size:14px!important}
+
+.registry-hub-grid{
+  display:grid!important;
+  gap:14px!important;
+}
+.registry-hub-grid.three{
+  grid-template-columns:repeat(3,minmax(0,1fr))!important;
+}
+.registry-hub-grid.two{
+  grid-template-columns:repeat(2,minmax(0,1fr))!important;
+}
+.registry-hub-grid.one{
+  grid-template-columns:minmax(0,1fr)!important;
+}
+.registry-hub-card{
+  position:relative!important;
+  min-width:0!important;
+  min-height:245px!important;
+  display:grid!important;
+  grid-template-columns:58px minmax(0,1fr) 42px!important;
+  grid-template-rows:auto 1fr auto!important;
+  align-items:start!important;
+  gap:0 15px!important;
+  padding:20px!important;
+  border:1px solid var(--rh-line)!important;
+  border-radius:22px!important;
+  background:#fff!important;
+  text-align:left!important;
+  box-shadow:0 7px 22px rgba(30,62,86,.05)!important;
+  overflow:hidden!important;
+  transition:transform .14s ease,border-color .14s ease,box-shadow .14s ease!important;
+}
+.registry-hub-card:before{
+  content:""!important;
+  position:absolute!important;
+  inset:0 auto 0 0!important;
+  width:4px!important;
+  background:var(--rh-slate)!important;
+}
+.registry-hub-card.audit:before{background:var(--rh-audit)!important}
+.registry-hub-card.export:before{background:var(--rh-excel)!important}
+@media(hover:hover) and (pointer:fine){
+  .registry-hub-card:hover{
+    transform:translateY(-2px)!important;
+    border-color:#c8d7e1!important;
+    box-shadow:0 13px 30px rgba(30,62,86,.085)!important;
+  }
+  .registry-hub-card.export:hover{border-color:#c5dfd1!important}
+  .registry-hub-card.audit:hover{border-color:#d2d5ef!important}
+}
+.registry-hub-icon{
+  grid-column:1!important;
+  grid-row:1/3!important;
+  width:58px!important;
+  height:58px!important;
+  display:grid!important;
+  place-items:center!important;
+  border-radius:17px!important;
+  background:#eef3f7!important;
+  color:var(--rh-slate)!important;
+}
+.registry-hub-card.audit .registry-hub-icon{
+  background:#eff0fb!important;
+  color:var(--rh-audit)!important;
+}
+.registry-hub-card.export .registry-hub-icon{
+  background:#eaf7ef!important;
+  color:var(--rh-excel)!important;
+}
+.registry-hub-icon>.ph{
+  font-size:29px!important;
+}
+.registry-hub-card-copy{
+  grid-column:2!important;
+  min-width:0!important;
+}
+.registry-hub-card-copy>small{
+  display:block!important;
+  margin-bottom:6px!important;
+  color:#8193a2!important;
+  font-size:9px!important;
+  font-weight:950!important;
+  letter-spacing:.115em!important;
+}
+.registry-hub-card-copy>b{
+  display:block!important;
+  color:var(--rh-ink)!important;
+  font-size:18px!important;
+  line-height:1.15!important;
+  font-weight:950!important;
+}
+.registry-hub-card-copy>span{
+  display:block!important;
+  margin-top:8px!important;
+  color:#718799!important;
+  font-size:11.5px!important;
+  line-height:1.42!important;
+  font-weight:700!important;
+}
+.registry-hub-open{
+  grid-column:3!important;
+  grid-row:1!important;
+  width:42px!important;
+  height:42px!important;
+  display:grid!important;
+  place-items:center!important;
+  border:1px solid #e1e8ed!important;
+  border-radius:13px!important;
+  background:#f8fafc!important;
+  color:#698399!important;
+  transition:transform .14s ease,background .14s ease!important;
+}
+.registry-hub-open>.ph{font-size:18px!important}
+.registry-hub-card.export .registry-hub-open{
+  background:#edf8f1!important;
+  border-color:#d5ebde!important;
+  color:#2e9160!important;
+}
+@media(hover:hover) and (pointer:fine){
+  .registry-hub-card:hover .registry-hub-open{transform:translateX(2px)!important;background:#f1f6f9!important}
+  .registry-hub-card.export:hover .registry-hub-open{background:#e4f5eb!important}
+}
+.registry-hub-card-metrics{
+  grid-column:1/-1!important;
+  grid-row:3!important;
+  display:grid!important;
+  grid-template-columns:1fr 1fr!important;
+  gap:8px!important;
+  margin-top:20px!important;
+  padding-top:15px!important;
+  border-top:1px solid #e7edf1!important;
+}
+.registry-hub-card-metrics>span{
+  min-width:0!important;
+  padding:10px 11px!important;
+  border-radius:13px!important;
+  background:#f7fafc!important;
+}
+.registry-hub-card-metrics b{
+  display:block!important;
+  color:#31536e!important;
+  font-size:21px!important;
+  line-height:1!important;
+}
+.registry-hub-card-metrics small{
+  display:block!important;
+  margin-top:5px!important;
+  color:#8495a2!important;
+  font-size:8px!important;
+  font-weight:950!important;
+  letter-spacing:.09em!important;
+}
+.registry-hub-export-meta{
+  grid-column:1/-1!important;
+  grid-row:3!important;
+  min-height:64px!important;
+  margin-top:20px!important;
+  padding:12px 13px!important;
+  border-top:1px solid #e4ede8!important;
+  border-radius:13px!important;
+  background:#f4fbf7!important;
+}
+.registry-hub-export-meta>span{
+  display:flex!important;
+  align-items:center!important;
+  gap:8px!important;
+  color:#2f8c5e!important;
+}
+.registry-hub-export-meta .ph{font-size:18px!important}
+.registry-hub-export-meta b{
+  font-size:13px!important;
+}
+.registry-hub-export-meta>small{
+  display:block!important;
+  margin-top:5px!important;
+  color:#759485!important;
+  font-size:8px!important;
+  font-weight:950!important;
+  letter-spacing:.09em!important;
+}
+
+@media(min-width:1500px){
+  .registry-hub-overview{
+    min-height:124px!important;
+    padding:22px 25px!important;
+  }
+  .registry-hub-overview-copy b{font-size:21px!important}
+  .registry-hub-overview-copy div>span{font-size:13px!important}
+  .registry-hub-card{
+    min-height:270px!important;
+    padding:23px!important;
+    grid-template-columns:64px minmax(0,1fr) 44px!important;
+    column-gap:17px!important;
+  }
+  .registry-hub-icon{
+    width:64px!important;
+    height:64px!important;
+  }
+  .registry-hub-icon>.ph{font-size:32px!important}
+  .registry-hub-card-copy>b{font-size:20px!important}
+  .registry-hub-card-copy>span{font-size:12.5px!important}
+  .registry-hub-card-metrics b{font-size:24px!important}
+}
+
+@media(max-width:1100px){
+  .registry-hub-grid.three{
+    grid-template-columns:1fr 1fr!important;
+  }
+  .registry-hub-card.export{
+    grid-column:1/-1!important;
+    min-height:200px!important;
+  }
+}
+
+@media(max-width:760px){
+  .registry-hub>.page-title{margin-bottom:14px!important}
+  .registry-hub-overview{
+    min-height:0!important;
+    padding:15px!important;
+    align-items:flex-start!important;
+    flex-direction:column!important;
+    gap:13px!important;
+    border-radius:18px!important;
+  }
+  .registry-hub-overview-icon{
+    width:46px!important;
+    height:46px!important;
+    flex-basis:46px!important;
+    border-radius:14px!important;
+  }
+  .registry-hub-overview-icon>.ph{font-size:24px!important}
+  .registry-hub-overview-copy{gap:12px!important}
+  .registry-hub-overview-copy b{font-size:16px!important}
+  .registry-hub-overview-copy div>span{font-size:10.5px!important}
+  .registry-hub-last{
+    width:100%!important;
+    min-width:0!important;
+    padding:10px 12px!important;
+  }
+  .registry-hub-grid.three,
+  .registry-hub-grid.two{
+    grid-template-columns:1fr!important;
+  }
+  .registry-hub-card,
+  .registry-hub-card.export{
+    grid-column:auto!important;
+    min-height:190px!important;
+    padding:16px!important;
+    grid-template-columns:50px minmax(0,1fr) 38px!important;
+    column-gap:12px!important;
+    border-radius:18px!important;
+  }
+  .registry-hub-icon{
+    width:50px!important;
+    height:50px!important;
+    border-radius:14px!important;
+  }
+  .registry-hub-icon>.ph{font-size:25px!important}
+  .registry-hub-card-copy>b{font-size:16px!important}
+  .registry-hub-card-copy>span{font-size:10.5px!important;margin-top:6px!important}
+  .registry-hub-open{
+    width:38px!important;
+    height:38px!important;
+    border-radius:11px!important;
+  }
+  .registry-hub-card-metrics,
+  .registry-hub-export-meta{
+    margin-top:15px!important;
+    padding-top:12px!important;
+  }
+}
+</style>
 </head>
 <body>
 <header id="topbar" class="topbar"></header>
@@ -8396,7 +8771,13 @@ class UI{
   }
   saveRequestPick(id){const picks=[...document.querySelectorAll('[data-pick-row]')].map(row=>({lineId:row.dataset.line,sourceKey:row.dataset.key,cartons:Number(row.querySelector('[data-pick-cartons]')?.value||0),pieces:Number(row.querySelector('[data-pick-pieces]')?.value||0)})).filter(p=>p.cartons>0||p.pieces>0),extraPieces=Number(document.getElementById('extraPickPieces')?.value||0),extraCartons=Number(document.getElementById('extraPickCartons')?.value||0);if(extraPieces>0)picks.push({lineId:'',sourceKey:document.getElementById('extraPickSource').value,cartons:extraCartons,pieces:extraPieces,extra:true});this.domain.requests.fulfill(id,picks,document.getElementById('requestPickNote').value);this.toast('Prelievo registrato.');this.router.go('request-detail',{id})}
 
-  registryHome(){return `${this.sectionTitle('STORICO','Registro')}<div class="intro registry-intro"><b>${phIcon('notebook','inline-icon')} Registro operativo NOVA</b><span>Consulta movimenti e audit, filtra lo storico ed esporta il registro in Excel.</span></div><section class="list-card registry-home-list"><button data-action="registry-movements">${phIcon('list-bullets','registry-row-icon movement')}<span><b>MOVIMENTI</b><small>Entrate, scarichi, spostamenti e rettifiche</small></span>${phIcon('caret-right','registry-row-chevron')}</button>${this.auth.can('AUDIT_VIEW')?`<button data-action="registry-audit">${phIcon('shield-check','registry-row-icon audit')}<span><b>AUDIT</b><small>Tracciabilità completa delle azioni</small></span>${phIcon('caret-right','registry-row-chevron')}</button>`:''}${this.auth.can('EXPORT')?`<button data-action="registry-export">${phIcon('microsoft-excel-logo','registry-row-icon export')}<span><b>ESPORTA MOVIMENTI</b><small>Movimenti + audit in un file Excel dedicato</small></span>${phIcon('download-simple','registry-row-chevron export')}</button>`:''}</section>`}
+  registryHome(){
+    const ledger=[...(this.store.db.ledger||[])].sort((a,b)=>new Date(b.at)-new Date(a.at)),audits=[...(this.store.db.audits||[])].sort((a,b)=>new Date(b.at)-new Date(a.at)),today=localDateInput(),movementToday=ledger.filter(x=>dateKeyLocal(x.at)===today).length,auditToday=audits.filter(x=>dateKeyLocal(x.at)===today).length,lastMovement=ledger[0]?.at||'',lastAudit=audits[0]?.at||'',lastActivity=[lastMovement,lastAudit].filter(Boolean).sort((a,b)=>new Date(b)-new Date(a))[0]||'',canAudit=this.auth.can('AUDIT_VIEW'),canExport=this.auth.can('EXPORT');
+    const movementCard=`<button class="registry-hub-card movement" data-action="registry-movements"><span class="registry-hub-icon">${phRegular('list-bullets')}</span><span class="registry-hub-card-copy"><small>STORICO OPERATIVO</small><b>MOVIMENTI</b><span>Entrate, scarichi, spostamenti, ubicazioni e rettifiche.</span></span><span class="registry-hub-card-metrics"><span><b>${ledger.length}</b><small>REGISTRAZIONI</small></span><span><b>${movementToday}</b><small>OGGI</small></span></span><span class="registry-hub-open">${phRegular('arrow-right')}</span></button>`;
+    const auditCard=canAudit?`<button class="registry-hub-card audit" data-action="registry-audit"><span class="registry-hub-icon">${phRegular('shield-check')}</span><span class="registry-hub-card-copy"><small>TRACCIABILITÀ</small><b>AUDIT</b><span>Controlla azioni, modifiche, operatori e variazioni registrate.</span></span><span class="registry-hub-card-metrics"><span><b>${audits.length}</b><small>EVENTI</small></span><span><b>${auditToday}</b><small>OGGI</small></span></span><span class="registry-hub-open">${phRegular('arrow-right')}</span></button>`:''; 
+    const exportCard=canExport?`<button class="registry-hub-card export" data-action="registry-export"><span class="registry-hub-icon">${phRegular('microsoft-excel-logo')}</span><span class="registry-hub-card-copy"><small>FILE EXCEL</small><b>ESPORTA REGISTRO</b><span>Scarica Movimenti e Audit in un unico file Excel dedicato.</span></span><span class="registry-hub-export-meta"><span>${phRegular('file-xls')}<b>2 fogli</b></span><small>MOVIMENTI + AUDIT</small></span><span class="registry-hub-open">${phRegular('download-simple')}</span></button>`:''; 
+    return `<section class="registry-hub">${this.sectionTitle('STORICO','Registro')}<section class="registry-hub-overview"><div class="registry-hub-overview-copy"><span class="registry-hub-overview-icon">${phRegular('notebook')}</span><div><small>REGISTRO OPERATIVO SOMA</small><b>Storico e tracciabilità del magazzino</b><span>Consulta ciò che è successo, verifica chi ha operato ed esporta lo storico quando serve.</span></div></div><div class="registry-hub-last"><small>ULTIMA ATTIVITÀ</small><b>${lastActivity?fmtDateTime(lastActivity):'Nessuna attività'}</b><span>${phRegular('warehouse')} ${esc(this.auth.site().name)}</span></div></section><div class="registry-hub-grid ${canAudit&&canExport?'three':canAudit||canExport?'two':'one'}">${movementCard}${auditCard}${exportCard}</div></section>`
+  }
   registryList(){const audit=this.registryTab==='AUDIT',canAudit=this.auth.can('AUDIT_VIEW');return `${this.sectionTitle('STORICO',audit?'Audit':'Registro')}<div class="tabs registry-tabs ${canAudit?'':'single'}"><button class="${!audit?'active':''}" data-action="registry-movements">${phIcon('list-bullets')}<span>MOVIMENTI</span></button>${canAudit?`<button class="${audit?'active':''}" data-action="registry-audit">${phIcon('shield-check')}<span>AUDIT</span></button>`:''}</div><section class="filter-card registry-filter-card"><div class="registry-search-row"><div class="registry-search-box">${phIcon('magnifying-glass')}<input id="registryQuery" class="field" placeholder="${audit?'Cerca operatore, azione o entità…':'Cerca articolo, operatore, posizione…'}"></div><button class="soft small registry-filter-btn" data-action="registry-filter-toggle">${phIcon('funnel-simple')}<span>FILTRI</span></button></div><div id="registryFilters" class="registry-filters hidden"><div class="registry-filter-label">${phIcon('calendar-blank')} Intervallo date</div><div class="two"><label>Dal<input id="registryFrom" type="date" class="field"></label><label>Al<input id="registryTo" type="date" class="field"></label></div>${audit?'':`<div class="registry-filter-label">${phIcon('sliders-horizontal')} Operazione e stato</div><div class="two"><select id="registryType" class="field"><option value="">TUTTE LE OPERAZIONI</option><option value="IN">ENTRATA MERCI</option><option value="OUT">SCARICA</option><option value="TRANSFER">SPOSTA / UBICAZIONE</option><option value="ADJUST">RETTIFICA</option></select><select id="registryState" class="field"><option value="">TUTTI GLI STATI</option>${CONFIG.states.map(s=>`<option>${s}</option>`).join('')}</select></div>`}</div></section><div id="registryResults" class="registry-results"></div>`}
   renderRegistryResults(){const host=document.getElementById('registryResults');if(!host)return;const q=norm(document.getElementById('registryQuery')?.value),from=document.getElementById('registryFrom')?.value||'',to=document.getElementById('registryTo')?.value||'',type=norm(document.getElementById('registryType')?.value),state=norm(document.getElementById('registryState')?.value),dateOk=v=>{const k=dateKeyLocal(v);return(!from||k>=from)&&(!to||k<=to)};if(this.registryTab==='AUDIT'){const rows=this.store.db.audits.filter(a=>dateOk(a.at)&&(!q||norm(`${a.operator} ${a.action} ${a.entityType} ${a.entityId}`).includes(q)));host.innerHTML=rows.length?rows.map(a=>{const m=a.meta||{},b=a.before?.quantity,n=a.after?.quantity,d=Number.isFinite(Number(m.delta))?Number(m.delta):(Number.isFinite(Number(b))&&Number.isFinite(Number(n))?Number(n)-Number(b):null),deltaClass=d===null?'':d>0?'positive':d<0?'negative':'neutral',before=Number.isFinite(Number(b))?b:'—',after=Number.isFinite(Number(n))?n:'—';return `<article class="audit-card registry-audit-card"><div class="audit-head"><span class="audit-icon">${phIcon('shield-check')}</span><div class="audit-title"><b>${esc(a.action)}</b><span>${fmtDateTime(a.at)}</span></div><span class="audit-operator">${phIcon('user-circle')} ${esc(a.operator||'—')}</span></div><div class="audit-entity"><span>${esc(a.entityType)}</span><b>${esc(a.entityId)}</b></div>${m.article?`<div class="audit-item"><b>${esc(m.article)}${m.size?` · ${esc(m.size)}`:''}</b>${m.location?`<span>${phIcon('map-pin-line')} ${esc(m.location)}${m.pallet?` · ${esc(m.pallet)}`:''}</span>`:''}</div>`:''}${d!==null?`<div class="audit-delta premium"><span><small>PRIMA</small><b>${before}</b></span><span><small>DOPO</small><b>${after}</b></span><span class="${deltaClass}"><small>DELTA</small><b>${d>0?'+':''}${d}</b></span></div>`:''}${m.reason||m.sessionId?`<div class="audit-meta">${m.reason?`<span>${phIcon('note-pencil')} ${esc(m.reason)}</span>`:''}${m.sessionId?`<span>${phIcon('fingerprint')} ${esc(m.sessionId)}</span>`:''}</div>`:''}</article>`}).join(''):`<div class="empty registry-empty">${phIcon('shield-check','empty-icon')}<div><b>Nessun evento di audit.</b><small>Le azioni tracciate compariranno qui.</small></div></div>`;return}const rows=[...this.store.db.ledger].sort((a,b)=>new Date(b.at)-new Date(a.at)).filter(e=>dateOk(e.at)&&(!type||e.type===type)&&(!state||e.item?.state===state)&&(!q||norm(`${e.item?.article} ${e.item?.size} ${e.item?.state} ${e.operator} ${e.from?.location||''} ${e.to?.location||''} ${e.destination||''}`).includes(q)));host.innerHTML=rows.length?rows.map(e=>this.ledgerCard(e)).join(''):`<div class="empty registry-empty">${phIcon('list-bullets','empty-icon')}<div><b>Nessun movimento.</b><small>Modifica i filtri oppure registra una nuova operazione.</small></div></div>`}
   ledgerLabel(e){if(e.type==='IN')return e.source?.kind==='RECEIPT'?'ENTRATA MERCI':'CARICO STORICO';if(e.type==='OUT')return e.source?.kind==='REQUEST'?'SCARICA · RICHIESTA':'SCARICA';if(e.type==='TRANSFER')return e.source?.kind==='PUTAWAY'?'UBICAZIONE':'SPOSTA';if(e.type==='ADJUST')return'RETTIFICA';return e.type||'MOVIMENTO'}
