@@ -4242,6 +4242,114 @@ body.desktop-mode .activity-desktop .activity-kpi.wide{grid-column:auto!importan
   border:0!important;
 }
 </style>
+
+<style id="r29-9-activity-desktop-polish">
+/* ===== R29.9 · DESKTOP ACTIVITY PANEL POLISH ===== */
+@media(min-width:981px){
+  body.desktop-mode .activity-desktop{
+    margin-top:18px!important;
+    padding:18px 18px 16px!important;
+    border-radius:22px!important;
+  }
+
+  body.desktop-mode .activity-desktop .activity-head{
+    min-height:54px!important;
+    padding:0 4px 14px!important;
+    display:flex!important;
+    align-items:center!important;
+    justify-content:space-between!important;
+  }
+
+  body.desktop-mode .activity-desktop .activity-head>div:first-child{
+    display:flex!important;
+    flex-direction:column!important;
+    justify-content:center!important;
+    gap:3px!important;
+  }
+
+  body.desktop-mode .activity-desktop .activity-head>div:first-child>b{
+    font-size:15.5px!important;
+    line-height:1.05!important;
+    letter-spacing:.06em!important;
+  }
+
+  body.desktop-mode .activity-desktop .activity-head span{
+    font-size:12.5px!important;
+    line-height:1.05!important;
+  }
+
+  body.desktop-mode .activity-desktop .activity-grid{
+    grid-template-columns:repeat(6,minmax(0,1fr))!important;
+    gap:10px!important;
+  }
+
+  body.desktop-mode .activity-desktop .activity-kpi{
+    min-height:78px!important;
+    padding:12px 14px!important;
+    border-radius:16px!important;
+    display:flex!important;
+    align-items:center!important;
+    justify-content:center!important;
+    gap:13px!important;
+    text-align:left!important;
+  }
+
+  body.desktop-mode .activity-desktop .activity-kpi>span{
+    width:42px!important;
+    height:42px!important;
+    min-width:42px!important;
+    border-radius:12px!important;
+    display:grid!important;
+    place-items:center!important;
+    margin:0!important;
+    flex:0 0 42px!important;
+  }
+
+  body.desktop-mode .activity-desktop .activity-kpi>span .ph,
+  body.desktop-mode .activity-desktop .activity-kpi>span .ph-duotone{
+    font-size:23px!important;
+    line-height:1!important;
+  }
+
+  body.desktop-mode .activity-desktop .activity-kpi p{
+    margin:0!important;
+    min-width:0!important;
+    display:flex!important;
+    flex-direction:column!important;
+    justify-content:center!important;
+    gap:2px!important;
+    line-height:1.05!important;
+  }
+
+  body.desktop-mode .activity-desktop .activity-kpi p b{
+    font-size:19px!important;
+    line-height:1.05!important;
+    font-weight:800!important;
+    letter-spacing:-.01em!important;
+    white-space:nowrap!important;
+  }
+
+  body.desktop-mode .activity-desktop .activity-kpi p small{
+    font-size:10.5px!important;
+    line-height:1.1!important;
+    font-weight:650!important;
+    white-space:nowrap!important;
+  }
+
+  /* Last KPI contains a date/time instead of a simple number */
+  body.desktop-mode .activity-desktop .activity-kpi.wide p b{
+    font-size:15.5px!important;
+    letter-spacing:0!important;
+  }
+
+  body.desktop-mode .activity-desktop .calendar-picker,
+  body.desktop-mode .activity-desktop .calendar-btn{
+    width:44px!important;
+    height:44px!important;
+    min-width:44px!important;
+  }
+}
+</style>
 </head>
 <body>
 <header id="topbar" class="topbar"></header>
