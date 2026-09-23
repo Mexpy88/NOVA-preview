@@ -3436,6 +3436,193 @@ button[data-action]>.inline-icon{margin:0!important;line-height:1!important}
   .stock-article{line-height:1.18;}
 }
 </style>
+
+<style id="r29-dedicated-home-layouts">
+/* ===== R29 · HOME: dedicated desktop and smartphone compositions ===== */
+.home-layout-desktop{display:none}
+.home-layout-mobile{display:block;max-width:560px;margin:0 auto}
+body.desktop-mode .home-layout-desktop{display:block}
+body.desktop-mode .home-layout-mobile{display:none}
+
+/* Desktop is a purpose-built control surface, not the mobile grid stretched wider. */
+body.desktop-mode .home-layout-desktop{
+  width:100%;
+}
+body.desktop-mode .desktop-home-head .home-hero{
+  align-items:center;
+  margin:0 0 12px;
+  min-height:76px;
+}
+body.desktop-mode .desktop-home-head .home-hero h1{
+  font-size:clamp(40px,3.1vw,54px);
+  margin-top:3px;
+}
+body.desktop-mode .desktop-home-head .home-hero p{margin-top:6px}
+body.desktop-mode .desktop-home-head .home-site-mark{
+  width:54px;height:54px;border-radius:17px
+}
+body.desktop-mode .desktop-home-tools{
+  display:grid;
+  grid-template-columns:minmax(0,1.35fr) minmax(360px,.65fr);
+  gap:12px;
+  align-items:stretch;
+  margin-bottom:12px;
+}
+body.desktop-mode .desktop-home-tools .warehouse-data-card,
+body.desktop-mode .desktop-home-tools .home-command-search{
+  margin:0!important;
+  min-height:66px;
+}
+body.desktop-mode .desktop-home-tools .warehouse-data-card{
+  display:grid!important;
+  grid-template-columns:minmax(0,1fr) auto;
+  align-items:stretch;
+  border-radius:18px;
+}
+body.desktop-mode .desktop-home-tools .warehouse-data-main{
+  grid-row:1;
+  padding:9px 13px;
+  grid-template-columns:42px minmax(0,1fr) auto 22px;
+  gap:10px;
+}
+body.desktop-mode .desktop-home-tools .warehouse-data-icon{
+  width:42px;height:42px;border-radius:13px
+}
+body.desktop-mode .desktop-home-tools .warehouse-data-icon>.ph{font-size:24px}
+body.desktop-mode .desktop-home-tools .warehouse-data-copy>b{font-size:15px}
+body.desktop-mode .desktop-home-tools .warehouse-data-copy>span{font-size:9px}
+body.desktop-mode .desktop-home-tools .warehouse-data-actions{
+  border-top:0;
+  border-left:1px solid #e7eee9;
+  align-items:center;
+  padding:0 9px;
+  gap:6px;
+}
+body.desktop-mode .desktop-home-tools .warehouse-data-actions button{
+  min-height:36px;
+  padding:0 10px;
+  font-size:9px;
+}
+body.desktop-mode .desktop-home-tools .warehouse-data-dirty{grid-column:1/-1}
+body.desktop-mode .desktop-home-tools .home-command-search{
+  min-height:66px;
+  height:100%;
+  border-radius:18px;
+  padding:0 16px;
+}
+body.desktop-mode .desktop-home-tools .home-command-search span{font-size:14px}
+
+/* Six operational areas are laid out as two compact desktop rows. */
+body.desktop-mode .desktop-home-modules{
+  display:grid!important;
+  grid-template-columns:repeat(3,minmax(0,1fr))!important;
+  gap:12px!important;
+  align-items:stretch;
+}
+body.desktop-mode .desktop-home-modules .module{
+  grid-column:auto!important;
+  border-radius:18px!important;
+  min-width:0;
+  display:grid;
+  grid-template-rows:auto 1fr;
+}
+body.desktop-mode .desktop-home-modules .module-head{
+  min-height:58px!important;
+  grid-template-columns:38px minmax(0,1fr) 22px!important;
+  gap:9px!important;
+  padding:9px 12px!important;
+}
+body.desktop-mode .desktop-home-modules .module-icon .ph{
+  font-size:27px!important;
+}
+body.desktop-mode .desktop-home-modules .module-title b{
+  font-size:14px!important;
+}
+body.desktop-mode .desktop-home-modules .module-open{
+  width:24px!important;height:24px!important;border-radius:8px!important
+}
+body.desktop-mode .desktop-home-modules .module-actions{
+  display:grid!important;
+  grid-template-columns:none!important;
+  grid-auto-flow:column;
+  grid-auto-columns:minmax(0,1fr);
+  gap:0!important;
+  padding:0!important;
+  border-top:1px solid #e4ebef;
+  min-height:70px;
+}
+body.desktop-mode .desktop-home-modules .module-action{
+  min-height:70px!important;
+  border-radius:0!important;
+  padding:8px 5px!important;
+  gap:5px!important;
+  border-right:1px solid #e5ebef!important;
+  background:#fff!important;
+}
+body.desktop-mode .desktop-home-modules .module-action:last-child{border-right:0!important}
+body.desktop-mode .desktop-home-modules .module-action>.ph,
+body.desktop-mode .desktop-home-modules .module-action>.ph-duotone{
+  font-size:20px!important;
+}
+body.desktop-mode .desktop-home-modules .module-action b{
+  font-size:9px!important;
+  line-height:1.1!important;
+}
+body.desktop-mode .desktop-home-modules .module.requests .module-action b,
+body.desktop-mode .desktop-home-modules .module.stock .module-action b{font-size:8.7px!important}
+
+/* Desktop activity is a compact horizontal status rail. */
+body.desktop-mode .activity-desktop{
+  margin-top:12px!important;
+  padding:11px 12px!important;
+  border-radius:18px!important;
+}
+body.desktop-mode .activity-desktop .activity-head{
+  padding:0 2px 8px!important;
+}
+body.desktop-mode .activity-desktop .activity-head>div:first-child>b{font-size:12px}
+body.desktop-mode .activity-desktop .activity-head span{font-size:10px}
+body.desktop-mode .activity-desktop .activity-grid{
+  grid-template-columns:repeat(6,minmax(0,1fr))!important;
+  gap:7px!important;
+}
+body.desktop-mode .activity-desktop .activity-kpi{
+  min-height:48px;
+  border-radius:12px!important;
+  padding:7px 8px!important;
+  grid-template-columns:28px 1fr!important;
+  gap:7px!important;
+}
+body.desktop-mode .activity-desktop .activity-kpi>span{
+  width:28px!important;height:28px!important;border-radius:9px!important;
+}
+body.desktop-mode .activity-desktop .activity-kpi>span .ph{font-size:17px!important}
+body.desktop-mode .activity-desktop .activity-kpi p b{font-size:14px!important}
+body.desktop-mode .activity-desktop .activity-kpi p small{font-size:8px!important}
+body.desktop-mode .activity-desktop .activity-kpi.wide{grid-column:auto!important}
+
+/* Smartphone home remains touch-first and vertically sequenced. */
+.home-layout-mobile .home-hero{margin-top:4px}
+.home-layout-mobile .mobile-home-modules{
+  grid-template-columns:1fr!important;
+  gap:12px!important;
+}
+.home-layout-mobile .mobile-home-modules .module{grid-column:auto!important}
+.home-layout-mobile .activity-mobile{margin-top:13px}
+.home-layout-mobile .activity-mobile .activity-grid{grid-template-columns:1fr 1fr!important}
+.home-layout-mobile .activity-mobile .activity-kpi.wide{grid-column:1/-1!important}
+
+/* Real phones always use the dedicated smartphone composition even if a desktop preference was saved. */
+@media(max-width:980px){
+  body.desktop-mode .home-layout-desktop{display:none!important}
+  body.desktop-mode .home-layout-mobile{display:block!important}
+  .home-layout-mobile{max-width:none;width:100%}
+}
+@media(min-width:981px) and (max-width:1240px){
+  body.desktop-mode .desktop-home-modules{grid-template-columns:repeat(2,minmax(0,1fr))!important}
+  body.desktop-mode .activity-desktop .activity-grid{grid-template-columns:repeat(3,minmax(0,1fr))!important}
+}
+</style>
 </head>
 <body>
 <header id="topbar" class="topbar"></header>
@@ -4257,10 +4444,15 @@ class UI{
   actionRow(action,label,ico,sub=''){return `<button class="module-action" data-action="${action}">${phDashboardActionIcon(action,ico)}<b>${label}</b></button>`}
   module(kind,title,sub,headAction,actions){const hero=phDashboardIcon(PHOSPHOR_MODULES[kind]||'squares-four',kind==='registry'?'registry-hero-icon':'');return `<section class="module ${kind}"><button class="module-head" data-action="${headAction}"><span class="module-icon transparent-hero">${hero}</span><span class="module-title"><b>${title}</b></span><span class="module-open">${phDashboardIcon('caret-right')}</span></button><div class="module-actions">${actions.join('')}</div></section>`}
 
-  home(){const p=this.auth.profile(),lina=this.auth.isLina(),cards=[];if(lina||this.auth.can('RECEIVE'))cards.push(this.module('receiving','ENTRATA MERCI',lina?'Arrivi e disponibilità':'Ricevi, controlla e ubica','receiving',[lina?this.actionRow('receipts-all','MERCE ARRIVATA','history'):this.actionRow('receipt-new','NUOVA ENTRATA','plus')+(this.auth.can('MOVE')?this.actionRow('receipts-pending','DA UBICARE','calendar'):'')+this.actionRow('receipts-all','STORICO ENTRATE','history')]));if(this.auth.can('MOVE'))cards.push(this.module('movement','MOVIMENTAZIONE','Scarica e sposta merce','issue',[this.actionRow('issue','SCARICA','down'),this.actionRow('transfer','SPOSTA','swap')]));if(this.auth.can('STOCK_VIEW')){const acts=[this.actionRow('stock','CERCA','search')];if(this.auth.can('RECTIFY'))acts.push(this.actionRow('rectify-new','RETTIFICA','check'));if(this.auth.can('COUNT'))acts.push(this.actionRow('count','CONTEGGIO ASSISTITO','registry'));cards.push(this.module('stock','GIACENZE',lina?'Cerca articoli e posizioni':'Cerca, rettifica e verifica','stock',acts))}if(this.auth.can('REQUEST_VIEW')||this.auth.can('REQUEST_CREATE')){const acts=[];if(this.auth.can('REQUEST_CREATE'))acts.push(this.actionRow('request-new','NUOVA RICHIESTA','plus'));if(this.auth.can('REQUEST_VIEW'))acts.push(this.actionRow('requests-progress','AVANZAMENTO','registry'));if(this.auth.can('REQUEST_PROCESS'))acts.push(this.actionRow('requests-process','COMPLETAMENTO','check'));cards.push(this.module('requests','RICHIESTE','Prelievi e avanzamento','requests-progress',acts))}if(this.auth.can('REGISTRY_VIEW'))cards.push(this.module('registry','REGISTRO','Movimenti e storico','registry',[this.actionRow('registry-movements','MOVIMENTI','registry'),...(this.auth.can('AUDIT_VIEW')?[this.actionRow('registry-audit','AUDIT','shield')]:[]),...(this.auth.can('EXPORT')?[this.actionRow('registry-export','ESPORTA MOVIMENTI','download')]:[])]));if(this.auth.canManageOperators()||this.auth.canManageSites()||this.auth.canManageRoles())cards.push(this.module('administration','AMMINISTRAZIONE','Operatori, sedi e permessi','admin',[...(this.auth.canManageOperators()?[this.actionRow('admin-operators','OPERATORI','users-three')]:[]),...(this.auth.canManageSites()?[this.actionRow('admin-sites','SEDI','buildings')]:[]),...(this.auth.canManageRoles()?[this.actionRow('admin-roles','RUOLI E PERMESSI','shield-check')]:[])]));return `<div class="home-hero"><div><div class="eyebrow">MAGAZZINO ${esc(this.auth.site().name.toUpperCase())}</div><h1>Centro operativo</h1><p>${esc(this.auth.user)} · ${esc(p.label)}</p></div><span class="home-site-mark">${phDashboardIcon('warehouse')}<b>${esc(this.auth.site().code||this.auth.site().id)}</b></span></div>${this.auth.can('MASTER_VIEW')?this.masterCompact():''}${this.auth.can('STOCK_VIEW')?`<button class="command-search home-command-search" data-action="stock">${phDashboardIcon('magnifying-glass')}<span>Cerca articolo, taglia o posizione…</span><span class="command-go">${phDashboardIcon('arrow-right')}</span></button>`:''}<div class="modules home-modules">${cards.join('')}</div>${this.activity()}${this.exportBar()}`}
+  home(){const p=this.auth.profile(),lina=this.auth.isLina(),cards=[];if(lina||this.auth.can('RECEIVE'))cards.push(this.module('receiving','ENTRATA MERCI',lina?'Arrivi e disponibilità':'Ricevi, controlla e ubica','receiving',[lina?this.actionRow('receipts-all','MERCE ARRIVATA','history'):this.actionRow('receipt-new','NUOVA ENTRATA','plus')+(this.auth.can('MOVE')?this.actionRow('receipts-pending','DA UBICARE','calendar'):'')+this.actionRow('receipts-all','STORICO ENTRATE','history')]));if(this.auth.can('MOVE'))cards.push(this.module('movement','MOVIMENTAZIONE','Scarica e sposta merce','issue',[this.actionRow('issue','SCARICA','down'),this.actionRow('transfer','SPOSTA','swap')]));if(this.auth.can('STOCK_VIEW')){const acts=[this.actionRow('stock','CERCA','search')];if(this.auth.can('RECTIFY'))acts.push(this.actionRow('rectify-new','RETTIFICA','check'));if(this.auth.can('COUNT'))acts.push(this.actionRow('count','CONTEGGIO ASSISTITO','registry'));cards.push(this.module('stock','GIACENZE',lina?'Cerca articoli e posizioni':'Cerca, rettifica e verifica','stock',acts))}if(this.auth.can('REQUEST_VIEW')||this.auth.can('REQUEST_CREATE')){const acts=[];if(this.auth.can('REQUEST_CREATE'))acts.push(this.actionRow('request-new','NUOVA RICHIESTA','plus'));if(this.auth.can('REQUEST_VIEW'))acts.push(this.actionRow('requests-progress','AVANZAMENTO','registry'));if(this.auth.can('REQUEST_PROCESS'))acts.push(this.actionRow('requests-process','COMPLETAMENTO','check'));cards.push(this.module('requests','RICHIESTE','Prelievi e avanzamento','requests-progress',acts))}if(this.auth.can('REGISTRY_VIEW'))cards.push(this.module('registry','REGISTRO','Movimenti e storico','registry',[this.actionRow('registry-movements','MOVIMENTI','registry'),...(this.auth.can('AUDIT_VIEW')?[this.actionRow('registry-audit','AUDIT','shield')]:[]),...(this.auth.can('EXPORT')?[this.actionRow('registry-export','ESPORTA MOVIMENTI','download')]:[])]));if(this.auth.canManageOperators()||this.auth.canManageSites()||this.auth.canManageRoles())cards.push(this.module('administration','AMMINISTRAZIONE','Operatori, sedi e permessi','admin',[...(this.auth.canManageOperators()?[this.actionRow('admin-operators','OPERATORI','users-three')]:[]),...(this.auth.canManageSites()?[this.actionRow('admin-sites','SEDI','buildings')]:[]),...(this.auth.canManageRoles()?[this.actionRow('admin-roles','RUOLI E PERMESSI','shield-check')]:[])]));
+    const hero=`<div class="home-hero"><div><div class="eyebrow">MAGAZZINO ${esc(this.auth.site().name.toUpperCase())}</div><h1>Centro operativo</h1><p>${esc(this.auth.user)} · ${esc(p.label)}</p></div><span class="home-site-mark">${phDashboardIcon('warehouse')}<b>${esc(this.auth.site().code||this.auth.site().id)}</b></span></div>`;
+    const master=this.auth.can('MASTER_VIEW')?this.masterCompact():'';
+    const search=this.auth.can('STOCK_VIEW')?`<button class="command-search home-command-search" data-action="stock">${phDashboardIcon('magnifying-glass')}<span>Cerca articolo, taglia o posizione…</span><span class="command-go">${phDashboardIcon('arrow-right')}</span></button>`:'';
+    const modules=cards.join('');
+    return `<section class="home-layout home-layout-desktop"><div class="desktop-home-head">${hero}</div><div class="desktop-home-tools">${master}${search}</div><div class="modules desktop-home-modules">${modules}</div>${this.activity('desktop')}</section><section class="home-layout home-layout-mobile">${hero}${master}${search}<div class="modules home-modules mobile-home-modules">${modules}</div>${this.activity('mobile')}</section>${this.exportBar()}`}
   masterCompact(){const m=this.store.db.master,ready=this.masterReady(),dirty=this.excel.dirtyCount(),site=this.auth.site(),canImport=this.auth.can('MASTER_IMPORT');return `<section class="warehouse-data-card ${ready?'is-ready':'is-empty'}"><button class="warehouse-data-main" data-action="master"><span class="warehouse-data-icon">${phDashboardIcon('microsoft-excel-logo')}</span><span class="warehouse-data-copy"><small>DATI MAGAZZINO</small><b>${ready?esc(m.filename):`Master ${esc(site.name)}`}</b>${ready?`<span>${m.rows.length} righe · Aggiornato ${fmtDateTime(m.importedAt)}</span>`:`<span>Sede ${esc(site.name)}</span>`}</span><span class="ready ${ready?'ok':'off'}">${ready?'PRONTO':'NON CARICATO'}</span><span class="warehouse-data-arrow">${phDashboardIcon('caret-right')}</span></button><div class="warehouse-data-actions">${ready?`<button data-action="master-view">${phDashboardIcon('table')}<span>VISUALIZZA</span></button>`:''}${canImport?`<button data-action="master-import">${phDashboardIcon(ready?'arrows-clockwise':'upload-simple')}<span>${ready?'AGGIORNA':'IMPORTA'}</span></button>`:''}</div>${dirty&&ready?`<div class="warehouse-data-dirty">${phDashboardIcon('warning-circle')} ${dirty} ${dirty===1?'modifica non esportata':'modifiche non esportate'}</div>`:''}</section>${this.excel.lastValidation?.ok?`<div class="excel-validation">✓ Export verificato</div>`:''}`}
   exportBar(){const dirty=this.excel.dirtyCount();return this.auth.can('EXPORT')&&this.masterReady()&&dirty?`<div class="export-float"><button data-action="master-export">ESPORTA ORA <span>${dirty}</span></button></div>`:''}
-  activity(){const key=this.activityDate,today=key===localDateInput(),s=activityForDay(this.store.db,key,this.auth.user),items=this.auth.isLina()?[[s.received,'Richieste ricevute','clipboard-text'],[s.completed,'Richieste completate','check-circle'],[s.latest?fmtDateTime(s.latest):'—','Ultima attività','clock-counter-clockwise']]:[[s.car,'Entrate','package'],[s.scar,'Scarichi','truck'],[s.sp,'Spostamenti','arrows-left-right'],[s.received,'Richieste','clipboard-text'],[s.completed,'Completate','check-circle'],[s.latest?fmtDateTime(s.latest):'—','Ultima attività','clock-counter-clockwise']];return `<section class="activity"><div class="activity-head"><div><b>OGGI IN MAGAZZINO</b><span>${key.split('-').reverse().join('/')}</span></div><div>${today?'':`<button data-action="activity-today">OGGI</button>`}<label class="calendar-btn" for="activityDate" title="Scegli data" aria-label="Scegli data">${phRegular('calendar-blank','calendar-glyph')}<input id="activityDate" type="date" max="${localDateInput()}" value="${key}" aria-label="Data attività"></label></div></div><div class="activity-grid">${items.map(([v,l,i],idx)=>`<div class="activity-kpi ${idx===items.length-1?'wide':''}"><span>${phDashboardIcon(i)}</span><p><b>${esc(v)}</b><small>${l}</small></p></div>`).join('')}</div></section>`}
+  activity(mode='mobile'){const key=this.activityDate,today=key===localDateInput(),s=activityForDay(this.store.db,key,this.auth.user),items=this.auth.isLina()?[[s.received,'Richieste ricevute','clipboard-text'],[s.completed,'Richieste completate','check-circle'],[s.latest?fmtDateTime(s.latest):'—','Ultima attività','clock-counter-clockwise']]:[[s.car,'Entrate','package'],[s.scar,'Scarichi','truck'],[s.sp,'Spostamenti','arrows-left-right'],[s.received,'Richieste','clipboard-text'],[s.completed,'Completate','check-circle'],[s.latest?fmtDateTime(s.latest):'—','Ultima attività','clock-counter-clockwise']],dateId=`activityDate-${mode}`;return `<section class="activity activity-${mode}"><div class="activity-head"><div><b>OGGI IN MAGAZZINO</b><span>${key.split('-').reverse().join('/')}</span></div><div>${today?'':`<button data-action="activity-today">OGGI</button>`}<label class="calendar-btn" for="${dateId}" title="Scegli data" aria-label="Scegli data">${phRegular('calendar-blank','calendar-glyph')}<input id="${dateId}" type="date" max="${localDateInput()}" value="${key}" aria-label="Data attività"></label></div></div><div class="activity-grid">${items.map(([v,l,i],idx)=>`<div class="activity-kpi ${idx===items.length-1?'wide':''}"><span>${phDashboardIcon(i)}</span><p><b>${esc(v)}</b><small>${l}</small></p></div>`).join('')}</div></section>`}
 
   master(){
     if(!this.require('MASTER_VIEW'))return'';const m=this.store.db.master,ready=this.masterReady(),hasLegacy=this.excel.legacyAvailable(),site=this.auth.site(),dirty=this.excel.dirtyCount();
@@ -4481,7 +4673,7 @@ class UI{
   openNotifications(){const d=document.getElementById('notificationDialog'),rows=this.domain.notifications.visibleTo(this.auth.user);d.querySelector('.dialog-body').innerHTML=rows.length?rows.map(n=>`<button class="notif-row ${n.readAt?'read':''}" data-action="notif-read" data-id="${n.id}" data-entity="${n.entityType}" data-entity-id="${n.entityId}"><b>${esc(n.title)}</b><span>${esc(n.body)}</span><small>${fmtDateTime(n.createdAt)}</small></button>`).join(''):'<div class="empty">Nessuna notifica.</div>';d.showModal()}
 
   input(el){if(el.id==='loginPin'){const next=String(el.value||'').replace(/\D/g,'').slice(0,4);if(el.value!==next)el.value=next;if(next.length>this.lastPinLength)this.sounds?.pinKey?.();this.lastPinLength=next.length}if(el.dataset.countExtra)this.updateCountExtra(el.dataset.dom,el.dataset.countExtra,el.value);if(el.id?.startsWith('count-value-'))this.updateCountValue(el.id.replace('count-value-',''),el.value);if(el.id==='rectCounted')this.updateRectCount(el.value);const bind=el.dataset.bind;if(bind)this.bindDraft(bind,el.value);if(['stockQuery','stockLocation'].includes(el.id))this.scheduleStockRender();if(['rectSearch','rectFilterSize','rectFilterLocation','rectFilterPallet'].includes(el.id))this.renderRectResults();if(el.id==='registryQuery')this.renderRegistryResults();if(el.id==='masterQuery'){this.masterView.query=el.value;this.masterView.page=1;this.scheduleMasterRender()}if(el.id==='masterFilterArticle'){this.masterView.article=el.value;this.masterView.page=1;this.scheduleMasterRender()}if(el.id==='masterFilterLocation'){this.masterView.location=el.value;this.masterView.page=1;this.scheduleMasterRender()}if(el.id==='masterFilterPallet'){this.masterView.pallet=el.value;this.masterView.page=1;this.scheduleMasterRender()}if(el.id==='loginPin'){el.value=el.value.replace(/\D/g,'').slice(0,4);document.getElementById('loginError')?.classList.add('hidden')}}
-  change(el){if(el.dataset.countExtra)this.updateCountExtra(el.dataset.dom,el.dataset.countExtra,el.value);if(el.id==='rectFilterState')this.renderRectResults();if(el.id==='rectReason'&&this.rectDraft)this.rectDraft.reason=norm(el.value);const bind=el.dataset.bind;if(bind){this.bindDraft(bind,el.value);if(bind.includes(':article')||bind.includes(':size')||bind.includes(':state'))this.renderView()}if(el.id==='stockState')this.renderStockResults();if(['registryFrom','registryTo','registryType','registryState'].includes(el.id))this.renderRegistryResults();if(el.id==='masterFilterSize'){this.masterView.size=el.value;this.masterView.page=1;this.renderMasterViewerBody()}if(el.id==='masterSort'){this.masterView.sort=el.value;this.masterView.page=1;this.renderMasterViewerBody()}if(el.id==='activityDate'){this.activityDate=el.value||localDateInput();this.renderView()}}
+  change(el){if(el.dataset.countExtra)this.updateCountExtra(el.dataset.dom,el.dataset.countExtra,el.value);if(el.id==='rectFilterState')this.renderRectResults();if(el.id==='rectReason'&&this.rectDraft)this.rectDraft.reason=norm(el.value);const bind=el.dataset.bind;if(bind){this.bindDraft(bind,el.value);if(bind.includes(':article')||bind.includes(':size')||bind.includes(':state'))this.renderView()}if(el.id==='stockState')this.renderStockResults();if(['registryFrom','registryTo','registryType','registryState'].includes(el.id))this.renderRegistryResults();if(el.id==='masterFilterSize'){this.masterView.size=el.value;this.masterView.page=1;this.renderMasterViewerBody()}if(el.id==='masterSort'){this.masterView.sort=el.value;this.masterView.page=1;this.renderMasterViewerBody()}if(el.id?.startsWith('activityDate-')){this.activityDate=el.value||localDateInput();this.renderView()}}
   bindDraft(bind,value){const [kind,id,key]=bind.split(':');if(kind==='receipt'&&this.receiptDraft){if(id==='header'){this.receiptDraft[key]=value;return}const l=this.receiptDraft.lines.find(x=>x.id===id);if(l){if(['ddtQuantity','checkedQuantity'].includes(key)){l[key]=Math.max(0,Number(value)||0);if(key==='checkedQuantity'&&l.partials.length)l.partials=[]}else if(key==='article')l[key]=normalizeArticle(value);else if(['size','state','pallet'].includes(key))l[key]=norm(value);else l[key]=value}}if(kind==='request'&&this.requestDraft){if(id==='header'){this.requestDraft[key]=value;return}const l=this.requestDraft.lines.find(x=>x.id===id);if(l){if(key==='cartonsRequested')l[key]=Math.max(0,Math.floor(Number(value)||0));else if(key==='article')l[key]=normalizeArticle(value);else if(key==='size')l[key]=norm(value);else l[key]=value}}}
 
   async importMaster(input){const file=input.files?.[0];input.value='';if(!file)return;if(this.masterReady()&&this.excel.dirtyCount()&&!confirm(`Ci sono ${this.excel.dirtyCount()} modifiche non esportate. Importare comunque?`))return;const r=await this.excel.importFile(file,{restoreHistory:true});this.countDraft=this.loadCountSession();this.rectDraft=null;this.toast(`${r.filename} importato · ${r.rows} righe.`);this.router.home()}
