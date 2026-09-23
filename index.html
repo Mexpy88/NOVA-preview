@@ -5544,6 +5544,549 @@ body.desktop-mode .activity-desktop .activity-kpi.wide{grid-column:auto!importan
   }
 }
 </style>
+
+<style id="r31-master-quick-request">
+/* ===== R31 · RICHIESTA RAPIDA DA MASTER ===== */
+:root{
+  --quick-request:#d59618;
+  --quick-request-strong:#9d6810;
+  --quick-request-soft:#fff8e9;
+  --quick-request-line:#ead09a;
+}
+
+.master-toolbar-actions{
+  display:flex!important;
+  align-items:center!important;
+  justify-content:flex-end!important;
+  gap:8px!important;
+}
+
+.master-request-toggle{
+  min-height:34px!important;
+  padding:0 11px!important;
+  border:1px solid var(--quick-request-line)!important;
+  border-radius:11px!important;
+  background:var(--quick-request-soft)!important;
+  color:var(--quick-request-strong)!important;
+  display:inline-flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  gap:7px!important;
+  font-size:9px!important;
+  font-weight:950!important;
+  letter-spacing:.025em!important;
+}
+
+.master-request-toggle>.ph{
+  font-size:16px!important;
+  line-height:1!important;
+}
+
+.master-request-toggle.active{
+  background:#fff1cf!important;
+  border-color:#dfb85b!important;
+  color:#8a5a08!important;
+}
+
+.master-request-mode-banner{
+  margin-top:11px!important;
+  padding:11px 13px!important;
+  border:1px solid #efdcae!important;
+  border-radius:14px!important;
+  background:linear-gradient(180deg,#fffdf8,#fff8e9)!important;
+  color:#765519!important;
+  display:flex!important;
+  align-items:center!important;
+  gap:10px!important;
+}
+
+.master-request-mode-banner>.ph{
+  flex:0 0 auto!important;
+  font-size:23px!important;
+  color:var(--quick-request)!important;
+}
+
+.master-request-mode-banner b{
+  display:block!important;
+  font-size:12px!important;
+  line-height:1.15!important;
+}
+
+.master-request-mode-banner small{
+  display:block!important;
+  margin-top:2px!important;
+  font-size:10px!important;
+  line-height:1.35!important;
+  color:#88754e!important;
+  font-weight:700!important;
+}
+
+/* Request columns in the master */
+.master-table-shell.request-mode .master-table{
+  min-width:1160px!important;
+}
+
+.master-request-select-head,
+.master-request-select-cell{
+  width:72px!important;
+  text-align:center!important;
+}
+
+.master-request-cartons-head,
+.master-request-cartons-cell{
+  width:94px!important;
+  text-align:center!important;
+}
+
+.master-request-check{
+  width:31px!important;
+  height:31px!important;
+  display:inline-grid!important;
+  place-items:center!important;
+  padding:0!important;
+  margin:0!important;
+  border:1px solid #d9e3ea!important;
+  border-radius:9px!important;
+  background:#fff!important;
+  color:#8da0af!important;
+  box-shadow:none!important;
+  transition:.14s ease!important;
+}
+
+.master-request-check>.ph{
+  font-size:20px!important;
+  line-height:1!important;
+}
+
+.master-request-check:hover{
+  border-color:#e0bd69!important;
+  color:var(--quick-request)!important;
+  background:#fffaf0!important;
+}
+
+.master-request-check.selected{
+  border-color:#ddb456!important;
+  color:#a56d0d!important;
+  background:#fff4d9!important;
+  box-shadow:0 0 0 3px rgba(213,150,24,.08)!important;
+}
+
+.master-table tbody tr.master-request-selected td{
+  background:#fffdf8!important;
+}
+
+.master-table tbody tr.master-request-selected:hover td{
+  background:#fffaf0!important;
+}
+
+.master-request-inline-qty{
+  width:68px!important;
+  height:34px!important;
+  margin:0 auto!important;
+  padding:0 8px!important;
+  border:1px solid #e5c97e!important;
+  border-radius:10px!important;
+  background:#fff!important;
+  color:#68470d!important;
+  text-align:center!important;
+  font-size:12px!important;
+  font-weight:900!important;
+  outline:0!important;
+}
+
+.master-request-inline-qty:focus{
+  border-color:var(--quick-request)!important;
+  box-shadow:0 0 0 3px rgba(213,150,24,.11)!important;
+}
+
+.master-request-not-selected{
+  color:#b2bdc5!important;
+}
+
+/* Sticky request cart */
+#masterRequestDock:empty{display:none!important}
+
+#masterRequestDock{
+  position:sticky!important;
+  bottom:14px!important;
+  z-index:20!important;
+  width:min(100%,1120px)!important;
+  margin:14px auto 0!important;
+  padding:0 14px!important;
+  pointer-events:none!important;
+}
+
+.master-request-dock-inner{
+  min-height:76px!important;
+  padding:11px 12px 11px 16px!important;
+  border:1px solid #dfc071!important;
+  border-radius:20px!important;
+  background:rgba(255,252,243,.97)!important;
+  box-shadow:0 18px 48px rgba(77,54,17,.16),0 4px 14px rgba(77,54,17,.08)!important;
+  backdrop-filter:blur(14px)!important;
+  display:flex!important;
+  align-items:center!important;
+  justify-content:space-between!important;
+  gap:18px!important;
+  pointer-events:auto!important;
+}
+
+.master-request-dock-copy{
+  min-width:0!important;
+  display:flex!important;
+  align-items:center!important;
+  gap:12px!important;
+}
+
+.master-request-dock-copy>.ph{
+  flex:0 0 auto!important;
+  font-size:28px!important;
+  color:var(--quick-request)!important;
+}
+
+.master-request-dock-copy b{
+  display:block!important;
+  color:#5f4617!important;
+  font-size:14px!important;
+  line-height:1.15!important;
+}
+
+.master-request-dock-copy small{
+  display:block!important;
+  margin-top:3px!important;
+  color:#85734f!important;
+  font-size:10.5px!important;
+  font-weight:750!important;
+}
+
+.master-request-dock-copy small strong{
+  color:#a23d35!important;
+}
+
+.master-request-dock-actions{
+  display:flex!important;
+  align-items:center!important;
+  gap:8px!important;
+  flex:0 0 auto!important;
+}
+
+.master-request-dock-actions button{
+  min-height:45px!important;
+  margin:0!important;
+  padding:0 14px!important;
+  border-radius:13px!important;
+  display:inline-flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  gap:7px!important;
+  font-size:10px!important;
+  white-space:nowrap!important;
+}
+
+.master-request-dock-actions .primary{
+  background:var(--quick-request)!important;
+  border-color:var(--quick-request)!important;
+  color:#fff!important;
+}
+
+.master-request-dock-actions .soft{
+  background:#fff!important;
+  border:1px solid var(--quick-request-line)!important;
+  color:var(--quick-request-strong)!important;
+}
+
+.master-request-dock-actions button:disabled{
+  opacity:.4!important;
+  cursor:not-allowed!important;
+}
+
+/* Review dialog */
+.master-request-dialog{
+  width:min(720px,calc(100vw - 28px))!important;
+  max-width:720px!important;
+  max-height:min(86dvh,760px)!important;
+  padding:0!important;
+  border:0!important;
+  border-radius:26px!important;
+  overflow:hidden!important;
+  background:#fff!important;
+  box-shadow:0 30px 90px rgba(24,48,67,.28)!important;
+}
+
+.master-request-dialog::backdrop{
+  background:rgba(19,42,61,.38)!important;
+  backdrop-filter:blur(7px)!important;
+}
+
+.master-request-dialog-head{
+  padding:20px 22px 15px!important;
+  display:flex!important;
+  align-items:flex-start!important;
+  justify-content:space-between!important;
+  gap:14px!important;
+  border-bottom:1px solid #e8edf1!important;
+}
+
+.master-request-dialog-head small{
+  display:block!important;
+  color:#a3761c!important;
+  font-size:9px!important;
+  font-weight:950!important;
+  letter-spacing:.12em!important;
+  margin-bottom:4px!important;
+}
+
+.master-request-dialog-head h2{
+  margin:0!important;
+  color:#173b5c!important;
+  font-size:25px!important;
+  line-height:1.05!important;
+}
+
+.master-request-dialog-head>button{
+  width:38px!important;
+  height:38px!important;
+  display:grid!important;
+  place-items:center!important;
+  border-radius:11px!important;
+  background:#f3f6f8!important;
+  color:#617b90!important;
+}
+
+.master-request-dialog-body{
+  padding:16px 18px!important;
+  overflow:auto!important;
+  max-height:min(58dvh,510px)!important;
+}
+
+.master-request-review-note{
+  display:flex!important;
+  align-items:flex-start!important;
+  gap:8px!important;
+  margin-bottom:12px!important;
+  padding:10px 12px!important;
+  border-radius:13px!important;
+  background:#f4f8fb!important;
+  color:#60798d!important;
+  font-size:11px!important;
+  line-height:1.4!important;
+}
+
+.master-request-review-note>.ph{
+  flex:0 0 auto!important;
+  margin-top:1px!important;
+  font-size:18px!important;
+  color:#4f7c9e!important;
+}
+
+.master-request-review-list{
+  display:grid!important;
+  gap:9px!important;
+}
+
+.master-request-review-item{
+  display:grid!important;
+  grid-template-columns:minmax(0,1fr) auto 38px!important;
+  align-items:center!important;
+  gap:12px!important;
+  padding:12px 12px 12px 14px!important;
+  border:1px solid #e3e9ed!important;
+  border-radius:16px!important;
+  background:#fff!important;
+}
+
+.master-request-review-item.unavailable{
+  border-color:#efc9c5!important;
+  background:#fff8f7!important;
+}
+
+.master-request-review-main{
+  min-width:0!important;
+  display:flex!important;
+  align-items:center!important;
+  gap:10px!important;
+}
+
+.master-request-review-icon{
+  width:32px!important;
+  height:32px!important;
+  display:grid!important;
+  place-items:center!important;
+  flex:0 0 32px!important;
+  color:var(--quick-request)!important;
+  background:transparent!important;
+}
+
+.master-request-review-item.unavailable .master-request-review-icon{
+  color:#b34b43!important;
+}
+
+.master-request-review-main b{
+  display:block!important;
+  color:#244965!important;
+  font-size:13px!important;
+  line-height:1.2!important;
+}
+
+.master-request-review-main small{
+  display:block!important;
+  margin-top:3px!important;
+  color:#758999!important;
+  font-size:10px!important;
+  font-weight:700!important;
+}
+
+.master-request-review-item.unavailable .master-request-review-main small{
+  color:#a23d35!important;
+  font-weight:900!important;
+}
+
+.master-request-review-qty>small{
+  display:block!important;
+  margin-bottom:5px!important;
+  color:#927333!important;
+  text-align:center!important;
+  font-size:8px!important;
+  font-weight:950!important;
+  letter-spacing:.09em!important;
+}
+
+.master-request-review-qty>div{
+  display:grid!important;
+  grid-template-columns:32px 58px 32px!important;
+  align-items:center!important;
+  border:1px solid #e7cf91!important;
+  border-radius:11px!important;
+  overflow:hidden!important;
+  background:#fff!important;
+}
+
+.master-request-review-qty button{
+  height:36px!important;
+  display:grid!important;
+  place-items:center!important;
+  background:#fffaf0!important;
+  color:#9a6810!important;
+}
+
+.master-request-review-qty input{
+  width:100%!important;
+  height:36px!important;
+  border:0!important;
+  border-left:1px solid #eee0bd!important;
+  border-right:1px solid #eee0bd!important;
+  outline:0!important;
+  text-align:center!important;
+  font-size:12px!important;
+  font-weight:900!important;
+  color:#67480e!important;
+}
+
+.master-request-review-remove{
+  width:36px!important;
+  height:36px!important;
+  display:grid!important;
+  place-items:center!important;
+  border-radius:10px!important;
+  background:#fff3f1!important;
+  color:#aa443c!important;
+}
+
+.master-request-dialog-actions{
+  padding:13px 18px 16px!important;
+  display:flex!important;
+  align-items:center!important;
+  justify-content:flex-end!important;
+  gap:9px!important;
+  border-top:1px solid #e8edf1!important;
+  background:#fbfcfd!important;
+}
+
+.master-request-dialog-actions button{
+  min-height:44px!important;
+  margin:0!important;
+  padding:0 14px!important;
+  border-radius:13px!important;
+}
+
+.master-request-send-dialog{
+  background:var(--quick-request)!important;
+  border-color:var(--quick-request)!important;
+  color:#fff!important;
+  display:inline-flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  gap:7px!important;
+}
+
+@media(max-width:980px){
+  .master-toolbar-foot{
+    align-items:flex-start!important;
+    flex-direction:column!important;
+  }
+  .master-toolbar-actions{
+    width:100%!important;
+    justify-content:space-between!important;
+  }
+  .master-request-dock-inner{
+    align-items:stretch!important;
+    flex-direction:column!important;
+    gap:10px!important;
+  }
+  .master-request-dock-actions{
+    width:100%!important;
+  }
+  .master-request-dock-actions button{
+    flex:1 1 0!important;
+  }
+}
+
+@media(max-width:600px){
+  .master-toolbar-actions{
+    flex-direction:column!important;
+    align-items:stretch!important;
+  }
+  .master-toolbar-actions button{
+    width:100%!important;
+  }
+  #masterRequestDock{
+    bottom:calc(68px + env(safe-area-inset-bottom))!important;
+    padding:0 8px!important;
+  }
+  .master-request-dock-inner{
+    border-radius:17px!important;
+  }
+  .master-request-dock-actions{
+    flex-direction:column!important;
+  }
+  .master-request-dock-actions button{
+    width:100%!important;
+  }
+  .master-request-dialog{
+    width:min(95vw,720px)!important;
+    border-radius:21px!important;
+  }
+  .master-request-review-item{
+    grid-template-columns:minmax(0,1fr) 36px!important;
+  }
+  .master-request-review-qty{
+    grid-column:1/-1!important;
+  }
+  .master-request-review-qty>div{
+    width:150px!important;
+  }
+  .master-request-review-remove{
+    grid-column:2!important;
+    grid-row:1!important;
+  }
+  .master-request-dialog-actions{
+    flex-direction:column-reverse!important;
+  }
+  .master-request-dialog-actions button{
+    width:100%!important;
+  }
+}
+</style>
 </head>
 <body>
 <header id="topbar" class="topbar"></header>
@@ -6309,7 +6852,7 @@ const phDashboardActionIcon=(action,fallback='')=>phRegular(PHOSPHOR_ACTIONS[act
 class UI{
   constructor({store,auth,router,domain,excel,sounds}){
     Object.assign(this,{store,auth,router,domain,excel,sounds});
-    this.activityDate=localDateInput();this.receiptDraft=null;this.requestDraft=null;this.rectDraft=null;this.rectFiltersOpen=false;this.countDraft=this.loadCountSession();this.registryTab='MOVIMENTI';this.ddtFiles=[];this.requestFiles=[];this.analysisKind='';this.stockSearchTimer=null;this.masterSearchTimer=null;this.masterView={query:'',article:'',size:'',location:'',pallet:'',sort:'article',page:1,pageSize:100};this.masterEditKey='';this.adminGeneratedPin='';this.siteChoiceRequired=false;this.siteChoiceSource='';this.lastPinLength=0;
+    this.activityDate=localDateInput();this.receiptDraft=null;this.requestDraft=null;this.rectDraft=null;this.rectFiltersOpen=false;this.countDraft=this.loadCountSession();this.registryTab='MOVIMENTI';this.ddtFiles=[];this.requestFiles=[];this.analysisKind='';this.stockSearchTimer=null;this.masterSearchTimer=null;this.masterView={query:'',article:'',size:'',location:'',pallet:'',sort:'article',page:1,pageSize:100};this.masterEditKey='';this.masterRequestMode=false;this.masterRequestItems=[];this.adminGeneratedPin='';this.siteChoiceRequired=false;this.siteChoiceSource='';this.lastPinLength=0;
     this.bind();this.setupVisualViewport();this.applyView(globalThis.localStorage?.getItem(CONFIG.viewKey)||'smartphone');
     if(this.auth.user&&this.auth.needsSiteChoice())setTimeout(()=>this.openSiteChoice({required:true,source:'restore'}),0);
   }
@@ -6359,7 +6902,7 @@ class UI{
   }
   renderView(){const host=document.getElementById('appView');if(!host)return;if(!this.auth.user){host.innerHTML=this.landing();return}const {name,params}=this.router.route;const renderers={home:()=>this.home(),master:()=>this.master(),receiving:()=>this.receivingHome(),'receipt-new':()=>this.receiptNew(),receipts:()=>this.receipts(params.mode),'receipt-detail':()=>this.receiptDetail(params.id),putaway:()=>this.putAway(params.receipt,params.line),stock:()=>this.stock(),rectify:()=>this.rectify(params.key),count:()=>this.count(),issue:()=>this.issue(),transfer:()=>this.transfer(),'request-new':()=>this.requestNew(),'requests-progress':()=>this.requestList('PROGRESS'),'requests-process':()=>this.requestList('PROCESS'),'request-detail':()=>this.requestDetail(params.id),'request-pick':()=>this.requestPick(params.id),registry:()=>this.registryHome(),'registry-list':()=>this.registryList(),admin:()=>this.adminHome(),'admin-operators':()=>this.adminOperators(),'admin-operator':()=>this.adminOperatorForm(params.id||''),'admin-sites':()=>this.adminSites(),'admin-site':()=>this.adminSiteForm(params.id||''),'admin-roles':()=>this.adminRoles()};host.innerHTML=(renderers[name]||renderers.home)()+this.mobileDock(name);this.afterRender(name)}
   mobileDock(name='home'){const items=[['home','house','Home',name==='home'],...(this.auth.can('STOCK_VIEW')?[['stock','magnifying-glass','Cerca',['stock','rectify','count'].includes(name)]]:[]),...(this.auth.can('REQUEST_VIEW')||this.auth.can('REQUEST_CREATE')?[['requests-progress','clipboard-text','Richieste',String(name).startsWith('request')||String(name).startsWith('requests')]]:[]),...(this.auth.can('MOVE')?[['issue','arrow-down','Scarica',['issue','transfer'].includes(name)]]:[]),['notifications','bell','Avvisi',false]];return `<nav class="mobile-dock">${items.map(([a,i,l,on])=>`<button data-action="${a}" class="${on?'active':''}">${phDashboardIcon(i)}<span>${l}</span></button>`).join('')}</nav>`}
-  afterRender(name){if(name==='master')this.renderMasterViewerBody();if(name==='stock')this.renderStockResults();if(name==='rectify')this.renderRectResults();if(name==='registry-list')this.renderRegistryResults();if(name==='request-pick')this.renderRequestPickSources();if(name==='count'&&this.countDraft)this.renderCountBody()}
+  afterRender(name){if(name==='master'){this.renderMasterViewerBody();this.renderMasterRequestDock()}if(name==='stock')this.renderStockResults();if(name==='rectify')this.renderRectResults();if(name==='registry-list')this.renderRegistryResults();if(name==='request-pick')this.renderRequestPickSources();if(name==='count'&&this.countDraft)this.renderCountBody()}
   landing(){return `<section class="landing landing-shell"><div class="landing-watermark" aria-hidden="true">${phIcon('warehouse')}</div><div class="landing-stage"><div class="landing-copy"><img class="landing-brand" src="${LOGO}" alt="Servizi Ospedalieri"><div class="landing-kicker">SOMA HUB</div><h1>Gestione<br>Magazzino</h1><p class="landing-lead">Un unico ambiente per accedere in modo semplice e sicuro alle attività del tuo magazzino.</p></div><aside class="landing-access-card"><div class="landing-access-head"><span class="landing-access-icon">${phIcon('shield-check')}</span><div class="landing-access-titleblock"><div class="landing-access-eyebrow">ACCESSO OPERATORE</div><h2>Accedi al magazzino</h2></div></div><p>Inserisci il tuo PIN personale per entrare nell'area operativa.</p><button class="landing-login" data-action="login"><i class="ph ph-sign-in landing-login-icon" aria-hidden="true"></i><span>ACCEDI</span></button><small>${phIcon('lock-key')} Accesso riservato agli operatori autorizzati</small></aside></div></section>`}
   sectionTitle(eyebrow,title,sub=''){return `<div class="page-title"><div class="eyebrow">${esc(eyebrow)}</div><h1>${esc(title)}</h1></div>`}
   actionRow(action,label,ico,sub=''){return `<button class="module-action" data-action="${action}">${phDashboardActionIcon(action,ico)}<b>${label}</b></button>`}
@@ -6378,8 +6921,8 @@ class UI{
   master(){
     if(!this.require('MASTER_VIEW'))return'';const m=this.store.db.master,ready=this.masterReady(),hasLegacy=this.excel.legacyAvailable(),site=this.auth.site(),dirty=this.excel.dirtyCount();
     if(!ready)return `<section class="master-page-clean"><section class="master-empty-panel">${phIcon('microsoft-excel-logo')}<h2>Master non caricato</h2><p>Per ${esc(site.name)} non è ancora presente un file Excel.</p>${this.auth.can('MASTER_IMPORT')?`<button class="primary" data-action="master-import">${phIcon('upload-simple')} IMPORTA MASTER EXCEL</button>`:''}${!ready&&hasLegacy&&site.id===CONFIG.defaultSiteId&&this.auth.can('MASTER_IMPORT')?`<button class="soft" data-action="legacy-migrate">MIGRA DATI REMOTO</button>`:''}</section></section>`;
-    const rows=this.domain.stock.positive(),sizes=[...new Set(rows.map(r=>r.size).filter(Boolean))].sort((a,b)=>a.localeCompare(b,'it',{numeric:true}));
-    return `<section class="master-page-clean"><section class="master-summary-card master-summary-card-clean"><div class="master-file-identity"><span>${phIcon('microsoft-excel-logo')}</span><div><small>FILE MASTER</small><b>${esc(m.filename)}</b><p>${rows.length} giacenze attive · Foglio ${esc(m.sheetName||'MAGAZZINO')}</p></div></div><div class="master-summary-meta"><div><small>CARICATO</small><b>${fmtDateTime(m.importedAt)}</b></div><div><small>OPERATORE</small><b>${esc(m.importedBy||'—')}</b></div><div><small>MODIFICHE DA ESPORTARE</small><b class="${dirty?'warn-text':''}">${dirty}</b></div></div><div class="master-summary-actions">${this.auth.can('MASTER_IMPORT')?`<button class="soft" data-action="master-import">${phIcon('arrows-clockwise')} AGGIORNA MASTER</button>`:''}${this.auth.can('MASTER_EXPORT')?`<button class="success" data-action="master-export">${phIcon('microsoft-excel-logo')} ESPORTA AGGIORNATO</button>`:''}</div></section><section class="master-workspace master-workspace-clean"><div class="master-toolbar"><div class="master-search-box">${phIcon('magnifying-glass')}<input id="masterQuery" autocomplete="off" placeholder="Ricerca libera: articolo, taglia, stato, descrizione…" value="${esc(this.masterView.query)}"></div><div class="master-filter-grid"><label>Articolo<input id="masterFilterArticle" autocomplete="off" value="${esc(this.masterView.article)}" placeholder="Es. SZ242"></label><label>Taglia<select id="masterFilterSize"><option value="">TUTTE</option>${sizes.map(x=>`<option value="${esc(x)}" ${this.masterView.size===x?'selected':''}>${esc(x)}</option>`).join('')}</select></label><label>POSIZIONE - FILA - SCAFFALE<input id="masterFilterLocation" autocomplete="off" value="${esc(this.masterView.location)}" placeholder="Es. STANZONE CDS FERRI"></label><label>Bancale<input id="masterFilterPallet" autocomplete="off" value="${esc(this.masterView.pallet)}" placeholder="Es. DISMESSI 19"></label><label class="master-filter-sort">Ordina<select id="masterSort"><option value="article" ${this.masterView.sort==='article'?'selected':''}>Articolo</option><option value="qty_desc" ${this.masterView.sort==='qty_desc'?'selected':''}>Quantità ↓</option><option value="qty_asc" ${this.masterView.sort==='qty_asc'?'selected':''}>Quantità ↑</option><option value="location" ${this.masterView.sort==='location'?'selected':''}>Posizione - Fila - Scaffale</option><option value="pallet" ${this.masterView.sort==='pallet'?'selected':''}>Bancale</option></select></label></div><div class="master-toolbar-foot"><span>${phIcon('funnel-simple')} Tutti i filtri sono combinabili</span><button data-action="master-filter-reset">AZZERA FILTRI</button></div></div><div class="master-permission-note">${phIcon(this.auth.can('MASTER_EDIT_STOCK')?'shield-check':'eye')}<span>${this.auth.can('MASTER_EDIT_STOCK')?'Puoi modificare le quantità. SOMA registra solo la variazione e preserva le formule Excel originali.':'Visualizzazione in sola lettura per il tuo ruolo.'}</span></div><div id="masterViewerMeta" class="master-viewer-meta"></div><div id="masterViewerBody"></div></section></section>`
+    const rows=this.domain.stock.positive(),sizes=[...new Set(rows.map(r=>r.size).filter(Boolean))].sort((a,b)=>a.localeCompare(b,'it',{numeric:true})),canQuick=this.auth.can('REQUEST_CREATE');
+    return `<section class="master-page-clean"><section class="master-summary-card master-summary-card-clean"><div class="master-file-identity"><span>${phIcon('microsoft-excel-logo')}</span><div><small>FILE MASTER</small><b>${esc(m.filename)}</b><p>${rows.length} giacenze attive · Foglio ${esc(m.sheetName||'MAGAZZINO')}</p></div></div><div class="master-summary-meta"><div><small>CARICATO</small><b>${fmtDateTime(m.importedAt)}</b></div><div><small>OPERATORE</small><b>${esc(m.importedBy||'—')}</b></div><div><small>MODIFICHE DA ESPORTARE</small><b class="${dirty?'warn-text':''}">${dirty}</b></div></div><div class="master-summary-actions">${this.auth.can('MASTER_IMPORT')?`<button class="soft" data-action="master-import">${phIcon('arrows-clockwise')} AGGIORNA MASTER</button>`:''}${this.auth.can('MASTER_EXPORT')?`<button class="success" data-action="master-export">${phIcon('microsoft-excel-logo')} ESPORTA AGGIORNATO</button>`:''}</div></section><section class="master-workspace master-workspace-clean"><div class="master-toolbar"><div class="master-search-box">${phIcon('magnifying-glass')}<input id="masterQuery" autocomplete="off" placeholder="Ricerca libera: articolo, taglia, stato, descrizione…" value="${esc(this.masterView.query)}"></div><div class="master-filter-grid"><label>Articolo<input id="masterFilterArticle" autocomplete="off" value="${esc(this.masterView.article)}" placeholder="Es. SZ242"></label><label>Taglia<select id="masterFilterSize"><option value="">TUTTE</option>${sizes.map(x=>`<option value="${esc(x)}" ${this.masterView.size===x?'selected':''}>${esc(x)}</option>`).join('')}</select></label><label>POSIZIONE - FILA - SCAFFALE<input id="masterFilterLocation" autocomplete="off" value="${esc(this.masterView.location)}" placeholder="Es. STANZONE CDS FERRI"></label><label>Bancale<input id="masterFilterPallet" autocomplete="off" value="${esc(this.masterView.pallet)}" placeholder="Es. DISMESSI 19"></label><label class="master-filter-sort">Ordina<select id="masterSort"><option value="article" ${this.masterView.sort==='article'?'selected':''}>Articolo</option><option value="qty_desc" ${this.masterView.sort==='qty_desc'?'selected':''}>Quantità ↓</option><option value="qty_asc" ${this.masterView.sort==='qty_asc'?'selected':''}>Quantità ↑</option><option value="location" ${this.masterView.sort==='location'?'selected':''}>Posizione - Fila - Scaffale</option><option value="pallet" ${this.masterView.sort==='pallet'?'selected':''}>Bancale</option></select></label></div><div class="master-toolbar-foot"><span>${phIcon('funnel-simple')} Tutti i filtri sono combinabili</span><div class="master-toolbar-actions"><button data-action="master-filter-reset">AZZERA FILTRI</button>${canQuick?`<button class="master-request-toggle ${this.masterRequestMode?'active':''}" data-action="master-request-toggle">${phRegular(this.masterRequestMode?'x':'check-square')}<span>${this.masterRequestMode?'ESCI DA RICHIESTA':'CREA RICHIESTA'}</span></button>`:''}</div></div>${canQuick&&this.masterRequestMode?`<div class="master-request-mode-banner">${phRegular('clipboard-text')}<div><b>Modalità richiesta rapida</b><small>Seleziona articolo e taglia, indica i cartoni e invia. Posizioni e bancali duplicati confluiscono nella stessa riga richiesta.</small></div></div>`:''}</div><div class="master-permission-note">${phIcon(this.auth.can('MASTER_EDIT_STOCK')?'shield-check':'eye')}<span>${this.auth.can('MASTER_EDIT_STOCK')?'Puoi modificare le quantità. SOMA registra solo la variazione e preserva le formule Excel originali.':'Visualizzazione in sola lettura per il tuo ruolo.'}</span></div><div id="masterViewerMeta" class="master-viewer-meta"></div><div id="masterViewerBody"></div></section>${canQuick?`<div id="masterRequestDock"></div><dialog id="masterRequestDialog" class="dialog master-request-dialog" aria-labelledby="masterRequestDialogTitle"><div class="master-request-dialog-head"><div><small>RICHIESTA RAPIDA</small><h2 id="masterRequestDialogTitle">Rivedi richiesta</h2></div><button type="button" data-action="master-request-review-close" aria-label="Chiudi">${phRegular('x')}</button></div><div id="masterRequestDialogBody" class="master-request-dialog-body"></div><div class="master-request-dialog-actions"><button class="soft" data-action="master-request-review-close">TORNA AL MASTER</button><button class="primary master-request-send-dialog" data-action="master-request-send">${phRegular('paper-plane-tilt')} INVIA RICHIESTA</button></div></dialog>`:''}</section>`
   }
   masterFilteredRows(){
     const all=this.domain.stock.positive(),v=this.masterView,q=String(v.query||'').trim(),parsed=this.parseStockQuery(q),article=normalizeArticle(v.article||''),size=norm(v.size),loc=norm(v.location),pallet=norm(v.pallet);let rows=all.filter(r=>{
@@ -6389,10 +6932,45 @@ class UI{
     const cmp={article:(a,b)=>a.article.localeCompare(b.article,'it',{numeric:true})||a.size.localeCompare(b.size,'it',{numeric:true})||a.location.localeCompare(b.location,'it',{numeric:true}),qty_desc:(a,b)=>b.quantity-a.quantity||a.article.localeCompare(b.article),qty_asc:(a,b)=>a.quantity-b.quantity||a.article.localeCompare(b.article),location:(a,b)=>a.location.localeCompare(b.location,'it',{numeric:true})||a.pallet.localeCompare(b.pallet,'it',{numeric:true})||a.article.localeCompare(b.article),pallet:(a,b)=>a.pallet.localeCompare(b.pallet,'it',{numeric:true})||a.location.localeCompare(b.location,'it',{numeric:true})||a.article.localeCompare(b.article)}[v.sort]||(()=>0);rows.sort(cmp);return rows
   }
   renderMasterViewerBody(){
-    const host=document.getElementById('masterViewerBody'),meta=document.getElementById('masterViewerMeta');if(!host||!meta)return;const rows=this.masterFilteredRows(),v=this.masterView,pages=Math.max(1,Math.ceil(rows.length/v.pageSize));v.page=Math.min(Math.max(1,v.page),pages);const start=(v.page-1)*v.pageSize,visible=rows.slice(start,start+v.pageSize),editable=this.auth.can('MASTER_EDIT_STOCK');
+    const host=document.getElementById('masterViewerBody'),meta=document.getElementById('masterViewerMeta');if(!host||!meta)return;const rows=this.masterFilteredRows(),v=this.masterView,pages=Math.max(1,Math.ceil(rows.length/v.pageSize));v.page=Math.min(Math.max(1,v.page),pages);const start=(v.page-1)*v.pageSize,visible=rows.slice(start,start+v.pageSize),editable=this.auth.can('MASTER_EDIT_STOCK'),requestMode=this.masterRequestMode&&this.auth.can('REQUEST_CREATE');
     meta.innerHTML=`<div><b>${rows.length}</b><span>${rows.length===1?'riga trovata':'righe trovate'}</span></div><small>Pagina ${v.page} di ${pages}${rows.length?` · ${start+1}-${Math.min(start+v.pageSize,rows.length)}`:''}</small>`;
-    host.innerHTML=visible.length?`<div class="master-table-shell" role="region" aria-label="Master Excel scorrevole. Scorri verticalmente e orizzontalmente per consultare tutte le righe e colonne." tabindex="0"><table class="master-table"><thead><tr><th>Articolo</th><th>Taglia</th><th>Stato</th><th class="num">Quantità</th><th>POSIZIONE - FILA - SCAFFALE</th><th>Bancale</th><th>Descrizione</th>${editable?'<th></th>':''}</tr></thead><tbody>${visible.map(r=>`<tr><td data-label="Articolo"><b>${esc(r.article)}</b></td><td data-label="Taglia">${esc(r.size||'—')}</td><td data-label="Stato"><span class="master-state ${this.stockStateClass(r.state)}"><i></i>${esc(r.state)}</span></td><td data-label="Quantità" class="num"><strong>${r.quantity}</strong></td><td data-label="POSIZIONE - FILA - SCAFFALE">${esc(r.location||'—')}</td><td data-label="Bancale">${esc(r.pallet||'—')}</td><td data-label="Descrizione" class="description">${esc(r.description||'—')}</td>${editable?`<td class="master-edit-cell"><button data-action="master-edit-row" data-key="${esc(encodeURIComponent(bucketKey(r)))}" aria-label="Modifica ${esc(r.article)}">${phIcon('pencil-simple')}</button></td>`:''}</tr>`).join('')}</tbody></table></div><div class="master-pagination"><button data-action="master-page-prev" ${v.page<=1?'disabled':''}>${phIcon('caret-left')} PRECEDENTE</button><span>${v.page} / ${pages}</span><button data-action="master-page-next" ${v.page>=pages?'disabled':''}>SUCCESSIVA ${phIcon('caret-right')}</button></div>`:`<div class="empty master-no-results">${phIcon('funnel-simple','empty-icon')}<div><b>Nessun dato corrisponde ai filtri.</b><small>Azzera i filtri o modifica i criteri di ricerca.</small></div></div>`
+    host.innerHTML=visible.length?`<div class="master-table-shell ${requestMode?'request-mode':''}" role="region" aria-label="Master Excel scorrevole. Scorri verticalmente e orizzontalmente per consultare tutte le righe e colonne." tabindex="0"><table class="master-table"><thead><tr>${requestMode?'<th class="master-request-select-head">RICHIEDI</th>':''}<th>Articolo</th><th>Taglia</th><th>Stato</th><th class="num">Quantità</th><th>POSIZIONE - FILA - SCAFFALE</th><th>Bancale</th><th>Descrizione</th>${requestMode?'<th class="master-request-cartons-head">CARTONI</th>':''}${editable?'<th></th>':''}</tr></thead><tbody>${visible.map(r=>{const encoded=encodeURIComponent(JSON.stringify([r.article,r.size||''])),selected=requestMode?this.masterRequestFind(r.article,r.size):null;return `<tr class="${selected?'master-request-selected':''}">${requestMode?`<td class="master-request-select-cell" data-label="Richiedi"><button type="button" class="master-request-check ${selected?'selected':''}" data-action="master-request-item" data-item="${esc(encoded)}" aria-pressed="${selected?'true':'false'}" aria-label="${selected?'Rimuovi':'Aggiungi'} ${esc(r.article)} ${esc(r.size||'')} dalla richiesta">${phRegular(selected?'check-square':'square')}</button></td>`:''}<td data-label="Articolo"><b>${esc(r.article)}</b></td><td data-label="Taglia">${esc(r.size||'—')}</td><td data-label="Stato"><span class="master-state ${this.stockStateClass(r.state)}"><i></i>${esc(r.state)}</span></td><td data-label="Quantità" class="num"><strong>${r.quantity}</strong></td><td data-label="POSIZIONE - FILA - SCAFFALE">${esc(r.location||'—')}</td><td data-label="Bancale">${esc(r.pallet||'—')}</td><td data-label="Descrizione" class="description">${esc(r.description||'—')}</td>${requestMode?`<td class="master-request-cartons-cell" data-label="Cartoni">${selected?`<input type="number" min="1" max="999" inputmode="numeric" class="master-request-inline-qty" data-master-request-qty="${esc(encoded)}" value="${selected.cartonsRequested}" aria-label="Cartoni richiesti per ${esc(r.article)} ${esc(r.size||'')}">`:'<span class="master-request-not-selected">—</span>'}</td>`:''}${editable?`<td class="master-edit-cell"><button data-action="master-edit-row" data-key="${esc(encodeURIComponent(bucketKey(r)))}" aria-label="Modifica ${esc(r.article)}">${phIcon('pencil-simple')}</button></td>`:''}</tr>`}).join('')}</tbody></table></div><div class="master-pagination"><button data-action="master-page-prev" ${v.page<=1?'disabled':''}>${phIcon('caret-left')} PRECEDENTE</button><span>${v.page} / ${pages}</span><button data-action="master-page-next" ${v.page>=pages?'disabled':''}>SUCCESSIVA ${phIcon('caret-right')}</button></div>`:`<div class="empty master-no-results">${phIcon('funnel-simple','empty-icon')}<div><b>Nessun dato corrisponde ai filtri.</b><small>Azzera i filtri o modifica i criteri di ricerca.</small></div></div>`;this.renderMasterRequestDock()
   }
+
+  masterRequestKey(article,size=''){return `${normalizeArticle(article)}\u241f${norm(size)}`}
+  masterRequestFind(article,size=''){const key=this.masterRequestKey(article,size);return this.masterRequestItems.find(x=>x.key===key)||null}
+  decodeMasterRequestItem(encoded){try{const [article,size]=JSON.parse(decodeURIComponent(encoded||''));return{article:normalizeArticle(article),size:norm(size)}}catch{return{article:'',size:''}}}
+  toggleMasterRequestMode(){
+    if(!this.auth.can('REQUEST_CREATE'))throw new Error('Non hai il permesso per creare richieste.');
+    if(this.masterRequestMode&&this.masterRequestItems.length&&!confirm('Uscire dalla modalità richiesta? La selezione corrente verrà azzerata.'))return;
+    this.masterRequestMode=!this.masterRequestMode;this.masterRequestItems=[];document.getElementById('masterRequestDialog')?.close();this.renderView()
+  }
+  toggleMasterRequestItem(encoded){
+    if(!this.masterRequestMode||!this.auth.can('REQUEST_CREATE'))return;const item=this.decodeMasterRequestItem(encoded);if(!item.article)throw new Error('Articolo non valido.');const key=this.masterRequestKey(item.article,item.size),idx=this.masterRequestItems.findIndex(x=>x.key===key);
+    if(idx>=0)this.masterRequestItems.splice(idx,1);else{const available=this.domain.stock.total(item.article,item.size);if(available<=0)throw new Error('Questo articolo non è più disponibile in magazzino.');this.masterRequestItems.push({key,article:item.article,size:item.size,cartonsRequested:1})}
+    this.renderMasterViewerBody()
+  }
+  updateMasterRequestQty(el,finalize=false){
+    if(!el?.dataset?.masterRequestQty)return;const item=this.decodeMasterRequestItem(el.dataset.masterRequestQty),found=this.masterRequestFind(item.article,item.size);if(!found)return;const raw=String(el.value??'').trim();if(!raw&&!finalize)return;let qty=Math.floor(Number(raw));if(!Number.isFinite(qty)||qty<1)qty=1;qty=Math.min(999,qty);found.cartonsRequested=qty;if(finalize){el.value=String(qty);this.renderMasterViewerBody()}else this.renderMasterRequestDock()
+  }
+  adjustMasterRequestQty(encoded,delta){
+    const item=this.decodeMasterRequestItem(encoded),found=this.masterRequestFind(item.article,item.size);if(!found)return;found.cartonsRequested=Math.max(1,Math.min(999,Math.floor(Number(found.cartonsRequested)||1)+delta));this.openMasterRequestReview()
+  }
+  removeMasterRequestItem(encoded){
+    const item=this.decodeMasterRequestItem(encoded),key=this.masterRequestKey(item.article,item.size);this.masterRequestItems=this.masterRequestItems.filter(x=>x.key!==key);this.renderMasterViewerBody();if(this.masterRequestItems.length)this.openMasterRequestReview();else document.getElementById('masterRequestDialog')?.close()
+  }
+  renderMasterRequestDock(){
+    const host=document.getElementById('masterRequestDock');if(!host)return;if(!this.masterRequestMode||!this.auth.can('REQUEST_CREATE')){host.innerHTML='';return}const items=this.masterRequestItems,total=items.reduce((n,x)=>n+Math.max(1,Math.floor(Number(x.cartonsRequested)||1)),0),unavailable=items.filter(x=>this.domain.stock.total(x.article,x.size)<=0).length;
+    host.innerHTML=`<div class="master-request-dock-inner"><div class="master-request-dock-copy">${phRegular('clipboard-text')}<div><b>Richiesta rapida</b><small>${items.length} ${items.length===1?'articolo selezionato':'articoli selezionati'} · ${total} ${total===1?'cartone':'cartoni'}${unavailable?` · <strong>${unavailable} non disponibile${unavailable===1?'':'i'}</strong>`:''}</small></div></div><div class="master-request-dock-actions"><button class="soft" data-action="master-request-review" ${items.length?'':'disabled'}>${phRegular('list-checks')} RIVEDI</button><button class="primary" data-action="master-request-send" ${items.length&&!unavailable?'':'disabled'}>${phRegular('paper-plane-tilt')} INVIA RICHIESTA</button></div></div>`
+  }
+  openMasterRequestReview(){
+    if(!this.masterRequestItems.length)throw new Error('Seleziona almeno un articolo.');const d=document.getElementById('masterRequestDialog'),body=document.getElementById('masterRequestDialogBody');if(!d||!body)return;body.innerHTML=`<div class="master-request-review-note">${phRegular('info')}<span>La richiesta è per <b>articolo + taglia</b>. Posizione e bancale verranno scelti durante il prelievo.</span></div><div class="master-request-review-list">${this.masterRequestItems.map(x=>{const encoded=encodeURIComponent(JSON.stringify([x.article,x.size||''])),available=this.domain.stock.total(x.article,x.size);return `<article class="master-request-review-item ${available<=0?'unavailable':''}"><div class="master-request-review-main"><span class="master-request-review-icon">${phRegular(available>0?'package':'warning-circle')}</span><div><b>${esc(x.article)}${x.size?` · ${esc(x.size)}`:''}</b><small>${available>0?`${available} pezzi disponibili`:'NON PIÙ DISPONIBILE'}</small></div></div><div class="master-request-review-qty"><small>CARTONI</small><div><button type="button" data-action="master-request-qty-minus" data-item="${esc(encoded)}" aria-label="Riduci cartoni">${phRegular('minus')}</button><input type="number" min="1" max="999" inputmode="numeric" data-master-request-qty="${esc(encoded)}" value="${x.cartonsRequested}"><button type="button" data-action="master-request-qty-plus" data-item="${esc(encoded)}" aria-label="Aumenta cartoni">${phRegular('plus')}</button></div></div><button class="master-request-review-remove" data-action="master-request-remove" data-item="${esc(encoded)}" aria-label="Rimuovi ${esc(x.article)}">${phRegular('trash')}</button></article>`}).join('')}</div>`;if(!d.open)d.showModal()
+  }
+  sendMasterRequest(){
+    if(!this.auth.can('REQUEST_CREATE'))throw new Error('Non hai il permesso per creare richieste.');if(!this.masterRequestItems.length)throw new Error('Seleziona almeno un articolo.');const unavailable=this.masterRequestItems.filter(x=>this.domain.stock.total(x.article,x.size)<=0);if(unavailable.length)throw new Error(`Richiesta non inviata. Non più disponibile: ${unavailable.map(x=>x.article+(x.size?' · '+x.size:'')).join(', ')}.`);
+    const lines=this.masterRequestItems.map(x=>({article:x.article,size:x.size,cartonsRequested:Math.max(1,Math.floor(Number(x.cartonsRequested)||1)),marker:'',note:''})),r=this.domain.requests.create({destination:'LINA',reference:'',requestedAt:nowIso(),note:'',lines});this.masterRequestItems=[];this.masterRequestMode=false;document.getElementById('masterRequestDialog')?.close();this.toast(`Richiesta ${r.id} inviata dal Master.`);this.router.go('request-detail',{id:r.id})
+  }
+
   scheduleMasterRender(delay=70){clearTimeout(this.masterSearchTimer);this.masterSearchTimer=setTimeout(()=>{this.masterSearchTimer=null;this.renderMasterViewerBody()},delay)}
   resetMasterFilters(){this.masterView={...this.masterView,query:'',article:'',size:'',location:'',pallet:'',sort:'article',page:1};const q=document.getElementById('masterQuery'),art=document.getElementById('masterFilterArticle'),sz=document.getElementById('masterFilterSize'),loc=document.getElementById('masterFilterLocation'),pal=document.getElementById('masterFilterPallet'),sort=document.getElementById('masterSort');if(q)q.value='';if(art)art.value='';if(sz)sz.value='';if(loc)loc.value='';if(pal)pal.value='';if(sort)sort.value='article';this.renderMasterViewerBody()}
   openMasterEdit(encodedKey){
@@ -6577,11 +7155,11 @@ class UI{
     foot.innerHTML=required?`<button class="soft small" data-action="site-choice-cancel">ANNULLA ACCESSO</button>`:'';
     if(!d.open)d.showModal()
   }
-  hasTransientSiteWork(){return !!(this.receiptDraft||this.requestDraft||this.rectDraft||this.ddtFiles.length||this.requestFiles.length)}
+  hasTransientSiteWork(){return !!(this.receiptDraft||this.requestDraft||this.rectDraft||this.ddtFiles.length||this.requestFiles.length||this.masterRequestItems.length)}
   async selectSite(siteId){
     const next=identityNorm(siteId);if(!this.auth.allowedSiteIds().includes(next))throw new Error('Sede non autorizzata per questo operatore.');if(!SITES[next]?.active)throw new Error('La sede selezionata non è attiva.');
     const old=this.auth.siteId,changing=old!==next;if(changing&&this.siteChoiceSource==='switch'&&this.hasTransientSiteWork()){if(!confirm(`Passare da ${SITES[old]?.name||old} a ${SITES[next]?.name||next}? Le bozze non confermate verranno chiuse.`))return}
-    if(changing)this.persistCountSession();this.auth.setSite(next);this.store.useSite(next,{silent:true});this.receiptDraft=null;this.requestDraft=null;this.rectDraft=null;this.ddtFiles=[];this.requestFiles=[];this.analysisKind='';this.registryTab='MOVIMENTI';this.activityDate=localDateInput();this.countDraft=this.loadCountSession();
+    if(changing)this.persistCountSession();this.auth.setSite(next);this.store.useSite(next,{silent:true});this.receiptDraft=null;this.requestDraft=null;this.rectDraft=null;this.masterRequestMode=false;this.masterRequestItems=[];this.ddtFiles=[];this.requestFiles=[];this.analysisKind='';this.registryTab='MOVIMENTI';this.activityDate=localDateInput();this.countDraft=this.loadCountSession();
     this.siteChoiceRequired=false;this.siteChoiceSource='';document.getElementById('siteDialog')?.close();this.router.home();this.render();this.toast(`Sede attiva: ${this.auth.site().name}.`)
   }
   cancelSiteChoice(){
@@ -6590,11 +7168,11 @@ class UI{
   openSiteSwitcher(){if(!this.auth.canSwitchSite()){this.toast(`Sede attiva: ${this.auth.site().name}.`);return}this.openSiteChoice({required:false,source:'switch'})}
   openLogin(){const d=document.getElementById('loginDialog'),pin=document.getElementById('loginPin'),toggle=d?.querySelector('[data-action="toggle-pin"]');pin.value='';this.lastPinLength=0;pin.type='password';document.getElementById('loginError').classList.add('hidden');document.documentElement.classList.remove('nova-keyboard-open');if(toggle){toggle.setAttribute('aria-label','Mostra PIN');const i=toggle.querySelector('i');if(i)i.className='ph-duotone ph-eye'}this.syncVisualViewport?.();d.showModal();setTimeout(()=>{pin.focus();this.syncVisualViewport?.()},80)}
   async login(){const ok=await this.auth.login(document.getElementById('loginPin').value);if(!ok){this.sounds?.error?.();document.getElementById('loginError').classList.remove('hidden');document.getElementById('loginPin').value='';this.lastPinLength=0;return}this.sounds?.success?.();document.documentElement.classList.remove('nova-keyboard-open');document.getElementById('loginDialog').close();if(this.auth.needsSiteChoice()){this.openSiteChoice({required:true,source:'login'});return}this.store.useSite(this.auth.siteId,{silent:true});this.countDraft=this.loadCountSession();this.router.home();this.render()}
-  logout(){this.persistCountSession();document.getElementById('siteDialog')?.close();this.siteChoiceRequired=false;this.siteChoiceSource='';this.auth.logout();this.store.useSite(CONFIG.defaultSiteId,{silent:true});this.receiptDraft=null;this.requestDraft=null;this.rectDraft=null;this.countDraft=null;this.ddtFiles=[];this.requestFiles=[];this.router.home();this.render()}
+  logout(){this.persistCountSession();document.getElementById('siteDialog')?.close();this.siteChoiceRequired=false;this.siteChoiceSource='';this.auth.logout();this.store.useSite(CONFIG.defaultSiteId,{silent:true});this.receiptDraft=null;this.requestDraft=null;this.rectDraft=null;this.masterRequestMode=false;this.masterRequestItems=[];this.countDraft=null;this.ddtFiles=[];this.requestFiles=[];this.router.home();this.render()}
   openNotifications(){const d=document.getElementById('notificationDialog'),rows=this.domain.notifications.visibleTo(this.auth.user);d.querySelector('.dialog-body').innerHTML=rows.length?rows.map(n=>`<button class="notif-row ${n.readAt?'read':''}" data-action="notif-read" data-id="${n.id}" data-entity="${n.entityType}" data-entity-id="${n.entityId}"><b>${esc(n.title)}</b><span>${esc(n.body)}</span><small>${fmtDateTime(n.createdAt)}</small></button>`).join(''):'<div class="empty">Nessuna notifica.</div>';d.showModal()}
 
-  input(el){if(el.id==='loginPin'){const next=String(el.value||'').replace(/\D/g,'').slice(0,4);if(el.value!==next)el.value=next;if(next.length>this.lastPinLength)this.sounds?.pinKey?.();this.lastPinLength=next.length}if(el.dataset.countExtra)this.updateCountExtra(el.dataset.dom,el.dataset.countExtra,el.value);if(el.id?.startsWith('count-value-'))this.updateCountValue(el.id.replace('count-value-',''),el.value);if(el.id==='rectCounted')this.updateRectCount(el.value);const bind=el.dataset.bind;if(bind)this.bindDraft(bind,el.value);if(['stockQuery','stockLocation','stockPallet'].includes(el.id))this.scheduleStockRender();if(['rectSearch','rectFilterSize','rectFilterLocation','rectFilterPallet'].includes(el.id))this.renderRectResults();if(el.id==='registryQuery')this.renderRegistryResults();if(el.id==='masterQuery'){this.masterView.query=el.value;this.masterView.page=1;this.scheduleMasterRender()}if(el.id==='masterFilterArticle'){this.masterView.article=el.value;this.masterView.page=1;this.scheduleMasterRender()}if(el.id==='masterFilterLocation'){this.masterView.location=el.value;this.masterView.page=1;this.scheduleMasterRender()}if(el.id==='masterFilterPallet'){this.masterView.pallet=el.value;this.masterView.page=1;this.scheduleMasterRender()}if(el.id==='loginPin'){el.value=el.value.replace(/\D/g,'').slice(0,4);document.getElementById('loginError')?.classList.add('hidden')}}
-  change(el){if(el.dataset.countExtra)this.updateCountExtra(el.dataset.dom,el.dataset.countExtra,el.value);if(el.id==='rectFilterState')this.renderRectResults();if(el.id==='rectReason'&&this.rectDraft)this.rectDraft.reason=norm(el.value);const bind=el.dataset.bind;if(bind){this.bindDraft(bind,el.value);if(bind.includes(':article')||bind.includes(':size')||bind.includes(':state'))this.renderView()}if(el.id==='stockState')this.renderStockResults();if(['registryFrom','registryTo','registryType','registryState'].includes(el.id))this.renderRegistryResults();if(el.id==='masterFilterSize'){this.masterView.size=el.value;this.masterView.page=1;this.renderMasterViewerBody()}if(el.id==='masterSort'){this.masterView.sort=el.value;this.masterView.page=1;this.renderMasterViewerBody()}if(el.id?.startsWith('activityDate-')){this.activityDate=el.value||localDateInput();this.renderView()}}
+  input(el){if(el.dataset.masterRequestQty)this.updateMasterRequestQty(el,false);if(el.id==='loginPin'){const next=String(el.value||'').replace(/\D/g,'').slice(0,4);if(el.value!==next)el.value=next;if(next.length>this.lastPinLength)this.sounds?.pinKey?.();this.lastPinLength=next.length}if(el.dataset.countExtra)this.updateCountExtra(el.dataset.dom,el.dataset.countExtra,el.value);if(el.id?.startsWith('count-value-'))this.updateCountValue(el.id.replace('count-value-',''),el.value);if(el.id==='rectCounted')this.updateRectCount(el.value);const bind=el.dataset.bind;if(bind)this.bindDraft(bind,el.value);if(['stockQuery','stockLocation','stockPallet'].includes(el.id))this.scheduleStockRender();if(['rectSearch','rectFilterSize','rectFilterLocation','rectFilterPallet'].includes(el.id))this.renderRectResults();if(el.id==='registryQuery')this.renderRegistryResults();if(el.id==='masterQuery'){this.masterView.query=el.value;this.masterView.page=1;this.scheduleMasterRender()}if(el.id==='masterFilterArticle'){this.masterView.article=el.value;this.masterView.page=1;this.scheduleMasterRender()}if(el.id==='masterFilterLocation'){this.masterView.location=el.value;this.masterView.page=1;this.scheduleMasterRender()}if(el.id==='masterFilterPallet'){this.masterView.pallet=el.value;this.masterView.page=1;this.scheduleMasterRender()}if(el.id==='loginPin'){el.value=el.value.replace(/\D/g,'').slice(0,4);document.getElementById('loginError')?.classList.add('hidden')}}
+  change(el){if(el.dataset.masterRequestQty)this.updateMasterRequestQty(el,true);if(el.dataset.countExtra)this.updateCountExtra(el.dataset.dom,el.dataset.countExtra,el.value);if(el.id==='rectFilterState')this.renderRectResults();if(el.id==='rectReason'&&this.rectDraft)this.rectDraft.reason=norm(el.value);const bind=el.dataset.bind;if(bind){this.bindDraft(bind,el.value);if(bind.includes(':article')||bind.includes(':size')||bind.includes(':state'))this.renderView()}if(el.id==='stockState')this.renderStockResults();if(['registryFrom','registryTo','registryType','registryState'].includes(el.id))this.renderRegistryResults();if(el.id==='masterFilterSize'){this.masterView.size=el.value;this.masterView.page=1;this.renderMasterViewerBody()}if(el.id==='masterSort'){this.masterView.sort=el.value;this.masterView.page=1;this.renderMasterViewerBody()}if(el.id?.startsWith('activityDate-')){this.activityDate=el.value||localDateInput();this.renderView()}}
   bindDraft(bind,value){const [kind,id,key]=bind.split(':');if(kind==='receipt'&&this.receiptDraft){if(id==='header'){this.receiptDraft[key]=value;return}const l=this.receiptDraft.lines.find(x=>x.id===id);if(l){if(['ddtQuantity','checkedQuantity'].includes(key)){l[key]=Math.max(0,Number(value)||0);if(key==='checkedQuantity'&&l.partials.length)l.partials=[]}else if(key==='article')l[key]=normalizeArticle(value);else if(['size','state','pallet'].includes(key))l[key]=norm(value);else l[key]=value}}if(kind==='request'&&this.requestDraft){if(id==='header'){this.requestDraft[key]=value;return}const l=this.requestDraft.lines.find(x=>x.id===id);if(l){if(key==='cartonsRequested')l[key]=Math.max(0,Math.floor(Number(value)||0));else if(key==='article')l[key]=normalizeArticle(value);else if(key==='size')l[key]=norm(value);else l[key]=value}}}
 
   async importMaster(input){const file=input.files?.[0];input.value='';if(!file)return;if(this.masterReady()&&this.excel.dirtyCount()&&!confirm(`Ci sono ${this.excel.dirtyCount()} modifiche non esportate. Importare comunque?`))return;const r=await this.excel.importFile(file,{restoreHistory:true});this.countDraft=this.loadCountSession();this.rectDraft=null;this.toast(`${r.filename} importato · ${r.rows} righe.`);this.router.home()}
@@ -6610,7 +7188,7 @@ class UI{
 
   action(action,el){
     const go=(name,params={})=>this.router.go(name,params);
-    const map={back:()=>this.router.back(),home:()=>this.router.home(),login:()=>{this.sounds?.click?.();this.openLogin()},'login-submit':()=>this.login(),logout:()=>{this.sounds?.click?.();this.logout()},'site-switch':()=>this.openSiteSwitcher(),'site-select':()=>this.selectSite(el.dataset.site),'site-choice-cancel':()=>this.cancelSiteChoice(),'toggle-pin':()=>{const p=document.getElementById('loginPin'),show=p.type==='password';p.type=show?'text':'password';const i=el.querySelector('i');if(i)i.className=`ph-duotone ph-${show?'eye-slash':'eye'}`;el.setAttribute('aria-label',show?'Nascondi PIN':'Mostra PIN');p.focus()},'view-desktop':()=>this.applyView('desktop'),'view-phone':()=>this.applyView('smartphone'),notifications:()=>this.openNotifications(),master:()=>go('master'),'master-view':()=>go('master'),'master-filter-reset':()=>this.resetMasterFilters(),'master-page-prev':()=>{this.masterView.page=Math.max(1,this.masterView.page-1);this.renderMasterViewerBody()},'master-page-next':()=>{this.masterView.page+=1;this.renderMasterViewerBody()},'master-edit-close':()=>this.closeMasterEdit(),'master-edit-save':()=>this.saveMasterEdit(),'master-import':()=>{if(!this.auth.can('MASTER_IMPORT'))throw new Error('Non hai il permesso per importare il Master.');document.getElementById('masterFile').click()},'master-export':async()=>{if(!this.auth.can('MASTER_EXPORT'))throw new Error('Non hai il permesso per esportare il Master.');const n=await this.excel.export();this.toast(`${n} esportato.`)},'legacy-migrate':()=>{if(!confirm('Migrare una COPIA dei dati REMOTO in NOVA? REMOTO non verrà modificato.'))return;this.excel.migrateLocalLegacy();this.toast('Copia REMOTO migrata in NOVA.');this.router.home()},receiving:()=>go('receiving'),'receipt-new':()=>this.openReceiptNew(),'receipts-pending':()=>go('receipts',{mode:'PENDING'}),'receipts-all':()=>go('receipts',{mode:'ALL'}),'receipt-line-add':()=>this.addReceiptLine(),'receipt-confirm':()=>this.confirmReceipt(),'ddt-camera':()=>document.getElementById('ddtCamera').click(),'ddt-file':()=>document.getElementById('ddtFile').click(),'ddt-analyze':()=>this.openAnalysis('DDT'),'request-camera':()=>document.getElementById('requestCamera').click(),'request-file':()=>document.getElementById('requestFile').click(),'request-analyze':()=>this.openAnalysis('REQUEST'),'analysis-share':()=>this.shareAnalysis(),'analysis-copy':()=>this.copyAnalysisPrompt(),'analysis-import':()=>this.importAnalysisJson(),stock:()=>{if(this.require('STOCK_VIEW',{master:true}))go('stock')},'rectify-new':()=>{this.rectDraft=null;go('rectify',{key:''})},rectify:()=>{this.rectDraft=null;go('rectify',{key:''})},'rect-filter-toggle':()=>{this.rectFiltersOpen=!this.rectFiltersOpen;this.renderView()},'rect-change':()=>{this.rectDraft=null;this.renderView()},'rect-step-minus':()=>this.stepRect(-1),'rect-step-plus':()=>this.stepRect(1),'rect-cancel':()=>{this.rectDraft=null;this.router.back()},'rectify-save':()=>this.saveRectify(el),count:()=>{this.countDraft=this.countDraft||this.loadCountSession();go('count')},'count-load':()=>this.loadCount(),'count-finalize':()=>this.finalizeCount(),'count-apply':()=>this.applyCount(el),'count-abandon':()=>this.abandonCount(),issue:()=>go('issue'),'issue-confirm':()=>this.confirmIssue(),transfer:()=>go('transfer'),'transfer-confirm':()=>this.confirmTransfer(),requests:()=>go('requests-progress'),'request-new':()=>this.openRequestNew(),'request-line-add':()=>this.addRequestLine(),'request-save':()=>this.saveRequest(),'requests-progress':()=>go('requests-progress'),'requests-process':()=>go('requests-process'),registry:()=>go('registry'),'registry-movements':()=>{this.registryTab='MOVIMENTI';go('registry-list')},'registry-audit':()=>{this.registryTab='AUDIT';go('registry-list')},'registry-export':async()=>{const n=await this.excel.exportRegistry();this.toast(`${n} esportato.`)},admin:()=>go('admin'),'admin-operators':()=>go('admin-operators'),'admin-operator-new':()=>go('admin-operator',{id:''}),'admin-sites':()=>go('admin-sites'),'admin-site-new':()=>go('admin-site',{id:''}),'admin-roles':()=>go('admin-roles'),'admin-pin-generate':()=>this.generateAdminPin(),'admin-pin-dismiss':()=>{this.adminGeneratedPin='';this.renderView()},'activity-today':()=>{this.activityDate=localDateInput();this.renderView()},'activity-date-open':()=>{const input=document.getElementById(el.dataset.target);if(!input)return;try{input.focus({preventScroll:true})}catch{input.focus?.()}if(typeof input.showPicker==='function'){try{input.showPicker();return}catch{}}input.click?.()},'registry-filter-toggle':()=>document.getElementById('registryFilters')?.classList.toggle('hidden')};
+    const map={back:()=>this.router.back(),home:()=>this.router.home(),login:()=>{this.sounds?.click?.();this.openLogin()},'login-submit':()=>this.login(),logout:()=>{this.sounds?.click?.();this.logout()},'site-switch':()=>this.openSiteSwitcher(),'site-select':()=>this.selectSite(el.dataset.site),'site-choice-cancel':()=>this.cancelSiteChoice(),'toggle-pin':()=>{const p=document.getElementById('loginPin'),show=p.type==='password';p.type=show?'text':'password';const i=el.querySelector('i');if(i)i.className=`ph-duotone ph-${show?'eye-slash':'eye'}`;el.setAttribute('aria-label',show?'Nascondi PIN':'Mostra PIN');p.focus()},'view-desktop':()=>this.applyView('desktop'),'view-phone':()=>this.applyView('smartphone'),notifications:()=>this.openNotifications(),master:()=>go('master'),'master-view':()=>go('master'),'master-filter-reset':()=>this.resetMasterFilters(),'master-request-toggle':()=>this.toggleMasterRequestMode(),'master-request-item':()=>this.toggleMasterRequestItem(el.dataset.item),'master-request-review':()=>this.openMasterRequestReview(),'master-request-review-close':()=>document.getElementById('masterRequestDialog')?.close(),'master-request-remove':()=>this.removeMasterRequestItem(el.dataset.item),'master-request-qty-minus':()=>this.adjustMasterRequestQty(el.dataset.item,-1),'master-request-qty-plus':()=>this.adjustMasterRequestQty(el.dataset.item,1),'master-request-send':()=>this.sendMasterRequest(),'master-page-prev':()=>{this.masterView.page=Math.max(1,this.masterView.page-1);this.renderMasterViewerBody()},'master-page-next':()=>{this.masterView.page+=1;this.renderMasterViewerBody()},'master-edit-close':()=>this.closeMasterEdit(),'master-edit-save':()=>this.saveMasterEdit(),'master-import':()=>{if(!this.auth.can('MASTER_IMPORT'))throw new Error('Non hai il permesso per importare il Master.');document.getElementById('masterFile').click()},'master-export':async()=>{if(!this.auth.can('MASTER_EXPORT'))throw new Error('Non hai il permesso per esportare il Master.');const n=await this.excel.export();this.toast(`${n} esportato.`)},'legacy-migrate':()=>{if(!confirm('Migrare una COPIA dei dati REMOTO in NOVA? REMOTO non verrà modificato.'))return;this.excel.migrateLocalLegacy();this.toast('Copia REMOTO migrata in NOVA.');this.router.home()},receiving:()=>go('receiving'),'receipt-new':()=>this.openReceiptNew(),'receipts-pending':()=>go('receipts',{mode:'PENDING'}),'receipts-all':()=>go('receipts',{mode:'ALL'}),'receipt-line-add':()=>this.addReceiptLine(),'receipt-confirm':()=>this.confirmReceipt(),'ddt-camera':()=>document.getElementById('ddtCamera').click(),'ddt-file':()=>document.getElementById('ddtFile').click(),'ddt-analyze':()=>this.openAnalysis('DDT'),'request-camera':()=>document.getElementById('requestCamera').click(),'request-file':()=>document.getElementById('requestFile').click(),'request-analyze':()=>this.openAnalysis('REQUEST'),'analysis-share':()=>this.shareAnalysis(),'analysis-copy':()=>this.copyAnalysisPrompt(),'analysis-import':()=>this.importAnalysisJson(),stock:()=>{if(this.require('STOCK_VIEW',{master:true}))go('stock')},'rectify-new':()=>{this.rectDraft=null;go('rectify',{key:''})},rectify:()=>{this.rectDraft=null;go('rectify',{key:''})},'rect-filter-toggle':()=>{this.rectFiltersOpen=!this.rectFiltersOpen;this.renderView()},'rect-change':()=>{this.rectDraft=null;this.renderView()},'rect-step-minus':()=>this.stepRect(-1),'rect-step-plus':()=>this.stepRect(1),'rect-cancel':()=>{this.rectDraft=null;this.router.back()},'rectify-save':()=>this.saveRectify(el),count:()=>{this.countDraft=this.countDraft||this.loadCountSession();go('count')},'count-load':()=>this.loadCount(),'count-finalize':()=>this.finalizeCount(),'count-apply':()=>this.applyCount(el),'count-abandon':()=>this.abandonCount(),issue:()=>go('issue'),'issue-confirm':()=>this.confirmIssue(),transfer:()=>go('transfer'),'transfer-confirm':()=>this.confirmTransfer(),requests:()=>go('requests-progress'),'request-new':()=>this.openRequestNew(),'request-line-add':()=>this.addRequestLine(),'request-save':()=>this.saveRequest(),'requests-progress':()=>go('requests-progress'),'requests-process':()=>go('requests-process'),registry:()=>go('registry'),'registry-movements':()=>{this.registryTab='MOVIMENTI';go('registry-list')},'registry-audit':()=>{this.registryTab='AUDIT';go('registry-list')},'registry-export':async()=>{const n=await this.excel.exportRegistry();this.toast(`${n} esportato.`)},admin:()=>go('admin'),'admin-operators':()=>go('admin-operators'),'admin-operator-new':()=>go('admin-operator',{id:''}),'admin-sites':()=>go('admin-sites'),'admin-site-new':()=>go('admin-site',{id:''}),'admin-roles':()=>go('admin-roles'),'admin-pin-generate':()=>this.generateAdminPin(),'admin-pin-dismiss':()=>{this.adminGeneratedPin='';this.renderView()},'activity-today':()=>{this.activityDate=localDateInput();this.renderView()},'activity-date-open':()=>{const input=document.getElementById(el.dataset.target);if(!input)return;try{input.focus({preventScroll:true})}catch{input.focus?.()}if(typeof input.showPicker==='function'){try{input.showPicker();return}catch{}}input.click?.()},'registry-filter-toggle':()=>document.getElementById('registryFilters')?.classList.toggle('hidden')};
     if(map[action])return map[action]();
     if(action==='master-edit-row')return this.openMasterEdit(el.dataset.key);if(action==='admin-operator-edit')return go('admin-operator',{id:el.dataset.id});if(action==='admin-operator-save')return this.saveAdminOperator(el.dataset.id||'');if(action==='admin-site-edit')return go('admin-site',{id:el.dataset.id});if(action==='admin-site-save')return this.saveAdminSite(el.dataset.id||'');if(action==='stock-suggest')return this.applyStockSuggestion(el);if(action==='receipt-line-remove')return this.removeReceiptLine(el.dataset.line);if(action==='partial-add')return this.addPartial(el.dataset.line);if(action==='partial-undo')return this.undoPartial(el.dataset.line);if(action==='partial-clear')return this.clearPartial(el.dataset.line);if(action==='receipt-open')return go('receipt-detail',{id:el.dataset.id});if(action==='putaway-open')return go('putaway',{receipt:el.dataset.receipt,line:el.dataset.line});if(action==='putaway-confirm')return this.confirmPutAway(el.dataset.receipt,el.dataset.line);if(action==='rectify-open'){this.rectDraft=null;return go('rectify',{key:el.dataset.key})}if(action==='rect-select')return this.selectRect(el.dataset.key);if(action==='count-confirm-row')return this.confirmCountRow(el.dataset.dom);if(action==='count-edit')return this.editCountRow(el.dataset.dom);if(action==='count-zero')return this.countZero(el.dataset.dom);if(action==='count-extra-add')return this.addCountExtra();if(action==='count-extra-remove')return this.removeCountExtra(el.dataset.dom);if(action==='request-line-remove')return this.removeRequestLine(el.dataset.line);if(action==='request-open')return go('request-detail',{id:el.dataset.id});if(action==='request-pick')return go('request-pick',{id:el.dataset.id});if(action==='request-pick-save')return this.saveRequestPick(el.dataset.id);if(action==='ledger-cancel')return this.cancelLedger(el.dataset.id);if(action==='notif-read'){this.domain.notifications.markRead(el.dataset.id);this.store.save('notification:read');document.getElementById('notificationDialog').close();if(el.dataset.entity==='RECEIPT')go('receipt-detail',{id:el.dataset.entityId});else if(el.dataset.entity==='REQUEST')go('request-detail',{id:el.dataset.entityId});return}
   }
