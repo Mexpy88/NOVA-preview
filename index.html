@@ -4980,6 +4980,154 @@ body.desktop-mode .activity-desktop .activity-kpi.wide{grid-column:auto!importan
   }
 }
 </style>
+
+<style id="r30-5-icon-system-audit">
+/* ===== R30.5 · GLOBAL OPERATIONAL ICON AUDIT =====
+   Decorative/semantic icons = transparent.
+   Functional controls/identity badges keep their surface. */
+
+/* Common optical alignment for semantic glyph wrappers */
+.stock-data-icon,
+.pick-location-icon,
+.receiving-row-icon,
+.registry-row-icon,
+.movement-form-icon,
+.admin-site-icon,
+.step-title>i,
+.suggest-icon{
+  display:grid!important;
+  place-items:center!important;
+  align-self:center!important;
+  justify-self:center!important;
+  padding:0!important;
+  margin:0!important;
+  background:transparent!important;
+  background-color:transparent!important;
+  background-image:none!important;
+  border:0!important;
+  outline:0!important;
+  box-shadow:none!important;
+}
+
+/* Prevent glyph baselines from making icons look vertically off-center */
+.stock-data-icon>.ph,
+.stock-data-icon>.ph-duotone,
+.pick-location-icon>.ph,
+.pick-location-icon>.ph-duotone,
+.receiving-row-icon>.ph,
+.receiving-row-icon>.ph-duotone,
+.registry-row-icon>.ph,
+.registry-row-icon>.ph-duotone,
+.movement-form-icon>.ph,
+.movement-form-icon>.ph-duotone,
+.admin-site-icon>.ph,
+.admin-site-icon>.ph-duotone,
+.step-title>i>.ph,
+.step-title>i>.ph-duotone,
+.suggest-icon>.ph,
+.suggest-icon>.ph-duotone{
+  display:block!important;
+  line-height:1!important;
+  margin:0!important;
+  padding:0!important;
+  background:transparent!important;
+  border:0!important;
+  box-shadow:none!important;
+}
+
+/* Stock result metadata */
+.stock-data-icon{
+  width:30px!important;
+  height:30px!important;
+  min-width:30px!important;
+  flex:0 0 30px!important;
+  border-radius:0!important;
+}
+.stock-data-icon>.ph,
+.stock-data-icon>.ph-duotone{font-size:25px!important}
+
+/* Request-pick/source location */
+.pick-location-icon{
+  width:30px!important;
+  height:30px!important;
+  min-width:30px!important;
+  flex:0 0 30px!important;
+  border-radius:0!important;
+}
+.pick-location-icon>.ph,
+.pick-location-icon>.ph-duotone{font-size:24px!important}
+
+/* Receiving and registry rows */
+.receiving-list>button>.receiving-row-icon,
+.registry-home-list>button>.registry-row-icon{
+  width:36px!important;
+  height:36px!important;
+  min-width:36px!important;
+  border-radius:0!important;
+  font-size:29px!important;
+}
+.receiving-list>button>.receiving-row-icon>.ph,
+.receiving-list>button>.receiving-row-icon>.ph-duotone,
+.registry-home-list>button>.registry-row-icon>.ph,
+.registry-home-list>button>.registry-row-icon>.ph-duotone{
+  font-size:29px!important;
+}
+
+/* Movement screen hero glyphs */
+.movement-form-icon{
+  width:42px!important;
+  height:42px!important;
+  min-width:42px!important;
+  flex:0 0 42px!important;
+  border-radius:0!important;
+  font-size:34px!important;
+}
+
+/* Administration site cards: keep the grid rhythm, remove decorative tile */
+.admin-site-icon{
+  width:36px!important;
+  height:36px!important;
+  min-width:36px!important;
+  border-radius:0!important;
+  font-size:28px!important;
+}
+.admin-site-card{
+  grid-template-columns:52px minmax(0,1fr) 42px!important;
+}
+.admin-site-card .admin-site-icon{
+  justify-self:center!important;
+}
+
+/* Generic step-title icons: preserve reserved space but no colored tile */
+.step-title>i{
+  width:48px!important;
+  height:48px!important;
+  min-width:48px!important;
+  border-radius:0!important;
+  font-size:28px!important;
+  font-style:normal!important;
+}
+
+/* Icons inside semantic data blocks align to the vertical center of text */
+.stock-data-block,
+.pick-source-premium{
+  align-items:center!important;
+}
+
+/* Explicitly protect functional surfaces that SHOULD remain boxed */
+.warehouse-data-icon,
+.excel-icon,
+.calendar-btn,
+.top-back,
+.view-btn,
+.inbox-btn,
+.login-dialog-icon,
+.landing-access-icon,
+.site-dialog-icon,
+.site-choice-code{
+  /* intentionally retain their component-specific surface */
+}
+</style>
 </head>
 <body>
 <header id="topbar" class="topbar"></header>
