@@ -5200,6 +5200,153 @@ body.desktop-mode .activity-desktop .activity-kpi.wide{grid-column:auto!importan
   .receiving-empty small{font-size:11.5px!important}
 }
 </style>
+
+<style id="r30-7-receiving-icon-alignment">
+/* ===== R30.7 · RECEIVING SUGGESTION + EMPTY STATE ALIGNMENT ===== */
+
+/* Suggested location: one mono glyph, optically centered with text */
+.line-form .suggest{
+  display:grid!important;
+  grid-template-columns:34px minmax(0,1fr)!important;
+  align-items:center!important;
+  column-gap:12px!important;
+  min-height:74px!important;
+  padding:13px 16px!important;
+}
+
+.line-form .suggest>.suggest-icon{
+  display:inline-flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  align-self:center!important;
+  justify-self:center!important;
+  width:30px!important;
+  height:30px!important;
+  min-width:30px!important;
+  margin:0!important;
+  padding:0!important;
+  font-size:27px!important;
+  line-height:1!important;
+  color:var(--receive)!important;
+  background:transparent!important;
+  border:0!important;
+  border-radius:0!important;
+  box-shadow:none!important;
+  vertical-align:middle!important;
+}
+
+.line-form .suggest>.suggest-icon::before{
+  display:block!important;
+  line-height:1!important;
+  margin:0!important;
+  transform:none!important;
+}
+
+.line-form .suggest>div{
+  min-width:0!important;
+  display:flex!important;
+  flex-direction:column!important;
+  justify-content:center!important;
+  align-items:flex-start!important;
+  gap:3px!important;
+  margin:0!important;
+  padding:0!important;
+}
+
+.line-form .suggest>div>span{
+  margin:0!important;
+  font-size:9.5px!important;
+  line-height:1.1!important;
+  font-weight:900!important;
+  letter-spacing:.09em!important;
+  color:#6c8a78!important;
+}
+
+.line-form .suggest>div>b{
+  margin:0!important;
+  font-size:15px!important;
+  line-height:1.2!important;
+  font-weight:800!important;
+}
+
+.line-form .suggest>div>small{
+  margin:1px 0 0!important;
+  font-size:11.5px!important;
+  line-height:1.3!important;
+}
+
+/* Contextual receiving empty states */
+.receiving-receipt-list .receiving-empty{
+  min-height:118px!important;
+  margin:16px 0 0!important;
+  padding:22px!important;
+  display:flex!important;
+  flex-direction:column!important;
+  align-items:center!important;
+  justify-content:center!important;
+  gap:8px!important;
+  text-align:center!important;
+}
+
+.receiving-receipt-list .receiving-empty .empty-icon{
+  display:inline-flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  width:auto!important;
+  height:auto!important;
+  min-width:0!important;
+  margin:0!important;
+  padding:0!important;
+  font-size:31px!important;
+  line-height:1!important;
+  background:transparent!important;
+  border:0!important;
+  border-radius:0!important;
+  box-shadow:none!important;
+}
+
+.receiving-empty-pending .empty-icon{color:var(--receive)!important}
+.receiving-empty-history .empty-icon{color:#5f7f98!important}
+
+.receiving-receipt-list .receiving-empty>div{
+  display:flex!important;
+  flex-direction:column!important;
+  align-items:center!important;
+  gap:4px!important;
+}
+
+.receiving-receipt-list .receiving-empty b{
+  margin:0!important;
+  font-size:16px!important;
+  line-height:1.15!important;
+  font-weight:800!important;
+}
+
+.receiving-receipt-list .receiving-empty small{
+  margin:0!important;
+  font-size:12px!important;
+  line-height:1.35!important;
+  font-weight:650!important;
+  color:#7a8d9c!important;
+}
+
+@media(max-width:600px){
+  .line-form .suggest{
+    grid-template-columns:30px minmax(0,1fr)!important;
+    column-gap:10px!important;
+    min-height:68px!important;
+    padding:12px 13px!important;
+  }
+  .line-form .suggest>.suggest-icon{
+    width:27px!important;
+    height:27px!important;
+    font-size:24px!important;
+  }
+  .line-form .suggest>div>span{font-size:8.5px!important}
+  .line-form .suggest>div>b{font-size:13px!important}
+  .line-form .suggest>div>small{font-size:10.5px!important}
+}
+</style>
 </head>
 <body>
 <header id="topbar" class="topbar"></header>
@@ -6119,14 +6266,14 @@ class UI{
   newReceiptLine(seed={}){return{id:uid(),article:normalizeArticle(seed.article||seed.article_base),size:norm(seed.size),state:norm(seed.state||'NUOVO')||'NUOVO',ddtQuantity:Number(seed.ddtQuantity??seed.ddt_quantity??seed.quantity??0)||0,checkedQuantity:Number(seed.checkedQuantity??0)||0,pallet:norm(seed.pallet||'P01')||'P01',note:String(seed.note||''),partials:[]}}
   openReceiptNew(){if(!this.require('RECEIVE',{master:true}))return;this.ddtFiles=[];this.receiptDraft={supplier:'',ddtNumber:'',ddtDate:localDateInput(),receivedAt:localDateTimeInput(),note:'',attachments:[],lines:[this.newReceiptLine()]};this.router.go('receipt-new')}
   receiptNew(){if(!this.receiptDraft)this.receiptDraft={supplier:'',ddtNumber:'',ddtDate:localDateInput(),receivedAt:localDateTimeInput(),note:'',attachments:[],lines:[this.newReceiptLine()]};const d=this.receiptDraft;return `${this.sectionTitle('NUOVA CONSEGNA','Ricevi e controlla')}<section class="form-card"><div class="step-title"><i>1</i><div><b>Documento e fornitore</b><small>Dati della consegna</small></div></div><label>Fornitore *<input class="field" data-bind="receipt:header:supplier" value="${esc(d.supplier)}"></label><div class="two"><label>Numero DDT<input class="field" data-bind="receipt:header:ddtNumber" value="${esc(d.ddtNumber)}"></label><label>Data DDT<input type="date" class="field" data-bind="receipt:header:ddtDate" value="${esc(d.ddtDate)}"></label></div><label>Arrivo merce<input type="datetime-local" class="field" data-bind="receipt:header:receivedAt" value="${esc(d.receivedAt)}"></label><div class="scan-row"><button class="primary small" data-action="ddt-camera">${phIcon('camera','inline-icon')} SCANSIONA DDT</button><button class="soft small" data-action="ddt-file">${phIcon('paperclip','inline-icon')} ALLEGA DDT</button></div>${this.ddtFiles.length?`<div class="file-chips">${this.ddtFiles.map(f=>`<span>${esc(f.name)}</span>`).join('')}</div><button class="soft" data-action="ddt-analyze">ANALIZZA DDT E COMPILA</button>`:''}</section><section class="form-card"><div class="step-title"><i>2</i><div><b>Articoli ricevuti</b><small>Confronta DDT e quantità fisica</small></div></div>${d.lines.map((l,i)=>this.receiptLineForm(l,i)).join('')}<button class="add-btn" data-action="receipt-line-add">${phRegular('plus','ph-bridge inline-icon')} AGGIUNGI ARTICOLO</button></section><section class="form-card"><div class="step-title"><i>3</i><div><b>Conferma entrata</b><small>Solo la quantità controllata entra in giacenza</small></div></div><label>Note consegna<textarea class="field textarea" data-bind="receipt:header:note">${esc(d.note)}</textarea></label><button class="success" data-action="receipt-confirm">CONTROLLA E CONFERMA</button></section>`}
-  receiptLineForm(l,i){const sug=this.domain.stock.suggest(l.article,l.size,l.state),diff=Number(l.ddtQuantity)!==Number(l.checkedQuantity),sum=(l.partials||[]).reduce((n,x)=>n+Number(x),0),ddt=Number(l.ddtQuantity||0);return `<article class="line-form ${diff?'warn-border':''}"><div class="line-top"><b>ARTICOLO ${i+1}</b>${this.receiptDraft.lines.length>1?`<button data-action="receipt-line-remove" data-line="${l.id}">RIMUOVI</button>`:''}</div><label>Codice articolo<input class="field" data-bind="receipt:${l.id}:article" value="${esc(l.article)}"></label><div class="two"><label>Taglia / variante<input class="field" data-bind="receipt:${l.id}:size" value="${esc(l.size)}"></label><label>Stato merce<select class="field" data-bind="receipt:${l.id}:state">${CONFIG.states.slice(0,3).map(s=>`<option ${l.state===s?'selected':''}>${s}</option>`).join('')}</select></label></div><div class="two"><label>Quantità DDT<input type="number" min="0" class="field" data-bind="receipt:${l.id}:ddtQuantity" value="${l.ddtQuantity}"></label><label>Quantità controllata *<input type="number" min="0" class="field" data-bind="receipt:${l.id}:checkedQuantity" value="${l.checkedQuantity}"></label></div><div class="partial-box"><div><b>CONTEGGIO PARZIALE</b><span class="partial-total ${Number(l.checkedQuantity)===ddt&&ddt>0?'ok':Number(l.checkedQuantity)>ddt?'over':'pending'}">${l.checkedQuantity} / ${ddt}</span></div><div class="partial-input"><input id="partial-${l.id}" type="number" min="1" class="field" placeholder="es. 6"><button class="primary small" data-action="partial-add" data-line="${l.id}">AGGIUNGI</button></div>${l.partials.length?`<div class="chips">${l.partials.map(x=>`<span>${x}</span>`).join('')}<small>${l.partials.join(' + ')} = <b>${sum}</b></small></div><div class="mini-actions"><button data-action="partial-undo" data-line="${l.id}">ANNULLA ULTIMO</button><button data-action="partial-clear" data-line="${l.id}">AZZERA</button></div>`:''}</div><label>Pallet / collo in ricevimento<input class="field" data-bind="receipt:${l.id}:pallet" value="${esc(l.pallet)}"></label><div class="suggest ${sug?'found':''}">${phIcon('map-pin-line','suggest-icon')}<div><span>POSIZIONE SUGGERITA</span><b>${sug?`Fila/Scaffale ${esc(sug.location)}${sug.pallet?` · Bancale ${esc(sug.pallet)}`:''}`:'Nessuna posizione abituale trovata'}</b>${sug?`<small>Stesso articolo già presente · ${sug.quantity} pezzi</small>`:''}</div></div><label>Note riga<input class="field" data-bind="receipt:${l.id}:note" value="${esc(l.note)}"></label></article>`}
+  receiptLineForm(l,i){const sug=this.domain.stock.suggest(l.article,l.size,l.state),diff=Number(l.ddtQuantity)!==Number(l.checkedQuantity),sum=(l.partials||[]).reduce((n,x)=>n+Number(x),0),ddt=Number(l.ddtQuantity||0);return `<article class="line-form ${diff?'warn-border':''}"><div class="line-top"><b>ARTICOLO ${i+1}</b>${this.receiptDraft.lines.length>1?`<button data-action="receipt-line-remove" data-line="${l.id}">RIMUOVI</button>`:''}</div><label>Codice articolo<input class="field" data-bind="receipt:${l.id}:article" value="${esc(l.article)}"></label><div class="two"><label>Taglia / variante<input class="field" data-bind="receipt:${l.id}:size" value="${esc(l.size)}"></label><label>Stato merce<select class="field" data-bind="receipt:${l.id}:state">${CONFIG.states.slice(0,3).map(s=>`<option ${l.state===s?'selected':''}>${s}</option>`).join('')}</select></label></div><div class="two"><label>Quantità DDT<input type="number" min="0" class="field" data-bind="receipt:${l.id}:ddtQuantity" value="${l.ddtQuantity}"></label><label>Quantità controllata *<input type="number" min="0" class="field" data-bind="receipt:${l.id}:checkedQuantity" value="${l.checkedQuantity}"></label></div><div class="partial-box"><div><b>CONTEGGIO PARZIALE</b><span class="partial-total ${Number(l.checkedQuantity)===ddt&&ddt>0?'ok':Number(l.checkedQuantity)>ddt?'over':'pending'}">${l.checkedQuantity} / ${ddt}</span></div><div class="partial-input"><input id="partial-${l.id}" type="number" min="1" class="field" placeholder="es. 6"><button class="primary small" data-action="partial-add" data-line="${l.id}">AGGIUNGI</button></div>${l.partials.length?`<div class="chips">${l.partials.map(x=>`<span>${x}</span>`).join('')}<small>${l.partials.join(' + ')} = <b>${sum}</b></small></div><div class="mini-actions"><button data-action="partial-undo" data-line="${l.id}">ANNULLA ULTIMO</button><button data-action="partial-clear" data-line="${l.id}">AZZERA</button></div>`:''}</div><label>Pallet / collo in ricevimento<input class="field" data-bind="receipt:${l.id}:pallet" value="${esc(l.pallet)}"></label><div class="suggest ${sug?'found':''}">${phRegular('map-pin-line','suggest-icon')}<div><span>POSIZIONE - FILA - SCAFFALE</span><b>${sug?`${esc(sug.location)}${sug.pallet?` · Bancale ${esc(sug.pallet)}`:''}`:'Nessuna posizione abituale trovata'}</b>${sug?`<small>Stesso articolo già presente · ${sug.quantity} pezzi</small>`:''}</div></div><label>Note riga<input class="field" data-bind="receipt:${l.id}:note" value="${esc(l.note)}"></label></article>`}
   addReceiptLine(){this.receiptDraft.lines.push(this.newReceiptLine({pallet:this.receiptDraft.lines.at(-1)?.pallet||'P01'}));this.renderView()}
   removeReceiptLine(id){this.receiptDraft.lines=this.receiptDraft.lines.filter(x=>x.id!==id);if(!this.receiptDraft.lines.length)this.receiptDraft.lines.push(this.newReceiptLine());this.renderView()}
   addPartial(id){const l=this.receiptDraft.lines.find(x=>x.id===id),input=document.getElementById(`partial-${id}`),v=Number(input?.value||0);if(v<=0)return;l.partials.push(v);l.checkedQuantity=l.partials.reduce((n,x)=>n+x,0);this.renderView()}
   undoPartial(id){const l=this.receiptDraft.lines.find(x=>x.id===id);l.partials.pop();l.checkedQuantity=l.partials.reduce((n,x)=>n+x,0);this.renderView()}
   clearPartial(id){const l=this.receiptDraft.lines.find(x=>x.id===id);l.partials=[];l.checkedQuantity=0;this.renderView()}
   confirmReceipt(){const valid=this.receiptDraft.lines.filter(l=>normalizeArticle(l.article)&&Number(l.checkedQuantity)>0);if(!this.receiptDraft.supplier.trim())throw new Error('Inserisci il fornitore.');if(!valid.length)throw new Error('Inserisci almeno un articolo controllato.');const mismatches=valid.filter(l=>Number(l.checkedQuantity)!==Number(l.ddtQuantity));if(mismatches.length&&!confirm(`${mismatches.length} ${mismatches.length===1?'riga ha':'righe hanno'} quantità controllata diversa dal DDT. Confermare comunque?`))return;this.receiptDraft.attachments=this.ddtFiles.map(f=>({name:f.name,type:f.type,size:f.size}));const r=this.domain.receiving.create({...this.receiptDraft,receivedAt:isoFromLocalInput(this.receiptDraft.receivedAt)});this.receiptDraft=null;this.ddtFiles=[];this.toast(`Entrata ${r.id} confermata.`);this.router.go('receipt-detail',{id:r.id})}
-  receipts(mode='ALL'){const rows=this.store.db.receipts.filter(r=>mode!=='PENDING'||this.domain.receiving.stats(r).pending>0);return `${this.sectionTitle(mode==='PENDING'?'RICEVIMENTO':'STORICO',mode==='PENDING'?'Da ubicare':this.auth.isLina()?'Merce arrivata':'Entrate merci')}<div class="receipt-list receiving-receipt-list">${rows.length?rows.map(r=>this.receiptCard(r)).join(''):`<div class="empty receiving-empty">${phRegular('tray','empty-icon')}<div><b>Nessuna entrata in questa sezione.</b><small>Quando arriveranno nuove consegne le vedrai qui.</small></div></div>`}</div>`}
+  receipts(mode='ALL'){const rows=this.store.db.receipts.filter(r=>mode!=='PENDING'||this.domain.receiving.stats(r).pending>0),pendingMode=mode==='PENDING',emptyState=pendingMode?`<div class="empty receiving-empty receiving-empty-pending">${phRegular('map-pin-line','empty-icon')}<div><b>Nessuna merce da ubicare</b><small>Tutte le entrate risultano già posizionate.</small></div></div>`:`<div class="empty receiving-empty receiving-empty-history">${phRegular('clock-counter-clockwise','empty-icon')}<div><b>Nessuna entrata registrata</b><small>Lo storico delle consegne comparirà qui.</small></div></div>`;return `${this.sectionTitle(pendingMode?'RICEVIMENTO':'STORICO',pendingMode?'Da ubicare':this.auth.isLina()?'Merce arrivata':'Entrate merci')}<div class="receipt-list receiving-receipt-list">${rows.length?rows.map(r=>this.receiptCard(r)).join(''):emptyState}</div>`}
   receiptCard(r){const s=this.domain.receiving.stats(r),status=this.domain.receiving.status(r);return `<article class="receipt-card receiving-card"><div class="receipt-card-head"><div><span>${esc(r.id)}</span><h2>${esc(r.supplier||'Fornitore non indicato')}</h2><p>${r.ddtNumber?`DDT ${esc(r.ddtNumber)} · `:''}${fmtDateTime(r.receivedAt)}</p></div><em class="status-pill ${status==='COMPLETATA'?'done':status==='PARZIALMENTE GESTITA'?'partial':'to-locate'}">${status}</em></div><div class="metrics receiving-metrics"><div><b>${r.lines.length}</b><span>Articoli</span></div><div><b>${s.received}</b><span>Ricevuti</span></div><div><b>${s.pending}</b><span>Da ubicare</span></div></div><button class="soft receiving-soft" data-action="receipt-open" data-id="${r.id}">${phIcon('folder-open','inline-icon')} APRI DETTAGLIO</button></article>`}
   receiptDetail(id){const r=this.store.db.receipts.find(x=>x.id===id);if(!r)return this.emptyPage('Entrata merci non trovata.');const s=this.domain.receiving.stats(r),read=!this.auth.can('MOVE');return `${this.sectionTitle(r.id,r.supplier||'Entrata merci',`${r.ddtNumber?`DDT ${r.ddtNumber} · `:''}${fmtDateTime(r.receivedAt)}`)}<div class="summary-four"><div><b>${s.received}</b><span>Controllati</span></div><div><b>${s.pending}</b><span>Da ubicare</span></div><div><b>${s.putAway}</b><span>Ubicati</span></div><div><b>${s.direct}</b><span>Prelevati</span></div></div>${r.lines.map(l=>{const x=this.domain.receiving.lineStats(r,l);return `<article class="detail-line"><div class="detail-line-top"><div><b>${esc(l.article)}${l.size?` · ${esc(l.size)}`:''}</b><span>${esc(l.state)} · AREA RICEVIMENTO · ${esc(l.receivingPallet)}</span></div><strong>${x.pending}</strong></div><div class="line-metrics"><span>DDT <b>${l.ddtQuantity}</b></span><span>Controllati <b>${x.received}</b></span><span>Ubicati <b>${x.putAway}</b></span>${x.direct?`<span>Prelevati <b>${x.direct}</b></span>`:''}</div>${l.suggestedLocation?`<div class="compact-suggest">Posizione suggerita: <b>${esc(l.suggestedLocation)}${l.suggestedPallet?` · ${esc(l.suggestedPallet)}`:''}</b></div>`:''}${x.pending&&!read?`<button class="success" data-action="putaway-open" data-receipt="${r.id}" data-line="${l.id}">${phIcon('map-pin-line','inline-icon')} UBICA ${x.pending} PEZZI</button>`:x.pending?'<div class="available-badge">DISPONIBILE · DA UBICARE</div>':'<div class="done-badge">✓ GESTITA</div>'}</article>`}).join('')}`}
   putAway(receiptId,lineId){const r=this.store.db.receipts.find(x=>x.id===receiptId),l=r?.lines.find(x=>x.id===lineId);if(!l)return this.emptyPage('Riga non trovata.');const pending=this.domain.receiving.pendingForLine(lineId);return `${this.sectionTitle('UBICAZIONE',`${l.article}${l.size?` · ${l.size}`:''}`)}<section class="form-card"><div class="big-number">${pending}</div><p>pezzi ancora in Area Ricevimento</p><label>Quantità da ubicare<input id="putQty" type="number" min="1" max="${pending}" value="${pending}" class="field"></label><label>Fila/Scaffale<input id="putLocation" class="field" value="${esc(l.suggestedLocation)}"></label><label>Bancale/Carrello<input id="putPallet" class="field" value="${esc(l.suggestedPallet)}"></label><button class="success" data-action="putaway-confirm" data-receipt="${receiptId}" data-line="${lineId}">${phIcon('check-circle','inline-icon')} CONFERMA UBICAZIONE</button></section>`}
