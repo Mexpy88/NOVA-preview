@@ -4843,6 +4843,143 @@ body.desktop-mode .activity-desktop .activity-kpi.wide{grid-column:auto!importan
   }
 }
 </style>
+
+<style id="r30-4-stock-search-taxonomy">
+/* ===== R30.4 · GIACENZE SEARCH TAXONOMY + UX/UI ===== */
+.stock-search-v2{
+  padding:20px!important;
+}
+
+.stock-search-v2 .stock-filter-row-v2{
+  display:grid!important;
+  grid-template-columns:minmax(210px,.72fr) minmax(320px,1.35fr) minmax(230px,.86fr)!important;
+  gap:12px!important;
+  margin-top:12px!important;
+  align-items:end!important;
+}
+
+.stock-search-v2 .stock-filter-control{
+  min-width:0!important;
+  display:flex!important;
+  flex-direction:column!important;
+  gap:7px!important;
+  margin:0!important;
+}
+
+.stock-search-v2 .stock-filter-control>span{
+  display:block!important;
+  padding-left:3px!important;
+  color:#72899c!important;
+  font-size:9.5px!important;
+  line-height:1!important;
+  font-weight:900!important;
+  letter-spacing:.105em!important;
+  white-space:nowrap!important;
+}
+
+.stock-search-v2 .stock-filter-control .field{
+  width:100%!important;
+  min-width:0!important;
+  height:56px!important;
+  min-height:56px!important;
+  margin:0!important;
+  border-radius:15px!important;
+  padding:0 14px!important;
+  background:#fff!important;
+  border:1px solid #cfdeea!important;
+  color:#173b5c!important;
+  font-size:14px!important;
+  font-weight:700!important;
+  transition:border-color .15s ease,box-shadow .15s ease,background .15s ease!important;
+}
+
+.stock-search-v2 .stock-filter-control select.field{
+  padding-right:38px!important;
+  font-weight:850!important;
+}
+
+.stock-search-v2 .stock-filter-control .field::placeholder{
+  color:#91a1ae!important;
+  font-weight:650!important;
+}
+
+.stock-search-v2 .stock-filter-control .field:hover{
+  border-color:#b8cde0!important;
+  background:#fcfdff!important;
+}
+
+.stock-search-v2 .stock-filter-control .field:focus{
+  outline:none!important;
+  border-color:#8064f4!important;
+  box-shadow:0 0 0 3px rgba(128,100,244,.10)!important;
+  background:#fff!important;
+}
+
+/* Result card terminology: give the longer location label enough breathing room. */
+.stock-card-premium .stock-data-grid{
+  grid-template-columns:minmax(0,1.45fr) minmax(230px,.52fr)!important;
+  gap:12px!important;
+}
+
+.stock-card-premium .stock-data-block{
+  align-items:center!important;
+  min-height:72px!important;
+  padding:13px 15px!important;
+}
+
+.stock-card-premium .stock-data-block small{
+  font-size:9px!important;
+  line-height:1.15!important;
+  letter-spacing:.085em!important;
+  margin-bottom:5px!important;
+}
+
+.stock-card-premium .stock-location-block small{
+  white-space:nowrap!important;
+}
+
+.stock-card-premium .stock-data-block b{
+  font-size:13.5px!important;
+  line-height:1.25!important;
+}
+
+@media(max-width:980px){
+  .stock-search-v2 .stock-filter-row-v2{
+    grid-template-columns:1fr 1fr!important;
+  }
+  .stock-search-v2 .stock-filter-control:first-child{
+    grid-column:1/-1!important;
+  }
+  .stock-card-premium .stock-data-grid{
+    grid-template-columns:1fr!important;
+  }
+}
+
+@media(max-width:600px){
+  .stock-search-v2{
+    padding:14px!important;
+  }
+  .stock-search-v2 .stock-filter-row-v2{
+    grid-template-columns:1fr!important;
+    gap:9px!important;
+  }
+  .stock-search-v2 .stock-filter-control:first-child{
+    grid-column:auto!important;
+  }
+  .stock-search-v2 .stock-filter-control>span{
+    font-size:8.5px!important;
+    white-space:normal!important;
+  }
+  .stock-search-v2 .stock-filter-control .field{
+    height:48px!important;
+    min-height:48px!important;
+    font-size:12px!important;
+  }
+  .stock-card-premium .stock-location-block small{
+    white-space:normal!important;
+  }
+}
+</style>
 </head>
 <body>
 <header id="topbar" class="topbar"></header>
@@ -5775,7 +5912,7 @@ class UI{
   putAway(receiptId,lineId){const r=this.store.db.receipts.find(x=>x.id===receiptId),l=r?.lines.find(x=>x.id===lineId);if(!l)return this.emptyPage('Riga non trovata.');const pending=this.domain.receiving.pendingForLine(lineId);return `${this.sectionTitle('UBICAZIONE',`${l.article}${l.size?` · ${l.size}`:''}`)}<section class="form-card"><div class="big-number">${pending}</div><p>pezzi ancora in Area Ricevimento</p><label>Quantità da ubicare<input id="putQty" type="number" min="1" max="${pending}" value="${pending}" class="field"></label><label>Fila/Scaffale<input id="putLocation" class="field" value="${esc(l.suggestedLocation)}"></label><label>Bancale/Carrello<input id="putPallet" class="field" value="${esc(l.suggestedPallet)}"></label><button class="success" data-action="putaway-confirm" data-receipt="${receiptId}" data-line="${lineId}">${phIcon('check-circle','inline-icon')} CONFERMA UBICAZIONE</button></section>`}
   confirmPutAway(receipt,line){this.domain.receiving.putAway(receipt,line,Number(document.getElementById('putQty').value),{location:document.getElementById('putLocation').value,pallet:document.getElementById('putPallet').value});this.toast('Merce ubicata.');this.router.go('receipt-detail',{id:receipt})}
 
-  stock(){return `${this.sectionTitle('GIACENZE','Cerca articoli e posizioni')}<section class="filter-card stock-search-card stock-step4"><div class="stock-search-main"><span class="stock-search-icon">${svg('search')}</span><input id="stockQuery" class="field" autocomplete="off" placeholder="Articolo e taglia · es. SZ242 42"></div><div id="stockSuggestions" class="stock-suggestions"></div><div class="two stock-filter-row"><select id="stockState" class="field"><option value="">TUTTI GLI STATI</option>${CONFIG.states.map(s=>`<option>${s}</option>`).join('')}</select><input id="stockLocation" class="field" placeholder="Fila / bancale"></div></section><div id="stockResults"></div>`}
+  stock(){return `${this.sectionTitle('GIACENZE','Cerca articoli e posizioni')}<section class="filter-card stock-search-card stock-step4 stock-search-v2"><div class="stock-search-main"><span class="stock-search-icon">${svg('search')}</span><input id="stockQuery" class="field" autocomplete="off" placeholder="Articolo e taglia · es. SZ242 42"></div><div id="stockSuggestions" class="stock-suggestions"></div><div class="stock-filter-row stock-filter-row-v2"><label class="stock-filter-control"><span>STATO</span><select id="stockState" class="field"><option value="">TUTTI GLI STATI</option>${CONFIG.states.map(s=>`<option>${s}</option>`).join('')}</select></label><label class="stock-filter-control stock-filter-location"><span>POSIZIONE - FILA - SCAFFALE</span><input id="stockLocation" class="field" autocomplete="off" placeholder="Es. STANZONE CDS FERRI"></label><label class="stock-filter-control stock-filter-pallet"><span>BANCALE</span><input id="stockPallet" class="field" autocomplete="off" placeholder="Es. DISMESSI 19"></label></div></section><div id="stockResults"></div>`}
   parseStockQuery(value){const raw=norm(value).replace(/[.·\-]+/g,' ').replace(/\s+/g,' ').trim();if(!raw)return{raw:'',article:'',size:'',hasSize:false};const parts=raw.split(' ').filter(Boolean);if(parts.length>=2){const size=norm(parts.pop()),article=normalizeArticle(parts.join(''));return{raw,article,size,hasSize:!!article&&!!size}}return{raw,article:normalizeArticle(raw),size:'',hasSize:false}}
   stockStateClass(state){return `state-${String(state||'NON_CHIARO').toLowerCase().replace(/[^a-z0-9]+/g,'-')}`}
   scheduleStockRender(delay=65){clearTimeout(this.stockSearchTimer);this.stockSearchTimer=setTimeout(()=>{this.stockSearchTimer=null;this.renderStockResults()},delay)}
@@ -5784,20 +5921,20 @@ class UI{
   applyStockSuggestion(el){const input=document.getElementById('stockQuery');if(!input)return;input.value=`${el.dataset.article}${el.dataset.size?` · ${el.dataset.size}`:''}`;clearTimeout(this.stockSearchTimer);this.renderStockResults();input.focus()}
   renderStockResults(){
     const host=document.getElementById('stockResults');if(!host)return;
-    const all=this.domain.stock.positive(),query=document.getElementById('stockQuery')?.value||'',parsed=this.parseStockQuery(query),st=norm(document.getElementById('stockState')?.value),lp=norm(document.getElementById('stockLocation')?.value);
+    const all=this.domain.stock.positive(),query=document.getElementById('stockQuery')?.value||'',parsed=this.parseStockQuery(query),st=norm(document.getElementById('stockState')?.value),loc=norm(document.getElementById('stockLocation')?.value),pallet=norm(document.getElementById('stockPallet')?.value);
     const indexed=all.map(row=>({row,article:normalizeArticle(row.article),size:norm(row.size),location:norm(row.location),pallet:norm(row.pallet)}));
     const exactExists=parsed.hasSize&&indexed.some(x=>x.article.includes(parsed.article)&&x.size===parsed.size);
     const matches=[];
     for(const x of indexed){
       if(st&&x.row.state!==st)continue;
-      if(lp&&!x.location.includes(lp)&&!x.pallet.includes(lp))continue;
+      if(loc&&!x.location.includes(loc))continue;if(pallet&&!x.pallet.includes(pallet))continue;
       if(parsed.raw){if(parsed.hasSize){if(!x.article.includes(parsed.article))continue;if(exactExists?x.size!==parsed.size:!x.size.startsWith(parsed.size))continue}else if(!x.article.includes(parsed.article)&&!x.size.includes(parsed.raw))continue}
       matches.push(x.row);
     }
     const suggestHost=document.getElementById('stockSuggestions'),suggestions=this.stockSuggestionRows(indexed,parsed);
     if(suggestHost)suggestHost.innerHTML=suggestions.length?`<div class="stock-suggest-label">SUGGERIMENTI</div><div class="stock-suggest-list">${suggestions.map(x=>`<button type="button" data-action="stock-suggest" data-article="${esc(x.article)}" data-size="${esc(x.size)}"><b>${esc(x.article)}</b>${x.size?`<span>${esc(x.size)}</span>`:''}</button>`).join('')}</div>`:'';
     const limit=80,rows=matches.slice(0,limit),truncated=matches.length>limit;
-    host.innerHTML=matches.length?`<div class="stock-result-count"><span><b>${matches.length}</b> ${matches.length===1?'giacenza trovata':'giacenze trovate'}</span>${truncated?`<small>Mostrate le prime ${limit} · affina la ricerca per vedere il record desiderato</small>`:''}</div>${rows.map(r=>{const receiving=r.location===CONFIG.receivingLocation,stateClass=this.stockStateClass(r.state);return `<article class="stock-card stock-card-premium ${stateClass}"><div class="stock-card-head"><div class="stock-identity"><span class="stock-article">${esc(r.article)}</span>${r.size?`<span class="stock-size">${esc(r.size)}</span>`:''}</div><div class="stock-quantity"><small>GIACENZA</small><strong>${r.quantity}</strong></div></div><div class="stock-state-row"><span class="stock-state-pill ${stateClass}"><i></i>${esc(r.state)}</span>${receiving?'<span class="stock-available-pill">DISPONIBILE · DA UBICARE</span>':''}</div><div class="stock-data-grid"><div class="stock-data-block stock-location-block"><span class="stock-data-icon">${phIcon('map-pin-line')}</span><div><small>POSIZIONE</small><b>${esc(receiving?'AREA RICEVIMENTO':r.location||'—')}</b></div></div><div class="stock-data-block stock-pallet-block"><span class="stock-data-icon">${phIcon('stack')}</span><div><small>BANCALE</small><b>${esc(r.pallet||'—')}</b></div></div></div>${this.auth.can('RECTIFY')?`<div class="stock-actions"><button class="stock-rectify-btn" data-action="rectify-open" data-key="${esc(bucketKey(r))}"><span>${phIcon('sliders-horizontal')} RETTIFICA GIACENZA</span>${phIcon('caret-right')}</button></div>`:''}</article>`}).join('')}`:`<div class="empty stock-empty">${phIcon('magnifying-glass','empty-icon')}<div><b>Nessuna giacenza trovata.</b><small>Prova a cambiare articolo, taglia, stato o posizione.</small></div></div>`
+    host.innerHTML=matches.length?`<div class="stock-result-count"><span><b>${matches.length}</b> ${matches.length===1?'giacenza trovata':'giacenze trovate'}</span>${truncated?`<small>Mostrate le prime ${limit} · affina la ricerca per vedere il record desiderato</small>`:''}</div>${rows.map(r=>{const receiving=r.location===CONFIG.receivingLocation,stateClass=this.stockStateClass(r.state);return `<article class="stock-card stock-card-premium ${stateClass}"><div class="stock-card-head"><div class="stock-identity"><span class="stock-article">${esc(r.article)}</span>${r.size?`<span class="stock-size">${esc(r.size)}</span>`:''}</div><div class="stock-quantity"><small>GIACENZA</small><strong>${r.quantity}</strong></div></div><div class="stock-state-row"><span class="stock-state-pill ${stateClass}"><i></i>${esc(r.state)}</span>${receiving?'<span class="stock-available-pill">DISPONIBILE · DA UBICARE</span>':''}</div><div class="stock-data-grid"><div class="stock-data-block stock-location-block"><span class="stock-data-icon">${phIcon('map-pin-line')}</span><div><small>POSIZIONE - FILA - SCAFFALE</small><b>${esc(receiving?'AREA RICEVIMENTO':r.location||'—')}</b></div></div><div class="stock-data-block stock-pallet-block"><span class="stock-data-icon">${phIcon('stack')}</span><div><small>BANCALE</small><b>${esc(r.pallet||'—')}</b></div></div></div>${this.auth.can('RECTIFY')?`<div class="stock-actions"><button class="stock-rectify-btn" data-action="rectify-open" data-key="${esc(bucketKey(r))}"><span>${phIcon('sliders-horizontal')} RETTIFICA GIACENZA</span>${phIcon('caret-right')}</button></div>`:''}</article>`}).join('')}`:`<div class="empty stock-empty">${phIcon('magnifying-glass','empty-icon')}<div><b>Nessuna giacenza trovata.</b><small>Prova a cambiare articolo, taglia, stato, posizione / fila / scaffale o bancale.</small></div></div>`
   }
   makeRectDraft(r){return r?{key:bucketKey(r),article:r.article,size:r.size,state:r.state,location:r.location,pallet:r.pallet,current:Number(r.quantity||0),counted:Number(r.quantity||0),reason:'CONTEGGIO FISICO',note:''}:null}
   rectify(key=''){
@@ -5892,7 +6029,7 @@ class UI{
   logout(){this.persistCountSession();document.getElementById('siteDialog')?.close();this.siteChoiceRequired=false;this.siteChoiceSource='';this.auth.logout();this.store.useSite(CONFIG.defaultSiteId,{silent:true});this.receiptDraft=null;this.requestDraft=null;this.rectDraft=null;this.countDraft=null;this.ddtFiles=[];this.requestFiles=[];this.router.home();this.render()}
   openNotifications(){const d=document.getElementById('notificationDialog'),rows=this.domain.notifications.visibleTo(this.auth.user);d.querySelector('.dialog-body').innerHTML=rows.length?rows.map(n=>`<button class="notif-row ${n.readAt?'read':''}" data-action="notif-read" data-id="${n.id}" data-entity="${n.entityType}" data-entity-id="${n.entityId}"><b>${esc(n.title)}</b><span>${esc(n.body)}</span><small>${fmtDateTime(n.createdAt)}</small></button>`).join(''):'<div class="empty">Nessuna notifica.</div>';d.showModal()}
 
-  input(el){if(el.id==='loginPin'){const next=String(el.value||'').replace(/\D/g,'').slice(0,4);if(el.value!==next)el.value=next;if(next.length>this.lastPinLength)this.sounds?.pinKey?.();this.lastPinLength=next.length}if(el.dataset.countExtra)this.updateCountExtra(el.dataset.dom,el.dataset.countExtra,el.value);if(el.id?.startsWith('count-value-'))this.updateCountValue(el.id.replace('count-value-',''),el.value);if(el.id==='rectCounted')this.updateRectCount(el.value);const bind=el.dataset.bind;if(bind)this.bindDraft(bind,el.value);if(['stockQuery','stockLocation'].includes(el.id))this.scheduleStockRender();if(['rectSearch','rectFilterSize','rectFilterLocation','rectFilterPallet'].includes(el.id))this.renderRectResults();if(el.id==='registryQuery')this.renderRegistryResults();if(el.id==='masterQuery'){this.masterView.query=el.value;this.masterView.page=1;this.scheduleMasterRender()}if(el.id==='masterFilterArticle'){this.masterView.article=el.value;this.masterView.page=1;this.scheduleMasterRender()}if(el.id==='masterFilterLocation'){this.masterView.location=el.value;this.masterView.page=1;this.scheduleMasterRender()}if(el.id==='masterFilterPallet'){this.masterView.pallet=el.value;this.masterView.page=1;this.scheduleMasterRender()}if(el.id==='loginPin'){el.value=el.value.replace(/\D/g,'').slice(0,4);document.getElementById('loginError')?.classList.add('hidden')}}
+  input(el){if(el.id==='loginPin'){const next=String(el.value||'').replace(/\D/g,'').slice(0,4);if(el.value!==next)el.value=next;if(next.length>this.lastPinLength)this.sounds?.pinKey?.();this.lastPinLength=next.length}if(el.dataset.countExtra)this.updateCountExtra(el.dataset.dom,el.dataset.countExtra,el.value);if(el.id?.startsWith('count-value-'))this.updateCountValue(el.id.replace('count-value-',''),el.value);if(el.id==='rectCounted')this.updateRectCount(el.value);const bind=el.dataset.bind;if(bind)this.bindDraft(bind,el.value);if(['stockQuery','stockLocation','stockPallet'].includes(el.id))this.scheduleStockRender();if(['rectSearch','rectFilterSize','rectFilterLocation','rectFilterPallet'].includes(el.id))this.renderRectResults();if(el.id==='registryQuery')this.renderRegistryResults();if(el.id==='masterQuery'){this.masterView.query=el.value;this.masterView.page=1;this.scheduleMasterRender()}if(el.id==='masterFilterArticle'){this.masterView.article=el.value;this.masterView.page=1;this.scheduleMasterRender()}if(el.id==='masterFilterLocation'){this.masterView.location=el.value;this.masterView.page=1;this.scheduleMasterRender()}if(el.id==='masterFilterPallet'){this.masterView.pallet=el.value;this.masterView.page=1;this.scheduleMasterRender()}if(el.id==='loginPin'){el.value=el.value.replace(/\D/g,'').slice(0,4);document.getElementById('loginError')?.classList.add('hidden')}}
   change(el){if(el.dataset.countExtra)this.updateCountExtra(el.dataset.dom,el.dataset.countExtra,el.value);if(el.id==='rectFilterState')this.renderRectResults();if(el.id==='rectReason'&&this.rectDraft)this.rectDraft.reason=norm(el.value);const bind=el.dataset.bind;if(bind){this.bindDraft(bind,el.value);if(bind.includes(':article')||bind.includes(':size')||bind.includes(':state'))this.renderView()}if(el.id==='stockState')this.renderStockResults();if(['registryFrom','registryTo','registryType','registryState'].includes(el.id))this.renderRegistryResults();if(el.id==='masterFilterSize'){this.masterView.size=el.value;this.masterView.page=1;this.renderMasterViewerBody()}if(el.id==='masterSort'){this.masterView.sort=el.value;this.masterView.page=1;this.renderMasterViewerBody()}if(el.id?.startsWith('activityDate-')){this.activityDate=el.value||localDateInput();this.renderView()}}
   bindDraft(bind,value){const [kind,id,key]=bind.split(':');if(kind==='receipt'&&this.receiptDraft){if(id==='header'){this.receiptDraft[key]=value;return}const l=this.receiptDraft.lines.find(x=>x.id===id);if(l){if(['ddtQuantity','checkedQuantity'].includes(key)){l[key]=Math.max(0,Number(value)||0);if(key==='checkedQuantity'&&l.partials.length)l.partials=[]}else if(key==='article')l[key]=normalizeArticle(value);else if(['size','state','pallet'].includes(key))l[key]=norm(value);else l[key]=value}}if(kind==='request'&&this.requestDraft){if(id==='header'){this.requestDraft[key]=value;return}const l=this.requestDraft.lines.find(x=>x.id===id);if(l){if(key==='cartonsRequested')l[key]=Math.max(0,Math.floor(Number(value)||0));else if(key==='article')l[key]=normalizeArticle(value);else if(key==='size')l[key]=norm(value);else l[key]=value}}}
 
