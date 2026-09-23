@@ -5347,6 +5347,203 @@ body.desktop-mode .activity-desktop .activity-kpi.wide{grid-column:auto!importan
   .line-form .suggest>div>small{font-size:10.5px!important}
 }
 </style>
+
+<style id="r30-9-master-page-cleanup">
+/* ===== R30.9 · MASTER PAGE CLEANUP ===== */
+.master-page-clean{
+  width:100%!important;
+  margin:0!important;
+  padding:2px 0 28px!important;
+}
+
+/* One compact operational header: file + meta + actions */
+.master-summary-card-clean{
+  display:grid!important;
+  grid-template-columns:minmax(360px,1.35fr) minmax(480px,1fr) auto!important;
+  align-items:center!important;
+  gap:16px!important;
+  margin:0 0 16px!important;
+  padding:16px 18px!important;
+  border-radius:22px!important;
+  background:#fff!important;
+}
+
+.master-summary-card-clean .master-file-identity{
+  min-width:0!important;
+  align-items:center!important;
+}
+
+.master-summary-card-clean .master-file-identity>span{
+  width:54px!important;
+  height:54px!important;
+  flex:0 0 54px!important;
+  border-radius:16px!important;
+}
+
+.master-summary-card-clean .master-file-identity b{
+  font-size:17px!important;
+  line-height:1.15!important;
+}
+
+.master-summary-card-clean .master-file-identity p{
+  margin-top:4px!important;
+  font-size:10.5px!important;
+}
+
+.master-summary-card-clean .master-summary-meta{
+  grid-template-columns:1.25fr .8fr .8fr!important;
+  gap:8px!important;
+  min-width:0!important;
+}
+
+.master-summary-card-clean .master-summary-meta>div{
+  min-width:0!important;
+  min-height:52px!important;
+  display:flex!important;
+  flex-direction:column!important;
+  justify-content:center!important;
+  padding:9px 10px!important;
+  border-radius:13px!important;
+}
+
+.master-summary-card-clean .master-summary-meta b{
+  overflow:hidden!important;
+  text-overflow:ellipsis!important;
+  white-space:nowrap!important;
+}
+
+.master-summary-card-clean .master-summary-actions{
+  grid-column:auto!important;
+  display:flex!important;
+  align-items:center!important;
+  justify-content:flex-end!important;
+  gap:8px!important;
+  padding:0!important;
+  border-top:0!important;
+  flex-wrap:nowrap!important;
+}
+
+.master-summary-card-clean .master-summary-actions button{
+  min-height:42px!important;
+  white-space:nowrap!important;
+  margin:0!important;
+}
+
+/* Workspace immediately follows the operational header */
+.master-workspace-clean{
+  border-radius:22px!important;
+}
+
+.master-workspace-clean .master-toolbar{
+  padding:15px 16px 13px!important;
+}
+
+.master-workspace-clean .master-search-box{
+  height:52px!important;
+  border-radius:14px!important;
+}
+
+.master-workspace-clean .master-filter-grid{
+  grid-template-columns:1fr .72fr 1.28fr 1fr .9fr!important;
+  gap:10px!important;
+  margin-top:12px!important;
+}
+
+.master-workspace-clean .master-filter-grid label{
+  color:#6c8192!important;
+  font-size:8.5px!important;
+  font-weight:900!important;
+  letter-spacing:.075em!important;
+  line-height:1.15!important;
+}
+
+.master-workspace-clean .master-filter-grid input,
+.master-workspace-clean .master-filter-grid select{
+  height:43px!important;
+  margin-top:6px!important;
+  border-radius:12px!important;
+  background:#fff!important;
+}
+
+.master-workspace-clean .master-filter-grid input:focus,
+.master-workspace-clean .master-filter-grid select:focus{
+  outline:none!important;
+  border-color:#8064f4!important;
+  box-shadow:0 0 0 3px rgba(128,100,244,.09)!important;
+}
+
+.master-workspace-clean .master-permission-note{
+  align-items:center!important;
+  min-height:38px!important;
+  padding:9px 16px!important;
+}
+
+.master-workspace-clean .master-viewer-meta{
+  min-height:46px!important;
+}
+
+/* Table header follows the same terminology system */
+.master-workspace-clean .master-table th{
+  vertical-align:middle!important;
+  line-height:1.15!important;
+}
+
+@media(max-width:1450px){
+  .master-summary-card-clean{
+    grid-template-columns:minmax(320px,1fr) minmax(420px,1.1fr)!important;
+  }
+  .master-summary-card-clean .master-summary-actions{
+    grid-column:1/-1!important;
+    justify-content:flex-end!important;
+    padding-top:10px!important;
+    border-top:1px solid #e8eef2!important;
+  }
+}
+
+@media(max-width:980px){
+  .master-page-clean{padding-top:0!important}
+  .master-summary-card-clean{
+    grid-template-columns:1fr!important;
+    gap:12px!important;
+  }
+  .master-summary-card-clean .master-summary-actions{
+    grid-column:auto!important;
+    justify-content:stretch!important;
+    border-top:1px solid #e8eef2!important;
+  }
+  .master-summary-card-clean .master-summary-actions button{
+    flex:1 1 0!important;
+  }
+  .master-workspace-clean .master-filter-grid{
+    grid-template-columns:1fr 1fr!important;
+  }
+  .master-workspace-clean .master-filter-sort{
+    grid-column:1/-1!important;
+  }
+}
+
+@media(max-width:600px){
+  .master-summary-card-clean{
+    padding:14px!important;
+    border-radius:18px!important;
+  }
+  .master-summary-card-clean .master-summary-meta{
+    grid-template-columns:1fr!important;
+  }
+  .master-summary-card-clean .master-summary-actions{
+    flex-direction:column!important;
+  }
+  .master-summary-card-clean .master-summary-actions button{
+    width:100%!important;
+  }
+  .master-workspace-clean .master-filter-grid{
+    grid-template-columns:1fr!important;
+  }
+  .master-workspace-clean .master-filter-sort{
+    grid-column:auto!important;
+  }
+}
+</style>
 </head>
 <body>
 <header id="topbar" class="topbar"></header>
@@ -6180,9 +6377,9 @@ class UI{
 
   master(){
     if(!this.require('MASTER_VIEW'))return'';const m=this.store.db.master,ready=this.masterReady(),hasLegacy=this.excel.legacyAvailable(),site=this.auth.site(),dirty=this.excel.dirtyCount();
-    if(!ready)return `<div class="master-page-head"><div><div class="eyebrow">MAGAZZINO ${esc(site.name.toUpperCase())}</div><h1>Dati magazzino</h1><p>Master operativo della sede</p></div></div><section class="master-empty-panel"><span>${phIcon('microsoft-excel-logo')}</span><h2>Master non caricato</h2><p>Per ${esc(site.name)} non è ancora presente un file Excel.</p>${this.auth.can('MASTER_IMPORT')?`<button class="primary" data-action="master-import">${phIcon('upload-simple')} IMPORTA MASTER EXCEL</button>`:''}${!ready&&hasLegacy&&site.id===CONFIG.defaultSiteId&&this.auth.can('MASTER_IMPORT')?`<button class="soft" data-action="legacy-migrate">MIGRA DATI REMOTO</button>`:''}</section>`;
+    if(!ready)return `<section class="master-page-clean"><section class="master-empty-panel">${phIcon('microsoft-excel-logo')}<h2>Master non caricato</h2><p>Per ${esc(site.name)} non è ancora presente un file Excel.</p>${this.auth.can('MASTER_IMPORT')?`<button class="primary" data-action="master-import">${phIcon('upload-simple')} IMPORTA MASTER EXCEL</button>`:''}${!ready&&hasLegacy&&site.id===CONFIG.defaultSiteId&&this.auth.can('MASTER_IMPORT')?`<button class="soft" data-action="legacy-migrate">MIGRA DATI REMOTO</button>`:''}</section></section>`;
     const rows=this.domain.stock.positive(),sizes=[...new Set(rows.map(r=>r.size).filter(Boolean))].sort((a,b)=>a.localeCompare(b,'it',{numeric:true}));
-    return `<div class="master-page-head"><div><div class="eyebrow">MAGAZZINO ${esc(site.name.toUpperCase())}</div><h1>Dati magazzino</h1><p>Consulta e filtra il Master operativo. Le modifiche autorizzate restano tracciate.</p></div><span class="master-site-chip">${phIcon('buildings')} ${esc(site.name)}</span></div><section class="master-summary-card"><div class="master-file-identity"><span>${phIcon('microsoft-excel-logo')}</span><div><small>FILE MASTER</small><b>${esc(m.filename)}</b><p>${rows.length} giacenze attive · ${esc(m.sheetName||'MAGAZZINO')}</p></div></div><div class="master-summary-meta"><div><small>CARICATO</small><b>${fmtDateTime(m.importedAt)}</b></div><div><small>OPERATORE</small><b>${esc(m.importedBy||'—')}</b></div><div><small>MODIFICHE DA ESPORTARE</small><b class="${dirty?'warn-text':''}">${dirty}</b></div></div><div class="master-summary-actions">${this.auth.can('MASTER_IMPORT')?`<button class="soft" data-action="master-import">${phIcon('arrows-clockwise')} AGGIORNA MASTER</button>`:''}${this.auth.can('MASTER_EXPORT')?`<button class="success" data-action="master-export">${phIcon('microsoft-excel-logo')} ESPORTA AGGIORNATO</button>`:''}</div></section><section class="master-workspace"><div class="master-toolbar"><div class="master-search-box">${phIcon('magnifying-glass')}<input id="masterQuery" autocomplete="off" placeholder="Ricerca libera: articolo, taglia, stato, descrizione…" value="${esc(this.masterView.query)}"></div><div class="master-filter-grid"><label>Articolo<input id="masterFilterArticle" autocomplete="off" value="${esc(this.masterView.article)}" placeholder="Es. SZ242"></label><label>Taglia<select id="masterFilterSize"><option value="">TUTTE</option>${sizes.map(x=>`<option value="${esc(x)}" ${this.masterView.size===x?'selected':''}>${esc(x)}</option>`).join('')}</select></label><label>Posizione<input id="masterFilterLocation" autocomplete="off" value="${esc(this.masterView.location)}" placeholder="Posizione"></label><label>Bancale<input id="masterFilterPallet" autocomplete="off" value="${esc(this.masterView.pallet)}" placeholder="Bancale"></label><label class="master-filter-sort">Ordina<select id="masterSort"><option value="article" ${this.masterView.sort==='article'?'selected':''}>Articolo</option><option value="qty_desc" ${this.masterView.sort==='qty_desc'?'selected':''}>Quantità ↓</option><option value="qty_asc" ${this.masterView.sort==='qty_asc'?'selected':''}>Quantità ↑</option><option value="location" ${this.masterView.sort==='location'?'selected':''}>Posizione</option><option value="pallet" ${this.masterView.sort==='pallet'?'selected':''}>Bancale</option></select></label></div><div class="master-toolbar-foot"><span>${phIcon('funnel-simple')} Tutti i filtri sono combinabili</span><button data-action="master-filter-reset">AZZERA FILTRI</button></div></div><div class="master-permission-note">${phIcon(this.auth.can('MASTER_EDIT_STOCK')?'shield-check':'eye')}<span>${this.auth.can('MASTER_EDIT_STOCK')?'Puoi modificare le quantità. NOVA registra solo la variazione e preserva le formule Excel originali.':'Visualizzazione in sola lettura per il tuo ruolo.'}</span></div><div id="masterViewerMeta" class="master-viewer-meta"></div><div id="masterViewerBody"></div></section>`
+    return `<section class="master-page-clean"><section class="master-summary-card master-summary-card-clean"><div class="master-file-identity"><span>${phIcon('microsoft-excel-logo')}</span><div><small>FILE MASTER</small><b>${esc(m.filename)}</b><p>${rows.length} giacenze attive · Foglio ${esc(m.sheetName||'MAGAZZINO')}</p></div></div><div class="master-summary-meta"><div><small>CARICATO</small><b>${fmtDateTime(m.importedAt)}</b></div><div><small>OPERATORE</small><b>${esc(m.importedBy||'—')}</b></div><div><small>MODIFICHE DA ESPORTARE</small><b class="${dirty?'warn-text':''}">${dirty}</b></div></div><div class="master-summary-actions">${this.auth.can('MASTER_IMPORT')?`<button class="soft" data-action="master-import">${phIcon('arrows-clockwise')} AGGIORNA MASTER</button>`:''}${this.auth.can('MASTER_EXPORT')?`<button class="success" data-action="master-export">${phIcon('microsoft-excel-logo')} ESPORTA AGGIORNATO</button>`:''}</div></section><section class="master-workspace master-workspace-clean"><div class="master-toolbar"><div class="master-search-box">${phIcon('magnifying-glass')}<input id="masterQuery" autocomplete="off" placeholder="Ricerca libera: articolo, taglia, stato, descrizione…" value="${esc(this.masterView.query)}"></div><div class="master-filter-grid"><label>Articolo<input id="masterFilterArticle" autocomplete="off" value="${esc(this.masterView.article)}" placeholder="Es. SZ242"></label><label>Taglia<select id="masterFilterSize"><option value="">TUTTE</option>${sizes.map(x=>`<option value="${esc(x)}" ${this.masterView.size===x?'selected':''}>${esc(x)}</option>`).join('')}</select></label><label>POSIZIONE - FILA - SCAFFALE<input id="masterFilterLocation" autocomplete="off" value="${esc(this.masterView.location)}" placeholder="Es. STANZONE CDS FERRI"></label><label>Bancale<input id="masterFilterPallet" autocomplete="off" value="${esc(this.masterView.pallet)}" placeholder="Es. DISMESSI 19"></label><label class="master-filter-sort">Ordina<select id="masterSort"><option value="article" ${this.masterView.sort==='article'?'selected':''}>Articolo</option><option value="qty_desc" ${this.masterView.sort==='qty_desc'?'selected':''}>Quantità ↓</option><option value="qty_asc" ${this.masterView.sort==='qty_asc'?'selected':''}>Quantità ↑</option><option value="location" ${this.masterView.sort==='location'?'selected':''}>Posizione - Fila - Scaffale</option><option value="pallet" ${this.masterView.sort==='pallet'?'selected':''}>Bancale</option></select></label></div><div class="master-toolbar-foot"><span>${phIcon('funnel-simple')} Tutti i filtri sono combinabili</span><button data-action="master-filter-reset">AZZERA FILTRI</button></div></div><div class="master-permission-note">${phIcon(this.auth.can('MASTER_EDIT_STOCK')?'shield-check':'eye')}<span>${this.auth.can('MASTER_EDIT_STOCK')?'Puoi modificare le quantità. SOMA registra solo la variazione e preserva le formule Excel originali.':'Visualizzazione in sola lettura per il tuo ruolo.'}</span></div><div id="masterViewerMeta" class="master-viewer-meta"></div><div id="masterViewerBody"></div></section></section>`
   }
   masterFilteredRows(){
     const all=this.domain.stock.positive(),v=this.masterView,q=String(v.query||'').trim(),parsed=this.parseStockQuery(q),article=normalizeArticle(v.article||''),size=norm(v.size),loc=norm(v.location),pallet=norm(v.pallet);let rows=all.filter(r=>{
@@ -6194,7 +6391,7 @@ class UI{
   renderMasterViewerBody(){
     const host=document.getElementById('masterViewerBody'),meta=document.getElementById('masterViewerMeta');if(!host||!meta)return;const rows=this.masterFilteredRows(),v=this.masterView,pages=Math.max(1,Math.ceil(rows.length/v.pageSize));v.page=Math.min(Math.max(1,v.page),pages);const start=(v.page-1)*v.pageSize,visible=rows.slice(start,start+v.pageSize),editable=this.auth.can('MASTER_EDIT_STOCK');
     meta.innerHTML=`<div><b>${rows.length}</b><span>${rows.length===1?'riga trovata':'righe trovate'}</span></div><small>Pagina ${v.page} di ${pages}${rows.length?` · ${start+1}-${Math.min(start+v.pageSize,rows.length)}`:''}</small>`;
-    host.innerHTML=visible.length?`<div class="master-table-shell" role="region" aria-label="Master Excel scorrevole. Scorri verticalmente e orizzontalmente per consultare tutte le righe e colonne." tabindex="0"><table class="master-table"><thead><tr><th>Articolo</th><th>Taglia</th><th>Stato</th><th class="num">Quantità</th><th>Posizione</th><th>Bancale</th><th>Descrizione</th>${editable?'<th></th>':''}</tr></thead><tbody>${visible.map(r=>`<tr><td data-label="Articolo"><b>${esc(r.article)}</b></td><td data-label="Taglia">${esc(r.size||'—')}</td><td data-label="Stato"><span class="master-state ${this.stockStateClass(r.state)}"><i></i>${esc(r.state)}</span></td><td data-label="Quantità" class="num"><strong>${r.quantity}</strong></td><td data-label="Posizione">${esc(r.location||'—')}</td><td data-label="Bancale">${esc(r.pallet||'—')}</td><td data-label="Descrizione" class="description">${esc(r.description||'—')}</td>${editable?`<td class="master-edit-cell"><button data-action="master-edit-row" data-key="${esc(encodeURIComponent(bucketKey(r)))}" aria-label="Modifica ${esc(r.article)}">${phIcon('pencil-simple')}</button></td>`:''}</tr>`).join('')}</tbody></table></div><div class="master-pagination"><button data-action="master-page-prev" ${v.page<=1?'disabled':''}>${phIcon('caret-left')} PRECEDENTE</button><span>${v.page} / ${pages}</span><button data-action="master-page-next" ${v.page>=pages?'disabled':''}>SUCCESSIVA ${phIcon('caret-right')}</button></div>`:`<div class="empty master-no-results">${phIcon('funnel-simple','empty-icon')}<div><b>Nessun dato corrisponde ai filtri.</b><small>Azzera i filtri o modifica i criteri di ricerca.</small></div></div>`
+    host.innerHTML=visible.length?`<div class="master-table-shell" role="region" aria-label="Master Excel scorrevole. Scorri verticalmente e orizzontalmente per consultare tutte le righe e colonne." tabindex="0"><table class="master-table"><thead><tr><th>Articolo</th><th>Taglia</th><th>Stato</th><th class="num">Quantità</th><th>POSIZIONE - FILA - SCAFFALE</th><th>Bancale</th><th>Descrizione</th>${editable?'<th></th>':''}</tr></thead><tbody>${visible.map(r=>`<tr><td data-label="Articolo"><b>${esc(r.article)}</b></td><td data-label="Taglia">${esc(r.size||'—')}</td><td data-label="Stato"><span class="master-state ${this.stockStateClass(r.state)}"><i></i>${esc(r.state)}</span></td><td data-label="Quantità" class="num"><strong>${r.quantity}</strong></td><td data-label="POSIZIONE - FILA - SCAFFALE">${esc(r.location||'—')}</td><td data-label="Bancale">${esc(r.pallet||'—')}</td><td data-label="Descrizione" class="description">${esc(r.description||'—')}</td>${editable?`<td class="master-edit-cell"><button data-action="master-edit-row" data-key="${esc(encodeURIComponent(bucketKey(r)))}" aria-label="Modifica ${esc(r.article)}">${phIcon('pencil-simple')}</button></td>`:''}</tr>`).join('')}</tbody></table></div><div class="master-pagination"><button data-action="master-page-prev" ${v.page<=1?'disabled':''}>${phIcon('caret-left')} PRECEDENTE</button><span>${v.page} / ${pages}</span><button data-action="master-page-next" ${v.page>=pages?'disabled':''}>SUCCESSIVA ${phIcon('caret-right')}</button></div>`:`<div class="empty master-no-results">${phIcon('funnel-simple','empty-icon')}<div><b>Nessun dato corrisponde ai filtri.</b><small>Azzera i filtri o modifica i criteri di ricerca.</small></div></div>`
   }
   scheduleMasterRender(delay=70){clearTimeout(this.masterSearchTimer);this.masterSearchTimer=setTimeout(()=>{this.masterSearchTimer=null;this.renderMasterViewerBody()},delay)}
   resetMasterFilters(){this.masterView={...this.masterView,query:'',article:'',size:'',location:'',pallet:'',sort:'article',page:1};const q=document.getElementById('masterQuery'),art=document.getElementById('masterFilterArticle'),sz=document.getElementById('masterFilterSize'),loc=document.getElementById('masterFilterLocation'),pal=document.getElementById('masterFilterPallet'),sort=document.getElementById('masterSort');if(q)q.value='';if(art)art.value='';if(sz)sz.value='';if(loc)loc.value='';if(pal)pal.value='';if(sort)sort.value='article';this.renderMasterViewerBody()}
