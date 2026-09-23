@@ -6298,6 +6298,16 @@ body.desktop-mode .activity-desktop .activity-kpi.wide{grid-column:auto!importan
   border-color:#cadbe6!important;
   background:#f2f7fa!important;
 }
+.master-request-aggregate-details[open]{
+  grid-column:2/-1!important;
+}
+.master-request-aggregate-details[open] .master-request-source-list{
+  position:static!important;
+  width:100%!important;
+  max-height:260px!important;
+  margin-top:7px!important;
+  box-shadow:none!important;
+}
 .master-request-source-list{
   position:absolute!important;
   z-index:15!important;
@@ -7309,7 +7319,7 @@ class UI{
     if(!this.auth.can('REQUEST_CREATE'))throw new Error('Non hai il permesso per creare richieste.');
     if(this.masterRequestMode&&this.masterRequestItems.length&&!confirm('Uscire dalla modalità richiesta? La selezione corrente verrà azzerata.'))return;
     const entering=!this.masterRequestMode;this.masterRequestMode=entering;this.masterRequestItems=[];
-    if(entering)this.masterView={...this.masterView,location:'',pallet:'',sort:['article','qty_desc','qty_asc'].includes(this.masterView.sort)?this.masterView.sort:'article',page:1};
+    if(entering)this.masterView={...this.masterView,location:'',pallet:'',sort:'article',page:1};
     document.getElementById('masterRequestDialog')?.close();this.renderView()
   }
   toggleMasterRequestItem(encoded){
