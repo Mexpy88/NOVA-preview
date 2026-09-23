@@ -6993,6 +6993,305 @@ body.desktop-mode .activity-desktop .activity-kpi.wide{grid-column:auto!importan
   .master-request-source-row>span:not(.master-request-state-chip){grid-column:1/-1!important}
 }
 </style>
+<style id="r31-4-review-modal-polish">
+/* ===== R31.4 · QUICK REQUEST REVIEW MODAL ===== */
+.master-request-dialog{
+  width:min(840px,calc(100vw - 36px))!important;
+  max-width:840px!important;
+  max-height:min(90dvh,840px)!important;
+  border-radius:28px!important;
+  box-shadow:0 34px 100px rgba(24,48,67,.30)!important;
+}
+.master-request-dialog-head{
+  padding:24px 26px 20px!important;
+  align-items:flex-start!important;
+  border-bottom:1px solid #e5ebef!important;
+}
+.master-request-dialog-head small{
+  margin-bottom:5px!important;
+  font-size:10px!important;
+  letter-spacing:.13em!important;
+}
+.master-request-dialog-head h2{
+  font-size:31px!important;
+  line-height:1.04!important;
+  letter-spacing:-.025em!important;
+}
+.master-request-dialog-head p{
+  margin:7px 0 0!important;
+  color:#74899a!important;
+  font-size:13px!important;
+  line-height:1.35!important;
+  font-weight:700!important;
+}
+.master-request-dialog-head>button{
+  width:44px!important;
+  height:44px!important;
+  flex:0 0 44px!important;
+  border-radius:13px!important;
+}
+.master-request-dialog-head>button>.ph{font-size:19px!important}
+
+.master-request-dialog-body{
+  padding:19px 20px 20px!important;
+  max-height:min(62dvh,590px)!important;
+}
+.master-request-review-note{
+  gap:10px!important;
+  margin-bottom:13px!important;
+  padding:13px 15px!important;
+  border-radius:14px!important;
+  font-size:13px!important;
+  line-height:1.45!important;
+}
+.master-request-review-note>.ph{
+  margin-top:0!important;
+  font-size:20px!important;
+}
+.master-request-review-summary{
+  display:grid!important;
+  grid-template-columns:1fr 1fr!important;
+  gap:10px!important;
+  margin-bottom:13px!important;
+}
+.master-request-review-summary>div{
+  min-height:58px!important;
+  display:flex!important;
+  align-items:center!important;
+  justify-content:space-between!important;
+  gap:12px!important;
+  padding:10px 14px!important;
+  border:1px solid #e2e9ed!important;
+  border-radius:14px!important;
+  background:#f9fbfc!important;
+}
+.master-request-review-summary small{
+  color:#8193a1!important;
+  font-size:9px!important;
+  font-weight:950!important;
+  letter-spacing:.11em!important;
+}
+.master-request-review-summary b{
+  color:#294f6d!important;
+  font-size:22px!important;
+  line-height:1!important;
+}
+
+.master-request-review-list{
+  gap:11px!important;
+}
+.master-request-review-item{
+  grid-template-columns:minmax(0,1fr) auto 46px!important;
+  gap:17px!important;
+  min-height:96px!important;
+  padding:15px 15px 15px 17px!important;
+  border-radius:18px!important;
+  border-color:#dfe7ec!important;
+  box-shadow:0 3px 10px rgba(30,64,89,.025)!important;
+}
+.master-request-review-item:hover{
+  border-color:#d2dde5!important;
+  background:#fdfefe!important;
+}
+.master-request-review-item.unavailable{
+  border-color:#edc6c2!important;
+  background:#fff8f7!important;
+}
+.master-request-review-main{
+  gap:13px!important;
+}
+.master-request-review-icon{
+  width:44px!important;
+  height:44px!important;
+  flex:0 0 44px!important;
+  border-radius:13px!important;
+  background:#fff8e8!important;
+  color:#c58a17!important;
+}
+.master-request-review-icon>.ph{
+  font-size:22px!important;
+}
+.master-request-review-item.unavailable .master-request-review-icon{
+  background:#fff0ee!important;
+  color:#b34b43!important;
+}
+.master-request-review-copy{
+  min-width:0!important;
+}
+.master-request-review-id{
+  display:flex!important;
+  align-items:center!important;
+  gap:9px!important;
+  min-width:0!important;
+}
+.master-request-review-id b{
+  min-width:0!important;
+  color:#244965!important;
+  font-size:17px!important;
+  line-height:1.15!important;
+  font-weight:900!important;
+  overflow:hidden!important;
+  text-overflow:ellipsis!important;
+  white-space:nowrap!important;
+}
+.master-request-review-id>span{
+  flex:0 0 auto!important;
+  min-width:42px!important;
+  height:30px!important;
+  padding:0 10px!important;
+  display:inline-grid!important;
+  place-items:center!important;
+  border-radius:10px!important;
+  background:#edf3f7!important;
+  color:#376783!important;
+  font-size:11px!important;
+  font-weight:950!important;
+}
+.master-request-review-main small{
+  margin-top:6px!important;
+  color:#718797!important;
+  font-size:12px!important;
+  line-height:1.25!important;
+  font-weight:750!important;
+}
+.master-request-review-item.unavailable .master-request-review-main small{
+  color:#a23d35!important;
+}
+
+.master-request-review-qty>small{
+  margin-bottom:7px!important;
+  font-size:9.5px!important;
+  letter-spacing:.1em!important;
+}
+.master-request-review-qty>div{
+  grid-template-columns:46px 66px 46px!important;
+  border-radius:13px!important;
+}
+.master-request-review-qty button{
+  height:46px!important;
+  font-size:17px!important;
+}
+.master-request-review-qty button>.ph{font-size:18px!important}
+.master-request-review-qty button:disabled{
+  opacity:.34!important;
+  cursor:default!important;
+}
+.master-request-review-qty input{
+  height:46px!important;
+  font-size:16px!important;
+}
+.master-request-review-remove{
+  width:46px!important;
+  height:46px!important;
+  border-radius:13px!important;
+}
+.master-request-review-remove>.ph{
+  font-size:18px!important;
+}
+
+.master-request-dialog-actions{
+  padding:14px 20px 18px!important;
+  gap:10px!important;
+  background:#fbfcfd!important;
+}
+.master-request-dialog-actions button{
+  min-height:54px!important;
+  padding:0 20px!important;
+  border-radius:14px!important;
+  font-size:12px!important;
+  font-weight:950!important;
+  letter-spacing:.015em!important;
+  display:inline-flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  gap:8px!important;
+}
+.master-request-dialog-actions button>.ph{font-size:17px!important}
+.master-request-dialog-actions .soft{
+  flex:1 1 0!important;
+  border:1px solid #cfdbe4!important;
+  background:#f7f9fb!important;
+  color:#274966!important;
+}
+.master-request-dialog-actions .master-request-send-dialog{
+  flex:1 1 0!important;
+}
+.master-request-dialog-actions .master-request-send-dialog:disabled{
+  opacity:.45!important;
+  cursor:not-allowed!important;
+  filter:saturate(.6)!important;
+}
+
+@media(max-width:600px){
+  .master-request-dialog{
+    width:min(96vw,840px)!important;
+    border-radius:22px!important;
+  }
+  .master-request-dialog-head{
+    padding:19px 18px 16px!important;
+  }
+  .master-request-dialog-head h2{font-size:26px!important}
+  .master-request-dialog-head p{font-size:11.5px!important}
+  .master-request-dialog-body{
+    padding:14px!important;
+    max-height:62dvh!important;
+  }
+  .master-request-review-note{
+    padding:11px 12px!important;
+    font-size:11.5px!important;
+  }
+  .master-request-review-summary{
+    gap:8px!important;
+  }
+  .master-request-review-summary>div{
+    min-height:52px!important;
+    padding:9px 11px!important;
+  }
+  .master-request-review-summary b{font-size:19px!important}
+  .master-request-review-item{
+    grid-template-columns:minmax(0,1fr) 42px!important;
+    min-height:0!important;
+    gap:10px!important;
+    padding:13px!important;
+  }
+  .master-request-review-icon{
+    width:38px!important;
+    height:38px!important;
+    flex-basis:38px!important;
+  }
+  .master-request-review-id b{font-size:15px!important}
+  .master-request-review-id>span{
+    min-width:38px!important;
+    height:27px!important;
+    font-size:10px!important;
+  }
+  .master-request-review-main small{font-size:11px!important}
+  .master-request-review-qty{
+    grid-column:1/-1!important;
+    padding-left:48px!important;
+  }
+  .master-request-review-qty>div{
+    width:168px!important;
+    grid-template-columns:44px 80px 44px!important;
+  }
+  .master-request-review-qty button,
+  .master-request-review-qty input{height:44px!important}
+  .master-request-review-remove{
+    width:42px!important;
+    height:42px!important;
+    grid-column:2!important;
+    grid-row:1!important;
+  }
+  .master-request-dialog-actions{
+    padding:12px 14px 14px!important;
+    flex-direction:column-reverse!important;
+  }
+  .master-request-dialog-actions button{
+    width:100%!important;
+    min-height:50px!important;
+  }
+}
+</style>
 </head>
 <body>
 <header id="topbar" class="topbar"></header>
@@ -7828,7 +8127,7 @@ class UI{
     if(!this.require('MASTER_VIEW'))return'';const m=this.store.db.master,ready=this.masterReady(),hasLegacy=this.excel.legacyAvailable(),site=this.auth.site(),dirty=this.excel.dirtyCount();
     if(!ready)return `<section class="master-page-clean"><section class="master-empty-panel">${phIcon('microsoft-excel-logo')}<h2>Master non caricato</h2><p>Per ${esc(site.name)} non è ancora presente un file Excel.</p>${this.auth.can('MASTER_IMPORT')?`<button class="primary" data-action="master-import">${phIcon('upload-simple')} IMPORTA MASTER EXCEL</button>`:''}${!ready&&hasLegacy&&site.id===CONFIG.defaultSiteId&&this.auth.can('MASTER_IMPORT')?`<button class="soft" data-action="legacy-migrate">MIGRA DATI REMOTO</button>`:''}</section></section>`;
     const rows=this.domain.stock.positive(),sizes=[...new Set(rows.map(r=>r.size).filter(Boolean))].sort((a,b)=>a.localeCompare(b,'it',{numeric:true})),canQuick=this.auth.can('REQUEST_CREATE');
-    return `<section class="master-page-clean ${this.masterRequestMode?'master-request-active':''}"><section class="master-summary-card master-summary-card-clean"><div class="master-file-identity"><span>${phIcon('microsoft-excel-logo')}</span><div><small>FILE MASTER</small><b>${esc(m.filename)}</b><p>${rows.length} giacenze attive · Foglio ${esc(m.sheetName||'MAGAZZINO')}</p></div></div><div class="master-summary-meta"><div><small>CARICATO</small><b>${fmtDateTime(m.importedAt)}</b></div><div><small>OPERATORE</small><b>${esc(m.importedBy||'—')}</b></div><div><small>MODIFICHE DA ESPORTARE</small><b class="${dirty?'warn-text':''}">${dirty}</b></div></div><div class="master-summary-actions">${this.auth.can('MASTER_IMPORT')?`<button class="soft" data-action="master-import">${phIcon('arrows-clockwise')} AGGIORNA MASTER</button>`:''}${this.auth.can('MASTER_EXPORT')?`<button class="success" data-action="master-export">${phIcon('microsoft-excel-logo')} ESPORTA AGGIORNATO</button>`:''}</div></section><section class="master-workspace master-workspace-clean"><div class="master-toolbar"><div class="master-search-box">${phIcon('magnifying-glass')}<input id="masterQuery" autocomplete="off" placeholder="${this.masterRequestMode?'Cerca articolo, taglia o descrizione…':'Ricerca libera: articolo, taglia, stato, descrizione…'}" value="${esc(this.masterView.query)}"></div><div class="master-filter-grid"><label>Articolo<input id="masterFilterArticle" autocomplete="off" value="${esc(this.masterView.article)}" placeholder="Es. SZ242"></label><label>Taglia<select id="masterFilterSize"><option value="">TUTTE</option>${sizes.map(x=>`<option value="${esc(x)}" ${this.masterView.size===x?'selected':''}>${esc(x)}</option>`).join('')}</select></label><label>POSIZIONE - FILA - SCAFFALE<input id="masterFilterLocation" autocomplete="off" value="${esc(this.masterView.location)}" placeholder="Es. STANZONE CDS FERRI"></label><label>Bancale<input id="masterFilterPallet" autocomplete="off" value="${esc(this.masterView.pallet)}" placeholder="Es. DISMESSI 19"></label><label class="master-filter-sort">Ordina<select id="masterSort"><option value="article" ${this.masterView.sort==='article'?'selected':''}>Articolo</option><option value="qty_desc" ${this.masterView.sort==='qty_desc'?'selected':''}>Quantità ↓</option><option value="qty_asc" ${this.masterView.sort==='qty_asc'?'selected':''}>Quantità ↑</option><option value="location" ${this.masterView.sort==='location'?'selected':''}>Posizione - Fila - Scaffale</option><option value="pallet" ${this.masterView.sort==='pallet'?'selected':''}>Bancale</option></select></label></div><div class="master-toolbar-foot"><span>${phIcon('funnel-simple')} ${this.masterRequestMode?'Ricerca per articolo e taglia · disponibilità aggregata':'Tutti i filtri sono combinabili'}</span><div class="master-toolbar-actions"><button data-action="master-filter-reset">AZZERA FILTRI</button>${canQuick?`<button class="master-request-toggle ${this.masterRequestMode?'active':''}" data-action="master-request-toggle">${phRegular(this.masterRequestMode?'x':'check-square')}<span>${this.masterRequestMode?'ESCI DA RICHIESTA':'CREA RICHIESTA'}</span></button>`:''}</div></div>${canQuick&&this.masterRequestMode?`<div class="master-request-mode-banner">${phRegular('clipboard-text')}<div><b>Modalità richiesta rapida</b><small>Una riga per articolo + taglia: vedi subito il totale disponibile e la composizione per stato. Le posizioni restano consultabili solo quando servono.</small></div></div>`:''}</div><div class="master-permission-note">${phIcon(this.auth.can('MASTER_EDIT_STOCK')?'shield-check':'eye')}<span>${this.auth.can('MASTER_EDIT_STOCK')?'Puoi modificare le quantità. SOMA registra solo la variazione e preserva le formule Excel originali.':'Visualizzazione in sola lettura per il tuo ruolo.'}</span></div><div id="masterViewerMeta" class="master-viewer-meta"></div><div id="masterViewerBody"></div></section>${canQuick?`<div id="masterRequestDock"></div><dialog id="masterRequestDialog" class="dialog master-request-dialog" aria-labelledby="masterRequestDialogTitle"><div class="master-request-dialog-head"><div><small>RICHIESTA RAPIDA</small><h2 id="masterRequestDialogTitle">Rivedi richiesta</h2></div><button type="button" data-action="master-request-review-close" aria-label="Chiudi">${phRegular('x')}</button></div><div id="masterRequestDialogBody" class="master-request-dialog-body"></div><div class="master-request-dialog-actions"><button class="soft" data-action="master-request-review-close">TORNA AL MASTER</button><button class="primary master-request-send-dialog" data-action="master-request-send">${phRegular('paper-plane-tilt')} INVIA RICHIESTA</button></div></dialog>`:''}</section>`
+    return `<section class="master-page-clean ${this.masterRequestMode?'master-request-active':''}"><section class="master-summary-card master-summary-card-clean"><div class="master-file-identity"><span>${phIcon('microsoft-excel-logo')}</span><div><small>FILE MASTER</small><b>${esc(m.filename)}</b><p>${rows.length} giacenze attive · Foglio ${esc(m.sheetName||'MAGAZZINO')}</p></div></div><div class="master-summary-meta"><div><small>CARICATO</small><b>${fmtDateTime(m.importedAt)}</b></div><div><small>OPERATORE</small><b>${esc(m.importedBy||'—')}</b></div><div><small>MODIFICHE DA ESPORTARE</small><b class="${dirty?'warn-text':''}">${dirty}</b></div></div><div class="master-summary-actions">${this.auth.can('MASTER_IMPORT')?`<button class="soft" data-action="master-import">${phIcon('arrows-clockwise')} AGGIORNA MASTER</button>`:''}${this.auth.can('MASTER_EXPORT')?`<button class="success" data-action="master-export">${phIcon('microsoft-excel-logo')} ESPORTA AGGIORNATO</button>`:''}</div></section><section class="master-workspace master-workspace-clean"><div class="master-toolbar"><div class="master-search-box">${phIcon('magnifying-glass')}<input id="masterQuery" autocomplete="off" placeholder="${this.masterRequestMode?'Cerca articolo, taglia o descrizione…':'Ricerca libera: articolo, taglia, stato, descrizione…'}" value="${esc(this.masterView.query)}"></div><div class="master-filter-grid"><label>Articolo<input id="masterFilterArticle" autocomplete="off" value="${esc(this.masterView.article)}" placeholder="Es. SZ242"></label><label>Taglia<select id="masterFilterSize"><option value="">TUTTE</option>${sizes.map(x=>`<option value="${esc(x)}" ${this.masterView.size===x?'selected':''}>${esc(x)}</option>`).join('')}</select></label><label>POSIZIONE - FILA - SCAFFALE<input id="masterFilterLocation" autocomplete="off" value="${esc(this.masterView.location)}" placeholder="Es. STANZONE CDS FERRI"></label><label>Bancale<input id="masterFilterPallet" autocomplete="off" value="${esc(this.masterView.pallet)}" placeholder="Es. DISMESSI 19"></label><label class="master-filter-sort">Ordina<select id="masterSort"><option value="article" ${this.masterView.sort==='article'?'selected':''}>Articolo</option><option value="qty_desc" ${this.masterView.sort==='qty_desc'?'selected':''}>Quantità ↓</option><option value="qty_asc" ${this.masterView.sort==='qty_asc'?'selected':''}>Quantità ↑</option><option value="location" ${this.masterView.sort==='location'?'selected':''}>Posizione - Fila - Scaffale</option><option value="pallet" ${this.masterView.sort==='pallet'?'selected':''}>Bancale</option></select></label></div><div class="master-toolbar-foot"><span>${phIcon('funnel-simple')} ${this.masterRequestMode?'Ricerca per articolo e taglia · disponibilità aggregata':'Tutti i filtri sono combinabili'}</span><div class="master-toolbar-actions"><button data-action="master-filter-reset">AZZERA FILTRI</button>${canQuick?`<button class="master-request-toggle ${this.masterRequestMode?'active':''}" data-action="master-request-toggle">${phRegular(this.masterRequestMode?'x':'check-square')}<span>${this.masterRequestMode?'ESCI DA RICHIESTA':'CREA RICHIESTA'}</span></button>`:''}</div></div>${canQuick&&this.masterRequestMode?`<div class="master-request-mode-banner">${phRegular('clipboard-text')}<div><b>Modalità richiesta rapida</b><small>Una riga per articolo + taglia: vedi subito il totale disponibile e la composizione per stato. Le posizioni restano consultabili solo quando servono.</small></div></div>`:''}</div><div class="master-permission-note">${phIcon(this.auth.can('MASTER_EDIT_STOCK')?'shield-check':'eye')}<span>${this.auth.can('MASTER_EDIT_STOCK')?'Puoi modificare le quantità. SOMA registra solo la variazione e preserva le formule Excel originali.':'Visualizzazione in sola lettura per il tuo ruolo.'}</span></div><div id="masterViewerMeta" class="master-viewer-meta"></div><div id="masterViewerBody"></div></section>${canQuick?`<div id="masterRequestDock"></div><dialog id="masterRequestDialog" class="dialog master-request-dialog" aria-labelledby="masterRequestDialogTitle"><div class="master-request-dialog-head"><div><small>RICHIESTA RAPIDA</small><h2 id="masterRequestDialogTitle">Rivedi richiesta</h2><p>Controlla articoli e cartoni prima dell'invio.</p></div><button type="button" data-action="master-request-review-close" aria-label="Chiudi">${phRegular('x')}</button></div><div id="masterRequestDialogBody" class="master-request-dialog-body"></div><div class="master-request-dialog-actions"><button class="soft" data-action="master-request-review-close">${phRegular('arrow-left')} TORNA ALLE GIACENZE</button><button class="primary master-request-send-dialog" data-action="master-request-send">${phRegular('paper-plane-tilt')} INVIA RICHIESTA</button></div></dialog>`:''}</section>`
   }
   masterFilteredRows(){
     const all=this.domain.stock.positive(),v=this.masterView,q=String(v.query||'').trim(),parsed=this.parseStockQuery(q),article=normalizeArticle(v.article||''),size=norm(v.size),loc=norm(v.location),pallet=norm(v.pallet);let rows=all.filter(r=>{
@@ -7921,7 +8220,12 @@ class UI{
     host.innerHTML=`<div class="master-request-dock-inner"><div class="master-request-dock-copy">${phRegular('clipboard-text')}<div><b>Richiesta rapida</b><small>${items.length} ${items.length===1?'articolo selezionato':'articoli selezionati'} · ${total} ${total===1?'cartone':'cartoni'}${unavailable?` · <strong>${unavailable} non disponibile${unavailable===1?'':'i'}</strong>`:''}</small></div></div><div class="master-request-dock-actions"><button class="soft" data-action="master-request-review" ${items.length?'':'disabled'}>${phRegular('list-checks')} RIVEDI</button><button class="primary" data-action="master-request-send" ${items.length&&!unavailable?'':'disabled'}>${phRegular('paper-plane-tilt')} INVIA RICHIESTA</button></div></div>`
   }
   openMasterRequestReview(){
-    if(!this.masterRequestItems.length)throw new Error('Seleziona almeno un articolo.');const d=document.getElementById('masterRequestDialog'),body=document.getElementById('masterRequestDialogBody');if(!d||!body)return;body.innerHTML=`<div class="master-request-review-note">${phRegular('info')}<span>La richiesta è per <b>articolo + taglia</b>. Posizione e bancale verranno scelti durante il prelievo.</span></div><div class="master-request-review-list">${this.masterRequestItems.map(x=>{const encoded=encodeURIComponent(JSON.stringify([x.article,x.size||''])),available=this.domain.stock.total(x.article,x.size);return `<article class="master-request-review-item ${available<=0?'unavailable':''}"><div class="master-request-review-main"><span class="master-request-review-icon">${phRegular(available>0?'package':'warning-circle')}</span><div><b>${esc(x.article)}${x.size?` · ${esc(x.size)}`:''}</b><small>${available>0?`${available} pezzi disponibili`:'NON PIÙ DISPONIBILE'}</small></div></div><div class="master-request-review-qty"><small>CARTONI</small><div><button type="button" data-action="master-request-qty-minus" data-item="${esc(encoded)}" aria-label="Riduci cartoni">${phRegular('minus')}</button><input type="number" min="1" max="999" inputmode="numeric" data-master-request-qty="${esc(encoded)}" value="${x.cartonsRequested}"><button type="button" data-action="master-request-qty-plus" data-item="${esc(encoded)}" aria-label="Aumenta cartoni">${phRegular('plus')}</button></div></div><button class="master-request-review-remove" data-action="master-request-remove" data-item="${esc(encoded)}" aria-label="Rimuovi ${esc(x.article)}">${phRegular('trash')}</button></article>`}).join('')}</div>`;if(!d.open)d.showModal()
+    if(!this.masterRequestItems.length)throw new Error('Seleziona almeno un articolo.');
+    const d=document.getElementById('masterRequestDialog'),body=document.getElementById('masterRequestDialogBody');if(!d||!body)return;
+    const totalCartons=this.masterRequestItems.reduce((n,x)=>n+Math.max(1,Math.floor(Number(x.cartonsRequested)||1)),0),unavailableCount=this.masterRequestItems.filter(x=>this.domain.stock.total(x.article,x.size)<=0).length;
+    body.innerHTML=`<div class="master-request-review-note">${phRegular('info')}<span>La richiesta viene raggruppata per <b>articolo e taglia</b>. Posizione e bancale saranno scelti durante la preparazione.</span></div><div class="master-request-review-summary"><div><small>ARTICOLI</small><b>${this.masterRequestItems.length}</b></div><div><small>CARTONI TOTALI</small><b>${totalCartons}</b></div></div><div class="master-request-review-list">${this.masterRequestItems.map(x=>{const encoded=encodeURIComponent(JSON.stringify([x.article,x.size||''])),available=this.domain.stock.total(x.article,x.size);return `<article class="master-request-review-item ${available<=0?'unavailable':''}"><div class="master-request-review-main"><span class="master-request-review-icon">${phRegular(available>0?'package':'warning-circle')}</span><div class="master-request-review-copy"><div class="master-request-review-id"><b>${esc(x.article)}</b>${x.size?`<span>${esc(x.size)}</span>`:''}</div><small>${available>0?`${available} pezzi disponibili`:'NON PIÙ DISPONIBILE'}</small></div></div><div class="master-request-review-qty"><small>CARTONI</small><div><button type="button" data-action="master-request-qty-minus" data-item="${esc(encoded)}" aria-label="Riduci cartoni" ${Number(x.cartonsRequested)<=1?'disabled':''}>${phRegular('minus')}</button><input type="number" min="1" max="999" inputmode="numeric" data-master-request-qty="${esc(encoded)}" value="${x.cartonsRequested}" aria-label="Cartoni richiesti per ${esc(x.article)} ${esc(x.size||'')}"><button type="button" data-action="master-request-qty-plus" data-item="${esc(encoded)}" aria-label="Aumenta cartoni">${phRegular('plus')}</button></div></div><button class="master-request-review-remove" data-action="master-request-remove" data-item="${esc(encoded)}" aria-label="Rimuovi ${esc(x.article)}">${phRegular('trash')}</button></article>`}).join('')}</div>`;
+    const send=d.querySelector('[data-action="master-request-send"]');if(send){send.disabled=unavailableCount>0;send.title=unavailableCount?'Rimuovi gli articoli non disponibili prima di inviare.':''}
+    if(!d.open)d.showModal()
   }
   sendMasterRequest(){
     if(!this.auth.can('REQUEST_CREATE'))throw new Error('Non hai il permesso per creare richieste.');if(!this.masterRequestItems.length)throw new Error('Seleziona almeno un articolo.');const unavailable=this.masterRequestItems.filter(x=>this.domain.stock.total(x.article,x.size)<=0);if(unavailable.length)throw new Error(`Richiesta non inviata. Non più disponibile: ${unavailable.map(x=>x.article+(x.size?' · '+x.size:'')).join(', ')}.`);
