@@ -5128,6 +5128,78 @@ body.desktop-mode .activity-desktop .activity-kpi.wide{grid-column:auto!importan
   /* intentionally retain their component-specific surface */
 }
 </style>
+
+<style id="r30-6-receiving-empty-state">
+/* ===== R30.6 · RECEIVING EMPTY STATE ===== */
+.receiving-empty{
+  min-height:118px!important;
+  width:100%!important;
+  margin:16px 0 0!important;
+  padding:22px 24px!important;
+  display:flex!important;
+  flex-direction:column!important;
+  align-items:center!important;
+  justify-content:center!important;
+  gap:8px!important;
+  text-align:center!important;
+  border:1px dashed #cfe3d9!important;
+  border-radius:20px!important;
+  background:rgba(255,255,255,.72)!important;
+  color:var(--receive-strong)!important;
+}
+
+.receiving-empty .empty-icon{
+  display:block!important;
+  width:auto!important;
+  height:auto!important;
+  margin:0!important;
+  padding:0!important;
+  font-size:31px!important;
+  line-height:1!important;
+  color:var(--receive)!important;
+  background:transparent!important;
+  border:0!important;
+  box-shadow:none!important;
+}
+
+.receiving-empty>div{
+  display:flex!important;
+  flex-direction:column!important;
+  align-items:center!important;
+  justify-content:center!important;
+  gap:4px!important;
+  margin:0!important;
+  padding:0!important;
+}
+
+.receiving-empty b{
+  margin:0!important;
+  color:var(--ink)!important;
+  font-size:16px!important;
+  line-height:1.15!important;
+  font-weight:800!important;
+  letter-spacing:-.01em!important;
+}
+
+.receiving-empty small{
+  margin:0!important;
+  color:#7a8d9c!important;
+  font-size:12px!important;
+  line-height:1.35!important;
+  font-weight:650!important;
+}
+
+@media(max-width:600px){
+  .receiving-empty{
+    min-height:104px!important;
+    padding:18px 16px!important;
+    border-radius:17px!important;
+  }
+  .receiving-empty .empty-icon{font-size:28px!important}
+  .receiving-empty b{font-size:15px!important}
+  .receiving-empty small{font-size:11.5px!important}
+}
+</style>
 </head>
 <body>
 <header id="topbar" class="topbar"></header>
@@ -6041,7 +6113,7 @@ class UI{
     const pending=receipts.filter(r=>this.domain.receiving.stats(r).pending>0);
     const pieces=pending.reduce((n,r)=>n+this.domain.receiving.stats(r).pending,0);
     const write=this.auth.can('RECEIVE');
-    const emptyState=receipts.length?'':`<div class="empty receiving-empty">${phRegular('tray','empty-icon')}<div><b>Nessuna entrata merci registrata.</b></div></div>`;
+    const emptyState=receipts.length?'':`<div class="empty receiving-empty">${phRegular('package','empty-icon')}<div><b>Nessuna entrata registrata</b><small>Le nuove consegne compariranno qui.</small></div></div>`;
     return `${this.sectionTitle('RICEVIMENTO','Entrata merci')}<div class="intro good receiving-intro"><b>${phIcon('package','inline-icon')} Flusso ricevimento</b><span>Controlla il DDT, verifica i pezzi e porta in giacenza solo il materiale confermato.</span></div><div class="stat-pair receiving-stats"><div><b>${pending.length}</b><span>Entrate da ubicare</span></div><div><b>${pieces}</b><span>Pezzi in ricevimento</span></div></div><section class="list-card receiving-list">${write?`<button data-action="receipt-new">${phRegular('plus-circle','receiving-row-icon')}<span><b>NUOVA ENTRATA</b><small>DDT, controllo e conferma</small></span>${phRegular('caret-right','receiving-row-chevron')}</button><button data-action="receipts-pending">${phRegular('map-pin-line','receiving-row-icon')}<span><b>DA UBICARE</b><small>${pending.length} ${pending.length===1?'consegna':'consegne'} aperte</small></span>${phRegular('caret-right','receiving-row-chevron')}</button>`:''}<button data-action="receipts-all">${phRegular('clock-counter-clockwise','receiving-row-icon')}<span><b>${write?'STORICO ENTRATE':'MERCE ARRIVATA'}</b><small>${write?'Consulta tutte le consegne':'Visualizzazione in sola lettura'}</small></span>${phRegular('caret-right','receiving-row-chevron')}</button></section>${emptyState}`;
   }
   newReceiptLine(seed={}){return{id:uid(),article:normalizeArticle(seed.article||seed.article_base),size:norm(seed.size),state:norm(seed.state||'NUOVO')||'NUOVO',ddtQuantity:Number(seed.ddtQuantity??seed.ddt_quantity??seed.quantity??0)||0,checkedQuantity:Number(seed.checkedQuantity??0)||0,pallet:norm(seed.pallet||'P01')||'P01',note:String(seed.note||''),partials:[]}}
