@@ -3724,6 +3724,224 @@ body.desktop-mode .activity-desktop .activity-kpi.wide{grid-column:auto!importan
   body.desktop-mode .activity-desktop .activity-kpi p small{font-size:9px!important}
 }
 </style>
+
+<style id="r29-2-desktop-scale-final">
+/* ===== R29.2 · DESKTOP FINAL SCALE + TYPOGRAPHY ===== */
+@media(min-width:981px){
+  body.desktop-mode .app-view{
+    width:min(98.4vw,1810px)!important;
+    padding-left:clamp(18px,1.35vw,28px)!important;
+    padding-right:clamp(18px,1.35vw,28px)!important;
+    padding-top:18px!important;
+  }
+  body.desktop-mode .topbar{
+    padding-left:max(20px,calc((100vw - 1750px)/2))!important;
+    padding-right:max(20px,calc((100vw - 1750px)/2))!important;
+  }
+
+  /* Hero */
+  body.desktop-mode .desktop-home-head .home-hero{
+    min-height:98px!important;
+    margin-bottom:17px!important;
+  }
+  body.desktop-mode .desktop-home-head .home-hero .eyebrow{
+    font-size:13.5px!important;
+    letter-spacing:.13em!important;
+  }
+  body.desktop-mode .desktop-home-head .home-hero h1{
+    font-size:clamp(56px,3.75vw,69px)!important;
+    line-height:.96!important;
+  }
+  body.desktop-mode .desktop-home-head .home-hero p{
+    font-size:15.5px!important;
+  }
+  body.desktop-mode .desktop-home-head .home-site-mark{
+    width:68px!important;
+    height:68px!important;
+    border-radius:20px!important;
+  }
+  body.desktop-mode .desktop-home-head .home-site-mark>.ph{
+    font-size:30px!important;
+  }
+  body.desktop-mode .desktop-home-head .home-site-mark b{
+    font-size:9.5px!important;
+  }
+
+  /* Master + search */
+  body.desktop-mode .desktop-home-tools{
+    grid-template-columns:minmax(0,1.40fr) minmax(430px,.60fr)!important;
+    gap:17px!important;
+    margin-bottom:17px!important;
+  }
+  body.desktop-mode .desktop-home-tools .warehouse-data-card,
+  body.desktop-mode .desktop-home-tools .home-command-search{
+    min-height:82px!important;
+  }
+  body.desktop-mode .desktop-home-tools .warehouse-data-main{
+    grid-template-columns:54px minmax(0,1fr) auto 26px!important;
+    gap:13px!important;
+    padding:12px 16px!important;
+  }
+  body.desktop-mode .desktop-home-tools .warehouse-data-icon{
+    width:54px!important;
+    height:54px!important;
+    border-radius:16px!important;
+  }
+  body.desktop-mode .desktop-home-tools .warehouse-data-icon>.ph{
+    font-size:30px!important;
+  }
+  body.desktop-mode .desktop-home-tools .warehouse-data-copy>small{
+    font-size:10px!important;
+  }
+  body.desktop-mode .desktop-home-tools .warehouse-data-copy>b{
+    font-size:18px!important;
+  }
+  body.desktop-mode .desktop-home-tools .warehouse-data-copy>span{
+    font-size:11px!important;
+  }
+  body.desktop-mode .desktop-home-tools .warehouse-data-actions button{
+    min-height:44px!important;
+    padding:0 14px!important;
+    font-size:10px!important;
+  }
+  body.desktop-mode .desktop-home-tools .home-command-search{
+    padding:0 21px!important;
+    gap:16px!important;
+  }
+  body.desktop-mode .desktop-home-tools .home-command-search>.ph{
+    font-size:27px!important;
+  }
+  body.desktop-mode .desktop-home-tools .home-command-search span{
+    font-size:17px!important;
+  }
+
+  /* Modules */
+  body.desktop-mode .desktop-home-modules{
+    gap:17px!important;
+  }
+  body.desktop-mode .desktop-home-modules .module{
+    border-radius:21px!important;
+  }
+  body.desktop-mode .desktop-home-modules .module-head{
+    min-height:76px!important;
+    grid-template-columns:48px minmax(0,1fr) 30px!important;
+    column-gap:12px!important;
+    padding:12px 15px!important;
+    align-items:center!important;
+  }
+  body.desktop-mode .desktop-home-modules .module-icon{
+    display:grid!important;
+    place-items:center!important;
+    align-self:center!important;
+    justify-self:center!important;
+  }
+  body.desktop-mode .desktop-home-modules .module-icon .ph{
+    font-size:34px!important;
+    line-height:1!important;
+  }
+  body.desktop-mode .desktop-home-modules .module-title{
+    display:flex!important;
+    align-items:center!important;
+    min-height:48px!important;
+  }
+  body.desktop-mode .desktop-home-modules .module-title b{
+    font-size:17.5px!important;
+    line-height:1.08!important;
+    letter-spacing:-.01em!important;
+  }
+  body.desktop-mode .desktop-home-modules .module-open{
+    width:30px!important;
+    height:30px!important;
+    display:grid!important;
+    place-items:center!important;
+    align-self:center!important;
+    justify-self:end!important;
+  }
+  body.desktop-mode .desktop-home-modules .module-open .ph{
+    font-size:18px!important;
+  }
+
+  /* Sub-actions: strict centering */
+  body.desktop-mode .desktop-home-modules .module-actions{
+    min-height:94px!important;
+    align-items:stretch!important;
+  }
+  body.desktop-mode .desktop-home-modules .module-action{
+    min-height:94px!important;
+    padding:12px 8px!important;
+    gap:8px!important;
+    display:flex!important;
+    flex-direction:column!important;
+    align-items:center!important;
+    justify-content:center!important;
+    text-align:center!important;
+  }
+  body.desktop-mode .desktop-home-modules .module-action>.ph,
+  body.desktop-mode .desktop-home-modules .module-action>.ph-duotone{
+    font-size:27px!important;
+    line-height:1!important;
+    margin:0 auto!important;
+    flex:0 0 auto!important;
+  }
+  body.desktop-mode .desktop-home-modules .module-action b{
+    width:100%!important;
+    min-height:26px!important;
+    display:flex!important;
+    align-items:center!important;
+    justify-content:center!important;
+    text-align:center!important;
+    font-size:11.5px!important;
+    line-height:1.12!important;
+    margin:0!important;
+  }
+  body.desktop-mode .desktop-home-modules .module.requests .module-action b,
+  body.desktop-mode .desktop-home-modules .module.stock .module-action b{
+    font-size:11px!important;
+  }
+
+  /* Activity */
+  body.desktop-mode .activity-desktop{
+    margin-top:17px!important;
+    padding:16px!important;
+    border-radius:21px!important;
+  }
+  body.desktop-mode .activity-desktop .activity-head{
+    padding:0 3px 12px!important;
+  }
+  body.desktop-mode .activity-desktop .activity-head>div:first-child>b{
+    font-size:14px!important;
+  }
+  body.desktop-mode .activity-desktop .activity-head span{
+    font-size:11.5px!important;
+  }
+  body.desktop-mode .activity-desktop .activity-kpi{
+    min-height:63px!important;
+    border-radius:15px!important;
+    padding:10px 11px!important;
+    grid-template-columns:38px 1fr!important;
+    gap:10px!important;
+  }
+  body.desktop-mode .activity-desktop .activity-kpi>span{
+    width:38px!important;
+    height:38px!important;
+    border-radius:11px!important;
+    display:grid!important;
+    place-items:center!important;
+  }
+  body.desktop-mode .activity-desktop .activity-kpi>span .ph{
+    font-size:21px!important;
+  }
+  body.desktop-mode .activity-desktop .activity-kpi p{
+    margin:0!important;
+  }
+  body.desktop-mode .activity-desktop .activity-kpi p b{
+    font-size:17px!important;
+  }
+  body.desktop-mode .activity-desktop .activity-kpi p small{
+    font-size:9.5px!important;
+  }
+}
+</style>
 </head>
 <body>
 <header id="topbar" class="topbar"></header>
