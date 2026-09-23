@@ -4817,6 +4817,34 @@ body.desktop-mode .activity-desktop .activity-kpi.wide{grid-column:auto!importan
   }
 }
 </style>
+
+<style id="r30-2-landing-logo-corner">
+/* ===== R30.2 · DESKTOP LANDING BRAND TO TOP-LEFT ===== */
+@media(min-width:981px){
+  .landing-stage{
+    position:relative!important;
+  }
+
+  /* Remove the copy block as positioning parent only on desktop:
+     text keeps the same geometry, logo anchors to the whole stage. */
+  .landing-copy{
+    position:static!important;
+  }
+
+  .landing-brand{
+    position:absolute!important;
+    top:-8px!important;
+    left:-6px!important;
+    width:clamp(195px,18vw,250px)!important;
+    max-width:250px!important;
+    height:auto!important;
+    margin:0!important;
+    transform:none!important;
+    z-index:4!important;
+    filter:drop-shadow(0 7px 18px rgba(34,72,105,.055))!important;
+  }
+}
+</style>
 </head>
 <body>
 <header id="topbar" class="topbar"></header>
