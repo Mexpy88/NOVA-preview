@@ -4091,6 +4091,112 @@ body.desktop-mode .activity-desktop .activity-kpi.wide{grid-column:auto!importan
   }
 }
 </style>
+
+<style id="r29-7-final-section-identity-fix">
+/* ===== R29.7 · FINAL SECTION IDENTITY LOCK ===== */
+:root{
+  --section-admin:#2F858B;
+  --section-admin-soft:#EAF6F6;
+}
+
+/* GIACENZE — violet identity, never movement blue */
+.module.stock{
+  --accent:var(--section-stock)!important;
+  --tint:var(--section-stock-soft)!important;
+  border-top:3px solid var(--section-stock)!important;
+  border-top-color:var(--section-stock)!important;
+}
+.module.stock .module-head,
+.module.stock .module-action{
+  --action-color:var(--section-stock)!important;
+  --action-soft:var(--section-stock-soft)!important;
+}
+.module.stock .module-icon,
+.module.stock .module-open,
+.module.stock .module-action>.ph,
+.module.stock .module-action>.ph-duotone,
+.module.stock .module-action b{
+  color:var(--section-stock)!important;
+}
+
+/* REGISTRO — keep slate */
+.module.registry{
+  --accent:var(--section-registry)!important;
+  --tint:var(--section-registry-soft)!important;
+  border-top:3px solid var(--section-registry)!important;
+  border-top-color:var(--section-registry)!important;
+}
+.module.registry .module-head,
+.module.registry .module-action{
+  --action-color:var(--section-registry)!important;
+  --action-soft:var(--section-registry-soft)!important;
+}
+.module.registry .module-icon,
+.module.registry .module-open,
+.module.registry .module-action>.ph,
+.module.registry .module-action>.ph-duotone,
+.module.registry .module-action b{
+  color:var(--section-registry)!important;
+}
+
+/* AMMINISTRAZIONE — dedicated petrol/teal identity */
+.module.administration{
+  --accent:var(--section-admin)!important;
+  --tint:var(--section-admin-soft)!important;
+  border-top:3px solid var(--section-admin)!important;
+  border-top-color:var(--section-admin)!important;
+}
+.module.administration .module-head,
+.module.administration .module-action{
+  --action-color:var(--section-admin)!important;
+  --action-soft:var(--section-admin-soft)!important;
+}
+.module.administration .module-icon,
+.module.administration .module-open,
+.module.administration .module-action>.ph,
+.module.administration .module-action>.ph-duotone,
+.module.administration .module-action b{
+  color:var(--section-admin)!important;
+}
+
+/* Keep main module titles consistent/dark; only accents carry section identity */
+.module.stock .module-title b,
+.module.registry .module-title b,
+.module.administration .module-title b{
+  color:var(--nova-ink)!important;
+}
+
+/* Desktop hover fills locked to each section */
+@media(hover:hover) and (pointer:fine){
+  .desktop-home-modules .module.stock .module-head:hover,
+  .desktop-home-modules .module.stock .module-action:hover{
+    background:var(--section-stock-soft)!important;
+  }
+  .desktop-home-modules .module.registry .module-head:hover,
+  .desktop-home-modules .module.registry .module-action:hover{
+    background:var(--section-registry-soft)!important;
+  }
+  .desktop-home-modules .module.administration .module-head:hover,
+  .desktop-home-modules .module.administration .module-action:hover{
+    background:var(--section-admin-soft)!important;
+  }
+
+  .desktop-home-modules .module.stock .module-action:hover{
+    box-shadow:inset 0 0 0 1px color-mix(in srgb,var(--section-stock) 24%,var(--nova-line))!important;
+  }
+  .desktop-home-modules .module.registry .module-action:hover{
+    box-shadow:inset 0 0 0 1px color-mix(in srgb,var(--section-registry) 24%,var(--nova-line))!important;
+  }
+  .desktop-home-modules .module.administration .module-action:hover{
+    box-shadow:inset 0 0 0 1px color-mix(in srgb,var(--section-admin) 24%,var(--nova-line))!important;
+  }
+}
+
+/* Pressed states */
+.desktop-home-modules .module.stock .module-action:active{background:#E7DFFF!important}
+.desktop-home-modules .module.registry .module-action:active{background:#E5EBF0!important}
+.desktop-home-modules .module.administration .module-action:active{background:#D9EFEF!important}
+</style>
 </head>
 <body>
 <header id="topbar" class="topbar"></header>
