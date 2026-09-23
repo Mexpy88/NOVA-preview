@@ -4031,6 +4031,40 @@ body.desktop-mode .activity-desktop .activity-kpi.wide{grid-column:auto!importan
   color:var(--action-color)!important;
 }
 </style>
+
+<style id="r29-4-module-hover-fill-fix">
+/* ===== R29.4 · VISIBLE MODULE CELL HOVER FILL ===== */
+@media(hover:hover) and (pointer:fine){
+  .desktop-home-modules .module.receiving .module-action:hover{
+    background:#EAF8F1!important;
+  }
+  .desktop-home-modules .module.movement .module-action:hover{
+    background:#EDF5FF!important;
+  }
+  .desktop-home-modules .module.stock .module-action:hover{
+    background:#F3EFFF!important;
+  }
+  .desktop-home-modules .module.requests .module-action:hover{
+    background:#FFF5DF!important;
+  }
+  .desktop-home-modules .module.registry .module-action:hover,
+  .desktop-home-modules .module.administration .module-action:hover{
+    background:#F0F4F7!important;
+  }
+
+  .desktop-home-modules .module-action:hover{
+    box-shadow:inset 0 0 0 1px color-mix(in srgb,var(--action-color) 24%,var(--nova-line))!important;
+  }
+}
+
+/* Pressed state: same family, slightly stronger */
+.desktop-home-modules .module.receiving .module-action:active{background:#DDF3E8!important}
+.desktop-home-modules .module.movement .module-action:active{background:#DCEAFF!important}
+.desktop-home-modules .module.stock .module-action:active{background:#E7DFFF!important}
+.desktop-home-modules .module.requests .module-action:active{background:#FFEBC4!important}
+.desktop-home-modules .module.registry .module-action:active,
+.desktop-home-modules .module.administration .module-action:active{background:#E5EBF0!important}
+</style>
 </head>
 <body>
 <header id="topbar" class="topbar"></header>
