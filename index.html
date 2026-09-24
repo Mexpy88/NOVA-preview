@@ -1,13 +1,13 @@
 <!doctype html>
 <html lang="it">
 <head>
-<meta name="soma-build" content="R31.20-20260924">
+<meta name="soma-build" content="R31.21-20260924">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
 <script id="soma-build-freshness">
 (() => {
-  const CURRENT_BUILD='R31.20-20260924',CHECK_KEY='soma:last-build-refresh';
+  const CURRENT_BUILD='R31.21-20260924',CHECK_KEY='soma:last-build-refresh';
   globalThis.SOMA_BUILD=CURRENT_BUILD;
   const check=async()=>{
     try{
@@ -10180,6 +10180,139 @@ body.desktop-mode .activity-desktop .activity-kpi.wide{grid-column:auto!importan
   }
 }
 </style>
+
+<style id="r31-21-receipt-new-premium">
+/* ===== R31.21 · NEW RECEIPT — PREMIUM OPERATIONAL WORKFLOW ===== */
+.receipt-new-shell{
+  --rn-green:#1fa873;--rn-green-dark:#157c56;--rn-green-soft:#edf8f3;--rn-blue:#427fc1;--rn-blue-soft:#edf4fb;
+  --rn-ink:#203f61;--rn-muted:#6f8496;--rn-line:#d7e3eb;--rn-amber:#b98522;--rn-amber-soft:#fff7e8;--rn-red:#b44b43;--rn-red-soft:#fff1ef;
+  width:100%!important;max-width:none!important;margin:0!important;padding:2px 0 8px!important;
+}
+body.desktop-mode .app-view:has(.receipt-new-shell){width:100%!important;max-width:none!important;margin:0!important;padding:20px 24px 46px!important}
+
+/* Hero */
+.receipt-new-hero{display:flex!important;align-items:center!important;justify-content:space-between!important;gap:24px!important;margin-bottom:18px!important}
+.receipt-new-title{display:flex!important;align-items:center!important;gap:17px!important;min-width:0!important}
+.receipt-new-title-icon{width:70px!important;height:70px!important;flex:0 0 70px!important;display:grid!important;place-items:center!important;border:1px solid #bfe0d1!important;border-radius:21px!important;background:var(--rn-green-soft)!important;color:var(--rn-green)!important}
+.receipt-new-title-icon>.ph{font-size:36px!important}
+.receipt-new-title small{display:block!important;color:var(--rn-green)!important;font-size:12px!important;font-weight:950!important;letter-spacing:.115em!important}
+.receipt-new-title h1{margin:5px 0 0!important;color:var(--rn-ink)!important;font-size:clamp(42px,3vw,54px)!important;line-height:.98!important;font-weight:950!important;letter-spacing:-.04em!important}
+.receipt-new-title p{margin:9px 0 0!important;color:var(--rn-muted)!important;font-size:14px!important;line-height:1.4!important;font-weight:750!important}
+.receipt-new-hero-meta{display:flex!important;align-items:stretch!important;gap:8px!important;flex-wrap:wrap!important;justify-content:flex-end!important}
+.receipt-new-hero-meta>span{min-width:130px!important;display:grid!important;grid-template-columns:24px minmax(0,1fr)!important;grid-template-rows:auto auto!important;column-gap:8px!important;align-items:center!important;padding:10px 12px!important;border:1px solid #dbe6ed!important;border-radius:14px!important;background:#fff!important}
+.receipt-new-hero-meta>span>.ph{grid-row:1/3!important;font-size:21px!important;color:#68849a!important}
+.receipt-new-hero-meta small{font-size:8px!important;font-weight:950!important;letter-spacing:.08em!important;color:#8799a7!important}
+.receipt-new-hero-meta b{font-size:12px!important;color:#31516c!important}
+.receipt-new-hero-meta>em{display:flex!important;align-items:center!important;padding:0 13px!important;border:1px solid #dce6ed!important;border-radius:14px!important;background:#f5f8fa!important;color:#657d90!important;font-size:10px!important;font-style:normal!important;font-weight:950!important;letter-spacing:.035em!important}
+.receipt-new-hero-meta>em.ok{background:var(--rn-green-soft)!important;border-color:#bfe0d1!important;color:var(--rn-green-dark)!important}
+.receipt-new-hero-meta>em.warn{background:var(--rn-amber-soft)!important;border-color:#ead19a!important;color:#8b6314!important}
+
+/* Stepper */
+.receipt-new-stepper{display:grid!important;grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:10px!important;margin-bottom:16px!important}
+.receipt-new-stepper>span{display:grid!important;grid-template-columns:38px minmax(0,1fr)!important;gap:10px!important;align-items:center!important;padding:10px 12px!important;border:1px solid #dce6ed!important;border-radius:15px!important;background:rgba(255,255,255,.72)!important}
+.receipt-new-stepper i{width:38px!important;height:38px!important;display:grid!important;place-items:center!important;border-radius:12px!important;background:#eef3f6!important;color:#6d8292!important;font-size:12px!important;font-style:normal!important;font-weight:950!important}
+.receipt-new-stepper b,.receipt-new-stepper small{display:block!important}
+.receipt-new-stepper b{color:#35536c!important;font-size:12px!important}.receipt-new-stepper small{margin-top:2px!important;color:#8a99a5!important;font-size:9px!important;font-weight:750!important}
+.receipt-new-stepper>span.active{border-color:#bfe0d1!important;background:var(--rn-green-soft)!important}.receipt-new-stepper>span.active i{background:var(--rn-green)!important;color:#fff!important}
+
+/* Main workflow cards */
+.receipt-workflow-card{margin:0 0 16px!important;padding:0!important;border:1px solid var(--rn-line)!important;border-radius:25px!important;background:#fff!important;box-shadow:0 10px 30px rgba(30,62,86,.055)!important;overflow:hidden!important}
+.receipt-step-head{display:grid!important;grid-template-columns:52px 50px minmax(0,1fr) auto!important;gap:12px!important;align-items:center!important;padding:20px 22px!important;border-bottom:1px solid #e7edf2!important;background:linear-gradient(180deg,#fff,#fbfcfd)!important}
+.receipt-step-number{width:52px!important;height:52px!important;display:grid!important;place-items:center!important;border-radius:16px!important;background:var(--rn-green)!important;color:#fff!important;font-size:21px!important;font-weight:950!important}
+.receipt-step-icon{width:50px!important;height:50px!important;display:grid!important;place-items:center!important;border-radius:15px!important;background:var(--rn-green-soft)!important;color:var(--rn-green)!important}
+.receipt-step-icon>.ph{font-size:25px!important}
+.receipt-step-head>div>small{display:block!important;color:#7f9285!important;font-size:9px!important;font-weight:950!important;letter-spacing:.1em!important}
+.receipt-step-head h2{margin:4px 0 0!important;color:var(--rn-ink)!important;font-size:22px!important;line-height:1.05!important;font-weight:950!important}
+.receipt-step-head p{margin:5px 0 0!important;color:#7b8e9e!important;font-size:11px!important;font-weight:750!important}
+.receipt-step-count{min-width:86px!important;display:flex!important;flex-direction:column!important;align-items:flex-end!important;color:var(--rn-green)!important;font-style:normal!important}.receipt-step-count b{font-size:30px!important;line-height:1!important}.receipt-step-count span{margin-top:3px!important;font-size:8px!important;font-weight:950!important;letter-spacing:.08em!important}
+
+/* Fields */
+.receipt-new-shell label{margin:0!important;font-size:inherit!important}
+.receipt-new-shell label>span{display:block!important;margin-bottom:7px!important;color:#31516c!important;font-size:11px!important;font-weight:900!important}
+.receipt-new-shell label>span>b{color:var(--rn-green)!important}
+.receipt-new-shell .field{min-height:56px!important;border:1.5px solid #cfdde6!important;border-radius:15px!important;background:#fff!important;padding:10px 14px!important;font-size:15px!important;font-weight:750!important}
+.receipt-new-shell .field:focus{border-color:#55a783!important;box-shadow:0 0 0 4px rgba(31,168,115,.09)!important}
+.receipt-new-shell .textarea{min-height:105px!important}
+
+/* Step 1 */
+.receipt-doc-grid{display:grid!important;grid-template-columns:1.35fr .65fr 1fr!important;gap:14px!important;padding:20px 22px 16px!important}
+.receipt-field-wide{grid-column:1/-1!important}
+.receipt-ddt-actions{display:grid!important;grid-template-columns:1fr 1fr!important;gap:10px!important;padding:0 22px 20px!important}
+.receipt-ddt-action{min-height:64px!important;display:grid!important;grid-template-columns:42px minmax(0,1fr) 24px!important;gap:10px!important;align-items:center!important;text-align:left!important;padding:10px 13px!important;border-radius:16px!important}
+.receipt-ddt-action>span{width:42px!important;height:42px!important;display:grid!important;place-items:center!important;border-radius:12px!important}.receipt-ddt-action>span>.ph{font-size:22px!important}
+.receipt-ddt-action small,.receipt-ddt-action b{display:block!important}.receipt-ddt-action small{font-size:8px!important;font-weight:950!important;letter-spacing:.075em!important;opacity:.72!important}.receipt-ddt-action b{margin-top:2px!important;font-size:13px!important}
+.receipt-ddt-action>.ph{font-size:18px!important}
+.receipt-ddt-action.primary-action{background:#3f80ce!important;color:#fff!important;box-shadow:0 7px 17px rgba(63,128,206,.16)!important}
+.receipt-ddt-action.primary-action>span{background:rgba(255,255,255,.14)!important}
+.receipt-ddt-action.secondary-action{border:1px solid #d8e3eb!important;background:#f2f6f9!important;color:#36556e!important}
+.receipt-ddt-action.secondary-action>span{background:#fff!important}
+.receipt-files{padding:0 22px 20px!important}.receipt-files .file-chips{margin:0 0 9px!important}.receipt-files .file-chips span{display:inline-flex!important;align-items:center!important;gap:5px!important;font-size:10px!important}
+.receipt-analyze{width:100%!important;min-height:48px!important;display:flex!important;align-items:center!important;justify-content:center!important;gap:8px!important;border:1px solid #c5d8e8!important;border-radius:14px!important;background:#edf5fb!important;color:#356d9f!important;font-size:10px!important;font-weight:950!important}
+
+/* Step 2 / line cards */
+.receipt-lines-stack{display:grid!important;gap:14px!important;padding:18px 20px!important}
+.receipt-item-card{position:relative!important;border:1px solid #d9e4eb!important;border-radius:20px!important;background:#fff!important;overflow:hidden!important;box-shadow:0 6px 20px rgba(30,62,86,.035)!important}
+.receipt-item-card:before{content:""!important;position:absolute!important;inset:0 auto 0 0!important;width:5px!important;background:#91a6b5!important}
+.receipt-item-card.warn:before{background:var(--rn-amber)!important}.receipt-item-card.ok:before{background:var(--rn-green)!important}
+.receipt-item-head{display:grid!important;grid-template-columns:46px minmax(0,1fr) auto auto!important;gap:12px!important;align-items:center!important;padding:15px 17px 14px 20px!important;border-bottom:1px solid #e7edf2!important;background:#fbfcfd!important}
+.receipt-item-index{width:46px!important;height:46px!important;display:grid!important;place-items:center!important;border-radius:14px!important;background:#eef3f6!important;color:#607b90!important;font-size:12px!important;font-weight:950!important}.receipt-item-card.warn .receipt-item-index{background:var(--rn-amber-soft)!important;color:#996c14!important}.receipt-item-card.ok .receipt-item-index{background:var(--rn-green-soft)!important;color:var(--rn-green)!important}
+.receipt-item-head small{display:block!important;color:#8799a7!important;font-size:8px!important;font-weight:950!important;letter-spacing:.09em!important}.receipt-item-head h3{margin:3px 0 0!important;color:#244363!important;font-size:17px!important;font-weight:950!important}.receipt-item-head p{margin:3px 0 0!important;color:#8798a5!important;font-size:9px!important;font-weight:700!important}
+.receipt-item-status{min-height:34px!important;display:inline-flex!important;align-items:center!important;gap:6px!important;padding:0 10px!important;border-radius:999px!important;background:#eef3f6!important;color:#667e90!important;font-size:8.5px!important;font-style:normal!important;font-weight:950!important;letter-spacing:.04em!important}.receipt-item-status>.ph{font-size:14px!important}.receipt-item-status.warn{background:var(--rn-amber-soft)!important;color:#8f6514!important}.receipt-item-status.ok{background:var(--rn-green-soft)!important;color:var(--rn-green-dark)!important}
+.receipt-item-remove{min-height:34px!important;display:inline-flex!important;align-items:center!important;gap:5px!important;padding:0 9px!important;border-radius:10px!important;background:#fff0ee!important;color:#ad453f!important;font-size:8px!important;font-weight:950!important}.receipt-item-remove>.ph{font-size:14px!important}
+
+.receipt-item-identity-grid{display:grid!important;grid-template-columns:1.2fr .55fr .65fr!important;gap:12px!important;padding:16px 18px!important}.receipt-item-code{min-width:0!important}
+.receipt-item-core-grid{display:grid!important;grid-template-columns:minmax(0,1fr) minmax(0,1fr)!important;gap:12px!important;padding:0 18px 14px!important}
+.receipt-quantity-panel,.receipt-partial-panel{min-width:0!important;border:1px solid #dfe7ed!important;border-radius:17px!important;background:#f8fafb!important;padding:14px!important}
+.receipt-quantity-panel>header,.receipt-partial-panel>header{display:flex!important;align-items:center!important;gap:9px!important;margin-bottom:11px!important}.receipt-quantity-panel>header>span,.receipt-partial-panel>header>span{width:36px!important;height:36px!important;display:grid!important;place-items:center!important;border-radius:11px!important;background:#eaf2f7!important;color:#527795!important;flex:0 0 auto!important}.receipt-quantity-panel>header>span>.ph,.receipt-partial-panel>header>span>.ph{font-size:19px!important}.receipt-quantity-panel header small,.receipt-partial-panel header small{display:block!important;color:#8093a2!important;font-size:7.5px!important;font-weight:950!important;letter-spacing:.08em!important}.receipt-quantity-panel header b,.receipt-partial-panel header b{display:block!important;margin-top:2px!important;color:#34536d!important;font-size:11px!important}
+.receipt-quantity-pair{display:grid!important;grid-template-columns:1fr 1fr!important;gap:9px!important}.receipt-quantity-pair label{padding:10px!important;border:1px solid #e1e8ed!important;border-radius:13px!important;background:#fff!important}.receipt-quantity-pair label.checked{border-color:#c9dfd4!important;background:#fbfefc!important}.receipt-quantity-pair .field{min-height:48px!important;font-size:18px!important;font-weight:900!important}
+.receipt-quantity-delta{display:flex!important;align-items:center!important;gap:8px!important;margin-top:9px!important;padding:9px 10px!important;border-radius:11px!important;background:#eef3f6!important;color:#637c8f!important}.receipt-quantity-delta>span>.ph{font-size:17px!important}.receipt-quantity-delta small,.receipt-quantity-delta b{display:block!important}.receipt-quantity-delta small{font-size:7px!important;font-weight:950!important;letter-spacing:.07em!important}.receipt-quantity-delta b{margin-top:2px!important;font-size:9.5px!important}.receipt-quantity-delta.warn{background:var(--rn-amber-soft)!important;color:#8d6313!important}.receipt-quantity-delta.ok{background:var(--rn-green-soft)!important;color:var(--rn-green-dark)!important}
+
+.receipt-partial-panel>header{display:grid!important;grid-template-columns:36px minmax(0,1fr) auto!important}.receipt-partial-panel .partial-total{padding:7px 9px!important;border-radius:999px!important;font-size:10px!important;font-weight:950!important}
+.receipt-partial-entry{display:grid!important;grid-template-columns:minmax(0,1fr) auto!important;gap:8px!important}.receipt-partial-entry .field{min-height:50px!important}.receipt-partial-entry button{min-width:118px!important;display:flex!important;align-items:center!important;justify-content:center!important;gap:6px!important;border-radius:13px!important;background:#3f80ce!important;color:#fff!important;font-size:9px!important;font-weight:950!important}.receipt-partial-entry button>.ph{font-size:16px!important}
+.receipt-partial-result{margin-top:9px!important}.receipt-partial-result .chips{margin:0!important}.receipt-partial-result .chips span{padding:6px 9px!important;font-size:10px!important}.receipt-partial-equation{display:flex!important;align-items:center!important;justify-content:space-between!important;margin-top:7px!important;padding:7px 9px!important;border-radius:10px!important;background:#fff!important;color:#6f8496!important;font-size:9px!important;font-weight:800!important}.receipt-partial-equation b{color:#2e5b7d!important;font-size:11px!important}.receipt-partial-actions{display:flex!important;gap:7px!important;margin-top:7px!important}.receipt-partial-actions button{display:inline-flex!important;align-items:center!important;gap:5px!important;padding:7px 9px!important;border-radius:9px!important;background:#eaf0f4!important;color:#577287!important;font-size:8px!important;font-weight:900!important}.receipt-partial-empty{min-height:50px!important;display:flex!important;align-items:center!important;gap:7px!important;padding:9px!important;border:1px dashed #cfdae2!important;border-radius:11px!important;color:#7c8f9d!important;font-size:9px!important;font-weight:700!important}.receipt-partial-empty>.ph{font-size:16px!important;flex:0 0 auto!important}
+
+.receipt-placement-grid{display:grid!important;grid-template-columns:minmax(280px,.55fr) minmax(0,1.45fr)!important;gap:12px!important;padding:0 18px 14px!important;align-items:stretch!important}
+.receipt-position-suggestion{display:grid!important;grid-template-columns:42px minmax(0,1fr)!important;gap:10px!important;align-items:center!important;padding:10px 12px!important;border:1px solid #d9e7df!important;border-radius:15px!important;background:#f3faf6!important;color:#5f766a!important}.receipt-position-suggestion.found{border-color:#bfe0d1!important;background:var(--rn-green-soft)!important;color:#376d56!important}.receipt-position-icon{width:42px!important;height:42px!important;display:grid!important;place-items:center!important;border-radius:12px!important;background:#fff!important;color:var(--rn-green)!important}.receipt-position-icon>.ph{font-size:22px!important}.receipt-position-suggestion small,.receipt-position-suggestion b,.receipt-position-suggestion p{display:block!important}.receipt-position-suggestion small{font-size:7.5px!important;font-weight:950!important;letter-spacing:.08em!important}.receipt-position-suggestion b{margin-top:3px!important;font-size:11px!important}.receipt-position-suggestion p{margin:3px 0 0!important;font-size:8.5px!important;font-weight:700!important}
+.receipt-line-note{display:block!important;padding:0 18px 17px!important}
+
+.receipt-add-line{width:calc(100% - 40px)!important;min-height:62px!important;display:grid!important;grid-template-columns:34px minmax(0,1fr) 22px!important;gap:10px!important;align-items:center!important;margin:0 20px 20px!important;padding:9px 13px!important;border:1.5px dashed #8fb5d6!important;border-radius:16px!important;background:#f1f7fc!important;color:#376f9e!important;text-align:left!important}.receipt-add-line>.ph:first-child{font-size:23px!important}.receipt-add-line b,.receipt-add-line small{display:block!important}.receipt-add-line b{font-size:11px!important}.receipt-add-line small{margin-top:2px!important;color:#7190a9!important;font-size:8.5px!important;font-weight:700!important}
+
+/* Step 3 */
+.receipt-confirm-summary{display:grid!important;grid-template-columns:repeat(4,minmax(0,1fr))!important;margin:18px 20px 0!important;border:1px solid #dce6ed!important;border-radius:17px!important;background:#f7fafc!important;overflow:hidden!important}.receipt-confirm-summary>span{display:flex!important;flex-direction:column!important;justify-content:center!important;min-height:86px!important;padding:12px 16px!important;border-right:1px solid #dfe7ec!important}.receipt-confirm-summary>span:last-child{border-right:0!important}.receipt-confirm-summary small{font-size:8.5px!important;font-weight:950!important;letter-spacing:.07em!important;color:#8395a4!important}.receipt-confirm-summary b{margin-top:5px!important;font-size:27px!important;line-height:1!important;color:#31516c!important}.receipt-confirm-summary em{margin-top:3px!important;font-size:8px!important;font-style:normal!important;font-weight:800!important;color:#8b9aa6!important}.receipt-mismatch-kpi b{color:var(--rn-amber)!important}
+.receipt-delivery-note{display:block!important;padding:16px 20px 0!important}
+.receipt-confirm-cta{width:calc(100% - 40px)!important;min-height:68px!important;display:flex!important;align-items:center!important;justify-content:space-between!important;gap:12px!important;margin:15px 20px 20px!important;padding:0 18px!important;border-radius:17px!important;background:var(--rn-green)!important;color:#fff!important;box-shadow:0 10px 24px rgba(31,168,115,.2)!important;text-align:left!important}.receipt-confirm-cta>span{display:grid!important;grid-template-columns:24px minmax(0,1fr)!important;column-gap:8px!important;align-items:center!important}.receipt-confirm-cta>span>.ph{grid-row:1/3!important;font-size:22px!important}.receipt-confirm-cta b,.receipt-confirm-cta small{display:block!important}.receipt-confirm-cta b{font-size:12px!important;letter-spacing:.025em!important}.receipt-confirm-cta small{margin-top:2px!important;font-size:9px!important;font-weight:700!important;opacity:.84!important}.receipt-confirm-cta>.ph{font-size:20px!important}
+
+@media(hover:hover) and (pointer:fine){
+ .receipt-ddt-action,.receipt-item-card,.receipt-add-line,.receipt-confirm-cta{transition:transform .16s ease,box-shadow .16s ease,border-color .16s ease,background .16s ease!important}
+ .receipt-ddt-action:hover,.receipt-add-line:hover,.receipt-confirm-cta:hover{transform:translateY(-2px)!important}
+ .receipt-item-card:hover{border-color:#b9ccd9!important;box-shadow:0 11px 27px rgba(30,62,86,.07)!important}
+ .receipt-confirm-cta:hover{background:#199867!important;box-shadow:0 13px 28px rgba(31,168,115,.24)!important}
+}
+
+@media(min-width:1500px){
+ body.desktop-mode .receipt-new-shell .field{font-size:16px!important}
+ body.desktop-mode .receipt-item-head h3{font-size:18px!important}
+ body.desktop-mode .receipt-step-head h2{font-size:24px!important}
+ body.desktop-mode .receipt-doc-grid{grid-template-columns:1.45fr .7fr .85fr!important}
+}
+@media(max-width:1050px){
+ .receipt-new-hero{align-items:flex-start!important;flex-direction:column!important}.receipt-new-hero-meta{justify-content:flex-start!important}
+ .receipt-doc-grid{grid-template-columns:1fr 1fr!important}.receipt-field-wide{grid-column:1/-1!important}.receipt-doc-grid>label:last-child{grid-column:1/-1!important}
+ .receipt-item-identity-grid{grid-template-columns:1fr 1fr!important}.receipt-item-code{grid-column:1/-1!important}
+ .receipt-item-core-grid{grid-template-columns:1fr!important}
+ .receipt-placement-grid{grid-template-columns:1fr!important}
+}
+@media(max-width:700px){
+ .receipt-new-title{align-items:flex-start!important;gap:12px!important}.receipt-new-title-icon{width:52px!important;height:52px!important;flex-basis:52px!important;border-radius:16px!important}.receipt-new-title-icon>.ph{font-size:28px!important}.receipt-new-title small{font-size:9.5px!important}.receipt-new-title h1{font-size:35px!important}.receipt-new-title p{font-size:11px!important}
+ .receipt-new-stepper{grid-template-columns:1fr!important}.receipt-new-stepper>span{min-height:56px!important}
+ .receipt-step-head{grid-template-columns:44px minmax(0,1fr) auto!important;padding:15px!important}.receipt-step-number{width:44px!important;height:44px!important;font-size:17px!important}.receipt-step-icon{display:none!important}.receipt-step-head h2{font-size:18px!important}.receipt-step-head p{font-size:9.5px!important}.receipt-step-count{grid-column:3!important;grid-row:1!important}
+ .receipt-doc-grid{grid-template-columns:1fr!important;padding:15px!important}.receipt-field-wide,.receipt-doc-grid>label:last-child{grid-column:auto!important}.receipt-ddt-actions{grid-template-columns:1fr!important;padding:0 15px 15px!important}.receipt-files{padding:0 15px 15px!important}
+ .receipt-lines-stack{padding:13px!important}.receipt-item-head{grid-template-columns:40px minmax(0,1fr) auto!important;padding:12px 12px 11px 16px!important}.receipt-item-index{width:40px!important;height:40px!important}.receipt-item-status{grid-column:2!important;justify-self:start!important}.receipt-item-remove{grid-column:3!important;grid-row:1/3!important}.receipt-item-remove span{display:none!important}
+ .receipt-item-identity-grid{grid-template-columns:1fr!important;padding:13px!important}.receipt-item-code{grid-column:auto!important}.receipt-item-core-grid{padding:0 13px 12px!important}.receipt-quantity-pair{grid-template-columns:1fr 1fr!important}.receipt-placement-grid{padding:0 13px 12px!important}.receipt-line-note{padding:0 13px 13px!important}
+ .receipt-add-line{width:calc(100% - 26px)!important;margin:0 13px 13px!important}
+ .receipt-confirm-summary{grid-template-columns:1fr 1fr!important;margin:13px 13px 0!important}.receipt-confirm-summary>span:nth-child(2){border-right:0!important}.receipt-confirm-summary>span:nth-child(-n+2){border-bottom:1px solid #dfe7ec!important}.receipt-delivery-note{padding:13px 13px 0!important}.receipt-confirm-cta{width:calc(100% - 26px)!important;margin:13px!important}
+}
+</style>
 </head>
 <body>
 <header id="topbar" class="topbar"></header>
@@ -11226,8 +11359,128 @@ class UI{
   }
   newReceiptLine(seed={}){return{id:uid(),article:normalizeArticle(seed.article||seed.article_base),size:norm(seed.size),state:norm(seed.state||'NUOVO')||'NUOVO',ddtQuantity:Number(seed.ddtQuantity??seed.ddt_quantity??seed.quantity??0)||0,checkedQuantity:Number(seed.checkedQuantity??0)||0,pallet:norm(seed.pallet||'P01')||'P01',note:String(seed.note||''),partials:[]}}
   openReceiptNew(){if(!this.require('RECEIVE'))return;if(!this.masterReady()){this.toast('Per registrare una nuova entrata è necessario il Master Excel.','error');this.router.go('receipt-new');return}this.ddtFiles=[];this.receiptDraft={supplier:'',ddtNumber:'',ddtDate:localDateInput(),receivedAt:localDateTimeInput(),note:'',attachments:[],lines:[this.newReceiptLine()]};this.router.go('receipt-new')}
-  receiptNew(){if(!this.require('RECEIVE'))return'';if(!this.masterReady())return this.masterRequiredView({context:'registrare una nuova entrata',backAction:'receiving',backLabel:'TORNA A ENTRATA MERCI'});if(!this.receiptDraft)this.receiptDraft={supplier:'',ddtNumber:'',ddtDate:localDateInput(),receivedAt:localDateTimeInput(),note:'',attachments:[],lines:[this.newReceiptLine()]};const d=this.receiptDraft;return `${this.sectionTitle('NUOVA CONSEGNA','Ricevi e controlla')}<section class="form-card"><div class="step-title"><i>1</i><div><b>Documento e fornitore</b><small>Dati della consegna</small></div></div><label>Fornitore *<input class="field" data-bind="receipt:header:supplier" value="${esc(d.supplier)}"></label><div class="two"><label>Numero DDT<input class="field" data-bind="receipt:header:ddtNumber" value="${esc(d.ddtNumber)}"></label><label>Data DDT<input type="date" class="field" data-bind="receipt:header:ddtDate" value="${esc(d.ddtDate)}"></label></div><label>Arrivo merce<input type="datetime-local" class="field" data-bind="receipt:header:receivedAt" value="${esc(d.receivedAt)}"></label><div class="scan-row"><button class="primary small" data-action="ddt-camera">${phIcon('camera','inline-icon')} SCANSIONA DDT</button><button class="soft small" data-action="ddt-file">${phIcon('paperclip','inline-icon')} ALLEGA DDT</button></div>${this.ddtFiles.length?`<div class="file-chips">${this.ddtFiles.map(f=>`<span>${esc(f.name)}</span>`).join('')}</div><button class="soft" data-action="ddt-analyze">ANALIZZA DDT E COMPILA</button>`:''}</section><section class="form-card"><div class="step-title"><i>2</i><div><b>Articoli ricevuti</b><small>Confronta DDT e quantità fisica</small></div></div>${d.lines.map((l,i)=>this.receiptLineForm(l,i)).join('')}<button class="add-btn" data-action="receipt-line-add">${phRegular('plus','ph-bridge inline-icon')} AGGIUNGI ARTICOLO</button></section><section class="form-card"><div class="step-title"><i>3</i><div><b>Conferma entrata</b><small>Solo la quantità controllata entra in giacenza</small></div></div><label>Note consegna<textarea class="field textarea" data-bind="receipt:header:note">${esc(d.note)}</textarea></label><button class="success" data-action="receipt-confirm">CONTROLLA E CONFERMA</button></section>`}
-  receiptLineForm(l,i){const sug=this.domain.stock.suggest(l.article,l.size,l.state),diff=Number(l.ddtQuantity)!==Number(l.checkedQuantity),sum=(l.partials||[]).reduce((n,x)=>n+Number(x),0),ddt=Number(l.ddtQuantity||0);return `<article class="line-form ${diff?'warn-border':''}"><div class="line-top"><b>ARTICOLO ${i+1}</b>${this.receiptDraft.lines.length>1?`<button data-action="receipt-line-remove" data-line="${l.id}">RIMUOVI</button>`:''}</div><label>Codice articolo<input class="field" data-bind="receipt:${l.id}:article" value="${esc(l.article)}"></label><div class="two"><label>Taglia / variante<input class="field" data-bind="receipt:${l.id}:size" value="${esc(l.size)}"></label><label>Stato merce<select class="field" data-bind="receipt:${l.id}:state">${CONFIG.states.slice(0,3).map(s=>`<option ${l.state===s?'selected':''}>${s}</option>`).join('')}</select></label></div><div class="two"><label>Quantità DDT<input type="number" min="0" class="field" data-bind="receipt:${l.id}:ddtQuantity" value="${l.ddtQuantity}"></label><label>Quantità controllata *<input type="number" min="0" class="field" data-bind="receipt:${l.id}:checkedQuantity" value="${l.checkedQuantity}"></label></div><div class="partial-box"><div><b>CONTEGGIO PARZIALE</b><span class="partial-total ${Number(l.checkedQuantity)===ddt&&ddt>0?'ok':Number(l.checkedQuantity)>ddt?'over':'pending'}">${l.checkedQuantity} / ${ddt}</span></div><div class="partial-input"><input id="partial-${l.id}" type="number" min="1" class="field" placeholder="es. 6"><button class="primary small" data-action="partial-add" data-line="${l.id}">AGGIUNGI</button></div>${l.partials.length?`<div class="chips">${l.partials.map(x=>`<span>${x}</span>`).join('')}<small>${l.partials.join(' + ')} = <b>${sum}</b></small></div><div class="mini-actions"><button data-action="partial-undo" data-line="${l.id}">ANNULLA ULTIMO</button><button data-action="partial-clear" data-line="${l.id}">AZZERA</button></div>`:''}</div><label>Pallet / collo in ricevimento<input class="field" data-bind="receipt:${l.id}:pallet" value="${esc(l.pallet)}"></label><div class="suggest ${sug?'found':''}">${phRegular('map-pin-line','suggest-icon')}<div><span>POSIZIONE - FILA - SCAFFALE</span><b>${sug?`${esc(sug.location)}${sug.pallet?` · Bancale ${esc(sug.pallet)}`:''}`:'Nessuna posizione abituale trovata'}</b>${sug?`<small>Stesso articolo già presente · ${sug.quantity} pezzi</small>`:''}</div></div><label>Note riga<input class="field" data-bind="receipt:${l.id}:note" value="${esc(l.note)}"></label></article>`}
+  receiptSummary(){
+    const lines=this.receiptDraft?.lines||[],ddt=lines.reduce((n,l)=>n+Number(l.ddtQuantity||0),0),checked=lines.reduce((n,l)=>n+Number(l.checkedQuantity||0),0),mismatches=lines.filter(l=>Number(l.ddtQuantity||0)!==Number(l.checkedQuantity||0)).length;
+    return{lines:lines.length,ddt,checked,mismatches}
+  }
+  updateReceiptNewSummary(){
+    if(this.router.route.name!=='receipt-new'||!this.receiptDraft)return;const x=this.receiptSummary(),set=(k,v)=>{const el=document.querySelector(`[data-receipt-summary="${k}"]`);if(el)el.textContent=v};
+    set('lines',x.lines);set('ddt',x.ddt);set('checked',x.checked);set('mismatches',x.mismatches);const badge=document.querySelector('[data-receipt-summary-state]');if(badge){badge.classList.toggle('ok',x.mismatches===0&&x.checked>0);badge.classList.toggle('warn',x.mismatches>0);badge.textContent=x.checked<=0?'IN COMPILAZIONE':x.mismatches?`${x.mismatches} SCOSTAMENT${x.mismatches===1?'O':'I'}`:'DATI COERENTI'}
+  }
+  receiptNew(){
+    if(!this.require('RECEIVE'))return'';if(!this.masterReady())return this.masterRequiredView({context:'registrare una nuova entrata',backAction:'receiving',backLabel:'TORNA A ENTRATA MERCI'});
+    if(!this.receiptDraft)this.receiptDraft={supplier:'',ddtNumber:'',ddtDate:localDateInput(),receivedAt:localDateTimeInput(),note:'',attachments:[],lines:[this.newReceiptLine()]};
+    const d=this.receiptDraft,x=this.receiptSummary(),files=this.ddtFiles.length;
+    return `<section class="receipt-new-shell">
+      <header class="receipt-new-hero">
+        <div class="receipt-new-title">
+          <span class="receipt-new-title-icon">${phRegular('package')}</span>
+          <div><small>NUOVA CONSEGNA</small><h1>Ricevi e controlla</h1><p>Registra il documento, verifica la merce fisica e prepara l’entrata in Area Ricevimento.</p></div>
+        </div>
+        <div class="receipt-new-hero-meta">
+          <span>${phRegular('user-circle')}<small>OPERATORE</small><b>${esc(this.auth.user||'—')}</b></span>
+          <span>${phRegular('list-numbers')}<small>ARTICOLI</small><b data-receipt-summary="lines">${x.lines}</b></span>
+          <em data-receipt-summary-state class="${x.checked>0?(x.mismatches?'warn':'ok'):''}">${x.checked<=0?'IN COMPILAZIONE':x.mismatches?`${x.mismatches} SCOSTAMENT${x.mismatches===1?'O':'I'}`:'DATI COERENTI'}</em>
+        </div>
+      </header>
+
+      <nav class="receipt-new-stepper" aria-label="Fasi entrata merce">
+        <span class="active"><i>1</i><div><b>Documento</b><small>Fornitore e DDT</small></div></span>
+        <span><i>2</i><div><b>Articoli</b><small>Controllo fisico</small></div></span>
+        <span><i>3</i><div><b>Conferma</b><small>Riepilogo entrata</small></div></span>
+      </nav>
+
+      <section class="receipt-workflow-card receipt-document-card">
+        <header class="receipt-step-head">
+          <span class="receipt-step-number">1</span>
+          <span class="receipt-step-icon">${phRegular('file-text')}</span>
+          <div><small>DATI CONSEGNA</small><h2>Documento e fornitore</h2><p>Identifica la consegna prima di iniziare il controllo della merce.</p></div>
+        </header>
+        <div class="receipt-doc-grid">
+          <label class="receipt-field-wide"><span>Fornitore <b>*</b></span><input class="field" data-bind="receipt:header:supplier" value="${esc(d.supplier)}" placeholder="Nome fornitore"></label>
+          <label><span>Numero DDT</span><input class="field" data-bind="receipt:header:ddtNumber" value="${esc(d.ddtNumber)}" placeholder="Es. 1458/26"></label>
+          <label><span>Data DDT</span><input type="date" class="field" data-bind="receipt:header:ddtDate" value="${esc(d.ddtDate)}"></label>
+          <label><span>Arrivo merce</span><input type="datetime-local" class="field" data-bind="receipt:header:receivedAt" value="${esc(d.receivedAt)}"></label>
+        </div>
+        <div class="receipt-ddt-actions">
+          <button class="receipt-ddt-action primary-action" data-action="ddt-camera"><span>${phRegular('camera')}</span><div><small>ACQUISISCI DOCUMENTO</small><b>Scansiona DDT</b></div>${phRegular('arrow-right')}</button>
+          <button class="receipt-ddt-action secondary-action" data-action="ddt-file"><span>${phRegular('paperclip')}</span><div><small>FILE ESISTENTE</small><b>Allega DDT</b></div>${phRegular('arrow-right')}</button>
+        </div>
+        ${files?`<div class="receipt-files"><div class="file-chips">${this.ddtFiles.map(f=>`<span>${phRegular('file')}${esc(f.name)}</span>`).join('')}</div><button class="receipt-analyze" data-action="ddt-analyze">${phRegular('sparkle')}<span>ANALIZZA DDT E COMPILA</span>${phRegular('arrow-right')}</button></div>`:''}
+      </section>
+
+      <section class="receipt-workflow-card receipt-items-card">
+        <header class="receipt-step-head">
+          <span class="receipt-step-number">2</span>
+          <span class="receipt-step-icon">${phRegular('package')}</span>
+          <div><small>CONTROLLO FISICO</small><h2>Articoli ricevuti</h2><p>Confronta quantità dichiarate e quantità realmente controllate.</p></div>
+          <em class="receipt-step-count"><b data-receipt-summary="lines">${x.lines}</b><span>${x.lines===1?'ARTICOLO':'ARTICOLI'}</span></em>
+        </header>
+        <div class="receipt-lines-stack">${d.lines.map((l,i)=>this.receiptLineForm(l,i)).join('')}</div>
+        <button class="receipt-add-line" data-action="receipt-line-add">${phRegular('plus-circle')}<span><b>Aggiungi articolo</b><small>Inserisci un’altra riga alla consegna</small></span>${phRegular('arrow-right')}</button>
+      </section>
+
+      <section class="receipt-workflow-card receipt-confirm-card">
+        <header class="receipt-step-head">
+          <span class="receipt-step-number">3</span>
+          <span class="receipt-step-icon">${phRegular('check-circle')}</span>
+          <div><small>CONTROLLO FINALE</small><h2>Conferma entrata</h2><p>Solo le quantità controllate verranno registrate in Area Ricevimento.</p></div>
+        </header>
+        <div class="receipt-confirm-summary">
+          <span><small>ARTICOLI</small><b data-receipt-summary="lines">${x.lines}</b><em>righe</em></span>
+          <span><small>QUANTITÀ DDT</small><b data-receipt-summary="ddt">${x.ddt}</b><em>pezzi</em></span>
+          <span><small>CONTROLLATI</small><b data-receipt-summary="checked">${x.checked}</b><em>pezzi</em></span>
+          <span class="receipt-mismatch-kpi"><small>SCOSTAMENTI</small><b data-receipt-summary="mismatches">${x.mismatches}</b><em>righe</em></span>
+        </div>
+        <label class="receipt-delivery-note"><span>Note consegna</span><textarea class="field textarea" data-bind="receipt:header:note" placeholder="Annotazioni generali sulla consegna…">${esc(d.note)}</textarea></label>
+        <button class="receipt-confirm-cta" data-action="receipt-confirm"><span>${phRegular('shield-check')}<b>CONTROLLA E CONFERMA</b><small>Registra l’entrata e porta la merce in Area Ricevimento</small></span>${phRegular('arrow-right')}</button>
+      </section>
+    </section>`
+  }
+  receiptLineForm(l,i){
+    const sug=this.domain.stock.suggest(l.article,l.size,l.state),diff=Number(l.ddtQuantity)!==Number(l.checkedQuantity),sum=(l.partials||[]).reduce((n,x)=>n+Number(x),0),ddt=Number(l.ddtQuantity||0),checked=Number(l.checkedQuantity||0),status=checked<=0?'DA CONTROLLARE':diff?'SCOSTAMENTO':'COERENTE',statusClass=checked<=0?'idle':diff?'warn':'ok';
+    return `<article class="receipt-item-card ${statusClass}">
+      <header class="receipt-item-head">
+        <span class="receipt-item-index">${String(i+1).padStart(2,'0')}</span>
+        <div><small>ARTICOLO</small><h3>${l.article?`${esc(l.article)}${l.size?` · ${esc(l.size)}`:''}`:`Articolo ${i+1}`}</h3><p>${l.article?'Dati identificativi e controllo quantità':'Inserisci codice articolo, taglia e stato merce.'}</p></div>
+        <em class="receipt-item-status ${statusClass}">${phRegular(statusClass==='ok'?'check-circle':statusClass==='warn'?'warning-circle':'clock')}${status}</em>
+        ${this.receiptDraft.lines.length>1?`<button class="receipt-item-remove" data-action="receipt-line-remove" data-line="${l.id}" aria-label="Rimuovi articolo">${phRegular('trash')}<span>RIMUOVI</span></button>`:''}
+      </header>
+
+      <div class="receipt-item-identity-grid">
+        <label class="receipt-item-code"><span>Codice articolo</span><input class="field" data-bind="receipt:${l.id}:article" value="${esc(l.article)}" placeholder="Codice SAP / articolo"></label>
+        <label><span>Taglia / variante</span><input class="field" data-bind="receipt:${l.id}:size" value="${esc(l.size)}" placeholder="Es. 42"></label>
+        <label><span>Stato merce</span><select class="field" data-bind="receipt:${l.id}:state">${CONFIG.states.slice(0,3).map(s=>`<option ${l.state===s?'selected':''}>${s}</option>`).join('')}</select></label>
+      </div>
+
+      <div class="receipt-item-core-grid">
+        <section class="receipt-quantity-panel">
+          <header><span>${phRegular('scales')}</span><div><small>VERIFICA QUANTITÀ</small><b>DDT vs controllo fisico</b></div></header>
+          <div class="receipt-quantity-pair">
+            <label><span>Quantità DDT</span><input type="number" min="0" class="field" data-bind="receipt:${l.id}:ddtQuantity" value="${l.ddtQuantity}"></label>
+            <label class="checked"><span>Quantità controllata <b>*</b></span><input type="number" min="0" class="field" data-bind="receipt:${l.id}:checkedQuantity" value="${l.checkedQuantity}"></label>
+          </div>
+          <div class="receipt-quantity-delta ${statusClass}"><span>${statusClass==='ok'?phRegular('check-circle'):statusClass==='warn'?phRegular('warning-circle'):phRegular('info')}</span><div><small>ESITO CONTROLLO</small><b>${checked<=0?'Inserisci la quantità realmente controllata':diff?`Differenza di ${Math.abs(checked-ddt)} pezzi rispetto al DDT`:'Quantità coerenti'}</b></div></div>
+        </section>
+
+        <section class="receipt-partial-panel">
+          <header><span>${phRegular('calculator')}</span><div><small>CONTEGGIO ASSISTITO</small><b>Somma conteggi parziali</b></div><em class="partial-total ${checked===ddt&&ddt>0?'ok':checked>ddt?'over':'pending'}">${checked} / ${ddt}</em></header>
+          <div class="receipt-partial-entry"><input id="partial-${l.id}" type="number" min="1" class="field" placeholder="Es. 6"><button data-action="partial-add" data-line="${l.id}">${phRegular('plus')}<span>AGGIUNGI</span></button></div>
+          ${l.partials.length?`<div class="receipt-partial-result"><div class="chips">${l.partials.map(x=>`<span>${x}</span>`).join('')}</div><div class="receipt-partial-equation"><span>${l.partials.join(' + ')}</span><b>= ${sum}</b></div><div class="receipt-partial-actions"><button data-action="partial-undo" data-line="${l.id}">${phRegular('arrow-counter-clockwise')} ANNULLA ULTIMO</button><button data-action="partial-clear" data-line="${l.id}">${phRegular('x-circle')} AZZERA</button></div></div>`:`<div class="receipt-partial-empty">${phRegular('info')}<span>Aggiungi i conteggi progressivi: il totale aggiornerà automaticamente la quantità controllata.</span></div>`}
+        </section>
+      </div>
+
+      <div class="receipt-placement-grid">
+        <label><span>Pallet / collo in ricevimento</span><input class="field" data-bind="receipt:${l.id}:pallet" value="${esc(l.pallet)}"></label>
+        <div class="receipt-position-suggestion ${sug?'found':'empty'}">
+          <span class="receipt-position-icon">${phRegular('map-pin-line')}</span>
+          <div><small>POSIZIONE - FILA - SCAFFALE</small><b>${sug?`${esc(sug.location)}${sug.pallet?` · Bancale ${esc(sug.pallet)}`:''}`:'Nessuna posizione abituale trovata'}</b><p>${sug?`Stesso articolo già presente · ${sug.quantity} pezzi`:'La posizione potrà essere definita nella fase di ubicazione.'}</p></div>
+        </div>
+      </div>
+
+      <label class="receipt-line-note"><span>Note riga</span><input class="field" data-bind="receipt:${l.id}:note" value="${esc(l.note)}" placeholder="Annotazioni specifiche per questo articolo"></label>
+    </article>`
+  }
   addReceiptLine(){this.receiptDraft.lines.push(this.newReceiptLine({pallet:this.receiptDraft.lines.at(-1)?.pallet||'P01'}));this.renderView()}
   removeReceiptLine(id){this.receiptDraft.lines=this.receiptDraft.lines.filter(x=>x.id!==id);if(!this.receiptDraft.lines.length)this.receiptDraft.lines.push(this.newReceiptLine());this.renderView()}
   addPartial(id){const l=this.receiptDraft.lines.find(x=>x.id===id),input=document.getElementById(`partial-${id}`),v=Number(input?.value||0);if(v<=0)return;l.partials.push(v);l.checkedQuantity=l.partials.reduce((n,x)=>n+x,0);this.renderView()}
@@ -11395,7 +11648,7 @@ class UI{
   logout(){this.persistCountSession();document.getElementById('requestDeleteDialog')?.close();document.getElementById('siteDialog')?.close();this.pendingRequestDeleteId='';this.siteChoiceRequired=false;this.siteChoiceSource='';this.auth.logout();this.store.useSite(CONFIG.defaultSiteId,{silent:true});this.receiptDraft=null;this.requestDraft=null;this.rectDraft=null;this.masterRequestMode=false;this.masterRequestItems=[];this.masterRequestOpenKey='';this.countDraft=null;this.ddtFiles=[];this.requestFiles=[];this.router.home();this.render()}
   openNotifications(){const d=document.getElementById('notificationDialog'),rows=this.domain.notifications.visibleTo(this.auth.user);d.querySelector('.dialog-body').innerHTML=rows.length?rows.map(n=>`<button class="notif-row ${n.readAt?'read':''}" data-action="notif-read" data-id="${n.id}" data-entity="${n.entityType}" data-entity-id="${n.entityId}"><b>${esc(n.title)}</b><span>${esc(n.body)}</span><small>${fmtDateTime(n.createdAt)}</small></button>`).join(''):'<div class="empty">Nessuna notifica.</div>';d.showModal()}
 
-  input(el){if(el.dataset.masterRequestQty)this.updateMasterRequestQty(el,false);if(el.id==='loginPin'){const next=String(el.value||'').replace(/\D/g,'').slice(0,4);if(el.value!==next)el.value=next;if(next.length>this.lastPinLength)this.sounds?.pinKey?.();this.lastPinLength=next.length}if(el.id==='requestDeletePin'){const next=String(el.value||'').replace(/\D/g,'').slice(0,CONFIG.pinLength);if(el.value!==next)el.value=next;if(next.length>this.lastDeletePinLength)this.sounds?.pinKey?.();this.lastDeletePinLength=next.length;document.getElementById('requestDeleteError')?.classList.add('hidden')}if(el.dataset.countExtra)this.updateCountExtra(el.dataset.dom,el.dataset.countExtra,el.value);if(el.id?.startsWith('count-value-'))this.updateCountValue(el.id.replace('count-value-',''),el.value);if(el.id==='rectCounted')this.updateRectCount(el.value);const bind=el.dataset.bind;if(bind)this.bindDraft(bind,el.value);if(['stockQuery','stockLocation','stockPallet'].includes(el.id))this.scheduleStockRender();if(['rectSearch','rectFilterSize','rectFilterLocation','rectFilterPallet'].includes(el.id))this.renderRectResults();if(el.id==='registryQuery')this.renderRegistryResults();if(el.id==='masterQuery'){this.masterView.query=el.value;this.masterView.page=1;this.scheduleMasterRender()}if(el.id==='masterFilterArticle'){this.masterView.article=el.value;this.masterView.page=1;this.scheduleMasterRender()}if(el.id==='masterFilterLocation'){this.masterView.location=el.value;this.masterView.page=1;this.scheduleMasterRender()}if(el.id==='masterFilterPallet'){this.masterView.pallet=el.value;this.masterView.page=1;this.scheduleMasterRender()}if(el.id==='loginPin'){el.value=el.value.replace(/\D/g,'').slice(0,4);document.getElementById('loginError')?.classList.add('hidden')}}
+  input(el){if(el.dataset.masterRequestQty)this.updateMasterRequestQty(el,false);if(el.id==='loginPin'){const next=String(el.value||'').replace(/\D/g,'').slice(0,4);if(el.value!==next)el.value=next;if(next.length>this.lastPinLength)this.sounds?.pinKey?.();this.lastPinLength=next.length}if(el.id==='requestDeletePin'){const next=String(el.value||'').replace(/\D/g,'').slice(0,CONFIG.pinLength);if(el.value!==next)el.value=next;if(next.length>this.lastDeletePinLength)this.sounds?.pinKey?.();this.lastDeletePinLength=next.length;document.getElementById('requestDeleteError')?.classList.add('hidden')}if(el.dataset.countExtra)this.updateCountExtra(el.dataset.dom,el.dataset.countExtra,el.value);if(el.id?.startsWith('count-value-'))this.updateCountValue(el.id.replace('count-value-',''),el.value);if(el.id==='rectCounted')this.updateRectCount(el.value);const bind=el.dataset.bind;if(bind){this.bindDraft(bind,el.value);if(bind.startsWith('receipt:'))this.updateReceiptNewSummary?.()}if(['stockQuery','stockLocation','stockPallet'].includes(el.id))this.scheduleStockRender();if(['rectSearch','rectFilterSize','rectFilterLocation','rectFilterPallet'].includes(el.id))this.renderRectResults();if(el.id==='registryQuery')this.renderRegistryResults();if(el.id==='masterQuery'){this.masterView.query=el.value;this.masterView.page=1;this.scheduleMasterRender()}if(el.id==='masterFilterArticle'){this.masterView.article=el.value;this.masterView.page=1;this.scheduleMasterRender()}if(el.id==='masterFilterLocation'){this.masterView.location=el.value;this.masterView.page=1;this.scheduleMasterRender()}if(el.id==='masterFilterPallet'){this.masterView.pallet=el.value;this.masterView.page=1;this.scheduleMasterRender()}if(el.id==='loginPin'){el.value=el.value.replace(/\D/g,'').slice(0,4);document.getElementById('loginError')?.classList.add('hidden')}}
   change(el){if(el.dataset.masterRequestQty)this.updateMasterRequestQty(el,true);if(el.dataset.countExtra)this.updateCountExtra(el.dataset.dom,el.dataset.countExtra,el.value);if(el.id==='rectFilterState')this.renderRectResults();if(el.id==='rectReason'&&this.rectDraft)this.rectDraft.reason=norm(el.value);const bind=el.dataset.bind;if(bind){this.bindDraft(bind,el.value);if(bind.includes(':article')||bind.includes(':size')||bind.includes(':state'))this.renderView()}if(el.id==='stockState')this.renderStockResults();if(['registryFrom','registryTo','registryType','registryState'].includes(el.id))this.renderRegistryResults();if(el.id==='masterFilterSize'){this.masterView.size=el.value;this.masterView.page=1;this.renderMasterViewerBody()}if(el.id==='masterSort'){this.masterView.sort=el.value;this.masterView.page=1;this.renderMasterViewerBody()}if(el.id?.startsWith('activityDate-')){this.activityDate=el.value||localDateInput();this.renderView()}}
   bindDraft(bind,value){const [kind,id,key]=bind.split(':');if(kind==='receipt'&&this.receiptDraft){if(id==='header'){this.receiptDraft[key]=value;return}const l=this.receiptDraft.lines.find(x=>x.id===id);if(l){if(['ddtQuantity','checkedQuantity'].includes(key)){l[key]=Math.max(0,Number(value)||0);if(key==='checkedQuantity'&&l.partials.length)l.partials=[]}else if(key==='article')l[key]=normalizeArticle(value);else if(['size','state','pallet'].includes(key))l[key]=norm(value);else l[key]=value}}if(kind==='request'&&this.requestDraft){if(id==='header'){this.requestDraft[key]=value;return}const l=this.requestDraft.lines.find(x=>x.id===id);if(l){if(key==='cartonsRequested')l[key]=Math.max(0,Math.floor(Number(value)||0));else if(key==='article')l[key]=normalizeArticle(value);else if(key==='size')l[key]=norm(value);else l[key]=value}}}
 
@@ -11437,6 +11690,6 @@ try{globalThis.__NOVA_LEGACY_AVAILABLE=!!localStorage.getItem(CONFIG.legacyStora
 const switchSite=async siteId=>{await ui.selectSite(siteId);return auth.site()};
 globalThis.NOVA=Object.freeze({version:CONFIG.appVersion,schema:CONFIG.version,identityVersion:CONFIG.identityVersion,store,auth,router,domain,excel,ui,sounds,sites:SITES,operators:OPERATORS,roles:ROLE_DEFS,saveIdentityRegistry,capabilities:Object.freeze({operational:ALL_CAPS,master:MASTER_CAPS,administration:ADMIN_CAPS,globalAdmin:GLOBAL_ADMIN_CAPS}),identityValidation:IDENTITY_VALIDATION,switchSite});
 ui.render();</script>
-<!-- SOMA_BUILD:R31.20-20260924 -->
+<!-- SOMA_BUILD:R31.21-20260924 -->
 </body>
 </html>
