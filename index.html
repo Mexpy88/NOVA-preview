@@ -1,13 +1,13 @@
 <!doctype html>
 <html lang="it">
 <head>
-<meta name="soma-build" content="R31.33-20260924">
+<meta name="soma-build" content="R31.34-20260924">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
 <script id="soma-build-freshness">
 (() => {
-  const CURRENT_BUILD='R31.33-20260924',CHECK_KEY='soma:last-build-refresh';
+  const CURRENT_BUILD='R31.34-20260924',CHECK_KEY='soma:last-build-refresh';
   globalThis.SOMA_BUILD=CURRENT_BUILD;
   const check=async()=>{
     try{
@@ -14482,6 +14482,268 @@ body.desktop-mode .app-view:has(.receipt-new-shell){width:100%!important;max-wid
   }
 }
 </style>
+
+
+<style id="r31-34-desktop-section2-typography-polish">
+/* ===== R31.34 · DESKTOP SECTION 2 — TYPOGRAPHY & RHYTHM POLISH =====
+   Desktop only. Same clean structure, with enterprise-grade readability and spacing. */
+@media(min-width:981px){
+
+  /* Article header: stronger hierarchy and less micro-text. */
+  body.desktop-mode .receipt-items-card .receipt-article-head-v2{
+    padding:20px 20px 18px 24px!important;
+  }
+  body.desktop-mode .receipt-items-card .receipt-article-heading small{
+    font-size:10px!important;
+    letter-spacing:.08em!important;
+  }
+  body.desktop-mode .receipt-items-card .receipt-article-heading h3{
+    margin-top:4px!important;
+    font-size:25px!important;
+    line-height:1.02!important;
+  }
+  body.desktop-mode .receipt-items-card .receipt-article-heading p{
+    margin-top:5px!important;
+    font-size:12.5px!important;
+    line-height:1.25!important;
+  }
+  body.desktop-mode .receipt-items-card .receipt-article-status{
+    min-height:36px!important;
+    padding:0 12px!important;
+    font-size:9.5px!important;
+    gap:6px!important;
+  }
+  body.desktop-mode .receipt-items-card .receipt-article-status>.ph{
+    font-size:16px!important;
+  }
+
+  /* Common article fields. */
+  body.desktop-mode .receipt-items-card .receipt-article-common-v2{
+    gap:14px!important;
+    padding:18px 18px 20px!important;
+  }
+  body.desktop-mode .receipt-items-card .receipt-article-common-v2 label>span{
+    margin-bottom:7px!important;
+    font-size:11.5px!important;
+    line-height:1.15!important;
+  }
+  body.desktop-mode .receipt-items-card .receipt-article-common-v2 .field{
+    min-height:58px!important;
+    padding:12px 14px!important;
+    font-size:17px!important;
+    border-radius:12px!important;
+  }
+
+  /* Operational row: increase breathing room without adding new containers. */
+  body.desktop-mode .receipt-items-card .receipt-variant-card-body{
+    min-height:196px!important;
+  }
+  body.desktop-mode .receipt-items-card .receipt-variant-quantities,
+  body.desktop-mode .receipt-items-card .receipt-assisted-count,
+  body.desktop-mode .receipt-items-card .receipt-variant-context{
+    padding:20px!important;
+  }
+  body.desktop-mode .receipt-items-card .receipt-variant-context{
+    padding-right:62px!important;
+  }
+
+  /* Operational section headings. */
+  body.desktop-mode .receipt-items-card .receipt-variant-quantities>header,
+  body.desktop-mode .receipt-items-card .receipt-assisted-count>header,
+  body.desktop-mode .receipt-items-card .receipt-variant-context>header{
+    min-height:42px!important;
+    margin-bottom:15px!important;
+    gap:10px!important;
+  }
+  body.desktop-mode .receipt-items-card .receipt-variant-quantities>header>span,
+  body.desktop-mode .receipt-items-card .receipt-assisted-count>header>span,
+  body.desktop-mode .receipt-items-card .receipt-variant-context>header>span{
+    width:30px!important;
+    height:30px!important;
+    flex:0 0 30px!important;
+  }
+  body.desktop-mode .receipt-items-card .receipt-variant-quantities>header>span>.ph,
+  body.desktop-mode .receipt-items-card .receipt-assisted-count>header>span>.ph,
+  body.desktop-mode .receipt-items-card .receipt-variant-context>header>span>.ph{
+    font-size:22px!important;
+  }
+  body.desktop-mode .receipt-items-card .receipt-variant-quantities header small,
+  body.desktop-mode .receipt-items-card .receipt-assisted-count header small,
+  body.desktop-mode .receipt-items-card .receipt-variant-context header small{
+    font-size:9px!important;
+    line-height:1.1!important;
+    letter-spacing:.075em!important;
+  }
+  body.desktop-mode .receipt-items-card .receipt-variant-quantities header b,
+  body.desktop-mode .receipt-items-card .receipt-assisted-count header b,
+  body.desktop-mode .receipt-items-card .receipt-variant-context header b{
+    margin-top:2px!important;
+    font-size:14px!important;
+    line-height:1.15!important;
+  }
+  body.desktop-mode .receipt-items-card .receipt-assisted-count header p{
+    margin-top:4px!important;
+    max-width:640px!important;
+    font-size:10.5px!important;
+    line-height:1.35!important;
+  }
+
+  /* Quantity controls: readable labels and strong values. */
+  body.desktop-mode .receipt-items-card .receipt-variant-quantity-grid{
+    gap:12px!important;
+  }
+  body.desktop-mode .receipt-items-card .receipt-variant-quantity-grid label>span{
+    margin-bottom:7px!important;
+    font-size:10.5px!important;
+    line-height:1.15!important;
+  }
+  body.desktop-mode .receipt-items-card .receipt-variant-quantity-grid .field{
+    min-height:58px!important;
+    padding:10px 13px!important;
+    font-size:20px!important;
+    line-height:1!important;
+    border-radius:12px!important;
+  }
+  body.desktop-mode .receipt-items-card .receipt-variant-size .field{
+    font-size:20px!important;
+  }
+
+  /* Assisted count: clearer action and guidance. */
+  body.desktop-mode .receipt-items-card .receipt-assisted-entry{
+    grid-template-columns:minmax(0,1fr) 138px!important;
+    gap:10px!important;
+  }
+  body.desktop-mode .receipt-items-card .receipt-assisted-entry .field{
+    min-height:58px!important;
+    padding:10px 14px!important;
+    font-size:18px!important;
+    border-radius:12px!important;
+  }
+  body.desktop-mode .receipt-items-card .receipt-assisted-entry button{
+    min-height:58px!important;
+    border-radius:12px!important;
+    font-size:10.5px!important;
+    gap:7px!important;
+  }
+  body.desktop-mode .receipt-items-card .receipt-assisted-entry button>.ph{
+    font-size:18px!important;
+  }
+  body.desktop-mode .receipt-items-card .receipt-assisted-empty{
+    margin-top:10px!important;
+    padding-top:8px!important;
+    gap:8px!important;
+    font-size:10.5px!important;
+    line-height:1.4!important;
+  }
+  body.desktop-mode .receipt-items-card .receipt-assisted-empty>.ph{
+    margin-top:1px!important;
+    font-size:16px!important;
+  }
+  body.desktop-mode .receipt-items-card .receipt-assisted-result{
+    margin-top:11px!important;
+    padding-top:12px!important;
+  }
+  body.desktop-mode .receipt-items-card .receipt-assisted-total small{
+    font-size:8.5px!important;
+  }
+  body.desktop-mode .receipt-items-card .receipt-assisted-total strong{
+    font-size:26px!important;
+  }
+  body.desktop-mode .receipt-items-card .receipt-assisted-total span{
+    font-size:9px!important;
+  }
+  body.desktop-mode .receipt-items-card .receipt-assisted-actions button{
+    min-height:34px!important;
+    font-size:9px!important;
+  }
+
+  /* Position information must be readable at a glance. */
+  body.desktop-mode .receipt-items-card .receipt-variant-position-card{
+    grid-template-columns:40px minmax(0,1fr)!important;
+    gap:11px!important;
+    padding-top:8px!important;
+  }
+  body.desktop-mode .receipt-items-card .receipt-variant-position-card>span{
+    width:40px!important;
+    height:40px!important;
+    border-radius:11px!important;
+  }
+  body.desktop-mode .receipt-items-card .receipt-variant-position-card>span>.ph{
+    font-size:20px!important;
+  }
+  body.desktop-mode .receipt-items-card .receipt-variant-position-card small{
+    font-size:8.5px!important;
+    line-height:1.15!important;
+  }
+  body.desktop-mode .receipt-items-card .receipt-variant-position-card b{
+    margin-top:3px!important;
+    font-size:12.5px!important;
+    line-height:1.2!important;
+  }
+  body.desktop-mode .receipt-items-card .receipt-variant-position-card p{
+    margin-top:4px!important;
+    font-size:9.5px!important;
+    line-height:1.3!important;
+  }
+
+  /* Add taglia: secondary action, but still comfortably readable. */
+  body.desktop-mode .receipt-items-card .receipt-add-variant-v2{
+    min-height:56px!important;
+    margin-top:12px!important;
+    padding:9px 12px!important;
+    grid-template-columns:30px minmax(0,1fr) 18px!important;
+    gap:10px!important;
+  }
+  body.desktop-mode .receipt-items-card .receipt-add-variant-v2>.ph:first-child{
+    font-size:20px!important;
+  }
+  body.desktop-mode .receipt-items-card .receipt-add-variant-v2 b{
+    font-size:11.5px!important;
+    line-height:1.1!important;
+  }
+  body.desktop-mode .receipt-items-card .receipt-add-variant-v2 small{
+    margin-top:2px!important;
+    font-size:9px!important;
+    line-height:1.2!important;
+  }
+
+  /* Article note. */
+  body.desktop-mode .receipt-items-card .receipt-article-note-v2{
+    padding:6px 18px 18px!important;
+  }
+  body.desktop-mode .receipt-items-card .receipt-article-note-v2>span{
+    margin-bottom:7px!important;
+    font-size:11.5px!important;
+  }
+  body.desktop-mode .receipt-items-card .receipt-article-note-v2 .field{
+    min-height:58px!important;
+    padding:12px 14px!important;
+    font-size:16px!important;
+    border-radius:12px!important;
+  }
+
+  /* Add article: clear level-up action outside the article card. */
+  body.desktop-mode .receipt-items-card>.receipt-add-article-v2{
+    min-height:68px!important;
+    padding:10px 16px!important;
+    grid-template-columns:34px minmax(0,1fr) 20px!important;
+    gap:12px!important;
+    border-radius:14px!important;
+  }
+  body.desktop-mode .receipt-items-card>.receipt-add-article-v2>.ph:first-child{
+    font-size:23px!important;
+  }
+  body.desktop-mode .receipt-items-card>.receipt-add-article-v2 b{
+    font-size:13px!important;
+    line-height:1.1!important;
+  }
+  body.desktop-mode .receipt-items-card>.receipt-add-article-v2 small{
+    margin-top:3px!important;
+    font-size:10px!important;
+    line-height:1.2!important;
+  }
+}
+</style>
 </head>
 <body>
 <header id="topbar" class="topbar"></header>
@@ -15910,6 +16172,6 @@ try{globalThis.__NOVA_LEGACY_AVAILABLE=!!localStorage.getItem(CONFIG.legacyStora
 const switchSite=async siteId=>{await ui.selectSite(siteId);return auth.site()};
 globalThis.NOVA=Object.freeze({version:CONFIG.appVersion,schema:CONFIG.version,identityVersion:CONFIG.identityVersion,store,auth,router,domain,excel,ui,sounds,sites:SITES,operators:OPERATORS,roles:ROLE_DEFS,saveIdentityRegistry,capabilities:Object.freeze({operational:ALL_CAPS,master:MASTER_CAPS,administration:ADMIN_CAPS,globalAdmin:GLOBAL_ADMIN_CAPS}),identityValidation:IDENTITY_VALIDATION,switchSite});
 ui.render();</script>
-<!-- SOMA_BUILD:R31.33-20260924 -->
+<!-- SOMA_BUILD:R31.34-20260924 -->
 </body>
 </html>
