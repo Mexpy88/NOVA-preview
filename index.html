@@ -1,13 +1,13 @@
 <!doctype html>
 <html lang="it">
 <head>
-<meta name="soma-build" content="R31.22-20260924">
+<meta name="soma-build" content="R31.23-20260924">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
 <script id="soma-build-freshness">
 (() => {
-  const CURRENT_BUILD='R31.22-20260924',CHECK_KEY='soma:last-build-refresh';
+  const CURRENT_BUILD='R31.23-20260924',CHECK_KEY='soma:last-build-refresh';
   globalThis.SOMA_BUILD=CURRENT_BUILD;
   const check=async()=>{
     try{
@@ -10806,6 +10806,85 @@ body.desktop-mode .app-view:has(.receipt-new-shell){width:100%!important;max-wid
   .receipt-position-suggestion p{font-size:10px!important}
 }
 </style>
+
+<style id="r31-23-receipt-variants">
+/* ===== R31.23 · NEW RECEIPT — ARTICLE / MULTI-SIZE WORKFLOW ===== */
+.receipt-variants-v1 .receipt-step-dual-count{min-width:150px!important;display:grid!important;grid-template-columns:auto auto!important;grid-template-rows:auto auto!important;gap:2px 10px!important;align-items:end!important}
+.receipt-step-dual-count b,.receipt-step-dual-count strong{font-size:34px!important;line-height:1!important;color:#1fa873!important;font-weight:950!important;text-align:right!important}
+.receipt-step-dual-count span,.receipt-step-dual-count small{font-size:9px!important;color:#6f8b7c!important;font-style:normal!important;font-weight:950!important;letter-spacing:.08em!important;text-align:left!important}
+
+.receipt-article-stack{display:grid!important;gap:18px!important;padding:20px 22px!important}
+.receipt-article-card{--ra:#7892a6;--ra-soft:#eef3f6;position:relative!important;border:1px solid #d6e2ea!important;border-radius:24px!important;background:#fff!important;box-shadow:0 9px 28px rgba(30,62,86,.045)!important;overflow:hidden!important}
+.receipt-article-card.warn{--ra:#b98522;--ra-soft:#fff7e8}.receipt-article-card.ok{--ra:#1fa873;--ra-soft:#edf8f3}
+.receipt-article-card:before{content:""!important;position:absolute!important;left:0!important;top:0!important;bottom:0!important;width:6px!important;background:var(--ra)!important}
+.receipt-article-head{display:grid!important;grid-template-columns:58px minmax(0,1fr) auto auto!important;gap:14px!important;align-items:center!important;padding:20px 20px 18px 25px!important;border-bottom:1px solid #e4ebf0!important;background:linear-gradient(180deg,#fff,#fbfcfd)!important}
+.receipt-article-index{width:58px!important;height:58px!important;display:grid!important;place-items:center!important;border-radius:17px!important;background:var(--ra-soft)!important;color:var(--ra)!important;font-size:15px!important;font-weight:950!important}
+.receipt-article-heading small{display:block!important;color:#8799a7!important;font-size:10px!important;font-weight:950!important;letter-spacing:.08em!important}
+.receipt-article-heading h3{margin:4px 0 0!important;color:#203f61!important;font-size:26px!important;line-height:1.05!important;font-weight:950!important}
+.receipt-article-heading p{margin:5px 0 0!important;color:#748a9a!important;font-size:12px!important;font-weight:750!important}
+.receipt-article-status{min-height:40px!important;display:inline-flex!important;align-items:center!important;gap:7px!important;padding:0 12px!important;border-radius:999px!important;background:var(--ra-soft)!important;color:var(--ra)!important;font-size:10px!important;font-style:normal!important;font-weight:950!important}.receipt-article-status>.ph{font-size:17px!important}
+.receipt-article-remove{min-height:40px!important;display:inline-flex!important;align-items:center!important;gap:6px!important;padding:0 11px!important;border-radius:11px!important;background:#fff1ef!important;color:#a94640!important;font-size:9px!important;font-weight:950!important}.receipt-article-remove>.ph{font-size:16px!important}
+
+.receipt-article-common{display:grid!important;grid-template-columns:minmax(0,1.45fr) minmax(210px,.45fr) minmax(210px,.45fr)!important;gap:14px!important;padding:18px 20px!important;background:#fbfcfd!important;border-bottom:1px solid #e4ebf0!important}
+.receipt-article-common label>span{font-size:12px!important}.receipt-article-common .field{min-height:58px!important;font-size:17px!important}
+.receipt-article-code .field{font-size:20px!important;font-weight:900!important}
+
+.receipt-variant-table-head{display:grid!important;grid-template-columns:minmax(150px,.55fr) minmax(130px,.4fr) minmax(150px,.45fr) minmax(300px,1.2fr) minmax(260px,.9fr) 118px!important;gap:10px!important;padding:15px 20px 8px!important;color:#8295a4!important;font-size:9px!important;font-weight:950!important;letter-spacing:.075em!important}
+.receipt-variant-list{display:grid!important;gap:10px!important;padding:0 20px 16px!important}
+.receipt-variant-row{--rv:#7892a6;--rv-soft:#eef3f6;padding:12px!important;border:1px solid #dce6ed!important;border-radius:17px!important;background:#f9fbfc!important}
+.receipt-variant-row.warn{--rv:#b98522;--rv-soft:#fff7e8;border-color:#ead19a!important;background:#fffdfa!important}.receipt-variant-row.ok{--rv:#1fa873;--rv-soft:#edf8f3;border-color:#c8e4d7!important;background:#fbfefc!important}
+.receipt-variant-main{display:grid!important;grid-template-columns:minmax(150px,.55fr) minmax(130px,.4fr) minmax(150px,.45fr) minmax(300px,1.2fr) minmax(260px,.9fr) 118px!important;gap:10px!important;align-items:stretch!important}
+.receipt-variant-row label>span{font-size:11px!important}.receipt-variant-row .field{min-height:56px!important;font-size:19px!important;font-weight:850!important}.receipt-variant-size .field{font-size:21px!important;font-weight:950!important}
+.receipt-variant-checked{padding:0!important}.receipt-variant-checked .field{border-color:#bcdccb!important;background:#fbfefc!important}
+
+.receipt-variant-partial{min-width:0!important;display:flex!important;flex-direction:column!important;justify-content:center!important}
+.receipt-variant-partial-entry{display:grid!important;grid-template-columns:minmax(0,1fr) auto!important;gap:7px!important}
+.receipt-variant-partial-entry .field{min-width:0!important}
+.receipt-variant-partial-entry button{min-width:105px!important;display:flex!important;align-items:center!important;justify-content:center!important;gap:5px!important;border-radius:13px!important;background:#3f80ce!important;color:#fff!important;font-size:9px!important;font-weight:950!important}.receipt-variant-partial-entry button>.ph{font-size:16px!important}
+.receipt-variant-partial-hint{display:block!important;margin-top:5px!important;color:#8497a5!important;font-size:9px!important;font-weight:700!important}
+.receipt-variant-partial-result{display:grid!important;grid-template-columns:minmax(0,1fr) auto 30px 30px!important;gap:5px!important;align-items:center!important;margin-top:6px!important}.receipt-variant-partial-result .chips{display:flex!important;gap:4px!important;min-width:0!important;overflow:hidden!important}.receipt-variant-partial-result .chips span{padding:4px 7px!important;font-size:9px!important}.receipt-variant-total{white-space:nowrap!important;color:#607b90!important;font-size:9px!important;font-weight:800!important}.receipt-variant-total b{color:#274c69!important;font-size:11px!important}.receipt-variant-partial-result button{width:30px!important;height:30px!important;display:grid!important;place-items:center!important;border-radius:9px!important;background:#eaf0f4!important;color:#607b90!important}.receipt-variant-partial-result button>.ph{font-size:14px!important}
+
+.receipt-variant-position{display:grid!important;grid-template-columns:30px minmax(0,1fr)!important;gap:8px!important;align-items:center!important;padding:8px 9px!important;border-radius:12px!important;background:#f0f5f7!important;color:#667f90!important}.receipt-variant-position.found{background:#edf8f3!important;color:#347358!important}.receipt-variant-position>.ph{font-size:20px!important;color:#1fa873!important}.receipt-variant-position small,.receipt-variant-position b,.receipt-variant-position span{display:block!important}.receipt-variant-position small{font-size:7px!important;font-weight:950!important;letter-spacing:.075em!important}.receipt-variant-position b{margin-top:2px!important;font-size:11px!important;line-height:1.15!important}.receipt-variant-position span{margin-top:2px!important;font-size:8.5px!important;font-weight:700!important}
+
+.receipt-variant-actions{display:flex!important;align-items:center!important;justify-content:flex-end!important;gap:6px!important}
+.receipt-variant-state{min-height:36px!important;display:inline-flex!important;align-items:center!important;gap:5px!important;padding:0 9px!important;border-radius:999px!important;background:var(--rv-soft)!important;color:var(--rv)!important;font-size:8px!important;font-style:normal!important;font-weight:950!important}.receipt-variant-state>.ph{font-size:14px!important}
+.receipt-variant-remove{width:36px!important;height:36px!important;display:grid!important;place-items:center!important;border-radius:10px!important;background:#fff0ee!important;color:#a94640!important}.receipt-variant-remove>.ph{font-size:16px!important}
+.receipt-variant-warning{display:flex!important;align-items:center!important;gap:7px!important;margin-top:8px!important;padding:8px 10px!important;border-radius:10px!important;background:#fff4dc!important;color:#865f13!important;font-size:10px!important;font-weight:800!important}.receipt-variant-warning>.ph{font-size:16px!important}
+
+.receipt-add-variant{width:calc(100% - 40px)!important;min-height:58px!important;display:flex!important;align-items:center!important;justify-content:center!important;gap:9px!important;margin:0 20px 15px!important;border:1.5px dashed #8fbcaa!important;border-radius:15px!important;background:#f2faf6!important;color:#267757!important}.receipt-add-variant>.ph{font-size:21px!important}.receipt-add-variant b,.receipt-add-variant small{display:block!important;text-align:left!important}.receipt-add-variant b{font-size:12px!important}.receipt-add-variant small{margin-top:2px!important;font-size:9px!important;font-weight:700!important;color:#668a79!important}
+.receipt-article-note{display:block!important;padding:0 20px 19px!important}.receipt-article-note>span{font-size:12px!important}
+
+.receipt-add-article-v2{width:calc(100% - 44px)!important;min-height:76px!important;display:grid!important;grid-template-columns:44px minmax(0,1fr) 24px!important;gap:12px!important;align-items:center!important;margin:0 22px 22px!important;padding:12px 15px!important;border:2px dashed #78a9d2!important;border-radius:18px!important;background:#eef6fc!important;color:#326e9f!important;text-align:left!important}.receipt-add-article-v2>.ph:first-child{font-size:29px!important}.receipt-add-article-v2 b,.receipt-add-article-v2 small{display:block!important}.receipt-add-article-v2 b{font-size:15px!important}.receipt-add-article-v2 small{margin-top:3px!important;font-size:11px!important;font-weight:700!important;color:#6d8da6!important}
+
+.receipt-confirm-summary-v2{grid-template-columns:repeat(5,minmax(0,1fr))!important}
+
+@media(hover:hover) and (pointer:fine){
+ .receipt-add-variant,.receipt-add-article-v2,.receipt-article-remove,.receipt-variant-remove{transition:transform .15s ease,box-shadow .15s ease,background .15s ease,border-color .15s ease!important}
+ .receipt-add-variant:hover,.receipt-add-article-v2:hover{transform:translateY(-2px)!important;box-shadow:0 8px 18px rgba(30,62,86,.07)!important}
+ .receipt-article-remove:hover,.receipt-variant-remove:hover{background:#b84c44!important;color:#fff!important}
+}
+
+@media(max-width:1350px){
+ .receipt-variant-table-head{display:none!important}
+ .receipt-variant-main{grid-template-columns:160px 130px 150px minmax(260px,1fr) minmax(220px,.8fr) 105px!important}
+}
+@media(max-width:1050px){
+ .receipt-article-common{grid-template-columns:1fr 1fr!important}.receipt-article-code{grid-column:1/-1!important}
+ .receipt-variant-main{grid-template-columns:1fr 1fr 1fr!important}.receipt-variant-partial{grid-column:1/3!important}.receipt-variant-position{grid-column:3!important}.receipt-variant-actions{grid-column:1/-1!important;justify-content:flex-start!important}
+ .receipt-confirm-summary-v2{grid-template-columns:repeat(3,minmax(0,1fr))!important}.receipt-confirm-summary-v2>span{border-bottom:1px solid #dfe7ec!important}
+}
+@media(max-width:700px){
+ .receipt-step-dual-count{min-width:100px!important}
+ .receipt-step-dual-count b,.receipt-step-dual-count strong{font-size:24px!important}
+ .receipt-article-stack{padding:13px!important;gap:13px!important}
+ .receipt-article-head{grid-template-columns:42px minmax(0,1fr) auto!important;padding:14px 12px 13px 16px!important}.receipt-article-index{width:42px!important;height:42px!important;font-size:11px!important}.receipt-article-heading h3{font-size:19px!important}.receipt-article-heading p{font-size:9.5px!important}.receipt-article-status{grid-column:2!important;justify-self:start!important}.receipt-article-remove{grid-column:3!important;grid-row:1/3!important}.receipt-article-remove span{display:none!important}
+ .receipt-article-common{grid-template-columns:1fr!important;padding:13px!important}.receipt-article-code{grid-column:auto!important}.receipt-article-common .field{font-size:16px!important}
+ .receipt-variant-list{padding:0 13px 13px!important}.receipt-variant-row{padding:10px!important}.receipt-variant-main{grid-template-columns:1fr 1fr!important}.receipt-variant-size{grid-column:1/-1!important}.receipt-variant-partial{grid-column:1/-1!important}.receipt-variant-position{grid-column:1/-1!important}.receipt-variant-actions{grid-column:1/-1!important}
+ .receipt-add-variant{width:calc(100% - 26px)!important;margin:0 13px 12px!important}.receipt-article-note{padding:0 13px 13px!important}
+ .receipt-add-article-v2{width:calc(100% - 26px)!important;margin:0 13px 13px!important}
+ .receipt-confirm-summary-v2{grid-template-columns:1fr 1fr!important}.receipt-confirm-summary-v2>span{border-right:1px solid #dfe7ec!important}.receipt-confirm-summary-v2>span:nth-child(2n){border-right:0!important}
+}
+</style>
 </head>
 <body>
 <header id="topbar" class="topbar"></header>
@@ -11850,38 +11929,53 @@ class UI{
     const emptyState=receipts.length?'':`<section class="receiving-control-empty"><span>${phRegular('package')}</span><div><b>Nessuna entrata registrata</b><small>Quando registrerai una consegna, lo storico operativo comparirà qui.</small></div></section>`;
     return `<section class="receiving-control-center"><header class="receiving-control-header"><div class="receiving-control-titleline"><span class="receiving-control-title-icon">${phRegular('package')}</span><div><h1>Entrata merci</h1><p>Registra, ubica e consulta tutte le consegne in arrivo al magazzino.</p></div></div></header>${masterNotice}<div class="receiving-control-grid ${gridClass}">${newEntryCard}${pendingCard}${historyCard}</div>${emptyState}</section>`
   }
-  newReceiptLine(seed={}){return{id:uid(),article:normalizeArticle(seed.article||seed.article_base),size:norm(seed.size),state:norm(seed.state||'NUOVO')||'NUOVO',ddtQuantity:Number(seed.ddtQuantity??seed.ddt_quantity??seed.quantity??0)||0,checkedQuantity:Number(seed.checkedQuantity??0)||0,pallet:norm(seed.pallet||'P01')||'P01',note:String(seed.note||''),partials:[]}}
+  newReceiptLine(seed={}){return{id:uid(),groupId:seed.groupId||uid(),article:normalizeArticle(seed.article||seed.article_base),size:norm(seed.size),state:norm(seed.state||'NUOVO')||'NUOVO',ddtQuantity:Number(seed.ddtQuantity??seed.ddt_quantity??seed.quantity??0)||0,checkedQuantity:Number(seed.checkedQuantity??0)||0,pallet:norm(seed.pallet||'P01')||'P01',note:String(seed.note||''),partials:clone(seed.partials||[])}}
   openReceiptNew(){if(!this.require('RECEIVE'))return;if(!this.masterReady()){this.toast('Per registrare una nuova entrata è necessario il Master Excel.','error');this.router.go('receipt-new');return}this.ddtFiles=[];this.receiptDraft={supplier:'',ddtNumber:'',ddtDate:localDateInput(),receivedAt:localDateTimeInput(),note:'',attachments:[],lines:[this.newReceiptLine()]};this.router.go('receipt-new')}
+  ensureReceiptGroups(){
+    if(!this.receiptDraft)return[];
+    const byArticle=new Map();
+    for(const l of this.receiptDraft.lines||[]){
+      if(l.groupId)continue;
+      const a=normalizeArticle(l.article);
+      if(a){if(!byArticle.has(a))byArticle.set(a,uid());l.groupId=byArticle.get(a)}
+      else l.groupId=uid();
+    }
+    return this.receiptDraft.lines||[]
+  }
+  receiptGroups(){
+    const lines=this.ensureReceiptGroups(),map=new Map(),out=[];
+    for(const l of lines){const id=l.groupId||l.id;if(!map.has(id)){const g={id,lines:[]};map.set(id,g);out.push(g)}map.get(id).lines.push(l)}
+    return out
+  }
   receiptSummary(){
-    const lines=this.receiptDraft?.lines||[],ddt=lines.reduce((n,l)=>n+Number(l.ddtQuantity||0),0),checked=lines.reduce((n,l)=>n+Number(l.checkedQuantity||0),0),mismatches=lines.filter(l=>Number(l.ddtQuantity||0)!==Number(l.checkedQuantity||0)).length;
-    return{lines:lines.length,ddt,checked,mismatches}
+    const lines=this.ensureReceiptGroups(),groups=this.receiptGroups(),ddt=lines.reduce((n,l)=>n+Number(l.ddtQuantity||0),0),checked=lines.reduce((n,l)=>n+Number(l.checkedQuantity||0),0),mismatches=lines.filter(l=>Number(l.ddtQuantity||0)!==Number(l.checkedQuantity||0)).length;
+    return{articles:groups.length,variants:lines.length,ddt,checked,mismatches}
   }
   updateReceiptNewSummary(){
-    if(this.router.route.name!=='receipt-new'||!this.receiptDraft)return;const x=this.receiptSummary(),set=(k,v)=>{const el=document.querySelector(`[data-receipt-summary="${k}"]`);if(el)el.textContent=v};
-    set('lines',x.lines);set('ddt',x.ddt);set('checked',x.checked);set('mismatches',x.mismatches);const badge=document.querySelector('[data-receipt-summary-state]');if(badge){badge.classList.toggle('ok',x.mismatches===0&&x.checked>0);badge.classList.toggle('warn',x.mismatches>0);badge.textContent=x.checked<=0?'IN COMPILAZIONE':x.mismatches?`${x.mismatches} SCOSTAMENT${x.mismatches===1?'O':'I'}`:'DATI COERENTI'}
+    if(this.router.route.name!=='receipt-new'||!this.receiptDraft)return;const x=this.receiptSummary(),set=(k,v)=>document.querySelectorAll(`[data-receipt-summary="${k}"]`).forEach(el=>el.textContent=v);
+    set('articles',x.articles);set('variants',x.variants);set('ddt',x.ddt);set('checked',x.checked);set('mismatches',x.mismatches)
   }
   receiptNew(){
     if(!this.require('RECEIVE'))return'';if(!this.masterReady())return this.masterRequiredView({context:'registrare una nuova entrata',backAction:'receiving',backLabel:'TORNA A ENTRATA MERCI'});
     if(!this.receiptDraft)this.receiptDraft={supplier:'',ddtNumber:'',ddtDate:localDateInput(),receivedAt:localDateTimeInput(),note:'',attachments:[],lines:[this.newReceiptLine()]};
-    const d=this.receiptDraft,x=this.receiptSummary(),files=this.ddtFiles.length;
-    return `<section class="receipt-new-shell">
+    const d=this.receiptDraft,x=this.receiptSummary(),groups=this.receiptGroups(),files=this.ddtFiles.length;
+    return `<section class="receipt-new-shell receipt-variants-v1">
       <header class="receipt-new-hero">
         <div class="receipt-new-title">
           <span class="receipt-new-title-icon">${phRegular('package')}</span>
-          <div><small>NUOVA CONSEGNA</small><h1>Ricevi e controlla</h1><p>Registra il documento, verifica la merce fisica e prepara l’entrata in Area Ricevimento.</p></div>
+          <div><small>NUOVA CONSEGNA</small><h1>Ricevi e controlla</h1><p>Un articolo, tutte le sue taglie. Controlla le quantità e registra ogni variante come riga indipendente.</p></div>
         </div>
       </header>
 
       <nav class="receipt-new-stepper" aria-label="Fasi entrata merce">
         <span class="active"><i>1</i><div><b>Documento</b><small>Fornitore e DDT</small></div></span>
-        <span><i>2</i><div><b>Articoli</b><small>Controllo fisico</small></div></span>
-        <span><i>3</i><div><b>Conferma</b><small>Riepilogo entrata</small></div></span>
+        <span><i>2</i><div><b>Articoli e taglie</b><small>Controllo fisico</small></div></span>
+        <span><i>3</i><div><b>Conferma</b><small>Righe operative</small></div></span>
       </nav>
 
       <section class="receipt-workflow-card receipt-document-card">
         <header class="receipt-step-head">
-          <span class="receipt-step-number">1</span>
-          <span class="receipt-step-icon">${phRegular('file-text')}</span>
+          <span class="receipt-step-number">1</span><span class="receipt-step-icon">${phRegular('file-text')}</span>
           <div><small>DATI CONSEGNA</small><h2>Documento e fornitore</h2><p>Identifica la consegna prima di iniziare il controllo della merce.</p></div>
         </header>
         <div class="receipt-doc-grid">
@@ -11899,78 +11993,88 @@ class UI{
 
       <section class="receipt-workflow-card receipt-items-card">
         <header class="receipt-step-head">
-          <span class="receipt-step-number">2</span>
-          <span class="receipt-step-icon">${phRegular('package')}</span>
-          <div><small>CONTROLLO FISICO</small><h2>Articoli ricevuti</h2><p>Confronta quantità dichiarate e quantità realmente controllate.</p></div>
-          <em class="receipt-step-count"><b data-receipt-summary="lines">${x.lines}</b><span>${x.lines===1?'ARTICOLO':'ARTICOLI'}</span></em>
+          <span class="receipt-step-number">2</span><span class="receipt-step-icon">${phRegular('stack')}</span>
+          <div><small>CONTROLLO FISICO</small><h2>Articoli e taglie ricevute</h2><p>Inserisci il codice una sola volta e aggiungi tutte le taglie presenti sul DDT.</p></div>
+          <em class="receipt-step-count receipt-step-dual-count"><b data-receipt-summary="articles">${x.articles}</b><span>ARTICOLI</span><strong data-receipt-summary="variants">${x.variants}</strong><small>TAGLIE</small></em>
         </header>
-        <div class="receipt-lines-stack">${d.lines.map((l,i)=>this.receiptLineForm(l,i)).join('')}</div>
-        <button class="receipt-add-line" data-action="receipt-line-add">${phRegular('plus-circle')}<span><b>Aggiungi articolo</b><small>Inserisci un’altra riga alla consegna</small></span>${phRegular('arrow-right')}</button>
+        <div class="receipt-article-stack">${groups.map((g,i)=>this.receiptArticleForm(g,i)).join('')}</div>
+        <button class="receipt-add-article-v2" data-action="receipt-article-add">${phRegular('plus-circle')}<span><b>Aggiungi articolo</b><small>Crea una nuova card per un altro codice articolo</small></span>${phRegular('arrow-right')}</button>
       </section>
 
       <section class="receipt-workflow-card receipt-confirm-card">
         <header class="receipt-step-head">
-          <span class="receipt-step-number">3</span>
-          <span class="receipt-step-icon">${phRegular('check-circle')}</span>
-          <div><small>CONTROLLO FINALE</small><h2>Conferma entrata</h2><p>Solo le quantità controllate verranno registrate in Area Ricevimento.</p></div>
+          <span class="receipt-step-number">3</span><span class="receipt-step-icon">${phRegular('check-circle')}</span>
+          <div><small>CONTROLLO FINALE</small><h2>Conferma entrata</h2><p>Ogni taglia sarà registrata come riga operativa indipendente.</p></div>
         </header>
-        <div class="receipt-confirm-summary">
-          <span><small>ARTICOLI</small><b data-receipt-summary="lines">${x.lines}</b><em>righe</em></span>
+        <div class="receipt-confirm-summary receipt-confirm-summary-v2">
+          <span><small>ARTICOLI</small><b data-receipt-summary="articles">${x.articles}</b><em>codici</em></span>
+          <span><small>TAGLIE / RIGHE</small><b data-receipt-summary="variants">${x.variants}</b><em>righe</em></span>
           <span><small>QUANTITÀ DDT</small><b data-receipt-summary="ddt">${x.ddt}</b><em>pezzi</em></span>
           <span><small>CONTROLLATI</small><b data-receipt-summary="checked">${x.checked}</b><em>pezzi</em></span>
-          <span class="receipt-mismatch-kpi"><small>SCOSTAMENTI</small><b data-receipt-summary="mismatches">${x.mismatches}</b><em>righe</em></span>
+          <span class="receipt-mismatch-kpi"><small>SCOSTAMENTI</small><b data-receipt-summary="mismatches">${x.mismatches}</b><em>taglie</em></span>
         </div>
         <label class="receipt-delivery-note"><span>Note consegna</span><textarea class="field textarea" data-bind="receipt:header:note" placeholder="Annotazioni generali sulla consegna…">${esc(d.note)}</textarea></label>
-        <button class="receipt-confirm-cta" data-action="receipt-confirm"><span>${phRegular('shield-check')}<b>CONTROLLA E CONFERMA</b><small>Registra l’entrata e porta la merce in Area Ricevimento</small></span>${phRegular('arrow-right')}</button>
+        <button class="receipt-confirm-cta" data-action="receipt-confirm"><span>${phRegular('shield-check')}<b>CONTROLLA E CONFERMA</b><small>Registra ${x.variants} ${x.variants===1?'riga':'righe'} indipendenti in Area Ricevimento</small></span>${phRegular('arrow-right')}</button>
       </section>
     </section>`
   }
-  receiptLineForm(l,i){
-    const sug=this.domain.stock.suggest(l.article,l.size,l.state),diff=Number(l.ddtQuantity)!==Number(l.checkedQuantity),sum=(l.partials||[]).reduce((n,x)=>n+Number(x),0),ddt=Number(l.ddtQuantity||0),checked=Number(l.checkedQuantity||0),status=checked<=0?'DA CONTROLLARE':diff?'SCOSTAMENTO':'COERENTE',statusClass=checked<=0?'idle':diff?'warn':'ok';
-    return `<article class="receipt-item-card ${statusClass}">
-      <header class="receipt-item-head">
-        <span class="receipt-item-index">${String(i+1).padStart(2,'0')}</span>
-        <div><small>ARTICOLO</small><h3>${l.article?`${esc(l.article)}${l.size?` · ${esc(l.size)}`:''}`:`Articolo ${i+1}`}</h3><p>${l.article?'Dati identificativi e controllo quantità':'Inserisci codice articolo, taglia e stato merce.'}</p></div>
-        <em class="receipt-item-status ${statusClass}">${phRegular(statusClass==='ok'?'check-circle':statusClass==='warn'?'warning-circle':'clock')}${status}</em>
-        ${this.receiptDraft.lines.length>1?`<button class="receipt-item-remove" data-action="receipt-line-remove" data-line="${l.id}" aria-label="Rimuovi articolo">${phRegular('trash')}<span>RIMUOVI</span></button>`:''}
+  receiptArticleForm(group,index){
+    const lines=group.lines||[],base=lines[0]||this.newReceiptLine({groupId:group.id}),ddt=lines.reduce((n,l)=>n+Number(l.ddtQuantity||0),0),checked=lines.reduce((n,l)=>n+Number(l.checkedQuantity||0),0),mismatches=lines.filter(l=>Number(l.ddtQuantity||0)!==Number(l.checkedQuantity||0)).length,status=checked<=0?'DA CONTROLLARE':mismatches?'SCOSTAMENTO':'COERENTE',statusClass=checked<=0?'idle':mismatches?'warn':'ok',articleCount=this.receiptGroups().length;
+    return `<article class="receipt-article-card ${statusClass}">
+      <header class="receipt-article-head">
+        <span class="receipt-article-index">${String(index+1).padStart(2,'0')}</span>
+        <div class="receipt-article-heading"><small>ARTICOLO</small><h3>${base.article?esc(base.article):`Articolo ${index+1}`}</h3><p>${lines.length} ${lines.length===1?'taglia':'taglie'} · ${ddt} pezzi DDT · ${checked} controllati</p></div>
+        <em class="receipt-article-status ${statusClass}">${phRegular(statusClass==='ok'?'check-circle':statusClass==='warn'?'warning-circle':'clock')}${status}</em>
+        ${articleCount>1?`<button class="receipt-article-remove" data-action="receipt-article-remove" data-group="${group.id}">${phRegular('trash')}<span>RIMUOVI ARTICOLO</span></button>`:''}
       </header>
 
-      <div class="receipt-item-identity-grid">
-        <label class="receipt-item-code"><span>Codice articolo</span><input class="field" data-bind="receipt:${l.id}:article" value="${esc(l.article)}" placeholder="Codice SAP / articolo"></label>
-        <label><span>Taglia / variante</span><input class="field" data-bind="receipt:${l.id}:size" value="${esc(l.size)}" placeholder="Es. 42"></label>
-        <label><span>Stato merce</span><select class="field" data-bind="receipt:${l.id}:state">${CONFIG.states.slice(0,3).map(s=>`<option ${l.state===s?'selected':''}>${s}</option>`).join('')}</select></label>
+      <div class="receipt-article-common">
+        <label class="receipt-article-code"><span>Codice articolo</span><input class="field" data-bind="receiptgroup:${group.id}:article" value="${esc(base.article)}" placeholder="Codice SAP / articolo"></label>
+        <label><span>Stato merce</span><select class="field" data-bind="receiptgroup:${group.id}:state">${CONFIG.states.slice(0,3).map(st=>`<option ${base.state===st?'selected':''}>${st}</option>`).join('')}</select></label>
+        <label><span>Pallet / collo</span><input class="field" data-bind="receiptgroup:${group.id}:pallet" value="${esc(base.pallet)}" placeholder="P01"></label>
       </div>
 
-      <div class="receipt-item-core-grid">
-        <section class="receipt-quantity-panel">
-          <header><span>${phRegular('scales')}</span><div><small>VERIFICA QUANTITÀ</small><b>DDT vs controllo fisico</b></div></header>
-          <div class="receipt-quantity-pair">
-            <label><span>Quantità DDT</span><input type="number" min="0" class="field" data-bind="receipt:${l.id}:ddtQuantity" value="${l.ddtQuantity}"></label>
-            <label class="checked"><span>Quantità controllata <b>*</b></span><input type="number" min="0" class="field" data-bind="receipt:${l.id}:checkedQuantity" value="${l.checkedQuantity}"></label>
-          </div>
-          <div class="receipt-quantity-delta ${statusClass}"><span>${statusClass==='ok'?phRegular('check-circle'):statusClass==='warn'?phRegular('warning-circle'):phRegular('info')}</span><div><small>ESITO CONTROLLO</small><b>${checked<=0?'Inserisci la quantità realmente controllata':diff?`Differenza di ${Math.abs(checked-ddt)} pezzi rispetto al DDT`:'Quantità coerenti'}</b></div></div>
-        </section>
+      <div class="receipt-variant-table-head"><span>TAGLIA / VARIANTE</span><span>Q.TÀ DDT</span><span>CONTROLLATA</span><span>CONTEGGIO ASSISTITO</span><span>POSIZIONE ABITUALE</span><span></span></div>
+      <div class="receipt-variant-list">${lines.map((l,i)=>this.receiptVariantForm(l,i,group)).join('')}</div>
 
-        <section class="receipt-partial-panel">
-          <header><span>${phRegular('calculator')}</span><div><small>CONTEGGIO ASSISTITO</small><b>Somma conteggi parziali</b></div><em class="partial-total ${checked===ddt&&ddt>0?'ok':checked>ddt?'over':'pending'}">${checked} / ${ddt}</em></header>
-          <div class="receipt-partial-entry"><input id="partial-${l.id}" type="number" min="1" class="field" placeholder="Es. 6"><button data-action="partial-add" data-line="${l.id}">${phRegular('plus')}<span>AGGIUNGI</span></button></div>
-          ${l.partials.length?`<div class="receipt-partial-result"><div class="chips">${l.partials.map(x=>`<span>${x}</span>`).join('')}</div><div class="receipt-partial-equation"><span>${l.partials.join(' + ')}</span><b>= ${sum}</b></div><div class="receipt-partial-actions"><button data-action="partial-undo" data-line="${l.id}">${phRegular('arrow-counter-clockwise')} ANNULLA ULTIMO</button><button data-action="partial-clear" data-line="${l.id}">${phRegular('x-circle')} AZZERA</button></div></div>`:`<div class="receipt-partial-empty">${phRegular('info')}<span>Aggiungi i conteggi progressivi: il totale aggiornerà automaticamente la quantità controllata.</span></div>`}
-        </section>
-      </div>
+      <button class="receipt-add-variant" data-action="receipt-variant-add" data-group="${group.id}">${phRegular('plus')}<span><b>Aggiungi taglia</b><small>Nuova variante dello stesso articolo</small></span></button>
 
-      <div class="receipt-placement-grid">
-        <label><span>Pallet / collo in ricevimento</span><input class="field" data-bind="receipt:${l.id}:pallet" value="${esc(l.pallet)}"></label>
-        <div class="receipt-position-suggestion ${sug?'found':'empty'}">
-          <span class="receipt-position-icon">${phRegular('map-pin-line')}</span>
-          <div><small>POSIZIONE - FILA - SCAFFALE</small><b>${sug?`${esc(sug.location)}${sug.pallet?` · Bancale ${esc(sug.pallet)}`:''}`:'Nessuna posizione abituale trovata'}</b><p>${sug?`Stesso articolo già presente · ${sug.quantity} pezzi`:'La posizione potrà essere definita nella fase di ubicazione.'}</p></div>
-        </div>
-      </div>
-
-      <label class="receipt-line-note"><span>Note riga</span><input class="field" data-bind="receipt:${l.id}:note" value="${esc(l.note)}" placeholder="Annotazioni specifiche per questo articolo"></label>
+      <label class="receipt-article-note"><span>Note articolo</span><input class="field" data-bind="receiptgroup:${group.id}:note" value="${esc(base.note)}" placeholder="Annotazioni comuni a tutte le taglie"></label>
     </article>`
   }
-  addReceiptLine(){this.receiptDraft.lines.push(this.newReceiptLine({pallet:this.receiptDraft.lines.at(-1)?.pallet||'P01'}));this.renderView()}
-  removeReceiptLine(id){this.receiptDraft.lines=this.receiptDraft.lines.filter(x=>x.id!==id);if(!this.receiptDraft.lines.length)this.receiptDraft.lines.push(this.newReceiptLine());this.renderView()}
+  receiptVariantForm(l,index,group){
+    const sug=this.domain.stock.suggest(l.article,l.size,l.state),ddt=Number(l.ddtQuantity||0),checked=Number(l.checkedQuantity||0),diff=ddt!==checked,sum=(l.partials||[]).reduce((n,x)=>n+Number(x),0),status=checked<=0?'DA CONTROLLARE':diff?'SCOSTAMENTO':'COERENTE',statusClass=checked<=0?'idle':diff?'warn':'ok',canRemove=(group.lines||[]).length>1;
+    return `<section class="receipt-variant-row ${statusClass}">
+      <div class="receipt-variant-main">
+        <label class="receipt-variant-size"><span>Taglia</span><input class="field" data-bind="receipt:${l.id}:size" value="${esc(l.size)}" placeholder="Es. 39"></label>
+        <label><span>DDT</span><input type="number" min="0" class="field" data-bind="receipt:${l.id}:ddtQuantity" value="${l.ddtQuantity}"></label>
+        <label class="receipt-variant-checked"><span>Controllata <b>*</b></span><input type="number" min="0" class="field" data-bind="receipt:${l.id}:checkedQuantity" value="${l.checkedQuantity}"></label>
+
+        <div class="receipt-variant-partial">
+          <div class="receipt-variant-partial-entry"><input id="partial-${l.id}" type="number" min="1" class="field" placeholder="Es. 6"><button data-action="partial-add" data-line="${l.id}">${phRegular('plus')}<span>AGGIUNGI</span></button></div>
+          ${l.partials.length?`<div class="receipt-variant-partial-result"><div class="chips">${l.partials.map(x=>`<span>${x}</span>`).join('')}</div><span class="receipt-variant-total">${l.partials.join(' + ')} = <b>${sum}</b></span><button data-action="partial-undo" data-line="${l.id}" title="Annulla ultimo">${phRegular('arrow-counter-clockwise')}</button><button data-action="partial-clear" data-line="${l.id}" title="Azzera">${phRegular('x-circle')}</button></div>`:`<small class="receipt-variant-partial-hint">Somma conteggi progressivi</small>`}
+        </div>
+
+        <div class="receipt-variant-position ${sug?'found':'empty'}">${phRegular('map-pin-line')}<div><small>POSIZIONE</small><b>${sug?esc(sug.location):'Non trovata'}</b><span>${sug?`${sug.quantity} pezzi${sug.pallet?` · ${esc(sug.pallet)}`:''}`:'Da definire in ubicazione'}</span></div></div>
+        <div class="receipt-variant-actions"><em class="receipt-variant-state ${statusClass}">${statusClass==='ok'?phRegular('check-circle'):statusClass==='warn'?phRegular('warning-circle'):phRegular('clock')}<span>${status}</span></em>${canRemove?`<button class="receipt-variant-remove" data-action="receipt-variant-remove" data-line="${l.id}" title="Rimuovi taglia">${phRegular('trash')}</button>`:''}</div>
+      </div>
+      ${checked>0&&diff?`<div class="receipt-variant-warning">${phRegular('warning-circle')}<span>Differenza di <b>${Math.abs(checked-ddt)} pezzi</b> rispetto al DDT.</span></div>`:''}
+    </section>`
+  }
+  addReceiptArticle(){
+    const last=this.receiptDraft.lines.at(-1),groupId=uid();this.receiptDraft.lines.push(this.newReceiptLine({groupId,pallet:last?.pallet||'P01',state:last?.state||'NUOVO'}));this.renderView()
+  }
+  removeReceiptArticle(groupId){
+    const groups=this.receiptGroups();if(groups.length<=1)return;this.receiptDraft.lines=this.receiptDraft.lines.filter(x=>x.groupId!==groupId);this.renderView()
+  }
+  addReceiptVariant(groupId){
+    const base=this.receiptDraft.lines.find(x=>x.groupId===groupId);if(!base)return;this.receiptDraft.lines.push(this.newReceiptLine({groupId,article:base.article,state:base.state,pallet:base.pallet,note:base.note}));this.renderView()
+  }
+  removeReceiptVariant(id){
+    const line=this.receiptDraft.lines.find(x=>x.id===id);if(!line)return;const siblings=this.receiptDraft.lines.filter(x=>x.groupId===line.groupId);if(siblings.length<=1)return;this.receiptDraft.lines=this.receiptDraft.lines.filter(x=>x.id!==id);this.renderView()
+  }
+  addReceiptLine(){this.addReceiptArticle()}
+  removeReceiptLine(id){this.removeReceiptVariant(id)}
   addPartial(id){const l=this.receiptDraft.lines.find(x=>x.id===id),input=document.getElementById(`partial-${id}`),v=Number(input?.value||0);if(v<=0)return;l.partials.push(v);l.checkedQuantity=l.partials.reduce((n,x)=>n+x,0);this.renderView()}
   undoPartial(id){const l=this.receiptDraft.lines.find(x=>x.id===id);l.partials.pop();l.checkedQuantity=l.partials.reduce((n,x)=>n+x,0);this.renderView()}
   clearPartial(id){const l=this.receiptDraft.lines.find(x=>x.id===id);l.partials=[];l.checkedQuantity=0;this.renderView()}
@@ -12136,9 +12240,20 @@ class UI{
   logout(){this.persistCountSession();document.getElementById('requestDeleteDialog')?.close();document.getElementById('siteDialog')?.close();this.pendingRequestDeleteId='';this.siteChoiceRequired=false;this.siteChoiceSource='';this.auth.logout();this.store.useSite(CONFIG.defaultSiteId,{silent:true});this.receiptDraft=null;this.requestDraft=null;this.rectDraft=null;this.masterRequestMode=false;this.masterRequestItems=[];this.masterRequestOpenKey='';this.countDraft=null;this.ddtFiles=[];this.requestFiles=[];this.router.home();this.render()}
   openNotifications(){const d=document.getElementById('notificationDialog'),rows=this.domain.notifications.visibleTo(this.auth.user);d.querySelector('.dialog-body').innerHTML=rows.length?rows.map(n=>`<button class="notif-row ${n.readAt?'read':''}" data-action="notif-read" data-id="${n.id}" data-entity="${n.entityType}" data-entity-id="${n.entityId}"><b>${esc(n.title)}</b><span>${esc(n.body)}</span><small>${fmtDateTime(n.createdAt)}</small></button>`).join(''):'<div class="empty">Nessuna notifica.</div>';d.showModal()}
 
-  input(el){if(el.dataset.masterRequestQty)this.updateMasterRequestQty(el,false);if(el.id==='loginPin'){const next=String(el.value||'').replace(/\D/g,'').slice(0,4);if(el.value!==next)el.value=next;if(next.length>this.lastPinLength)this.sounds?.pinKey?.();this.lastPinLength=next.length}if(el.id==='requestDeletePin'){const next=String(el.value||'').replace(/\D/g,'').slice(0,CONFIG.pinLength);if(el.value!==next)el.value=next;if(next.length>this.lastDeletePinLength)this.sounds?.pinKey?.();this.lastDeletePinLength=next.length;document.getElementById('requestDeleteError')?.classList.add('hidden')}if(el.dataset.countExtra)this.updateCountExtra(el.dataset.dom,el.dataset.countExtra,el.value);if(el.id?.startsWith('count-value-'))this.updateCountValue(el.id.replace('count-value-',''),el.value);if(el.id==='rectCounted')this.updateRectCount(el.value);const bind=el.dataset.bind;if(bind){this.bindDraft(bind,el.value);if(bind.startsWith('receipt:'))this.updateReceiptNewSummary?.()}if(['stockQuery','stockLocation','stockPallet'].includes(el.id))this.scheduleStockRender();if(['rectSearch','rectFilterSize','rectFilterLocation','rectFilterPallet'].includes(el.id))this.renderRectResults();if(el.id==='registryQuery')this.renderRegistryResults();if(el.id==='masterQuery'){this.masterView.query=el.value;this.masterView.page=1;this.scheduleMasterRender()}if(el.id==='masterFilterArticle'){this.masterView.article=el.value;this.masterView.page=1;this.scheduleMasterRender()}if(el.id==='masterFilterLocation'){this.masterView.location=el.value;this.masterView.page=1;this.scheduleMasterRender()}if(el.id==='masterFilterPallet'){this.masterView.pallet=el.value;this.masterView.page=1;this.scheduleMasterRender()}if(el.id==='loginPin'){el.value=el.value.replace(/\D/g,'').slice(0,4);document.getElementById('loginError')?.classList.add('hidden')}}
-  change(el){if(el.dataset.masterRequestQty)this.updateMasterRequestQty(el,true);if(el.dataset.countExtra)this.updateCountExtra(el.dataset.dom,el.dataset.countExtra,el.value);if(el.id==='rectFilterState')this.renderRectResults();if(el.id==='rectReason'&&this.rectDraft)this.rectDraft.reason=norm(el.value);const bind=el.dataset.bind;if(bind){this.bindDraft(bind,el.value);if(bind.includes(':article')||bind.includes(':size')||bind.includes(':state'))this.renderView()}if(el.id==='stockState')this.renderStockResults();if(['registryFrom','registryTo','registryType','registryState'].includes(el.id))this.renderRegistryResults();if(el.id==='masterFilterSize'){this.masterView.size=el.value;this.masterView.page=1;this.renderMasterViewerBody()}if(el.id==='masterSort'){this.masterView.sort=el.value;this.masterView.page=1;this.renderMasterViewerBody()}if(el.id?.startsWith('activityDate-')){this.activityDate=el.value||localDateInput();this.renderView()}}
-  bindDraft(bind,value){const [kind,id,key]=bind.split(':');if(kind==='receipt'&&this.receiptDraft){if(id==='header'){this.receiptDraft[key]=value;return}const l=this.receiptDraft.lines.find(x=>x.id===id);if(l){if(['ddtQuantity','checkedQuantity'].includes(key)){l[key]=Math.max(0,Number(value)||0);if(key==='checkedQuantity'&&l.partials.length)l.partials=[]}else if(key==='article')l[key]=normalizeArticle(value);else if(['size','state','pallet'].includes(key))l[key]=norm(value);else l[key]=value}}if(kind==='request'&&this.requestDraft){if(id==='header'){this.requestDraft[key]=value;return}const l=this.requestDraft.lines.find(x=>x.id===id);if(l){if(key==='cartonsRequested')l[key]=Math.max(0,Math.floor(Number(value)||0));else if(key==='article')l[key]=normalizeArticle(value);else if(key==='size')l[key]=norm(value);else l[key]=value}}}
+  input(el){if(el.dataset.masterRequestQty)this.updateMasterRequestQty(el,false);if(el.id==='loginPin'){const next=String(el.value||'').replace(/\D/g,'').slice(0,4);if(el.value!==next)el.value=next;if(next.length>this.lastPinLength)this.sounds?.pinKey?.();this.lastPinLength=next.length}if(el.id==='requestDeletePin'){const next=String(el.value||'').replace(/\D/g,'').slice(0,CONFIG.pinLength);if(el.value!==next)el.value=next;if(next.length>this.lastDeletePinLength)this.sounds?.pinKey?.();this.lastDeletePinLength=next.length;document.getElementById('requestDeleteError')?.classList.add('hidden')}if(el.dataset.countExtra)this.updateCountExtra(el.dataset.dom,el.dataset.countExtra,el.value);if(el.id?.startsWith('count-value-'))this.updateCountValue(el.id.replace('count-value-',''),el.value);if(el.id==='rectCounted')this.updateRectCount(el.value);const bind=el.dataset.bind;if(bind){this.bindDraft(bind,el.value);if(bind.startsWith('receipt:')||bind.startsWith('receiptgroup:'))this.updateReceiptNewSummary?.()}if(['stockQuery','stockLocation','stockPallet'].includes(el.id))this.scheduleStockRender();if(['rectSearch','rectFilterSize','rectFilterLocation','rectFilterPallet'].includes(el.id))this.renderRectResults();if(el.id==='registryQuery')this.renderRegistryResults();if(el.id==='masterQuery'){this.masterView.query=el.value;this.masterView.page=1;this.scheduleMasterRender()}if(el.id==='masterFilterArticle'){this.masterView.article=el.value;this.masterView.page=1;this.scheduleMasterRender()}if(el.id==='masterFilterLocation'){this.masterView.location=el.value;this.masterView.page=1;this.scheduleMasterRender()}if(el.id==='masterFilterPallet'){this.masterView.pallet=el.value;this.masterView.page=1;this.scheduleMasterRender()}if(el.id==='loginPin'){el.value=el.value.replace(/\D/g,'').slice(0,4);document.getElementById('loginError')?.classList.add('hidden')}}
+  change(el){if(el.dataset.masterRequestQty)this.updateMasterRequestQty(el,true);if(el.dataset.countExtra)this.updateCountExtra(el.dataset.dom,el.dataset.countExtra,el.value);if(el.id==='rectFilterState')this.renderRectResults();if(el.id==='rectReason'&&this.rectDraft)this.rectDraft.reason=norm(el.value);const bind=el.dataset.bind;if(bind){this.bindDraft(bind,el.value);if(bind.includes(':article')||bind.includes(':size')||bind.includes(':state')||bind.startsWith('receiptgroup:'))this.renderView()}if(el.id==='stockState')this.renderStockResults();if(['registryFrom','registryTo','registryType','registryState'].includes(el.id))this.renderRegistryResults();if(el.id==='masterFilterSize'){this.masterView.size=el.value;this.masterView.page=1;this.renderMasterViewerBody()}if(el.id==='masterSort'){this.masterView.sort=el.value;this.masterView.page=1;this.renderMasterViewerBody()}if(el.id?.startsWith('activityDate-')){this.activityDate=el.value||localDateInput();this.renderView()}}
+  bindDraft(bind,value){
+    const [kind,id,key]=bind.split(':');
+    if(kind==='receipt'&&this.receiptDraft){
+      if(id==='header'){this.receiptDraft[key]=value;return}
+      const l=this.receiptDraft.lines.find(x=>x.id===id);if(l){if(['ddtQuantity','checkedQuantity'].includes(key)){l[key]=Math.max(0,Number(value)||0);if(key==='checkedQuantity'&&l.partials.length)l.partials=[]}else if(key==='article')l[key]=normalizeArticle(value);else if(['size','state','pallet'].includes(key))l[key]=norm(value);else l[key]=value}
+      return
+    }
+    if(kind==='receiptgroup'&&this.receiptDraft){
+      const groupLines=this.receiptDraft.lines.filter(x=>x.groupId===id);for(const l of groupLines){if(key==='article')l.article=normalizeArticle(value);else if(['state','pallet'].includes(key))l[key]=norm(value);else l[key]=value}return
+    }
+    if(kind==='request'&&this.requestDraft){if(id==='header'){this.requestDraft[key]=value;return}const l=this.requestDraft.lines.find(x=>x.id===id);if(l){if(key==='cartonsRequested')l[key]=Math.max(0,Math.floor(Number(value)||0));else if(key==='article')l[key]=normalizeArticle(value);else if(key==='size')l[key]=norm(value);else l[key]=value}}
+  }
 
   async importMaster(input){const file=input.files?.[0];input.value='';if(!file)return;if(this.masterReady()&&this.excel.dirtyCount()&&!confirm(`Ci sono ${this.excel.dirtyCount()} modifiche non esportate. Importare comunque?`))return;const r=await this.excel.importFile(file,{restoreHistory:true});this.countDraft=this.loadCountSession();this.rectDraft=null;this.toast(`${r.filename} importato · ${r.rows} righe.`);this.router.home()}
   addDdtFiles(input){for(const f of input.files||[])this.ddtFiles.push(f);input.value='';this.renderView()}
@@ -12148,15 +12263,15 @@ class UI{
   openAnalysis(kind){this.analysisKind=kind;const d=document.getElementById('analysisDialog'),files=kind==='DDT'?this.ddtFiles:this.requestFiles,prompt=kind==='DDT'?this.ddtPrompt():this.requestPrompt();document.getElementById('analysisTitle').textContent=kind==='DDT'?'Analizza DDT':'Analizza richiesta';document.getElementById('analysisInfo').innerHTML=`<p>${files.length} ${files.length===1?'file allegato':'file allegati'}.</p><div class="file-chips">${files.map(f=>`<span>${esc(f.name)}</span>`).join('')}</div>`;document.getElementById('analysisJson').value='';document.getElementById('analysisPrompt').value=prompt;d.showModal()}
   async shareAnalysis(){const files=this.analysisKind==='DDT'?this.ddtFiles:this.requestFiles,prompt=document.getElementById('analysisPrompt').value;try{if(navigator.share&&(!navigator.canShare||navigator.canShare({files}))){await navigator.share({title:this.analysisKind==='DDT'?'Analisi DDT':'Analisi richiesta',text:prompt,files});this.toast('Condivisione aperta.')}else{await navigator.clipboard.writeText(prompt);this.toast('Istruzioni copiate. Allega i file a ChatGPT.')}}catch(e){if(e?.name!=='AbortError')throw e}}
   async copyAnalysisPrompt(){await navigator.clipboard.writeText(document.getElementById('analysisPrompt').value);this.toast('Istruzioni copiate.')}
-  importAnalysisJson(){let obj;try{obj=JSON.parse(document.getElementById('analysisJson').value)}catch{throw new Error('JSON non valido.')}if(this.analysisKind==='DDT'){if(!this.receiptDraft)throw new Error('Entrata non disponibile.');if(obj.supplier)this.receiptDraft.supplier=String(obj.supplier);if(obj.ddt_number)this.receiptDraft.ddtNumber=String(obj.ddt_number);if(obj.ddt_date)this.receiptDraft.ddtDate=String(obj.ddt_date);const lines=Array.isArray(obj.lines)?obj.lines:[];if(lines.length)this.receiptDraft.lines=lines.map(x=>this.newReceiptLine({article_base:x.article_base,size:x.size,state:x.state||'NUOVO',ddtQuantity:Number(x.quantity||0),checkedQuantity:0,pallet:x.pallet||'P01',note:x.note||''}));}else{if(!this.requestDraft)throw new Error('Richiesta non disponibile.');const lines=Array.isArray(obj.lines)?obj.lines:[];if(lines.length)this.requestDraft.lines=lines.map(x=>this.newRequestLine({article_base:x.article_base,size:x.size,quantity:x.quantity,marker:x.marker,note:x.note}));}document.getElementById('analysisDialog').close();this.renderView();this.toast('Dati importati. Controllali prima di confermare.')}
+  importAnalysisJson(){let obj;try{obj=JSON.parse(document.getElementById('analysisJson').value)}catch{throw new Error('JSON non valido.')}if(this.analysisKind==='DDT'){if(!this.receiptDraft)throw new Error('Entrata non disponibile.');if(obj.supplier)this.receiptDraft.supplier=String(obj.supplier);if(obj.ddt_number)this.receiptDraft.ddtNumber=String(obj.ddt_number);if(obj.ddt_date)this.receiptDraft.ddtDate=String(obj.ddt_date);const lines=Array.isArray(obj.lines)?obj.lines:[];if(lines.length){const groups=new Map();this.receiptDraft.lines=lines.map(x=>{const article=normalizeArticle(x.article_base),key=article||uid();if(!groups.has(key))groups.set(key,uid());return this.newReceiptLine({groupId:groups.get(key),article_base:article,size:x.size,state:x.state||'NUOVO',ddtQuantity:Number(x.quantity||0),checkedQuantity:0,pallet:x.pallet||'P01',note:x.note||''})})}}else{if(!this.requestDraft)throw new Error('Richiesta non disponibile.');const lines=Array.isArray(obj.lines)?obj.lines:[];if(lines.length)this.requestDraft.lines=lines.map(x=>this.newRequestLine({article_base:x.article_base,size:x.size,quantity:x.quantity,marker:x.marker,note:x.note}));}document.getElementById('analysisDialog').close();this.renderView();this.toast('Dati importati. Controllali prima di confermare.')}
   emptyPage(msg){return `<div class="empty">${esc(msg)}</div>`}
 
   action(action,el){
     const go=(name,params={})=>this.router.go(name,params);
-    const map={back:()=>this.router.back(),home:()=>this.router.home(),login:()=>{this.sounds?.click?.();this.openLogin()},'login-submit':()=>this.login(),logout:()=>{this.sounds?.click?.();this.logout()},'site-switch':()=>this.openSiteSwitcher(),'site-select':()=>this.selectSite(el.dataset.site),'site-choice-cancel':()=>this.cancelSiteChoice(),'toggle-pin':()=>{const p=document.getElementById('loginPin'),show=p.type==='password';p.type=show?'text':'password';const i=el.querySelector('i');if(i)i.className=`ph-duotone ph-${show?'eye-slash':'eye'}`;el.setAttribute('aria-label',show?'Nascondi PIN':'Mostra PIN');p.focus()},'view-desktop':()=>this.applyView('desktop'),'view-phone':()=>this.applyView('smartphone'),notifications:()=>this.openNotifications(),master:()=>go('master'),'master-view':()=>go('master'),'master-filter-reset':()=>this.resetMasterFilters(),'master-request-toggle':()=>this.toggleMasterRequestMode(),'master-request-item':()=>this.toggleMasterRequestItem(el.dataset.item),'master-request-locations':()=>this.toggleMasterRequestLocations(el.dataset.item,el),'master-request-review':()=>this.openMasterRequestReview(),'master-request-review-close':()=>document.getElementById('masterRequestDialog')?.close(),'master-request-remove':()=>this.removeMasterRequestItem(el.dataset.item),'master-request-qty-minus':()=>this.adjustMasterRequestQty(el.dataset.item,-1),'master-request-qty-plus':()=>this.adjustMasterRequestQty(el.dataset.item,1),'master-request-send':()=>this.sendMasterRequest(),'master-page-prev':()=>{this.masterView.page=Math.max(1,this.masterView.page-1);this.renderMasterViewerBody()},'master-page-next':()=>{this.masterView.page+=1;this.renderMasterViewerBody()},'master-edit-close':()=>this.closeMasterEdit(),'master-edit-save':()=>this.saveMasterEdit(),'master-import':()=>{if(!this.auth.can('MASTER_IMPORT'))throw new Error('Non hai il permesso per importare il Master.');document.getElementById('masterFile').click()},'master-export':async()=>{if(!this.auth.can('MASTER_EXPORT'))throw new Error('Non hai il permesso per esportare il Master.');const n=await this.excel.export();this.toast(`${n} esportato.`)},'legacy-migrate':()=>{if(!confirm('Migrare una COPIA dei dati REMOTO in NOVA? REMOTO non verrà modificato.'))return;this.excel.migrateLocalLegacy();this.toast('Copia REMOTO migrata in NOVA.');this.router.home()},receiving:()=>go('receiving'),'receipt-new':()=>this.openReceiptNew(),'receipts-pending':()=>go('receipts',{mode:'PENDING'}),'receipts-all':()=>go('receipts',{mode:'ALL'}),'receipt-line-add':()=>this.addReceiptLine(),'receipt-confirm':()=>this.confirmReceipt(),'ddt-camera':()=>document.getElementById('ddtCamera').click(),'ddt-file':()=>document.getElementById('ddtFile').click(),'ddt-analyze':()=>this.openAnalysis('DDT'),'request-camera':()=>document.getElementById('requestCamera').click(),'request-file':()=>document.getElementById('requestFile').click(),'request-analyze':()=>this.openAnalysis('REQUEST'),'analysis-share':()=>this.shareAnalysis(),'analysis-copy':()=>this.copyAnalysisPrompt(),'analysis-import':()=>this.importAnalysisJson(),stock:()=>{if(this.require('STOCK_VIEW'))go('stock')},'rectify-new':()=>{this.rectDraft=null;go('rectify',{key:''})},rectify:()=>{this.rectDraft=null;go('rectify',{key:''})},'rect-filter-toggle':()=>{this.rectFiltersOpen=!this.rectFiltersOpen;this.renderView()},'rect-change':()=>{this.rectDraft=null;this.renderView()},'rect-step-minus':()=>this.stepRect(-1),'rect-step-plus':()=>this.stepRect(1),'rect-cancel':()=>{this.rectDraft=null;this.router.back()},'rectify-save':()=>this.saveRectify(el),count:()=>{this.countDraft=this.countDraft||this.loadCountSession();go('count')},'count-load':()=>this.loadCount(),'count-finalize':()=>this.finalizeCount(),'count-apply':()=>this.applyCount(el),'count-abandon':()=>this.abandonCount(),issue:()=>go('issue'),'issue-confirm':()=>this.confirmIssue(),transfer:()=>go('transfer'),'transfer-confirm':()=>this.confirmTransfer(),requests:()=>go('requests-progress'),'request-new':()=>this.openRequestNew(),'request-line-add':()=>this.addRequestLine(),'request-save':()=>this.saveRequest(),'requests-progress':()=>go('requests-progress'),'requests-process':()=>go('requests-process'),registry:()=>go('registry'),'registry-movements':()=>{this.registryTab='MOVIMENTI';go('registry-list')},'registry-audit':()=>{this.registryTab='AUDIT';go('registry-list')},'registry-export':async()=>{const n=await this.excel.exportRegistry();this.toast(`${n} esportato.`)},admin:()=>go('admin'),'admin-operators':()=>go('admin-operators'),'admin-operator-new':()=>go('admin-operator',{id:''}),'admin-sites':()=>go('admin-sites'),'admin-site-new':()=>go('admin-site',{id:''}),'admin-roles':()=>go('admin-roles'),'admin-pin-generate':()=>this.generateAdminPin(),'admin-pin-dismiss':()=>{this.adminGeneratedPin='';this.renderView()},'activity-today':()=>{this.activityDate=localDateInput();this.renderView()},'activity-date-open':()=>{const input=document.getElementById(el.dataset.target);if(!input)return;try{input.focus({preventScroll:true})}catch{input.focus?.()}if(typeof input.showPicker==='function'){try{input.showPicker();return}catch{}}input.click?.()},'registry-filter-toggle':()=>document.getElementById('registryFilters')?.classList.toggle('hidden')};
+    const map={back:()=>this.router.back(),home:()=>this.router.home(),login:()=>{this.sounds?.click?.();this.openLogin()},'login-submit':()=>this.login(),logout:()=>{this.sounds?.click?.();this.logout()},'site-switch':()=>this.openSiteSwitcher(),'site-select':()=>this.selectSite(el.dataset.site),'site-choice-cancel':()=>this.cancelSiteChoice(),'toggle-pin':()=>{const p=document.getElementById('loginPin'),show=p.type==='password';p.type=show?'text':'password';const i=el.querySelector('i');if(i)i.className=`ph-duotone ph-${show?'eye-slash':'eye'}`;el.setAttribute('aria-label',show?'Nascondi PIN':'Mostra PIN');p.focus()},'view-desktop':()=>this.applyView('desktop'),'view-phone':()=>this.applyView('smartphone'),notifications:()=>this.openNotifications(),master:()=>go('master'),'master-view':()=>go('master'),'master-filter-reset':()=>this.resetMasterFilters(),'master-request-toggle':()=>this.toggleMasterRequestMode(),'master-request-item':()=>this.toggleMasterRequestItem(el.dataset.item),'master-request-locations':()=>this.toggleMasterRequestLocations(el.dataset.item,el),'master-request-review':()=>this.openMasterRequestReview(),'master-request-review-close':()=>document.getElementById('masterRequestDialog')?.close(),'master-request-remove':()=>this.removeMasterRequestItem(el.dataset.item),'master-request-qty-minus':()=>this.adjustMasterRequestQty(el.dataset.item,-1),'master-request-qty-plus':()=>this.adjustMasterRequestQty(el.dataset.item,1),'master-request-send':()=>this.sendMasterRequest(),'master-page-prev':()=>{this.masterView.page=Math.max(1,this.masterView.page-1);this.renderMasterViewerBody()},'master-page-next':()=>{this.masterView.page+=1;this.renderMasterViewerBody()},'master-edit-close':()=>this.closeMasterEdit(),'master-edit-save':()=>this.saveMasterEdit(),'master-import':()=>{if(!this.auth.can('MASTER_IMPORT'))throw new Error('Non hai il permesso per importare il Master.');document.getElementById('masterFile').click()},'master-export':async()=>{if(!this.auth.can('MASTER_EXPORT'))throw new Error('Non hai il permesso per esportare il Master.');const n=await this.excel.export();this.toast(`${n} esportato.`)},'legacy-migrate':()=>{if(!confirm('Migrare una COPIA dei dati REMOTO in NOVA? REMOTO non verrà modificato.'))return;this.excel.migrateLocalLegacy();this.toast('Copia REMOTO migrata in NOVA.');this.router.home()},receiving:()=>go('receiving'),'receipt-new':()=>this.openReceiptNew(),'receipts-pending':()=>go('receipts',{mode:'PENDING'}),'receipts-all':()=>go('receipts',{mode:'ALL'}),'receipt-line-add':()=>this.addReceiptLine(),'receipt-article-add':()=>this.addReceiptArticle(),'receipt-confirm':()=>this.confirmReceipt(),'ddt-camera':()=>document.getElementById('ddtCamera').click(),'ddt-file':()=>document.getElementById('ddtFile').click(),'ddt-analyze':()=>this.openAnalysis('DDT'),'request-camera':()=>document.getElementById('requestCamera').click(),'request-file':()=>document.getElementById('requestFile').click(),'request-analyze':()=>this.openAnalysis('REQUEST'),'analysis-share':()=>this.shareAnalysis(),'analysis-copy':()=>this.copyAnalysisPrompt(),'analysis-import':()=>this.importAnalysisJson(),stock:()=>{if(this.require('STOCK_VIEW'))go('stock')},'rectify-new':()=>{this.rectDraft=null;go('rectify',{key:''})},rectify:()=>{this.rectDraft=null;go('rectify',{key:''})},'rect-filter-toggle':()=>{this.rectFiltersOpen=!this.rectFiltersOpen;this.renderView()},'rect-change':()=>{this.rectDraft=null;this.renderView()},'rect-step-minus':()=>this.stepRect(-1),'rect-step-plus':()=>this.stepRect(1),'rect-cancel':()=>{this.rectDraft=null;this.router.back()},'rectify-save':()=>this.saveRectify(el),count:()=>{this.countDraft=this.countDraft||this.loadCountSession();go('count')},'count-load':()=>this.loadCount(),'count-finalize':()=>this.finalizeCount(),'count-apply':()=>this.applyCount(el),'count-abandon':()=>this.abandonCount(),issue:()=>go('issue'),'issue-confirm':()=>this.confirmIssue(),transfer:()=>go('transfer'),'transfer-confirm':()=>this.confirmTransfer(),requests:()=>go('requests-progress'),'request-new':()=>this.openRequestNew(),'request-line-add':()=>this.addRequestLine(),'request-save':()=>this.saveRequest(),'requests-progress':()=>go('requests-progress'),'requests-process':()=>go('requests-process'),registry:()=>go('registry'),'registry-movements':()=>{this.registryTab='MOVIMENTI';go('registry-list')},'registry-audit':()=>{this.registryTab='AUDIT';go('registry-list')},'registry-export':async()=>{const n=await this.excel.exportRegistry();this.toast(`${n} esportato.`)},admin:()=>go('admin'),'admin-operators':()=>go('admin-operators'),'admin-operator-new':()=>go('admin-operator',{id:''}),'admin-sites':()=>go('admin-sites'),'admin-site-new':()=>go('admin-site',{id:''}),'admin-roles':()=>go('admin-roles'),'admin-pin-generate':()=>this.generateAdminPin(),'admin-pin-dismiss':()=>{this.adminGeneratedPin='';this.renderView()},'activity-today':()=>{this.activityDate=localDateInput();this.renderView()},'activity-date-open':()=>{const input=document.getElementById(el.dataset.target);if(!input)return;try{input.focus({preventScroll:true})}catch{input.focus?.()}if(typeof input.showPicker==='function'){try{input.showPicker();return}catch{}}input.click?.()},'registry-filter-toggle':()=>document.getElementById('registryFilters')?.classList.toggle('hidden')};
     if(map[action])return map[action]();
     if(action==='request-delete')return this.openRequestDelete(el.dataset.id);if(action==='request-delete-close')return this.closeRequestDelete();if(action==='request-delete-confirm')return this.confirmRequestDelete();if(action==='request-delete-toggle-pin')return this.toggleRequestDeletePin();
-    if(action==='master-edit-row')return this.openMasterEdit(el.dataset.key);if(action==='admin-operator-edit')return go('admin-operator',{id:el.dataset.id});if(action==='admin-operator-save')return this.saveAdminOperator(el.dataset.id||'');if(action==='admin-site-edit')return go('admin-site',{id:el.dataset.id});if(action==='admin-site-save')return this.saveAdminSite(el.dataset.id||'');if(action==='stock-suggest')return this.applyStockSuggestion(el);if(action==='receipt-line-remove')return this.removeReceiptLine(el.dataset.line);if(action==='partial-add')return this.addPartial(el.dataset.line);if(action==='partial-undo')return this.undoPartial(el.dataset.line);if(action==='partial-clear')return this.clearPartial(el.dataset.line);if(action==='receipt-open')return go('receipt-detail',{id:el.dataset.id});if(action==='putaway-open')return go('putaway',{receipt:el.dataset.receipt,line:el.dataset.line});if(action==='putaway-confirm')return this.confirmPutAway(el.dataset.receipt,el.dataset.line);if(action==='rectify-open'){this.rectDraft=null;return go('rectify',{key:el.dataset.key})}if(action==='rect-select')return this.selectRect(el.dataset.key);if(action==='count-confirm-row')return this.confirmCountRow(el.dataset.dom);if(action==='count-edit')return this.editCountRow(el.dataset.dom);if(action==='count-zero')return this.countZero(el.dataset.dom);if(action==='count-extra-add')return this.addCountExtra();if(action==='count-extra-remove')return this.removeCountExtra(el.dataset.dom);if(action==='request-line-remove')return this.removeRequestLine(el.dataset.line);if(action==='request-open')return go('request-detail',{id:el.dataset.id});if(action==='request-pick')return go('request-pick',{id:el.dataset.id});if(action==='request-pick-save')return this.saveRequestPick(el.dataset.id);if(action==='ledger-cancel')return this.cancelLedger(el.dataset.id);if(action==='notif-read'){this.domain.notifications.markRead(el.dataset.id);this.store.save('notification:read');document.getElementById('notificationDialog').close();if(el.dataset.entity==='RECEIPT')go('receipt-detail',{id:el.dataset.entityId});else if(el.dataset.entity==='REQUEST')go('request-detail',{id:el.dataset.entityId});return}
+    if(action==='receipt-article-remove')return this.removeReceiptArticle(el.dataset.group);if(action==='receipt-variant-add')return this.addReceiptVariant(el.dataset.group);if(action==='receipt-variant-remove')return this.removeReceiptVariant(el.dataset.line);if(action==='master-edit-row')return this.openMasterEdit(el.dataset.key);if(action==='admin-operator-edit')return go('admin-operator',{id:el.dataset.id});if(action==='admin-operator-save')return this.saveAdminOperator(el.dataset.id||'');if(action==='admin-site-edit')return go('admin-site',{id:el.dataset.id});if(action==='admin-site-save')return this.saveAdminSite(el.dataset.id||'');if(action==='stock-suggest')return this.applyStockSuggestion(el);if(action==='receipt-line-remove')return this.removeReceiptLine(el.dataset.line);if(action==='partial-add')return this.addPartial(el.dataset.line);if(action==='partial-undo')return this.undoPartial(el.dataset.line);if(action==='partial-clear')return this.clearPartial(el.dataset.line);if(action==='receipt-open')return go('receipt-detail',{id:el.dataset.id});if(action==='putaway-open')return go('putaway',{receipt:el.dataset.receipt,line:el.dataset.line});if(action==='putaway-confirm')return this.confirmPutAway(el.dataset.receipt,el.dataset.line);if(action==='rectify-open'){this.rectDraft=null;return go('rectify',{key:el.dataset.key})}if(action==='rect-select')return this.selectRect(el.dataset.key);if(action==='count-confirm-row')return this.confirmCountRow(el.dataset.dom);if(action==='count-edit')return this.editCountRow(el.dataset.dom);if(action==='count-zero')return this.countZero(el.dataset.dom);if(action==='count-extra-add')return this.addCountExtra();if(action==='count-extra-remove')return this.removeCountExtra(el.dataset.dom);if(action==='request-line-remove')return this.removeRequestLine(el.dataset.line);if(action==='request-open')return go('request-detail',{id:el.dataset.id});if(action==='request-pick')return go('request-pick',{id:el.dataset.id});if(action==='request-pick-save')return this.saveRequestPick(el.dataset.id);if(action==='ledger-cancel')return this.cancelLedger(el.dataset.id);if(action==='notif-read'){this.domain.notifications.markRead(el.dataset.id);this.store.save('notification:read');document.getElementById('notificationDialog').close();if(el.dataset.entity==='RECEIPT')go('receipt-detail',{id:el.dataset.entityId});else if(el.dataset.entity==='REQUEST')go('request-detail',{id:el.dataset.entityId});return}
   }
 }
 
@@ -12178,6 +12293,6 @@ try{globalThis.__NOVA_LEGACY_AVAILABLE=!!localStorage.getItem(CONFIG.legacyStora
 const switchSite=async siteId=>{await ui.selectSite(siteId);return auth.site()};
 globalThis.NOVA=Object.freeze({version:CONFIG.appVersion,schema:CONFIG.version,identityVersion:CONFIG.identityVersion,store,auth,router,domain,excel,ui,sounds,sites:SITES,operators:OPERATORS,roles:ROLE_DEFS,saveIdentityRegistry,capabilities:Object.freeze({operational:ALL_CAPS,master:MASTER_CAPS,administration:ADMIN_CAPS,globalAdmin:GLOBAL_ADMIN_CAPS}),identityValidation:IDENTITY_VALIDATION,switchSite});
 ui.render();</script>
-<!-- SOMA_BUILD:R31.22-20260924 -->
+<!-- SOMA_BUILD:R31.23-20260924 -->
 </body>
 </html>
