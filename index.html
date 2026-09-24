@@ -1,13 +1,13 @@
 <!doctype html>
 <html lang="it">
 <head>
-<meta name="soma-build" content="R31.15-20260924">
+<meta name="soma-build" content="R31.16-20260924">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
 <script id="soma-build-freshness">
 (() => {
-  const CURRENT_BUILD='R31.15-20260924',CHECK_KEY='soma:last-build-refresh';
+  const CURRENT_BUILD='R31.16-20260924',CHECK_KEY='soma:last-build-refresh';
   globalThis.SOMA_BUILD=CURRENT_BUILD;
   const check=async()=>{
     try{
@@ -9173,6 +9173,7 @@ body.desktop-mode .activity-desktop .activity-kpi.wide{grid-column:auto!importan
 .request-delete-pin-wrap>span>.ph,.request-delete-pin-wrap>button>.ph{font-size:19px!important}
 .request-delete-pin-wrap input{width:100%!important;height:52px!important;border:0!important;outline:0!important;background:transparent!important;color:#213f63!important;text-align:center!important;font-size:22px!important;font-weight:950!important;letter-spacing:.25em!important;padding-left:.25em!important}
 .request-delete-error{display:flex!important;align-items:center!important;gap:8px!important;margin:11px 20px 0!important;font-size:10px!important}
+.request-delete-error.hidden{display:none!important}
 .request-delete-error>.ph{flex:0 0 auto!important;font-size:18px!important}
 .request-delete-actions{display:grid!important;grid-template-columns:1fr 1.2fr!important;gap:9px!important;padding:17px 20px 20px!important}
 .request-delete-cancel,.request-delete-confirm{min-height:50px!important;border-radius:15px!important;font-size:10px!important;font-weight:950!important;letter-spacing:.035em!important}
@@ -10459,6 +10460,6 @@ try{globalThis.__NOVA_LEGACY_AVAILABLE=!!localStorage.getItem(CONFIG.legacyStora
 const switchSite=async siteId=>{await ui.selectSite(siteId);return auth.site()};
 globalThis.NOVA=Object.freeze({version:CONFIG.appVersion,schema:CONFIG.version,identityVersion:CONFIG.identityVersion,store,auth,router,domain,excel,ui,sounds,sites:SITES,operators:OPERATORS,roles:ROLE_DEFS,saveIdentityRegistry,capabilities:Object.freeze({operational:ALL_CAPS,master:MASTER_CAPS,administration:ADMIN_CAPS,globalAdmin:GLOBAL_ADMIN_CAPS}),identityValidation:IDENTITY_VALIDATION,switchSite});
 ui.render();</script>
-<!-- SOMA_BUILD:R31.15-20260924 -->
+<!-- SOMA_BUILD:R31.16-20260924 -->
 </body>
 </html>
