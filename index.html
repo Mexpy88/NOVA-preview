@@ -1,13 +1,13 @@
 <!doctype html>
 <html lang="it">
 <head>
-<meta name="soma-build" content="R31.24-20260924">
+<meta name="soma-build" content="R31.25-20260924">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
 <script id="soma-build-freshness">
 (() => {
-  const CURRENT_BUILD='R31.24-20260924',CHECK_KEY='soma:last-build-refresh';
+  const CURRENT_BUILD='R31.25-20260924',CHECK_KEY='soma:last-build-refresh';
   globalThis.SOMA_BUILD=CURRENT_BUILD;
   const check=async()=>{
     try{
@@ -10890,6 +10890,569 @@ body.desktop-mode .app-view:has(.receipt-new-shell){width:100%!important;max-wid
 .receiving-card .receiving-metrics{grid-template-columns:repeat(4,minmax(0,1fr))!important}
 @media(max-width:700px){.receiving-card .receiving-metrics{grid-template-columns:1fr 1fr!important}}
 </style>
+
+<style id="r31-25-variant-card-redesign">
+/* ===== R31.25 · RECEIPT VARIANTS — HIERARCHY / ASSISTED COUNT / ALIGNMENT ===== */
+
+/* Two distinct top counters instead of stacked numbers */
+.receipt-step-counts{
+  display:flex!important;
+  align-items:stretch!important;
+  gap:9px!important;
+}
+.receipt-step-counts>span{
+  min-width:104px!important;
+  display:flex!important;
+  flex-direction:column!important;
+  justify-content:center!important;
+  align-items:flex-start!important;
+  padding:10px 13px!important;
+  border:1px solid #d9e6df!important;
+  border-radius:14px!important;
+  background:#f4faf7!important;
+}
+.receipt-step-counts b{
+  color:#1fa873!important;
+  font-size:30px!important;
+  line-height:1!important;
+  font-weight:950!important;
+}
+.receipt-step-counts small{
+  margin-top:5px!important;
+  color:#648173!important;
+  font-size:9px!important;
+  line-height:1!important;
+  font-weight:950!important;
+  letter-spacing:.08em!important;
+}
+
+/* Article hierarchy */
+.receipt-article-card-v2{
+  overflow:hidden!important;
+}
+.receipt-article-head-v2{
+  padding-bottom:19px!important;
+}
+.receipt-article-head-v2 .receipt-article-heading h3{
+  font-size:27px!important;
+}
+.receipt-article-common-v2{
+  padding-top:20px!important;
+  padding-bottom:20px!important;
+}
+
+/* Clear visual transition from article-level data to variant-level data */
+.receipt-variants-zone{
+  margin:0 20px 18px!important;
+  border:1px solid #dce7ee!important;
+  border-radius:20px!important;
+  background:#f8fbfc!important;
+  overflow:hidden!important;
+}
+.receipt-variants-zone-head{
+  display:flex!important;
+  align-items:center!important;
+  justify-content:space-between!important;
+  gap:18px!important;
+  padding:17px 18px!important;
+  border-bottom:1px solid #dfe8ee!important;
+  background:#f1f7fa!important;
+}
+.receipt-variants-zone-title{
+  display:flex!important;
+  align-items:center!important;
+  gap:12px!important;
+  min-width:0!important;
+}
+.receipt-variants-zone-title>span{
+  width:44px!important;
+  height:44px!important;
+  flex:0 0 44px!important;
+  display:grid!important;
+  place-items:center!important;
+  border-radius:13px!important;
+  background:#fff!important;
+  color:#3c739d!important;
+  box-shadow:0 3px 10px rgba(30,62,86,.05)!important;
+}
+.receipt-variants-zone-title>span>.ph{font-size:22px!important}
+.receipt-variants-zone-title small{
+  display:block!important;
+  color:#758b9a!important;
+  font-size:9px!important;
+  font-weight:950!important;
+  letter-spacing:.09em!important;
+}
+.receipt-variants-zone-title h4{
+  margin:3px 0 0!important;
+  color:#244363!important;
+  font-size:20px!important;
+  line-height:1.05!important;
+  font-weight:950!important;
+}
+.receipt-variants-zone-title p{
+  margin:4px 0 0!important;
+  color:#788d9d!important;
+  font-size:10.5px!important;
+  font-weight:700!important;
+}
+.receipt-variants-zone-head>em{
+  min-width:78px!important;
+  display:flex!important;
+  flex-direction:column!important;
+  align-items:flex-end!important;
+  color:#3f7197!important;
+  font-style:normal!important;
+}
+.receipt-variants-zone-head>em b{
+  font-size:28px!important;
+  line-height:1!important;
+  font-weight:950!important;
+}
+.receipt-variants-zone-head>em span{
+  margin-top:4px!important;
+  font-size:8.5px!important;
+  font-weight:950!important;
+  letter-spacing:.08em!important;
+}
+
+/* Variant cards */
+.receipt-variant-list-v2{
+  display:grid!important;
+  gap:13px!important;
+  padding:15px!important;
+}
+.receipt-variant-card{
+  --vc:#7892a6;
+  --vc-soft:#eef3f6;
+  border:1px solid #d9e4eb!important;
+  border-radius:18px!important;
+  background:#fff!important;
+  box-shadow:0 5px 16px rgba(30,62,86,.035)!important;
+  overflow:hidden!important;
+}
+.receipt-variant-card.warn{--vc:#b98522;--vc-soft:#fff7e8;border-color:#ead19a!important}
+.receipt-variant-card.ok{--vc:#1fa873;--vc-soft:#edf8f3;border-color:#c6e3d5!important}
+
+.receipt-variant-card-head{
+  display:flex!important;
+  align-items:center!important;
+  justify-content:space-between!important;
+  gap:14px!important;
+  padding:13px 15px!important;
+  border-bottom:1px solid #e3eaef!important;
+  background:linear-gradient(180deg,#fff,#fbfcfd)!important;
+}
+.receipt-variant-card-title{
+  display:flex!important;
+  align-items:center!important;
+  gap:11px!important;
+  min-width:0!important;
+}
+.receipt-variant-card-title>span{
+  width:38px!important;
+  height:38px!important;
+  flex:0 0 38px!important;
+  display:grid!important;
+  place-items:center!important;
+  border-radius:11px!important;
+  background:var(--vc-soft)!important;
+  color:var(--vc)!important;
+  font-size:10px!important;
+  font-weight:950!important;
+}
+.receipt-variant-card-title small{
+  display:block!important;
+  color:#8596a4!important;
+  font-size:8px!important;
+  font-weight:950!important;
+  letter-spacing:.075em!important;
+}
+.receipt-variant-card-title h5{
+  margin:2px 0 0!important;
+  color:#274866!important;
+  font-size:16px!important;
+  line-height:1.1!important;
+  font-weight:950!important;
+}
+.receipt-variant-card-actions{
+  display:flex!important;
+  align-items:center!important;
+  gap:7px!important;
+}
+
+/* Three balanced operational panels */
+.receipt-variant-card-body{
+  display:grid!important;
+  grid-template-columns:minmax(360px,.92fr) minmax(430px,1.18fr) minmax(300px,.8fr)!important;
+  gap:12px!important;
+  padding:14px!important;
+  align-items:stretch!important;
+}
+.receipt-variant-quantities,
+.receipt-assisted-count,
+.receipt-variant-context{
+  min-width:0!important;
+  display:flex!important;
+  flex-direction:column!important;
+  padding:14px!important;
+  border:1px solid #dfe7ed!important;
+  border-radius:15px!important;
+  background:#f8fafb!important;
+}
+.receipt-variant-quantities>header,
+.receipt-assisted-count>header,
+.receipt-variant-context>header{
+  display:flex!important;
+  align-items:flex-start!important;
+  gap:9px!important;
+  min-height:40px!important;
+  margin-bottom:11px!important;
+}
+.receipt-variant-quantities>header>span,
+.receipt-assisted-count>header>span,
+.receipt-variant-context>header>span{
+  width:38px!important;
+  height:38px!important;
+  flex:0 0 38px!important;
+  display:grid!important;
+  place-items:center!important;
+  border-radius:11px!important;
+  background:#eaf2f7!important;
+  color:#527795!important;
+}
+.receipt-variant-quantities>header>span>.ph,
+.receipt-assisted-count>header>span>.ph,
+.receipt-variant-context>header>span>.ph{font-size:20px!important}
+.receipt-variant-quantities header small,
+.receipt-assisted-count header small,
+.receipt-variant-context header small{
+  display:block!important;
+  color:#8496a4!important;
+  font-size:7.5px!important;
+  font-weight:950!important;
+  letter-spacing:.075em!important;
+}
+.receipt-variant-quantities header b,
+.receipt-assisted-count header b,
+.receipt-variant-context header b{
+  display:block!important;
+  margin-top:2px!important;
+  color:#34536d!important;
+  font-size:12px!important;
+}
+.receipt-assisted-count header p{
+  margin:3px 0 0!important;
+  color:#7a8e9d!important;
+  font-size:9px!important;
+  line-height:1.35!important;
+  font-weight:700!important;
+}
+
+/* Quantities align perfectly */
+.receipt-variant-quantity-grid{
+  display:grid!important;
+  grid-template-columns:1fr .72fr .82fr!important;
+  gap:8px!important;
+  margin-top:auto!important;
+}
+.receipt-variant-quantity-grid label{
+  padding:9px!important;
+  border:1px solid #e0e8ed!important;
+  border-radius:12px!important;
+  background:#fff!important;
+}
+.receipt-variant-quantity-grid label>span{
+  font-size:9.5px!important;
+}
+.receipt-variant-quantity-grid .field{
+  min-height:50px!important;
+  font-size:20px!important;
+  font-weight:900!important;
+}
+.receipt-variant-quantity-grid .receipt-variant-size .field{
+  font-size:21px!important;
+}
+.receipt-variant-quantity-grid .receipt-variant-checked{
+  border-color:#c5dfd1!important;
+  background:#fbfefc!important;
+}
+
+/* Assisted count is visually a tool, not another form field */
+.receipt-assisted-count{
+  border-color:#cfdfea!important;
+  background:#f4f9fc!important;
+}
+.receipt-assisted-count>header>span{
+  background:#e4f0f8!important;
+  color:#3f7ba9!important;
+}
+.receipt-assisted-entry{
+  display:grid!important;
+  grid-template-columns:minmax(0,1fr) 122px!important;
+  gap:8px!important;
+}
+.receipt-assisted-entry .field{
+  min-height:52px!important;
+  font-size:18px!important;
+  background:#fff!important;
+}
+.receipt-assisted-entry button{
+  display:flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  gap:6px!important;
+  min-height:52px!important;
+  border-radius:13px!important;
+  background:#3f80ce!important;
+  color:#fff!important;
+  font-size:9.5px!important;
+  font-weight:950!important;
+}
+.receipt-assisted-entry button>.ph{font-size:17px!important}
+.receipt-assisted-empty{
+  display:flex!important;
+  align-items:flex-start!important;
+  gap:7px!important;
+  margin-top:8px!important;
+  padding:9px 10px!important;
+  border:1px dashed #cbd9e4!important;
+  border-radius:10px!important;
+  background:#fff!important;
+  color:#6e8495!important;
+  font-size:9px!important;
+  line-height:1.4!important;
+  font-weight:700!important;
+}
+.receipt-assisted-empty>.ph{font-size:15px!important;flex:0 0 auto!important;margin-top:1px!important}
+.receipt-assisted-result{
+  display:grid!important;
+  grid-template-columns:minmax(0,1fr) auto!important;
+  grid-template-areas:"chips total" "actions total"!important;
+  gap:7px 10px!important;
+  margin-top:8px!important;
+  padding:9px!important;
+  border:1px solid #d6e3ec!important;
+  border-radius:11px!important;
+  background:#fff!important;
+}
+.receipt-assisted-chips{
+  grid-area:chips!important;
+  display:flex!important;
+  gap:5px!important;
+  flex-wrap:wrap!important;
+}
+.receipt-assisted-chips span{
+  min-width:30px!important;
+  padding:5px 7px!important;
+  border-radius:8px!important;
+  background:#eaf2f8!important;
+  color:#3c6686!important;
+  text-align:center!important;
+  font-size:9px!important;
+  font-weight:950!important;
+}
+.receipt-assisted-total{
+  grid-area:total!important;
+  min-width:104px!important;
+  display:flex!important;
+  flex-direction:column!important;
+  justify-content:center!important;
+  align-items:flex-end!important;
+  padding-left:10px!important;
+  border-left:1px solid #e3eaf0!important;
+}
+.receipt-assisted-total small{
+  color:#8395a3!important;
+  font-size:7px!important;
+  font-weight:950!important;
+  letter-spacing:.07em!important;
+}
+.receipt-assisted-total strong{
+  margin-top:3px!important;
+  color:#2f658f!important;
+  font-size:27px!important;
+  line-height:1!important;
+  font-weight:950!important;
+}
+.receipt-assisted-total span{
+  margin-top:2px!important;
+  color:#8798a5!important;
+  font-size:8px!important;
+  font-weight:800!important;
+}
+.receipt-assisted-actions{
+  grid-area:actions!important;
+  display:flex!important;
+  gap:6px!important;
+}
+.receipt-assisted-actions button{
+  display:inline-flex!important;
+  align-items:center!important;
+  gap:5px!important;
+  padding:6px 8px!important;
+  border-radius:8px!important;
+  background:#edf2f5!important;
+  color:#5d7689!important;
+  font-size:8px!important;
+  font-weight:900!important;
+}
+.receipt-assisted-actions button>.ph{font-size:13px!important}
+
+/* Position/context panel */
+.receipt-variant-context{
+  background:#f7faf8!important;
+}
+.receipt-variant-context>header>span{
+  background:#e9f6ef!important;
+  color:#1fa873!important;
+}
+.receipt-variant-position-card{
+  display:grid!important;
+  grid-template-columns:42px minmax(0,1fr)!important;
+  gap:10px!important;
+  align-items:center!important;
+  min-height:94px!important;
+  margin-top:auto!important;
+  padding:12px!important;
+  border:1px solid #d8e7df!important;
+  border-radius:13px!important;
+  background:#fff!important;
+  color:#667e70!important;
+}
+.receipt-variant-position-card>span{
+  width:42px!important;
+  height:42px!important;
+  display:grid!important;
+  place-items:center!important;
+  border-radius:12px!important;
+  background:#eef8f3!important;
+  color:#1fa873!important;
+}
+.receipt-variant-position-card>span>.ph{font-size:21px!important}
+.receipt-variant-position-card small{
+  display:block!important;
+  color:#799080!important;
+  font-size:7.5px!important;
+  font-weight:950!important;
+  letter-spacing:.07em!important;
+}
+.receipt-variant-position-card b{
+  display:block!important;
+  margin-top:3px!important;
+  color:#476858!important;
+  font-size:11px!important;
+}
+.receipt-variant-position-card p{
+  margin:3px 0 0!important;
+  color:#71877a!important;
+  font-size:8.5px!important;
+  line-height:1.3!important;
+  font-weight:700!important;
+}
+.receipt-variant-position-card.empty{
+  color:#6e8391!important;
+  border-color:#dce6ec!important;
+}
+.receipt-variant-position-card.empty>span{
+  background:#eef3f6!important;
+  color:#6e8a9c!important;
+}
+
+/* Clear success / discrepancy feedback */
+.receipt-variant-match,
+.receipt-variant-warning{
+  display:flex!important;
+  align-items:center!important;
+  gap:7px!important;
+  margin-top:8px!important;
+  padding:8px 9px!important;
+  border-radius:9px!important;
+  font-size:9px!important;
+  font-weight:800!important;
+}
+.receipt-variant-match{background:#edf8f3!important;color:#287356!important}
+.receipt-variant-warning{background:#fff4dc!important;color:#865f13!important}
+.receipt-variant-match>.ph,.receipt-variant-warning>.ph{font-size:15px!important}
+
+/* Add-size is clearly inside the variants section */
+.receipt-add-variant-v2{
+  width:calc(100% - 30px)!important;
+  min-height:62px!important;
+  display:grid!important;
+  grid-template-columns:32px minmax(0,1fr) 20px!important;
+  gap:9px!important;
+  align-items:center!important;
+  justify-content:initial!important;
+  margin:0 15px 15px!important;
+  padding:9px 12px!important;
+  border-color:#8ebda9!important;
+  border-radius:14px!important;
+  text-align:left!important;
+}
+.receipt-add-variant-v2>.ph:first-child{font-size:22px!important}
+.receipt-add-variant-v2>.ph:last-child{font-size:16px!important}
+.receipt-add-variant-v2 b{font-size:11.5px!important}
+.receipt-add-variant-v2 small{font-size:9px!important}
+
+/* Article notes visually return to article level */
+.receipt-article-note-v2{
+  padding:0 20px 20px!important;
+}
+
+/* Desktop enlargement for real warehouse screens */
+@media(min-width:1500px){
+  body.desktop-mode .receipt-step-counts>span{min-width:118px!important;padding:11px 15px!important}
+  body.desktop-mode .receipt-step-counts b{font-size:34px!important}
+  body.desktop-mode .receipt-step-counts small{font-size:10px!important}
+
+  body.desktop-mode .receipt-variants-zone-title h4{font-size:23px!important}
+  body.desktop-mode .receipt-variants-zone-title p{font-size:12px!important}
+  body.desktop-mode .receipt-variant-card-title h5{font-size:19px!important}
+  body.desktop-mode .receipt-variant-card-body{grid-template-columns:minmax(400px,.9fr) minmax(500px,1.2fr) minmax(330px,.8fr)!important}
+  body.desktop-mode .receipt-variant-quantities,
+  body.desktop-mode .receipt-assisted-count,
+  body.desktop-mode .receipt-variant-context{padding:16px!important}
+  body.desktop-mode .receipt-variant-quantities header b,
+  body.desktop-mode .receipt-assisted-count header b,
+  body.desktop-mode .receipt-variant-context header b{font-size:14px!important}
+  body.desktop-mode .receipt-assisted-count header p{font-size:10.5px!important}
+  body.desktop-mode .receipt-variant-quantity-grid label>span{font-size:11px!important}
+  body.desktop-mode .receipt-variant-quantity-grid .field{min-height:56px!important;font-size:23px!important}
+  body.desktop-mode .receipt-assisted-entry .field{min-height:56px!important;font-size:20px!important}
+  body.desktop-mode .receipt-assisted-entry button{min-height:56px!important;font-size:10.5px!important}
+  body.desktop-mode .receipt-assisted-empty{font-size:10.5px!important}
+  body.desktop-mode .receipt-variant-position-card b{font-size:13px!important}
+  body.desktop-mode .receipt-variant-position-card p{font-size:10px!important}
+}
+
+@media(max-width:1200px){
+  .receipt-variant-card-body{
+    grid-template-columns:1fr 1fr!important;
+  }
+  .receipt-variant-context{
+    grid-column:1/-1!important;
+  }
+}
+@media(max-width:760px){
+  .receipt-step-counts{
+    width:100%!important;
+    grid-column:1/-1!important;
+    justify-content:flex-start!important;
+  }
+  .receipt-step-counts>span{min-width:92px!important}
+  .receipt-variants-zone{margin:0 13px 13px!important}
+  .receipt-variants-zone-head{align-items:flex-start!important;padding:13px!important}
+  .receipt-variants-zone-title p{display:none!important}
+  .receipt-variant-list-v2{padding:11px!important}
+  .receipt-variant-card-body{grid-template-columns:1fr!important;padding:11px!important}
+  .receipt-variant-context{grid-column:auto!important}
+  .receipt-variant-quantity-grid{grid-template-columns:1fr 1fr!important}
+  .receipt-variant-size{grid-column:1/-1!important}
+  .receipt-assisted-actions button span{display:none!important}
+  .receipt-add-variant-v2{width:calc(100% - 22px)!important;margin:0 11px 11px!important}
+}
+</style>
 </head>
 <body>
 <header id="topbar" class="topbar"></header>
@@ -12000,7 +12563,7 @@ class UI{
         <header class="receipt-step-head">
           <span class="receipt-step-number">2</span><span class="receipt-step-icon">${phRegular('stack')}</span>
           <div><small>CONTROLLO FISICO</small><h2>Articoli e taglie ricevute</h2><p>Inserisci il codice una sola volta e aggiungi tutte le taglie presenti sul DDT.</p></div>
-          <em class="receipt-step-count receipt-step-dual-count"><b data-receipt-summary="articles">${x.articles}</b><span>ARTICOLI</span><strong data-receipt-summary="variants">${x.variants}</strong><small>TAGLIE</small></em>
+          <div class="receipt-step-counts"><span><b data-receipt-summary="articles">${x.articles}</b><small>ARTICOLI</small></span><span><b data-receipt-summary="variants">${x.variants}</b><small>TAGLIE</small></span></div>
         </header>
         <div class="receipt-article-stack">${groups.map((g,i)=>this.receiptArticleForm(g,i)).join('')}</div>
         <button class="receipt-add-article-v2" data-action="receipt-article-add">${phRegular('plus-circle')}<span><b>Aggiungi articolo</b><small>Crea una nuova card per un altro codice articolo</small></span>${phRegular('arrow-right')}</button>
@@ -12025,46 +12588,65 @@ class UI{
   }
   receiptArticleForm(group,index){
     const lines=group.lines||[],base=lines[0]||this.newReceiptLine({groupId:group.id}),ddt=lines.reduce((n,l)=>n+Number(l.ddtQuantity||0),0),checked=lines.reduce((n,l)=>n+Number(l.checkedQuantity||0),0),mismatches=lines.filter(l=>Number(l.ddtQuantity||0)!==Number(l.checkedQuantity||0)).length,status=checked<=0?'DA CONTROLLARE':mismatches?'SCOSTAMENTO':'COERENTE',statusClass=checked<=0?'idle':mismatches?'warn':'ok',articleCount=this.receiptGroups().length;
-    return `<article class="receipt-article-card ${statusClass}">
-      <header class="receipt-article-head">
+    return `<article class="receipt-article-card receipt-article-card-v2 ${statusClass}">
+      <header class="receipt-article-head receipt-article-head-v2">
         <span class="receipt-article-index">${String(index+1).padStart(2,'0')}</span>
-        <div class="receipt-article-heading"><small>ARTICOLO</small><h3>${base.article?esc(base.article):`Articolo ${index+1}`}</h3><p>${lines.length} ${lines.length===1?'taglia':'taglie'} · ${ddt} pezzi DDT · ${checked} controllati</p></div>
+        <div class="receipt-article-heading"><small>ARTICOLO</small><h3>${base.article?esc(base.article):'Nuovo articolo'}</h3><p>${lines.length} ${lines.length===1?'taglia':'taglie'} · ${ddt} pezzi DDT · ${checked} controllati</p></div>
         <em class="receipt-article-status ${statusClass}">${phRegular(statusClass==='ok'?'check-circle':statusClass==='warn'?'warning-circle':'clock')}${status}</em>
         ${articleCount>1?`<button class="receipt-article-remove" data-action="receipt-article-remove" data-group="${group.id}">${phRegular('trash')}<span>RIMUOVI ARTICOLO</span></button>`:''}
       </header>
 
-      <div class="receipt-article-common">
+      <div class="receipt-article-common receipt-article-common-v2">
         <label class="receipt-article-code"><span>Codice articolo</span><input class="field" data-bind="receiptgroup:${group.id}:article" value="${esc(base.article)}" placeholder="Codice SAP / articolo"></label>
         <label><span>Stato merce</span><select class="field" data-bind="receiptgroup:${group.id}:state">${CONFIG.states.slice(0,3).map(st=>`<option ${base.state===st?'selected':''}>${st}</option>`).join('')}</select></label>
         <label><span>Pallet / collo</span><input class="field" data-bind="receiptgroup:${group.id}:pallet" value="${esc(base.pallet)}" placeholder="P01"></label>
       </div>
 
-      <div class="receipt-variant-table-head"><span>TAGLIA / VARIANTE</span><span>Q.TÀ DDT</span><span>CONTROLLATA</span><span>CONTEGGIO ASSISTITO</span><span>POSIZIONE ABITUALE</span><span></span></div>
-      <div class="receipt-variant-list">${lines.map((l,i)=>this.receiptVariantForm(l,i,group)).join('')}</div>
+      <section class="receipt-variants-zone">
+        <header class="receipt-variants-zone-head">
+          <div class="receipt-variants-zone-title"><span>${phRegular('stack')}</span><div><small>VARIANTI DELLO STESSO ARTICOLO</small><h4>Taglie ricevute</h4><p>Una riga per ogni taglia presente sul DDT. Quantità e conteggi restano indipendenti.</p></div></div>
+          <em><b>${lines.length}</b><span>${lines.length===1?'TAGLIA':'TAGLIE'}</span></em>
+        </header>
 
-      <button class="receipt-add-variant" data-action="receipt-variant-add" data-group="${group.id}">${phRegular('plus')}<span><b>Aggiungi taglia</b><small>Nuova variante dello stesso articolo</small></span></button>
+        <div class="receipt-variant-list receipt-variant-list-v2">${lines.map((l,i)=>this.receiptVariantForm(l,i,group)).join('')}</div>
 
-      <label class="receipt-article-note"><span>Note articolo</span><input class="field" data-bind="receiptgroup:${group.id}:note" value="${esc(base.note)}" placeholder="Annotazioni comuni a tutte le taglie"></label>
+        <button class="receipt-add-variant receipt-add-variant-v2" data-action="receipt-variant-add" data-group="${group.id}">${phRegular('plus-circle')}<span><b>Aggiungi taglia</b><small>Aggiungi un’altra variante dello stesso articolo</small></span>${phRegular('arrow-right')}</button>
+      </section>
+
+      <label class="receipt-article-note receipt-article-note-v2"><span>Note articolo</span><input class="field" data-bind="receiptgroup:${group.id}:note" value="${esc(base.note)}" placeholder="Annotazioni comuni a tutte le taglie"></label>
     </article>`
   }
   receiptVariantForm(l,index,group){
     const sug=this.domain.stock.suggest(l.article,l.size,l.state),ddt=Number(l.ddtQuantity||0),checked=Number(l.checkedQuantity||0),diff=ddt!==checked,sum=(l.partials||[]).reduce((n,x)=>n+Number(x),0),status=checked<=0?'DA CONTROLLARE':diff?'SCOSTAMENTO':'COERENTE',statusClass=checked<=0?'idle':diff?'warn':'ok',canRemove=(group.lines||[]).length>1;
-    return `<section class="receipt-variant-row ${statusClass}">
-      <div class="receipt-variant-main">
-        <label class="receipt-variant-size"><span>Taglia</span><input class="field" data-bind="receipt:${l.id}:size" value="${esc(l.size)}" placeholder="Es. 39"></label>
-        <label><span>DDT</span><input type="number" min="0" class="field" data-bind="receipt:${l.id}:ddtQuantity" value="${l.ddtQuantity}"></label>
-        <label class="receipt-variant-checked"><span>Controllata <b>*</b></span><input type="number" min="0" class="field" data-bind="receipt:${l.id}:checkedQuantity" value="${l.checkedQuantity}"></label>
+    return `<article class="receipt-variant-card ${statusClass}">
+      <header class="receipt-variant-card-head">
+        <div class="receipt-variant-card-title"><span>${String(index+1).padStart(2,'0')}</span><div><small>TAGLIA / VARIANTE</small><h5>${l.size?`Taglia ${esc(l.size)}`:'Nuova taglia'}</h5></div></div>
+        <div class="receipt-variant-card-actions"><em class="receipt-variant-state ${statusClass}">${statusClass==='ok'?phRegular('check-circle'):statusClass==='warn'?phRegular('warning-circle'):phRegular('clock')}<span>${status}</span></em>${canRemove?`<button class="receipt-variant-remove" data-action="receipt-variant-remove" data-line="${l.id}" title="Rimuovi taglia">${phRegular('trash')}</button>`:''}</div>
+      </header>
 
-        <div class="receipt-variant-partial">
-          <div class="receipt-variant-partial-entry"><input id="partial-${l.id}" type="number" min="1" class="field" placeholder="Es. 6"><button data-action="partial-add" data-line="${l.id}">${phRegular('plus')}<span>AGGIUNGI</span></button></div>
-          ${l.partials.length?`<div class="receipt-variant-partial-result"><div class="chips">${l.partials.map(x=>`<span>${x}</span>`).join('')}</div><span class="receipt-variant-total">${l.partials.join(' + ')} = <b>${sum}</b></span><button data-action="partial-undo" data-line="${l.id}" title="Annulla ultimo">${phRegular('arrow-counter-clockwise')}</button><button data-action="partial-clear" data-line="${l.id}" title="Azzera">${phRegular('x-circle')}</button></div>`:`<small class="receipt-variant-partial-hint">Somma conteggi progressivi</small>`}
-        </div>
+      <div class="receipt-variant-card-body">
+        <section class="receipt-variant-quantities">
+          <header><span>${phRegular('scales')}</span><div><small>QUANTITÀ</small><b>Dati della taglia</b></div></header>
+          <div class="receipt-variant-quantity-grid">
+            <label class="receipt-variant-size"><span>Taglia</span><input class="field" data-bind="receipt:${l.id}:size" value="${esc(l.size)}" placeholder="Es. 39"></label>
+            <label><span>Q.tà DDT</span><input type="number" min="0" class="field" data-bind="receipt:${l.id}:ddtQuantity" value="${l.ddtQuantity}"></label>
+            <label class="receipt-variant-checked"><span>Controllata <b>*</b></span><input type="number" min="0" class="field" data-bind="receipt:${l.id}:checkedQuantity" value="${l.checkedQuantity}"></label>
+          </div>
+          ${checked>0&&diff?`<div class="receipt-variant-warning">${phRegular('warning-circle')}<span>Differenza di <b>${Math.abs(checked-ddt)} pezzi</b> rispetto al DDT.</span></div>`:checked>0&&!diff?`<div class="receipt-variant-match">${phRegular('check-circle')}<span>Quantità controllata coerente con il DDT.</span></div>`:''}
+        </section>
 
-        <div class="receipt-variant-position ${sug?'found':'empty'}">${phRegular('map-pin-line')}<div><small>POSIZIONE</small><b>${sug?esc(sug.location):'Non trovata'}</b><span>${sug?`${sug.quantity} pezzi${sug.pallet?` · ${esc(sug.pallet)}`:''}`:'Da definire in ubicazione'}</span></div></div>
-        <div class="receipt-variant-actions"><em class="receipt-variant-state ${statusClass}">${statusClass==='ok'?phRegular('check-circle'):statusClass==='warn'?phRegular('warning-circle'):phRegular('clock')}<span>${status}</span></em>${canRemove?`<button class="receipt-variant-remove" data-action="receipt-variant-remove" data-line="${l.id}" title="Rimuovi taglia">${phRegular('trash')}</button>`:''}</div>
+        <section class="receipt-assisted-count">
+          <header><span>${phRegular('calculator')}</span><div><small>STRUMENTO OPZIONALE</small><b>Conteggio assistito</b><p>Inserisci conteggi parziali, ad esempio 6 + 4 + 8. Il totale aggiorna automaticamente “Controllata”.</p></div></header>
+          <div class="receipt-assisted-entry"><input id="partial-${l.id}" type="number" min="1" class="field" placeholder="Es. 6"><button data-action="partial-add" data-line="${l.id}">${phRegular('plus')}<span>AGGIUNGI</span></button></div>
+          ${l.partials.length?`<div class="receipt-assisted-result"><div class="receipt-assisted-chips">${l.partials.map(x=>`<span>${x}</span>`).join('')}</div><div class="receipt-assisted-total"><small>TOTALE CONTEGGIO</small><strong>${sum}</strong><span>pezzi</span></div><div class="receipt-assisted-actions"><button data-action="partial-undo" data-line="${l.id}">${phRegular('arrow-counter-clockwise')}<span>Annulla ultimo</span></button><button data-action="partial-clear" data-line="${l.id}">${phRegular('x-circle')}<span>Azzera</span></button></div></div>`:`<div class="receipt-assisted-empty">${phRegular('info')}<span>Usalo quando conti la merce in più gruppi. Se conosci già il totale, inseriscilo direttamente in “Controllata”.</span></div>`}
+        </section>
+
+        <section class="receipt-variant-context">
+          <header><span>${phRegular('map-pin-line')}</span><div><small>UBICAZIONE</small><b>Posizione abituale</b></div></header>
+          <div class="receipt-variant-position-card ${sug?'found':'empty'}"><span>${phRegular(sug?'map-pin':'map-pin-line')}</span><div><small>POSIZIONE - FILA - SCAFFALE</small><b>${sug?esc(sug.location):'Nessuna posizione trovata'}</b><p>${sug?`${sug.quantity} pezzi disponibili${sug.pallet?` · Bancale ${esc(sug.pallet)}`:''}`:'La posizione verrà definita nella fase di ubicazione.'}</p></div></div>
+        </section>
       </div>
-      ${checked>0&&diff?`<div class="receipt-variant-warning">${phRegular('warning-circle')}<span>Differenza di <b>${Math.abs(checked-ddt)} pezzi</b> rispetto al DDT.</span></div>`:''}
-    </section>`
+    </article>`
   }
   addReceiptArticle(){
     const last=this.receiptDraft.lines.at(-1),groupId=uid();this.receiptDraft.lines.push(this.newReceiptLine({groupId,pallet:last?.pallet||'P01',state:last?.state||'NUOVO'}));this.renderView()
@@ -12298,6 +12880,6 @@ try{globalThis.__NOVA_LEGACY_AVAILABLE=!!localStorage.getItem(CONFIG.legacyStora
 const switchSite=async siteId=>{await ui.selectSite(siteId);return auth.site()};
 globalThis.NOVA=Object.freeze({version:CONFIG.appVersion,schema:CONFIG.version,identityVersion:CONFIG.identityVersion,store,auth,router,domain,excel,ui,sounds,sites:SITES,operators:OPERATORS,roles:ROLE_DEFS,saveIdentityRegistry,capabilities:Object.freeze({operational:ALL_CAPS,master:MASTER_CAPS,administration:ADMIN_CAPS,globalAdmin:GLOBAL_ADMIN_CAPS}),identityValidation:IDENTITY_VALIDATION,switchSite});
 ui.render();</script>
-<!-- SOMA_BUILD:R31.24-20260924 -->
+<!-- SOMA_BUILD:R31.25-20260924 -->
 </body>
 </html>
