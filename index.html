@@ -1,13 +1,13 @@
 <!doctype html>
 <html lang="it">
 <head>
-<meta name="soma-build" content="R31.16-20260924">
+<meta name="soma-build" content="R31.17-20260924">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
 <script id="soma-build-freshness">
 (() => {
-  const CURRENT_BUILD='R31.16-20260924',CHECK_KEY='soma:last-build-refresh';
+  const CURRENT_BUILD='R31.17-20260924',CHECK_KEY='soma:last-build-refresh';
   globalThis.SOMA_BUILD=CURRENT_BUILD;
   const check=async()=>{
     try{
@@ -9208,6 +9208,189 @@ body.desktop-mode .activity-desktop .activity-kpi.wide{grid-column:auto!importan
   .request-progress-card-v2,.request-progress-card-v2:before,.request-progress-card-v2:after,.request-progress-card-icon,.request-progress-card-icon>.ph,.request-progress-primary,.request-progress-primary>.ph,.request-progress-delete,.request-detail-delete{transition:none!important}
 }
 </style>
+
+<style id="r31-17-request-detail-premium">
+/* ===== R31.17 · REQUEST DETAIL — PREMIUM OPERATIONAL SHEET ===== */
+.request-detail-v3{
+  --rd-accent:#b98522;
+  --rd-soft:#fff7e7;
+  --rd-hover:#fff3d9;
+  --rd-line:#ead19a;
+  --rd-ink:#244363;
+  --rd-muted:#71879a;
+  --rd-border:#d7e2ea;
+  display:block!important;
+}
+.request-detail-v3.partial{--rd-accent:#4f79ad;--rd-soft:#eef4fb;--rd-hover:#e8f1fb;--rd-line:#bfd2e7}
+.request-detail-v3.done{--rd-accent:#29976a;--rd-soft:#edf8f2;--rd-hover:#e7f6ed;--rd-line:#b9ddc9}
+
+.request-detail-v3-hero{
+  display:flex!important;align-items:center!important;justify-content:space-between!important;gap:20px!important;
+  margin:0 0 16px!important;padding:0!important;
+}
+.request-detail-v3-title{display:flex!important;align-items:center!important;gap:14px!important;min-width:0!important}
+.request-detail-v3-title-icon{
+  width:58px!important;height:58px!important;flex:0 0 58px!important;display:grid!important;place-items:center!important;
+  border:1px solid var(--rd-line)!important;border-radius:17px!important;background:var(--rd-soft)!important;color:var(--rd-accent)!important;
+  box-shadow:0 6px 18px rgba(31,62,86,.04)!important;
+}
+.request-detail-v3-title-icon>.ph{font-size:30px!important}
+.request-detail-v3-title>div{min-width:0!important}
+.request-detail-v3-title small{display:block!important;color:var(--rd-accent)!important;font-size:9px!important;line-height:1.2!important;font-weight:950!important;letter-spacing:.12em!important}
+.request-detail-v3-title h1{margin:5px 0 0!important;color:#213f63!important;font-size:clamp(32px,2.7vw,42px)!important;line-height:1!important;font-weight:900!important;letter-spacing:-.038em!important}
+.request-detail-v3-title p{margin:8px 0 0!important;color:#71879a!important;font-size:11px!important;line-height:1.35!important;font-weight:700!important}
+.request-detail-v3-status{
+  min-height:36px!important;display:inline-flex!important;align-items:center!important;gap:7px!important;padding:0 12px!important;
+  border:1px solid var(--rd-line)!important;border-radius:999px!important;background:var(--rd-soft)!important;color:var(--rd-accent)!important;
+  font-size:9px!important;line-height:1!important;font-style:normal!important;font-weight:950!important;letter-spacing:.045em!important;white-space:nowrap!important;
+}
+.request-detail-v3-status>.ph{font-size:15px!important}
+
+.request-detail-v3-overview{
+  display:grid!important;grid-template-columns:minmax(0,1.35fr) minmax(380px,.85fr)!important;gap:12px!important;margin-bottom:14px!important;
+}
+.request-detail-v3-progress,.request-detail-v3-kpis{
+  border:1px solid var(--rd-border)!important;border-radius:20px!important;background:#fff!important;box-shadow:0 7px 22px rgba(30,62,86,.045)!important;
+}
+.request-detail-v3-progress{padding:17px 18px!important}
+.request-detail-v3-progress-top{display:flex!important;align-items:flex-start!important;justify-content:space-between!important;gap:16px!important}
+.request-detail-v3-progress-top small{display:block!important;color:#8193a2!important;font-size:8px!important;font-weight:950!important;letter-spacing:.105em!important}
+.request-detail-v3-progress-top span{display:block!important;margin-top:5px!important;color:#536f87!important;font-size:11px!important;font-weight:800!important}
+.request-detail-v3-progress-top strong{color:var(--rd-accent)!important;font-size:34px!important;line-height:.9!important;font-weight:900!important;letter-spacing:-.04em!important}
+.request-detail-v3-progress-top strong i{font-size:15px!important;font-style:normal!important}
+.request-detail-v3-progress-bar{height:8px!important;margin-top:15px!important;border-radius:999px!important;background:#e8eef2!important;overflow:hidden!important}
+.request-detail-v3-progress-bar>i{display:block!important;height:100%!important;border-radius:inherit!important;background:linear-gradient(90deg,color-mix(in srgb,var(--rd-accent) 68%,#fff),var(--rd-accent))!important}
+.request-detail-v3-progress-foot{display:flex!important;align-items:center!important;justify-content:space-between!important;gap:12px!important;margin-top:9px!important;color:#7a8f9f!important;font-size:9.5px!important;font-weight:800!important}
+.request-detail-v3-kpis{display:grid!important;grid-template-columns:repeat(3,minmax(0,1fr))!important;padding:10px!important}
+.request-detail-v3-kpis>span{min-width:0!important;display:flex!important;flex-direction:column!important;justify-content:center!important;padding:10px 12px!important;border-right:1px solid #e8eef2!important}
+.request-detail-v3-kpis>span:last-child{border-right:0!important}
+.request-detail-v3-kpis small{color:#8798a5!important;font-size:7.5px!important;font-weight:950!important;letter-spacing:.085em!important}
+.request-detail-v3-kpis b{margin-top:5px!important;color:var(--rd-accent)!important;font-size:27px!important;line-height:1!important;font-weight:900!important}
+.request-detail-v3-kpis em{margin-top:3px!important;color:#8798a5!important;font-size:8px!important;font-style:normal!important;font-weight:800!important}
+
+.request-detail-v3-integrity{
+  display:grid!important;grid-template-columns:34px minmax(0,1fr)!important;gap:11px!important;align-items:start!important;
+  margin:0 0 16px!important;padding:13px 15px!important;border:1px solid #e8c56e!important;border-radius:16px!important;background:#fff8e8!important;color:#7d5a12!important;
+}
+.request-detail-v3-integrity>.ph{font-size:24px!important;color:#b98522!important}
+.request-detail-v3-integrity b{display:block!important;font-size:12px!important}
+.request-detail-v3-integrity p{margin:3px 0 9px!important;font-size:9.5px!important;line-height:1.35!important;font-weight:700!important}
+.request-detail-v3-integrity>div>div{display:flex!important;gap:7px!important;flex-wrap:wrap!important}
+.request-detail-v3-integrity span{display:inline-flex!important;align-items:center!important;gap:6px!important;padding:6px 8px!important;border:1px solid #ecd59c!important;border-radius:9px!important;background:#fffdf8!important;font-size:7.5px!important;font-weight:950!important;letter-spacing:.045em!important}
+.request-detail-v3-integrity strong{font-size:8.5px!important;color:#77530c!important}
+
+.request-detail-v3-section-head{
+  display:flex!important;align-items:flex-end!important;justify-content:space-between!important;gap:16px!important;margin:20px 0 10px!important;padding:0 2px!important;
+}
+.request-detail-v3-section-head small{display:block!important;color:#7c90a0!important;font-size:8px!important;font-weight:950!important;letter-spacing:.11em!important}
+.request-detail-v3-section-head h2{margin:4px 0 0!important;color:#294967!important;font-size:19px!important;line-height:1.1!important;font-weight:900!important}
+.request-detail-v3-section-head>span{padding:7px 10px!important;border:1px solid var(--rd-line)!important;border-radius:999px!important;background:var(--rd-soft)!important;color:var(--rd-accent)!important;font-size:8.5px!important;font-weight:950!important;white-space:nowrap!important}
+
+.request-detail-v3-lines{display:grid!important;gap:9px!important}
+.request-detail-v3-line{
+  --line-accent:#b98522;
+  --line-soft:#fff8e9;
+  position:relative!important;overflow:hidden!important;padding:14px 16px 13px 18px!important;border:1px solid #dce6ed!important;border-radius:18px!important;background:#fff!important;
+  box-shadow:0 5px 16px rgba(30,62,86,.035)!important;transition:border-color .16s ease,box-shadow .16s ease,transform .16s ease,background .16s ease!important;
+}
+.request-detail-v3-line.partial{--line-accent:#4f79ad;--line-soft:#eef4fb}
+.request-detail-v3-line.done{--line-accent:#29976a;--line-soft:#edf8f2}
+.request-detail-v3-line:before{content:""!important;position:absolute!important;left:0!important;top:0!important;bottom:0!important;width:4px!important;background:var(--line-accent)!important}
+.request-detail-v3-line-main{display:grid!important;grid-template-columns:34px minmax(0,1fr) auto!important;gap:11px!important;align-items:center!important}
+.request-detail-v3-line-index{
+  width:34px!important;height:34px!important;display:grid!important;place-items:center!important;border-radius:11px!important;background:var(--line-soft)!important;color:var(--line-accent)!important;
+  font-size:9px!important;font-weight:950!important;letter-spacing:.04em!important;
+}
+.request-detail-v3-line-id{min-width:0!important}
+.request-detail-v3-line-id small{display:block!important;color:#8a99a5!important;font-size:7px!important;font-weight:950!important;letter-spacing:.09em!important}
+.request-detail-v3-line-id b{display:block!important;margin-top:3px!important;color:#244363!important;font-size:14px!important;line-height:1.15!important;font-weight:950!important;overflow-wrap:anywhere!important}
+.request-detail-v3-line-id b i{color:#9aa8b3!important;font-style:normal!important;font-weight:800!important}
+.request-detail-v3-line-id span{display:block!important;margin-top:3px!important;color:#7c8f9e!important;font-size:8.5px!important;font-weight:750!important}
+.request-detail-v3-line-rem{min-width:72px!important;text-align:right!important}
+.request-detail-v3-line-rem small{display:block!important;color:#8a99a5!important;font-size:7px!important;font-weight:950!important;letter-spacing:.08em!important}
+.request-detail-v3-line-rem strong{display:inline-block!important;margin-top:2px!important;color:var(--line-accent)!important;font-size:25px!important;line-height:1!important;font-weight:900!important}
+.request-detail-v3-line-rem span{display:inline-block!important;margin-left:4px!important;color:#8a99a5!important;font-size:7.5px!important;font-weight:800!important}
+.request-detail-v3-line-progress{height:4px!important;margin:10px 0 9px 45px!important;border-radius:999px!important;background:#ebf0f3!important;overflow:hidden!important}
+.request-detail-v3-line-progress>i{display:block!important;height:100%!important;border-radius:inherit!important;background:var(--line-accent)!important}
+.request-detail-v3-line-stats{display:grid!important;grid-template-columns:repeat(4,minmax(0,1fr))!important;gap:6px!important;margin-left:45px!important}
+.request-detail-v3-line-stats>span{min-width:0!important;display:grid!important;grid-template-columns:auto 1fr!important;grid-template-rows:auto auto!important;column-gap:5px!important;padding:7px 8px!important;border:1px solid transparent!important;border-radius:10px!important;background:#f7fafc!important}
+.request-detail-v3-line-stats small{grid-column:1/-1!important;color:#8b99a5!important;font-size:6.5px!important;font-weight:950!important;letter-spacing:.07em!important}
+.request-detail-v3-line-stats b{color:#34536d!important;font-size:15px!important;line-height:1!important;font-weight:900!important}
+.request-detail-v3-line-stats em{align-self:end!important;color:#94a2ad!important;font-size:6.5px!important;font-style:normal!important;font-weight:800!important}
+.request-detail-v3-line-stats>span.available b{color:#26835d!important}
+.request-detail-v3-line-stats>span.unavailable{background:#fff7f6!important;border-color:#f1d5d2!important}
+.request-detail-v3-line-stats>span.unavailable b{color:#b54b44!important}
+.request-detail-v3-line-foot{display:flex!important;align-items:center!important;gap:7px!important;margin:7px 0 0 45px!important;padding:7px 9px!important;border-radius:10px!important;font-size:8px!important;font-weight:800!important}
+.request-detail-v3-line-foot>.ph{flex:0 0 auto!important;font-size:14px!important}
+.request-detail-v3-line-foot.available{background:#eef8f3!important;color:#31745a!important}
+.request-detail-v3-line-foot.unavailable{background:#fff2f0!important;color:#a64740!important}
+.request-detail-v3-line-foot strong{font-weight:950!important}
+.request-detail-v3-note,.request-detail-v3-marker{display:flex!important;align-items:center!important;gap:6px!important;margin:7px 0 0 45px!important;padding:6px 8px!important;border-radius:9px!important;font-size:7.5px!important;font-weight:800!important}
+.request-detail-v3-note{background:#f2f6f9!important;color:#61798d!important}
+.request-detail-v3-marker{background:#fff5dc!important;color:#8e640f!important}
+.request-detail-v3-note>.ph,.request-detail-v3-marker>.ph{font-size:13px!important;flex:0 0 auto!important}
+
+@media(hover:hover) and (pointer:fine){
+  .request-detail-v3-line:hover{transform:translateY(-2px)!important;border-color:color-mix(in srgb,var(--line-accent) 30%,#dce6ed)!important;background:linear-gradient(180deg,color-mix(in srgb,var(--line-soft) 48%,#fff),#fff 76%)!important;box-shadow:0 10px 24px rgba(30,62,86,.065)!important}
+}
+
+.request-detail-v3-actions{
+  display:flex!important;align-items:center!important;justify-content:flex-end!important;gap:9px!important;margin-top:16px!important;padding:14px!important;
+  border:1px solid #dce6ed!important;border-radius:18px!important;background:rgba(255,255,255,.82)!important;box-shadow:0 8px 22px rgba(30,62,86,.045)!important;
+}
+.request-detail-v3-primary{
+  min-width:230px!important;min-height:50px!important;display:flex!important;align-items:center!important;justify-content:space-between!important;gap:12px!important;padding:0 15px!important;
+  border:1px solid #29976a!important;border-radius:14px!important;background:#29976a!important;color:#fff!important;font-size:9.5px!important;font-weight:950!important;letter-spacing:.03em!important;box-shadow:0 8px 18px rgba(41,151,106,.16)!important;
+}
+.request-detail-v3-primary>span{display:flex!important;align-items:center!important;gap:7px!important}
+.request-detail-v3-primary .ph{font-size:17px!important}
+.request-detail-v3-delete{
+  min-height:50px!important;display:inline-flex!important;align-items:center!important;justify-content:center!important;gap:7px!important;padding:0 14px!important;
+  border:1px solid #efcfcc!important;border-radius:14px!important;background:#fff6f5!important;color:#ad453f!important;font-size:9.5px!important;font-weight:950!important;letter-spacing:.03em!important;
+  transition:background .16s ease,border-color .16s ease,color .16s ease,box-shadow .16s ease!important;
+}
+.request-detail-v3-delete>.ph{font-size:17px!important}
+@media(hover:hover) and (pointer:fine){
+  .request-detail-v3-delete:hover{background:#b84c44!important;border-color:#b84c44!important;color:#fff!important;box-shadow:0 8px 18px rgba(184,76,68,.16)!important}
+  .request-detail-v3-primary:hover{filter:brightness(.97)!important;box-shadow:0 10px 22px rgba(41,151,106,.22)!important}
+}
+
+@media(max-width:1050px){
+  .request-detail-v3-overview{grid-template-columns:1fr!important}
+}
+@media(max-width:700px){
+  .request-detail-v3-hero{align-items:flex-start!important;flex-direction:column!important;gap:11px!important}
+  .request-detail-v3-title{align-items:flex-start!important;gap:11px!important}
+  .request-detail-v3-title-icon{width:48px!important;height:48px!important;flex-basis:48px!important;border-radius:14px!important}
+  .request-detail-v3-title-icon>.ph{font-size:25px!important}
+  .request-detail-v3-title h1{font-size:clamp(29px,8.5vw,38px)!important}
+  .request-detail-v3-status{align-self:flex-start!important}
+  .request-detail-v3-kpis{grid-template-columns:repeat(3,minmax(0,1fr))!important}
+  .request-detail-v3-kpis>span{padding:8px!important}
+  .request-detail-v3-kpis b{font-size:22px!important}
+  .request-detail-v3-progress-foot{align-items:flex-start!important;flex-direction:column!important;gap:3px!important}
+  .request-detail-v3-section-head{align-items:flex-start!important;flex-direction:column!important;gap:8px!important}
+  .request-detail-v3-line{padding:13px 13px 12px 16px!important}
+  .request-detail-v3-line-main{grid-template-columns:32px minmax(0,1fr) auto!important;gap:9px!important}
+  .request-detail-v3-line-index{width:32px!important;height:32px!important}
+  .request-detail-v3-line-rem{min-width:58px!important}
+  .request-detail-v3-line-rem strong{font-size:22px!important}
+  .request-detail-v3-line-progress,.request-detail-v3-line-stats,.request-detail-v3-line-foot,.request-detail-v3-note,.request-detail-v3-marker{margin-left:41px!important}
+  .request-detail-v3-line-stats{grid-template-columns:1fr 1fr!important}
+  .request-detail-v3-actions{align-items:stretch!important;flex-direction:column!important}
+  .request-detail-v3-primary,.request-detail-v3-delete{width:100%!important;min-width:0!important}
+}
+@media(max-width:430px){
+  .request-detail-v3-overview{gap:9px!important}
+  .request-detail-v3-progress{padding:14px!important}
+  .request-detail-v3-kpis{padding:7px!important}
+  .request-detail-v3-line-id b{font-size:12.5px!important}
+  .request-detail-v3-line-rem span{display:none!important}
+}
+@media(prefers-reduced-motion:reduce){
+  .request-detail-v3-line,.request-detail-v3-delete{transition:none!important}
+}
+</style>
 </head>
 <body>
 <header id="topbar" class="topbar"></header>
@@ -10348,9 +10531,14 @@ class UI{
     return `<article class="request-progress-card-v2 ${statusClass} ${inconsistent?'data-mismatch':''}"><div class="request-progress-card-top"><span class="request-progress-card-icon">${phRegular(statusIcon)}</span><div class="request-progress-identity"><small>${esc(r.id)}</small><h2>${esc(r.destination)}</h2><p>${fmtDateTime(r.requestedAt)} · ${esc(r.operator||'—')}</p></div><em class="request-progress-status">${phRegular(statusIcon)}<span>${esc(status)}</span></em></div><div class="request-progress-track-wrap"><div class="request-progress-track-label"><span>AVANZAMENTO</span><strong>${s.percent}%</strong></div><div class="request-progress-track"><i style="width:${s.percent}%"></i></div></div><div class="request-progress-stats-v2"><span><small>RICHIESTI</small><strong>${s.requested}</strong><em>cartoni</em></span><span><small>PRELEVATI</small><strong>${s.delivered}</strong><em>cartoni</em></span><span><small>RESIDUI</small><strong>${s.remaining}</strong><em>cartoni</em></span></div>${inconsistent?`<div class="request-progress-integrity">${phRegular('warning-circle')}<span>Stato e dati di avanzamento storici non risultano allineati.</span></div>`:''}<div class="request-progress-card-actions"><button class="request-progress-primary" data-action="${process?'request-pick':'request-open'}" data-id="${esc(r.id)}"><span>${process?'PREPARA RICHIESTA':'APRI DETTAGLIO'}</span>${phRegular(process?'package':'arrow-right')}</button>${canDelete?`<button class="request-progress-delete" data-action="request-delete" data-id="${esc(r.id)}" aria-label="Elimina ${esc(r.id)}" title="Elimina richiesta">${phRegular('trash')}</button>`:''}</div></article>`
   }
   requestDetail(id){
-    const r=this.store.db.requests.find(x=>x.id===id);if(!r||r.deletedAt)return this.emptyPage('Richiesta non trovata o non più disponibile.');const s=this.domain.requests.summary(r),status=r.status||'DA PREPARARE',statusClass=status==='COMPLETATA'?'done':status==='PARZIALE'?'partial':'to-prepare',canDelete=this.domain.requests.canDelete(r),inconsistent=(status==='COMPLETATA'&&s.remaining>0)||(status!=='COMPLETATA'&&s.requested>0&&s.remaining===0);
-    const prepare=this.auth.can('REQUEST_PROCESS')&&status!=='COMPLETATA'?`<button class="success request-prepare" data-action="request-pick" data-id="${esc(r.id)}">${phIcon('package','inline-icon')} PREPARA RICHIESTA</button>`:'',remove=canDelete?`<button class="request-detail-delete" data-action="request-delete" data-id="${esc(r.id)}">${phRegular('trash')}<span>ELIMINA RICHIESTA</span></button>`:'';
-    return `${this.sectionTitle(r.id,`Richiesta · ${r.destination}`,`${fmtDateTime(r.requestedAt)} · ${status}`)}<div class="request-detail-status"><em class="status-pill ${statusClass}">${phIcon(status==='COMPLETATA'?'check-circle':status==='PARZIALE'?'circle-half':'clock','status-icon')}${esc(status)}</em></div>${inconsistent?`<div class="request-detail-integrity">${phRegular('warning-circle')}<div><b>Dati storici da verificare</b><small>Lo stato salvato e i cartoni registrati non producono lo stesso avanzamento.</small></div></div>`:''}<div class="summary-three request-summary"><div><b>${s.requested}</b><span>Cartoni richiesti</span></div><div><b>${s.delivered}</b><span>Cartoni presi</span></div><div><b>${s.remaining}</b><span>Cartoni residui</span></div></div>${r.lines.map(l=>{const d=this.domain.requests.deliveredForLine(r,l.id),rem=Math.max(0,l.cartonsRequested-d.cartons);return `<article class="detail-line request-detail-line"><div class="detail-line-top"><div><b>${esc(l.article)}${l.size?` · ${esc(l.size)}`:''}</b><span>${esc(l.note)}</span></div><strong>${rem}</strong></div><div class="line-metrics request-line-metrics"><span>${phIcon('package','metric-icon')}Cartoni richiesti <b>${l.cartonsRequested}</b></span><span>${phIcon('check-circle','metric-icon')}Cartoni presi <b>${d.cartons}</b></span><span>${phIcon('arrow-down','metric-icon')}Pezzi scaricati <b>${d.pieces}</b></span><span>${phIcon('package','metric-icon')}Pezzi disponibili <b>${this.domain.stock.total(l.article,l.size)}</b></span></div>${this.domain.stock.receivingTotal(l.article,l.size)?`<div class="available-badge request-receiving-badge">${phIcon('tray','inline-icon')}${this.domain.stock.receivingTotal(l.article,l.size)} PEZZI DISPONIBILI IN AREA RICEVIMENTO</div>`:''}${l.marker?'<div class="marker-box request-marker">* Segnalazione presente sulla richiesta originale</div>':''}</article>`}).join('')}${prepare||remove?`<div class="request-detail-actions-v2">${prepare}${remove}</div>`:''}`
+    const r=this.store.db.requests.find(x=>x.id===id);if(!r||r.deletedAt)return this.emptyPage('Richiesta non trovata o non più disponibile.');
+    const s=this.domain.requests.summary(r),status=r.status||'DA PREPARARE',statusClass=status==='COMPLETATA'?'done':status==='PARZIALE'?'partial':'pending',statusIcon=status==='COMPLETATA'?'check-circle':status==='PARZIALE'?'circle-half':'clock',canDelete=this.domain.requests.canDelete(r),calculatedStatus=s.remaining===0?'COMPLETATA':s.delivered>0?'PARZIALE':'DA PREPARARE',inconsistent=status!==calculatedStatus;
+    const prepare=this.auth.can('REQUEST_PROCESS')&&status!=='COMPLETATA'?`<button class="request-detail-v3-primary" data-action="request-pick" data-id="${esc(r.id)}"><span>${phRegular('package')} PREPARA RICHIESTA</span>${phRegular('arrow-right')}</button>`:'',remove=canDelete?`<button class="request-detail-v3-delete" data-action="request-delete" data-id="${esc(r.id)}">${phRegular('trash')}<span>ELIMINA RICHIESTA</span></button>`:'';
+    const rows=(r.lines||[]).map((l,index)=>{
+      const d=this.domain.requests.deliveredForLine(r,l.id),requested=integer(l.cartonsRequested),rem=Math.max(0,requested-d.cartons),percent=requested?Math.min(100,Math.round(d.cartons*100/requested)):0,available=this.domain.stock.total(l.article,l.size),receiving=this.domain.stock.receivingTotal(l.article,l.size),lineState=rem===0?'done':d.cartons>0?'partial':'pending',availabilityClass=available>0?'available':'unavailable';
+      return `<article class="request-detail-v3-line ${lineState}"><div class="request-detail-v3-line-main"><span class="request-detail-v3-line-index">${String(index+1).padStart(2,'0')}</span><div class="request-detail-v3-line-id"><small>ARTICOLO</small><b>${esc(l.article)}${l.size?` <i>·</i> ${esc(l.size)}`:''}</b><span>${rem===0?'Riga completata':d.cartons>0?'Prelievo parziale':'Da preparare'}</span></div><div class="request-detail-v3-line-rem"><small>RESIDUI</small><strong>${rem}</strong><span>cartoni</span></div></div><div class="request-detail-v3-line-progress"><i style="width:${percent}%"></i></div><div class="request-detail-v3-line-stats"><span><small>RICHIESTI</small><b>${requested}</b><em>cartoni</em></span><span><small>PRELEVATI</small><b>${d.cartons}</b><em>cartoni</em></span><span><small>SCARICATI</small><b>${d.pieces}</b><em>pezzi</em></span><span class="${availabilityClass}"><small>DISPONIBILI</small><b>${available}</b><em>pezzi</em></span></div><div class="request-detail-v3-line-foot ${availabilityClass}">${phRegular(available>0?'package':'warning-circle')}<span>${available>0?`Disponibilità attuale: <b>${available} pezzi</b>${receiving?` · <strong>${receiving} in Area Ricevimento</strong>`:''}`:'Nessun pezzo disponibile in giacenza per questo articolo'}</span></div>${l.note?`<div class="request-detail-v3-note">${phRegular('note-pencil')}<span>${esc(l.note)}</span></div>`:''}${l.marker?`<div class="request-detail-v3-marker">${phRegular('asterisk')} Segnalazione presente sulla richiesta originale</div>`:''}</article>`
+    }).join('');
+    return `<section class="request-detail-v3 ${statusClass}"><header class="request-detail-v3-hero"><div class="request-detail-v3-title"><span class="request-detail-v3-title-icon">${phRegular('clipboard-text')}</span><div><small>${esc(r.id)}</small><h1>${esc(r.destination||'Richiesta')}</h1><p>${fmtDateTime(r.requestedAt)} · ${esc(r.operator||'—')}${r.reference?` · Rif. ${esc(r.reference)}`:''}</p></div></div><em class="request-detail-v3-status">${phRegular(statusIcon)}<span>${esc(status)}</span></em></header><section class="request-detail-v3-overview"><div class="request-detail-v3-progress"><div class="request-detail-v3-progress-top"><div><small>AVANZAMENTO RICHIESTA</small><span>${s.delivered} di ${s.requested} cartoni prelevati</span></div><strong>${s.percent}<i>%</i></strong></div><div class="request-detail-v3-progress-bar"><i style="width:${s.percent}%"></i></div><div class="request-detail-v3-progress-foot"><span>${s.remaining} cartoni residui</span><span>${s.pieces} pezzi scaricati</span></div></div><div class="request-detail-v3-kpis"><span><small>RICHIESTI</small><b>${s.requested}</b><em>cartoni</em></span><span><small>PRELEVATI</small><b>${s.delivered}</b><em>cartoni</em></span><span><small>RESIDUI</small><b>${s.remaining}</b><em>cartoni</em></span></div></section>${inconsistent?`<section class="request-detail-v3-integrity">${phRegular('warning-circle')}<div><b>Dati storici da verificare</b><p>Lo stato salvato e l’avanzamento calcolato non coincidono.</p><div><span>STATO SALVATO <strong>${esc(status)}</strong></span><span>AVANZAMENTO CALCOLATO <strong>${esc(calculatedStatus)} · ${s.percent}%</strong></span></div></div></section>`:''}<div class="request-detail-v3-section-head"><div><small>DETTAGLIO ARTICOLI</small><h2>${(r.lines||[]).length} ${(r.lines||[]).length===1?'riga operativa':'righe operative'}</h2></div><span>${s.remaining} cartoni residui</span></div><div class="request-detail-v3-lines">${rows}</div>${prepare||remove?`<footer class="request-detail-v3-actions">${prepare}${remove}</footer>`:''}</section>`
   }
   requestPick(id){if(!this.require('REQUEST_PROCESS'))return'';if(!this.masterReady())return this.masterRequiredView({context:'preparare e scaricare una richiesta',backAction:'requests-process',backLabel:'TORNA AL COMPLETAMENTO'});const r=this.store.db.requests.find(x=>x.id===id);if(!r||r.deletedAt)return this.emptyPage('Richiesta non trovata o non più disponibile.');return `${this.sectionTitle('PRELIEVO',r.id)}<div class="request-pick-hero">${phIcon('package','request-pick-hero-icon')}<div><b>Preparazione richiesta</b><small>Cartoni = avanzamento · Pezzi = scarico reale dalla giacenza</small></div></div><div id="requestPickSources" data-request="${r.id}"></div><section class="form-card extra-pick request-extra"><h2>${phIcon('plus-circle','inline-icon')} Materiale non richiesto</h2><label>Giacenza${this.sourceSelect('extraPickSource')}</label><div class="two"><label>Cartoni<input id="extraPickCartons" type="number" min="0" value="0" class="field"></label><label>Pezzi<input id="extraPickPieces" type="number" min="0" value="0" class="field"></label></div></section><label>Note consegna<textarea id="requestPickNote" class="field textarea"></textarea></label><button class="success request-pick-confirm" data-action="request-pick-save" data-id="${r.id}">${phIcon('check-circle','inline-icon')} CONFERMA CARTONI E SCARICA PEZZI</button>`}
   renderRequestPickSources(){
@@ -10460,6 +10648,6 @@ try{globalThis.__NOVA_LEGACY_AVAILABLE=!!localStorage.getItem(CONFIG.legacyStora
 const switchSite=async siteId=>{await ui.selectSite(siteId);return auth.site()};
 globalThis.NOVA=Object.freeze({version:CONFIG.appVersion,schema:CONFIG.version,identityVersion:CONFIG.identityVersion,store,auth,router,domain,excel,ui,sounds,sites:SITES,operators:OPERATORS,roles:ROLE_DEFS,saveIdentityRegistry,capabilities:Object.freeze({operational:ALL_CAPS,master:MASTER_CAPS,administration:ADMIN_CAPS,globalAdmin:GLOBAL_ADMIN_CAPS}),identityValidation:IDENTITY_VALIDATION,switchSite});
 ui.render();</script>
-<!-- SOMA_BUILD:R31.16-20260924 -->
+<!-- SOMA_BUILD:R31.17-20260924 -->
 </body>
 </html>
