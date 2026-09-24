@@ -1,13 +1,13 @@
 <!doctype html>
 <html lang="it">
 <head>
-<meta name="soma-build" content="R31.30-20260924">
+<meta name="soma-build" content="R31.31-20260924">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
 <script id="soma-build-freshness">
 (() => {
-  const CURRENT_BUILD='R31.30-20260924',CHECK_KEY='soma:last-build-refresh';
+  const CURRENT_BUILD='R31.31-20260924',CHECK_KEY='soma:last-build-refresh';
   globalThis.SOMA_BUILD=CURRENT_BUILD;
   const check=async()=>{
     try{
@@ -13919,6 +13919,69 @@ body.desktop-mode .app-view:has(.receipt-new-shell){width:100%!important;max-wid
   }
 }
 </style>
+
+
+<style id="r31-31-desktop-receipt-surface-depth">
+/* ===== R31.31 · DESKTOP RECEIPT SURFACE DEPTH =====
+   Desktop only. Creates a clear hierarchy: page → phase card → article → variant. */
+@media(min-width:981px){
+  body.desktop-mode .receipt-document-card,
+  body.desktop-mode .receipt-items-card,
+  body.desktop-mode .receipt-confirm-card{
+    border-width:1px!important;
+    border-style:solid!important;
+    background:#fff!important;
+    transition:box-shadow .18s ease,border-color .18s ease!important;
+  }
+
+  body.desktop-mode .receipt-document-card{
+    border-color:#bfd6ef!important;
+    box-shadow:
+      0 2px 7px rgba(30,62,86,.035),
+      0 14px 34px rgba(63,128,206,.085)!important;
+  }
+  body.desktop-mode .receipt-items-card{
+    border-color:#b5ddd7!important;
+    box-shadow:
+      0 2px 7px rgba(30,62,86,.035),
+      0 14px 34px rgba(21,154,140,.085)!important;
+  }
+  body.desktop-mode .receipt-confirm-card{
+    border-color:#b9dfcd!important;
+    box-shadow:
+      0 2px 7px rgba(30,62,86,.035),
+      0 14px 34px rgba(31,168,115,.09)!important;
+  }
+
+  /* Second surface level: article card. */
+  body.desktop-mode .receipt-items-card .receipt-article-card-v2{
+    border-color:#cfdde5!important;
+    box-shadow:
+      0 2px 5px rgba(30,62,86,.025),
+      0 9px 24px rgba(30,62,86,.065)!important;
+  }
+
+  /* Third surface level: individual size/variant. */
+  body.desktop-mode .receipt-items-card .receipt-variant-card{
+    border-color:#d6e3e9!important;
+    box-shadow:
+      0 2px 5px rgba(30,62,86,.022),
+      0 5px 14px rgba(30,62,86,.045)!important;
+  }
+
+  /* Keep internal panels visually inset rather than floating. */
+  body.desktop-mode .receipt-variant-quantities,
+  body.desktop-mode .receipt-assisted-count,
+  body.desktop-mode .receipt-variant-context{
+    box-shadow:inset 0 0 0 1px rgba(255,255,255,.55)!important;
+  }
+
+  /* Summary belongs to phase 3, so give it a restrained inset separation. */
+  body.desktop-mode .receipt-confirm-card .receipt-confirm-summary{
+    box-shadow:inset 0 1px 0 rgba(255,255,255,.8)!important;
+  }
+}
+</style>
 </head>
 <body>
 <header id="topbar" class="topbar"></header>
@@ -15347,6 +15410,6 @@ try{globalThis.__NOVA_LEGACY_AVAILABLE=!!localStorage.getItem(CONFIG.legacyStora
 const switchSite=async siteId=>{await ui.selectSite(siteId);return auth.site()};
 globalThis.NOVA=Object.freeze({version:CONFIG.appVersion,schema:CONFIG.version,identityVersion:CONFIG.identityVersion,store,auth,router,domain,excel,ui,sounds,sites:SITES,operators:OPERATORS,roles:ROLE_DEFS,saveIdentityRegistry,capabilities:Object.freeze({operational:ALL_CAPS,master:MASTER_CAPS,administration:ADMIN_CAPS,globalAdmin:GLOBAL_ADMIN_CAPS}),identityValidation:IDENTITY_VALIDATION,switchSite});
 ui.render();</script>
-<!-- SOMA_BUILD:R31.30-20260924 -->
+<!-- SOMA_BUILD:R31.31-20260924 -->
 </body>
 </html>
