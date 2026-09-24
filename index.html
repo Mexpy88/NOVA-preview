@@ -1,13 +1,13 @@
 <!doctype html>
 <html lang="it">
 <head>
-<meta name="soma-build" content="R31.31-20260924">
+<meta name="soma-build" content="R31.32-20260924">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
 <script id="soma-build-freshness">
 (() => {
-  const CURRENT_BUILD='R31.31-20260924',CHECK_KEY='soma:last-build-refresh';
+  const CURRENT_BUILD='R31.32-20260924',CHECK_KEY='soma:last-build-refresh';
   globalThis.SOMA_BUILD=CURRENT_BUILD;
   const check=async()=>{
     try{
@@ -13982,6 +13982,261 @@ body.desktop-mode .app-view:has(.receipt-new-shell){width:100%!important;max-wid
   }
 }
 </style>
+
+
+<style id="r31-32-desktop-receipt-section2-simplify">
+/* ===== R31.32 · DESKTOP RECEIPT SECTION 2 — FLATTER INFORMATION ARCHITECTURE =====
+   Desktop only. Reduce nested cards and make ARTICLE → VARIANTS → OPERATIVE DATA immediately legible. */
+@media(min-width:981px){
+
+  /* Phase 2 becomes the contextual surface, not another white box. */
+  body.desktop-mode .receipt-items-card{
+    background:#f3f8f7!important;
+    border-color:#add8d1!important;
+    box-shadow:
+      0 2px 7px rgba(30,62,86,.03),
+      0 13px 32px rgba(21,154,140,.07)!important;
+  }
+  body.desktop-mode .receipt-items-card>.receipt-step-head{
+    background:linear-gradient(100deg,#eaf7f5 0,#f8fcfb 44%,#fff 100%)!important;
+  }
+
+  /* The article is the only strong white card inside phase 2. */
+  body.desktop-mode .receipt-items-card .receipt-article-stack{
+    padding:20px!important;
+    gap:18px!important;
+    background:transparent!important;
+  }
+  body.desktop-mode .receipt-items-card .receipt-article-card-v2{
+    background:#fff!important;
+    border:1px solid #cbdde2!important;
+    border-radius:22px!important;
+    box-shadow:
+      0 2px 5px rgba(30,62,86,.025),
+      0 10px 26px rgba(30,62,86,.075)!important;
+  }
+  body.desktop-mode .receipt-items-card .receipt-article-head-v2{
+    background:#fff!important;
+    border-bottom:1px solid #e0e8ea!important;
+  }
+  body.desktop-mode .receipt-items-card .receipt-article-common-v2{
+    padding:18px 18px 20px!important;
+    background:#fbfcfd!important;
+    border-bottom:1px solid #dfe9e7!important;
+  }
+
+  /* "Taglie ricevute" is now a subsection heading, not a card within a card. */
+  body.desktop-mode .receipt-items-card .receipt-variants-zone{
+    margin:0 18px 16px!important;
+    border:0!important;
+    border-radius:0!important;
+    background:transparent!important;
+    box-shadow:none!important;
+    overflow:visible!important;
+  }
+  body.desktop-mode .receipt-items-card .receipt-variants-zone-head{
+    min-height:72px!important;
+    padding:17px 2px 13px!important;
+    border-top:0!important;
+    border-right:0!important;
+    border-left:0!important;
+    border-bottom:1px solid #cfdedb!important;
+    border-radius:0!important;
+    background:transparent!important;
+  }
+  body.desktop-mode .receipt-items-card .receipt-variants-zone-title{
+    gap:10px!important;
+  }
+  body.desktop-mode .receipt-items-card .receipt-variants-zone-title>span{
+    width:28px!important;
+    height:28px!important;
+    flex:0 0 28px!important;
+    border:0!important;
+    border-radius:0!important;
+    background:transparent!important;
+    box-shadow:none!important;
+    color:var(--phase-check-dark,#0f766d)!important;
+  }
+  body.desktop-mode .receipt-items-card .receipt-variants-zone-title>span>.ph{
+    font-size:23px!important;
+  }
+  body.desktop-mode .receipt-items-card .receipt-variants-zone-title small{
+    color:#62817d!important;
+    font-size:8.5px!important;
+  }
+  body.desktop-mode .receipt-items-card .receipt-variants-zone-title h4{
+    margin-top:2px!important;
+    color:#204d49!important;
+    font-size:19px!important;
+  }
+  body.desktop-mode .receipt-items-card .receipt-variants-zone-title p{
+    margin-top:4px!important;
+    color:#728a87!important;
+    font-size:9.5px!important;
+  }
+  body.desktop-mode .receipt-items-card .receipt-variants-zone-head>em{
+    min-width:62px!important;
+    color:var(--phase-check-dark,#0f766d)!important;
+  }
+  body.desktop-mode .receipt-items-card .receipt-variants-zone-head>em b{
+    font-size:24px!important;
+  }
+
+  /* Variant list starts directly under the subsection heading. */
+  body.desktop-mode .receipt-items-card .receipt-variant-list-v2{
+    gap:12px!important;
+    padding:14px 0 0!important;
+  }
+
+  /* One variant = one clear row/card, not another stack of white cards. */
+  body.desktop-mode .receipt-items-card .receipt-variant-card{
+    border:1px solid #cddde0!important;
+    border-radius:16px!important;
+    background:#fff!important;
+    box-shadow:0 4px 14px rgba(30,62,86,.05)!important;
+  }
+  body.desktop-mode .receipt-items-card .receipt-variant-card-head{
+    min-height:58px!important;
+    padding:11px 14px!important;
+    background:#fff!important;
+    border-bottom:1px solid #dfe8e8!important;
+  }
+
+  /* The three former boxes become ONE operative surface with separators. */
+  body.desktop-mode .receipt-items-card .receipt-variant-card-body{
+    display:grid!important;
+    grid-template-columns:minmax(350px,.95fr) minmax(430px,1.22fr) minmax(300px,.83fr)!important;
+    gap:0!important;
+    padding:0!important;
+    align-items:stretch!important;
+    background:#f7faf9!important;
+  }
+  body.desktop-mode .receipt-items-card .receipt-variant-quantities,
+  body.desktop-mode .receipt-items-card .receipt-assisted-count,
+  body.desktop-mode .receipt-items-card .receipt-variant-context{
+    min-width:0!important;
+    margin:0!important;
+    padding:16px!important;
+    border:0!important;
+    border-radius:0!important;
+    background:transparent!important;
+    box-shadow:none!important;
+  }
+  body.desktop-mode .receipt-items-card .receipt-assisted-count,
+  body.desktop-mode .receipt-items-card .receipt-variant-context{
+    border-left:1px solid #dce6e4!important;
+  }
+
+  /* Panel headings become labels, not mini-cards. */
+  body.desktop-mode .receipt-items-card .receipt-variant-quantities>header,
+  body.desktop-mode .receipt-items-card .receipt-assisted-count>header,
+  body.desktop-mode .receipt-items-card .receipt-variant-context>header{
+    min-height:34px!important;
+    margin:0 0 11px!important;
+    gap:8px!important;
+  }
+  body.desktop-mode .receipt-items-card .receipt-variant-quantities>header>span,
+  body.desktop-mode .receipt-items-card .receipt-assisted-count>header>span,
+  body.desktop-mode .receipt-items-card .receipt-variant-context>header>span{
+    width:26px!important;
+    height:26px!important;
+    flex:0 0 26px!important;
+    border:0!important;
+    border-radius:0!important;
+    background:transparent!important;
+    box-shadow:none!important;
+  }
+  body.desktop-mode .receipt-items-card .receipt-variant-quantities>header>span{
+    color:#5e7e98!important;
+  }
+  body.desktop-mode .receipt-items-card .receipt-assisted-count>header>span{
+    color:#4d82b7!important;
+  }
+  body.desktop-mode .receipt-items-card .receipt-variant-context>header>span{
+    color:#2e9d70!important;
+  }
+  body.desktop-mode .receipt-items-card .receipt-variant-quantities>header>span>.ph,
+  body.desktop-mode .receipt-items-card .receipt-assisted-count>header>span>.ph,
+  body.desktop-mode .receipt-items-card .receipt-variant-context>header>span>.ph{
+    font-size:20px!important;
+  }
+  body.desktop-mode .receipt-items-card .receipt-variant-quantities header small,
+  body.desktop-mode .receipt-items-card .receipt-assisted-count header small,
+  body.desktop-mode .receipt-items-card .receipt-variant-context header small{
+    color:#82928f!important;
+    font-size:7.5px!important;
+  }
+  body.desktop-mode .receipt-items-card .receipt-variant-quantities header b,
+  body.desktop-mode .receipt-items-card .receipt-assisted-count header b,
+  body.desktop-mode .receipt-items-card .receipt-variant-context header b{
+    color:#294b60!important;
+    font-size:12px!important;
+  }
+  body.desktop-mode .receipt-items-card .receipt-assisted-count header p{
+    margin-top:2px!important;
+    color:#778b97!important;
+    font-size:8.5px!important;
+  }
+
+  /* Inputs remain distinct controls; the surrounding container is no longer a box. */
+  body.desktop-mode .receipt-items-card .receipt-variant-quantity-grid label{
+    background:#fff!important;
+    border:1px solid #d8e3e7!important;
+    border-radius:11px!important;
+  }
+  body.desktop-mode .receipt-items-card .receipt-variant-checked{
+    border-color:#b9dfcc!important;
+    background:#fbfefc!important;
+  }
+
+  /* Assisted-count helper becomes a low-noise inline hint. */
+  body.desktop-mode .receipt-items-card .receipt-assisted-empty{
+    border:1px dashed #cbdbe5!important;
+    background:rgba(255,255,255,.72)!important;
+    border-radius:9px!important;
+  }
+  body.desktop-mode .receipt-items-card .receipt-assisted-result{
+    background:#fff!important;
+    border:1px solid #d5e2e8!important;
+    border-radius:10px!important;
+  }
+
+  /* Position is content inside the unified row, not an additional card hierarchy. */
+  body.desktop-mode .receipt-items-card .receipt-variant-position-card{
+    min-height:86px!important;
+    border:1px solid #d8e6df!important;
+    border-radius:11px!important;
+    background:rgba(255,255,255,.78)!important;
+    box-shadow:none!important;
+  }
+
+  /* Add variant belongs to the subsection and stays intentionally lightweight. */
+  body.desktop-mode .receipt-items-card .receipt-add-variant-v2{
+    width:100%!important;
+    min-height:52px!important;
+    margin:12px 0 0!important;
+    border:1.5px dashed #7cbcb3!important;
+    border-radius:12px!important;
+    background:rgba(234,248,246,.65)!important;
+    box-shadow:none!important;
+  }
+
+  /* Article notes close the article without introducing another visual card. */
+  body.desktop-mode .receipt-items-card .receipt-article-note-v2{
+    padding:0 18px 18px!important;
+    background:#fff!important;
+  }
+
+  /* The add-article control sits on the phase surface, clearly outside the article card. */
+  body.desktop-mode .receipt-items-card>.receipt-add-article-v2{
+    width:calc(100% - 40px)!important;
+    margin:0 20px 20px!important;
+    background:#e8f6f3!important;
+    border-color:#62afa5!important;
+    box-shadow:none!important;
+  }
+}
+</style>
 </head>
 <body>
 <header id="topbar" class="topbar"></header>
@@ -15410,6 +15665,6 @@ try{globalThis.__NOVA_LEGACY_AVAILABLE=!!localStorage.getItem(CONFIG.legacyStora
 const switchSite=async siteId=>{await ui.selectSite(siteId);return auth.site()};
 globalThis.NOVA=Object.freeze({version:CONFIG.appVersion,schema:CONFIG.version,identityVersion:CONFIG.identityVersion,store,auth,router,domain,excel,ui,sounds,sites:SITES,operators:OPERATORS,roles:ROLE_DEFS,saveIdentityRegistry,capabilities:Object.freeze({operational:ALL_CAPS,master:MASTER_CAPS,administration:ADMIN_CAPS,globalAdmin:GLOBAL_ADMIN_CAPS}),identityValidation:IDENTITY_VALIDATION,switchSite});
 ui.render();</script>
-<!-- SOMA_BUILD:R31.31-20260924 -->
+<!-- SOMA_BUILD:R31.32-20260924 -->
 </body>
 </html>
