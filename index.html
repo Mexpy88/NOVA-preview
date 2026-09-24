@@ -1,13 +1,13 @@
 <!doctype html>
 <html lang="it">
 <head>
-<meta name="soma-build" content="R31.26-20260924">
+<meta name="soma-build" content="R31.27-20260924">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
 <script id="soma-build-freshness">
 (() => {
-  const CURRENT_BUILD='R31.26-20260924',CHECK_KEY='soma:last-build-refresh';
+  const CURRENT_BUILD='R31.27-20260924',CHECK_KEY='soma:last-build-refresh';
   globalThis.SOMA_BUILD=CURRENT_BUILD;
   const check=async()=>{
     try{
@@ -11456,6 +11456,221 @@ body.desktop-mode .app-view:has(.receipt-new-shell){width:100%!important;max-wid
   .receipt-add-variant-v2{width:calc(100% - 22px)!important;margin:0 11px 11px!important}
 }
 </style>
+
+
+<style id="r31-27-receipt-phase-color-system">
+/* ===== R31.27 · RECEIPT PHASE COLOR SYSTEM =====
+   1 Document = blue · 2 Physical control = teal · 3 Confirmation = SOMA green
+   Color is used as navigation/semantic accent; operational status colors remain untouched. */
+.receipt-new-shell{
+  --phase-doc:#3f80ce;
+  --phase-doc-dark:#2f6fae;
+  --phase-doc-soft:#edf5fd;
+  --phase-doc-line:#c9dcf2;
+  --phase-check:#159a8c;
+  --phase-check-dark:#0f766d;
+  --phase-check-soft:#eaf8f6;
+  --phase-check-line:#bfe3de;
+  --phase-done:#1fa873;
+  --phase-done-dark:#16845a;
+  --phase-done-soft:#edf8f3;
+  --phase-done-line:#c5e5d6;
+}
+
+/* Global stepper: the whole route is legible at a glance */
+.receipt-new-stepper>span{
+  position:relative!important;
+  overflow:hidden!important;
+  transition:border-color .18s ease,background .18s ease,box-shadow .18s ease!important;
+}
+.receipt-new-stepper>span::after{
+  content:""!important;
+  position:absolute!important;
+  left:0!important;
+  right:0!important;
+  bottom:0!important;
+  height:3px!important;
+  opacity:.96!important;
+}
+.receipt-new-stepper>span:nth-child(1){
+  border-color:var(--phase-doc-line)!important;
+  background:linear-gradient(135deg,var(--phase-doc-soft),#fff 78%)!important;
+  box-shadow:0 5px 16px rgba(63,128,206,.055)!important;
+}
+.receipt-new-stepper>span:nth-child(1)::after{background:var(--phase-doc)!important}
+.receipt-new-stepper>span:nth-child(1) i{background:var(--phase-doc)!important;color:#fff!important}
+.receipt-new-stepper>span:nth-child(1) b{color:var(--phase-doc-dark)!important}
+
+.receipt-new-stepper>span:nth-child(2){
+  border-color:var(--phase-check-line)!important;
+  background:linear-gradient(135deg,var(--phase-check-soft),#fff 78%)!important;
+  box-shadow:0 5px 16px rgba(21,154,140,.055)!important;
+}
+.receipt-new-stepper>span:nth-child(2)::after{background:var(--phase-check)!important}
+.receipt-new-stepper>span:nth-child(2) i{background:var(--phase-check)!important;color:#fff!important}
+.receipt-new-stepper>span:nth-child(2) b{color:var(--phase-check-dark)!important}
+
+.receipt-new-stepper>span:nth-child(3){
+  border-color:var(--phase-done-line)!important;
+  background:linear-gradient(135deg,var(--phase-done-soft),#fff 78%)!important;
+  box-shadow:0 5px 16px rgba(31,168,115,.055)!important;
+}
+.receipt-new-stepper>span:nth-child(3)::after{background:var(--phase-done)!important}
+.receipt-new-stepper>span:nth-child(3) i{background:var(--phase-done)!important;color:#fff!important}
+.receipt-new-stepper>span:nth-child(3) b{color:var(--phase-done-dark)!important}
+
+/* Shared phase-card treatment */
+.receipt-document-card,
+.receipt-items-card,
+.receipt-confirm-card{
+  position:relative!important;
+}
+.receipt-document-card::before,
+.receipt-items-card::before,
+.receipt-confirm-card::before{
+  content:""!important;
+  position:absolute!important;
+  left:0!important;
+  top:0!important;
+  bottom:0!important;
+  width:5px!important;
+  z-index:2!important;
+}
+
+/* 1 · DOCUMENTO — blue */
+.receipt-document-card{
+  border-color:var(--phase-doc-line)!important;
+  box-shadow:0 10px 30px rgba(63,128,206,.065)!important;
+}
+.receipt-document-card::before{background:var(--phase-doc)!important}
+.receipt-document-card .receipt-step-head{
+  background:linear-gradient(100deg,var(--phase-doc-soft) 0,#fff 38%)!important;
+  border-bottom-color:#dce8f4!important;
+}
+.receipt-document-card .receipt-step-number{background:var(--phase-doc)!important}
+.receipt-document-card .receipt-step-icon{background:#e5f0fb!important;color:var(--phase-doc)!important}
+.receipt-document-card .receipt-step-head>div>small{color:var(--phase-doc-dark)!important}
+.receipt-document-card label>span>b{color:var(--phase-doc)!important}
+.receipt-document-card .field:focus{
+  border-color:#6ca2db!important;
+  box-shadow:0 0 0 4px rgba(63,128,206,.10)!important;
+}
+.receipt-document-card .receipt-ddt-action.secondary-action{
+  border-color:#d2e1f0!important;
+  background:#f3f8fd!important;
+  color:#356d9f!important;
+}
+.receipt-document-card .receipt-ddt-action.secondary-action>span{
+  color:var(--phase-doc)!important;
+  background:#fff!important;
+}
+
+/* 2 · CONTROLLO FISICO — teal */
+.receipt-items-card{
+  border-color:var(--phase-check-line)!important;
+  box-shadow:0 10px 30px rgba(21,154,140,.065)!important;
+}
+.receipt-items-card::before{background:var(--phase-check)!important}
+.receipt-items-card>.receipt-step-head{
+  background:linear-gradient(100deg,var(--phase-check-soft) 0,#fff 40%)!important;
+  border-bottom-color:#d6ebe7!important;
+}
+.receipt-items-card>.receipt-step-head .receipt-step-number{background:var(--phase-check)!important}
+.receipt-items-card>.receipt-step-head .receipt-step-icon{background:#dff4f1!important;color:var(--phase-check)!important}
+.receipt-items-card>.receipt-step-head>div>small{color:var(--phase-check-dark)!important}
+.receipt-items-card .receipt-step-counts>span{
+  border-color:var(--phase-check-line)!important;
+  background:#f1faf8!important;
+}
+.receipt-items-card .receipt-step-counts b{color:var(--phase-check)!important}
+.receipt-items-card .receipt-step-counts small{color:#5d817c!important}
+
+.receipt-items-card .receipt-article-card.idle .receipt-article-index{
+  background:#e9f6f4!important;
+  color:var(--phase-check-dark)!important;
+}
+.receipt-items-card .receipt-article-card.idle{
+  border-left-color:#7bbab2!important;
+}
+.receipt-items-card .receipt-article-common .field:focus,
+.receipt-items-card .receipt-variant-quantity-grid .field:focus{
+  border-color:#55ada3!important;
+  box-shadow:0 0 0 4px rgba(21,154,140,.09)!important;
+}
+.receipt-items-card .receipt-variants-zone{
+  border-color:#d3e8e4!important;
+}
+.receipt-items-card .receipt-variants-zone-head{
+  border-bottom-color:#d6e9e6!important;
+  background:#f0f9f7!important;
+}
+.receipt-items-card .receipt-variants-zone-title>span{
+  color:var(--phase-check)!important;
+  background:#fff!important;
+}
+.receipt-items-card .receipt-variants-zone-title h4{color:#245e58!important}
+.receipt-items-card .receipt-variants-zone-head>em{color:var(--phase-check-dark)!important}
+.receipt-items-card .receipt-add-variant-v2{
+  border-color:#80bfb7!important;
+  background:#eff9f7!important;
+  color:var(--phase-check-dark)!important;
+}
+.receipt-items-card .receipt-add-variant-v2 small{color:#658b86!important}
+.receipt-items-card .receipt-add-article-v2{
+  border-color:#68b4aa!important;
+  background:#eaf8f6!important;
+  color:var(--phase-check-dark)!important;
+}
+.receipt-items-card .receipt-add-article-v2 small{color:#648d87!important}
+@media(hover:hover) and (pointer:fine){
+  .receipt-items-card .receipt-add-variant-v2:hover,
+  .receipt-items-card .receipt-add-article-v2:hover{
+    border-color:var(--phase-check)!important;
+    background:#e2f5f2!important;
+    box-shadow:0 9px 20px rgba(21,154,140,.11)!important;
+  }
+}
+
+/* 3 · CONFERMA — SOMA green */
+.receipt-confirm-card{
+  border-color:var(--phase-done-line)!important;
+  box-shadow:0 10px 30px rgba(31,168,115,.075)!important;
+}
+.receipt-confirm-card::before{background:var(--phase-done)!important}
+.receipt-confirm-card>.receipt-step-head{
+  background:linear-gradient(100deg,var(--phase-done-soft) 0,#fff 40%)!important;
+  border-bottom-color:#d9ebe2!important;
+}
+.receipt-confirm-card>.receipt-step-head .receipt-step-number{background:var(--phase-done)!important}
+.receipt-confirm-card>.receipt-step-head .receipt-step-icon{background:#e4f5ed!important;color:var(--phase-done)!important}
+.receipt-confirm-card>.receipt-step-head>div>small{color:var(--phase-done-dark)!important}
+.receipt-confirm-card .receipt-confirm-summary{
+  border-color:var(--phase-done-line)!important;
+  background:linear-gradient(180deg,#fbfefc,#f6fbf8)!important;
+}
+.receipt-confirm-card .receipt-confirm-summary>span:not(.receipt-mismatch-kpi) b{
+  color:var(--phase-done-dark)!important;
+}
+.receipt-confirm-card .receipt-delivery-note .field:focus{
+  border-color:#55a783!important;
+  box-shadow:0 0 0 4px rgba(31,168,115,.09)!important;
+}
+.receipt-confirm-card .receipt-confirm-cta{
+  background:linear-gradient(135deg,#20ab76,#199867)!important;
+  box-shadow:0 10px 24px rgba(31,168,115,.18)!important;
+}
+
+/* Preserve amber as a warning semantic, independent of phase color */
+.receipt-confirm-card .receipt-mismatch-kpi b{color:#b47a12!important}
+
+/* Mobile keeps the same semantic mapping without adding density */
+@media(max-width:700px){
+  .receipt-document-card::before,
+  .receipt-items-card::before,
+  .receipt-confirm-card::before{width:4px!important}
+  .receipt-new-stepper>span::after{height:2px!important}
+}
+</style>
 </head>
 <body>
 <header id="topbar" class="topbar"></header>
@@ -12883,6 +13098,6 @@ try{globalThis.__NOVA_LEGACY_AVAILABLE=!!localStorage.getItem(CONFIG.legacyStora
 const switchSite=async siteId=>{await ui.selectSite(siteId);return auth.site()};
 globalThis.NOVA=Object.freeze({version:CONFIG.appVersion,schema:CONFIG.version,identityVersion:CONFIG.identityVersion,store,auth,router,domain,excel,ui,sounds,sites:SITES,operators:OPERATORS,roles:ROLE_DEFS,saveIdentityRegistry,capabilities:Object.freeze({operational:ALL_CAPS,master:MASTER_CAPS,administration:ADMIN_CAPS,globalAdmin:GLOBAL_ADMIN_CAPS}),identityValidation:IDENTITY_VALIDATION,switchSite});
 ui.render();</script>
-<!-- SOMA_BUILD:R31.26-20260924 -->
+<!-- SOMA_BUILD:R31.27-20260924 -->
 </body>
 </html>
