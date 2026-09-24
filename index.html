@@ -1,13 +1,13 @@
 <!doctype html>
 <html lang="it">
 <head>
-<meta name="soma-build" content="R31.25-20260924">
+<meta name="soma-build" content="R31.26-20260924">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
 <script id="soma-build-freshness">
 (() => {
-  const CURRENT_BUILD='R31.25-20260924',CHECK_KEY='soma:last-build-refresh';
+  const CURRENT_BUILD='R31.26-20260924',CHECK_KEY='soma:last-build-refresh';
   globalThis.SOMA_BUILD=CURRENT_BUILD;
   const check=async()=>{
     try{
@@ -11025,6 +11025,9 @@ body.desktop-mode .app-view:has(.receipt-new-shell){width:100%!important;max-wid
 .receipt-variant-card{
   --vc:#7892a6;
   --vc-soft:#eef3f6;
+  /* R31.26: keep legacy status-pill tokens mapped to the new card palette */
+  --rv:var(--vc);
+  --rv-soft:var(--vc-soft);
   border:1px solid #d9e4eb!important;
   border-radius:18px!important;
   background:#fff!important;
@@ -12880,6 +12883,6 @@ try{globalThis.__NOVA_LEGACY_AVAILABLE=!!localStorage.getItem(CONFIG.legacyStora
 const switchSite=async siteId=>{await ui.selectSite(siteId);return auth.site()};
 globalThis.NOVA=Object.freeze({version:CONFIG.appVersion,schema:CONFIG.version,identityVersion:CONFIG.identityVersion,store,auth,router,domain,excel,ui,sounds,sites:SITES,operators:OPERATORS,roles:ROLE_DEFS,saveIdentityRegistry,capabilities:Object.freeze({operational:ALL_CAPS,master:MASTER_CAPS,administration:ADMIN_CAPS,globalAdmin:GLOBAL_ADMIN_CAPS}),identityValidation:IDENTITY_VALIDATION,switchSite});
 ui.render();</script>
-<!-- SOMA_BUILD:R31.25-20260924 -->
+<!-- SOMA_BUILD:R31.26-20260924 -->
 </body>
 </html>
