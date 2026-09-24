@@ -1,6 +1,38 @@
 <!doctype html>
 <html lang="it">
 <head>
+<meta name="soma-build" content="R31.12-20260924">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
+<script id="soma-build-freshness">
+(() => {
+  const CURRENT_BUILD='R31.12-20260924',CHECK_KEY='soma:last-build-refresh';
+  globalThis.SOMA_BUILD=CURRENT_BUILD;
+  const check=async()=>{
+    try{
+      if(!/^https?:$/.test(location.protocol))return;
+      const url=new URL(location.href);
+      url.searchParams.set('__soma_check',Date.now().toString());
+      const res=await fetch(url.href,{cache:'no-store',headers:{'Cache-Control':'no-cache'}});
+      if(!res.ok)return;
+      const html=await res.text();
+      const m=html.match(/<meta\s+name=["']soma-build["']\s+content=["']([^"']+)["']/i)||html.match(/<meta\s+content=["']([^"']+)["']\s+name=["']soma-build["']/i);
+      const latest=m?.[1];if(!latest||latest===CURRENT_BUILD)return;
+      const now=Date.now(),last=JSON.parse(sessionStorage.getItem(CHECK_KEY)||'null');
+      if(last?.build===latest&&now-Number(last.at||0)<60000)return;
+      sessionStorage.setItem(CHECK_KEY,JSON.stringify({build:latest,at:now}));
+      const target=new URL(location.href);
+      target.searchParams.delete('__soma_check');
+      target.searchParams.set('build',latest);
+      location.replace(target.href);
+    }catch{}
+  };
+  addEventListener('pageshow',()=>setTimeout(check,250),{once:true});
+  document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible')check()});
+  setInterval(check,120000);
+})();
+</script>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#edf4f8">
@@ -9719,5 +9751,6 @@ try{globalThis.__NOVA_LEGACY_AVAILABLE=!!localStorage.getItem(CONFIG.legacyStora
 const switchSite=async siteId=>{await ui.selectSite(siteId);return auth.site()};
 globalThis.NOVA=Object.freeze({version:CONFIG.appVersion,schema:CONFIG.version,identityVersion:CONFIG.identityVersion,store,auth,router,domain,excel,ui,sounds,sites:SITES,operators:OPERATORS,roles:ROLE_DEFS,saveIdentityRegistry,capabilities:Object.freeze({operational:ALL_CAPS,master:MASTER_CAPS,administration:ADMIN_CAPS,globalAdmin:GLOBAL_ADMIN_CAPS}),identityValidation:IDENTITY_VALIDATION,switchSite});
 ui.render();</script>
+<!-- SOMA_BUILD:R31.12-20260924 -->
 </body>
 </html>
