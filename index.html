@@ -1,13 +1,13 @@
 <!doctype html>
 <html lang="it">
 <head>
-<meta name="soma-build" content="R31.29-20260924">
+<meta name="soma-build" content="R31.30-20260924">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
 <script id="soma-build-freshness">
 (() => {
-  const CURRENT_BUILD='R31.29-20260924',CHECK_KEY='soma:last-build-refresh';
+  const CURRENT_BUILD='R31.30-20260924',CHECK_KEY='soma:last-build-refresh';
   globalThis.SOMA_BUILD=CURRENT_BUILD;
   const check=async()=>{
     try{
@@ -13838,6 +13838,87 @@ body.desktop-mode .app-view:has(.receipt-new-shell){width:100%!important;max-wid
   }
 }
 </style>
+
+
+<style id="r31-30-desktop-receipt-pickers">
+/* ===== R31.30 · DESKTOP RECEIPT DATE / DATETIME PICKERS =====
+   Desktop only: mobile keeps the existing native controls unchanged. */
+.receipt-picker-field{display:contents}
+.receipt-picker-trigger{display:none}
+
+@media(min-width:981px){
+  body.desktop-mode .receipt-doc-grid>.receipt-picker-field{
+    position:relative!important;
+    display:block!important;
+    min-width:0!important;
+  }
+  body.desktop-mode .receipt-picker-field>label{
+    display:block!important;
+    min-width:0!important;
+  }
+  body.desktop-mode .receipt-picker-field .field{
+    width:100%!important;
+    padding-right:70px!important;
+    cursor:pointer!important;
+  }
+
+  /* Hide only the browser glyph; the native picker remains the source of truth. */
+  body.desktop-mode .receipt-picker-field input[type="date"]::-webkit-calendar-picker-indicator,
+  body.desktop-mode .receipt-picker-field input[type="datetime-local"]::-webkit-calendar-picker-indicator{
+    opacity:0!important;
+    pointer-events:none!important;
+    width:0!important;
+    min-width:0!important;
+    margin:0!important;
+    padding:0!important;
+  }
+
+  body.desktop-mode .receipt-picker-trigger{
+    position:absolute!important;
+    right:7px!important;
+    bottom:7px!important;
+    z-index:3!important;
+    width:48px!important;
+    height:48px!important;
+    display:grid!important;
+    place-items:center!important;
+    padding:0!important;
+    border:1px solid var(--phase-doc-line,#c9dcf2)!important;
+    border-radius:13px!important;
+    background:var(--phase-doc-soft,#edf5fd)!important;
+    color:var(--phase-doc,#3f80ce)!important;
+    box-shadow:0 2px 7px rgba(63,128,206,.045)!important;
+    transition:
+      background .16s ease,
+      border-color .16s ease,
+      color .16s ease,
+      box-shadow .16s ease,
+      transform .08s ease!important;
+  }
+  body.desktop-mode .receipt-picker-trigger>.ph{
+    font-size:22px!important;
+    line-height:1!important;
+  }
+  body.desktop-mode .receipt-picker-field:hover .receipt-picker-trigger,
+  body.desktop-mode .receipt-picker-field:focus-within .receipt-picker-trigger{
+    border-color:#9fc2e8!important;
+    background:#e5f0fb!important;
+    color:#2f6fae!important;
+    box-shadow:0 5px 13px rgba(63,128,206,.11)!important;
+  }
+  body.desktop-mode .receipt-picker-field:focus-within .field{
+    border-color:#6ca2db!important;
+    box-shadow:0 0 0 4px rgba(63,128,206,.10)!important;
+  }
+  body.desktop-mode .receipt-picker-trigger:active{
+    transform:scale(.96)!important;
+  }
+  body.desktop-mode .receipt-picker-trigger:focus-visible{
+    outline:3px solid rgba(63,128,206,.18)!important;
+    outline-offset:2px!important;
+  }
+}
+</style>
 </head>
 <body>
 <header id="topbar" class="topbar"></header>
@@ -14632,6 +14713,7 @@ class UI{
   }
   bind(){
     document.addEventListener('click',e=>{const el=e.target.closest('[data-action]');if(!el)return;e.preventDefault();this.safe(()=>this.action(el.dataset.action,el))});
+    document.addEventListener('click',e=>{const box=e.target.closest('.receipt-picker-field');if(!box||e.target.closest('[data-action]')||!document.body.classList.contains('desktop-mode')||(globalThis.innerWidth||document.documentElement.clientWidth||0)<=980)return;const input=box.querySelector('input[type="date"],input[type="datetime-local"]');if(!input)return;try{input.focus({preventScroll:true})}catch{input.focus?.()}if(typeof input.showPicker==='function'){try{input.showPicker();return}catch{}}input.click?.()});
     document.addEventListener('input',e=>this.input(e.target));document.addEventListener('change',e=>this.change(e.target));
     document.addEventListener('keydown',e=>{if(e.key!=='Enter'||e.shiftKey||e.ctrlKey||e.altKey||e.metaKey)return;const requestDelete=document.getElementById('requestDeleteDialog');if(requestDelete?.open){e.preventDefault();this.safe(()=>this.confirmRequestDelete());return}const login=document.getElementById('loginDialog');if(login?.open){e.preventDefault();this.safe(()=>this.login())}});
     document.getElementById('masterFile')?.addEventListener('change',e=>this.importMaster(e.target));
@@ -14934,8 +15016,8 @@ class UI{
         <div class="receipt-doc-grid">
           <label class="receipt-field-wide"><span>Fornitore <b>*</b></span><input class="field" data-bind="receipt:header:supplier" value="${esc(d.supplier)}" placeholder="Nome fornitore"></label>
           <label><span>Numero DDT</span><input class="field" data-bind="receipt:header:ddtNumber" value="${esc(d.ddtNumber)}" placeholder="Es. 1458/26"></label>
-          <label><span>Data DDT</span><input type="date" class="field" data-bind="receipt:header:ddtDate" value="${esc(d.ddtDate)}"></label>
-          <label><span>Arrivo merce</span><input type="datetime-local" class="field" data-bind="receipt:header:receivedAt" value="${esc(d.receivedAt)}"></label>
+          <div class="receipt-picker-field"><label for="receiptDdtDate"><span>Data DDT</span><input id="receiptDdtDate" type="date" class="field" data-bind="receipt:header:ddtDate" value="${esc(d.ddtDate)}"></label><button type="button" class="receipt-picker-trigger" data-action="receipt-picker-open" data-target="receiptDdtDate" aria-label="Apri calendario Data DDT">${phRegular('calendar-blank')}</button></div>
+          <div class="receipt-picker-field"><label for="receiptArrivalMerce"><span>Arrivo merce</span><input id="receiptArrivalMerce" type="datetime-local" class="field" data-bind="receipt:header:receivedAt" value="${esc(d.receivedAt)}"></label><button type="button" class="receipt-picker-trigger" data-action="receipt-picker-open" data-target="receiptArrivalMerce" aria-label="Apri calendario Arrivo merce">${phRegular('calendar-blank')}</button></div>
         </div>
         <div class="receipt-ddt-actions">
           <button class="receipt-ddt-action primary-action" data-action="ddt-camera"><span>${phRegular('camera')}</span><div><small>ACQUISISCI DOCUMENTO</small><b>Scansiona DDT</b></div>${phRegular('arrow-right')}</button>
@@ -15240,7 +15322,7 @@ class UI{
 
   action(action,el){
     const go=(name,params={})=>this.router.go(name,params);
-    const map={back:()=>this.router.back(),home:()=>this.router.home(),login:()=>{this.sounds?.click?.();this.openLogin()},'login-submit':()=>this.login(),logout:()=>{this.sounds?.click?.();this.logout()},'site-switch':()=>this.openSiteSwitcher(),'site-select':()=>this.selectSite(el.dataset.site),'site-choice-cancel':()=>this.cancelSiteChoice(),'toggle-pin':()=>{const p=document.getElementById('loginPin'),show=p.type==='password';p.type=show?'text':'password';const i=el.querySelector('i');if(i)i.className=`ph-duotone ph-${show?'eye-slash':'eye'}`;el.setAttribute('aria-label',show?'Nascondi PIN':'Mostra PIN');p.focus()},'view-desktop':()=>this.applyView('desktop'),'view-phone':()=>this.applyView('smartphone'),notifications:()=>this.openNotifications(),master:()=>go('master'),'master-view':()=>go('master'),'master-filter-reset':()=>this.resetMasterFilters(),'master-request-toggle':()=>this.toggleMasterRequestMode(),'master-request-item':()=>this.toggleMasterRequestItem(el.dataset.item),'master-request-locations':()=>this.toggleMasterRequestLocations(el.dataset.item,el),'master-request-review':()=>this.openMasterRequestReview(),'master-request-review-close':()=>document.getElementById('masterRequestDialog')?.close(),'master-request-remove':()=>this.removeMasterRequestItem(el.dataset.item),'master-request-qty-minus':()=>this.adjustMasterRequestQty(el.dataset.item,-1),'master-request-qty-plus':()=>this.adjustMasterRequestQty(el.dataset.item,1),'master-request-send':()=>this.sendMasterRequest(),'master-page-prev':()=>{this.masterView.page=Math.max(1,this.masterView.page-1);this.renderMasterViewerBody()},'master-page-next':()=>{this.masterView.page+=1;this.renderMasterViewerBody()},'master-edit-close':()=>this.closeMasterEdit(),'master-edit-save':()=>this.saveMasterEdit(),'master-import':()=>{if(!this.auth.can('MASTER_IMPORT'))throw new Error('Non hai il permesso per importare il Master.');document.getElementById('masterFile').click()},'master-export':async()=>{if(!this.auth.can('MASTER_EXPORT'))throw new Error('Non hai il permesso per esportare il Master.');const n=await this.excel.export();this.toast(`${n} esportato.`)},'legacy-migrate':()=>{if(!confirm('Migrare una COPIA dei dati REMOTO in NOVA? REMOTO non verrà modificato.'))return;this.excel.migrateLocalLegacy();this.toast('Copia REMOTO migrata in NOVA.');this.router.home()},receiving:()=>go('receiving'),'receipt-new':()=>this.openReceiptNew(),'receipts-pending':()=>go('receipts',{mode:'PENDING'}),'receipts-all':()=>go('receipts',{mode:'ALL'}),'receipt-line-add':()=>this.addReceiptLine(),'receipt-article-add':()=>this.addReceiptArticle(),'receipt-confirm':()=>this.confirmReceipt(),'ddt-camera':()=>document.getElementById('ddtCamera').click(),'ddt-file':()=>document.getElementById('ddtFile').click(),'ddt-analyze':()=>this.openAnalysis('DDT'),'request-camera':()=>document.getElementById('requestCamera').click(),'request-file':()=>document.getElementById('requestFile').click(),'request-analyze':()=>this.openAnalysis('REQUEST'),'analysis-share':()=>this.shareAnalysis(),'analysis-copy':()=>this.copyAnalysisPrompt(),'analysis-import':()=>this.importAnalysisJson(),stock:()=>{if(this.require('STOCK_VIEW'))go('stock')},'rectify-new':()=>{this.rectDraft=null;go('rectify',{key:''})},rectify:()=>{this.rectDraft=null;go('rectify',{key:''})},'rect-filter-toggle':()=>{this.rectFiltersOpen=!this.rectFiltersOpen;this.renderView()},'rect-change':()=>{this.rectDraft=null;this.renderView()},'rect-step-minus':()=>this.stepRect(-1),'rect-step-plus':()=>this.stepRect(1),'rect-cancel':()=>{this.rectDraft=null;this.router.back()},'rectify-save':()=>this.saveRectify(el),count:()=>{this.countDraft=this.countDraft||this.loadCountSession();go('count')},'count-load':()=>this.loadCount(),'count-finalize':()=>this.finalizeCount(),'count-apply':()=>this.applyCount(el),'count-abandon':()=>this.abandonCount(),issue:()=>go('issue'),'issue-confirm':()=>this.confirmIssue(),transfer:()=>go('transfer'),'transfer-confirm':()=>this.confirmTransfer(),requests:()=>go('requests-progress'),'request-new':()=>this.openRequestNew(),'request-line-add':()=>this.addRequestLine(),'request-save':()=>this.saveRequest(),'requests-progress':()=>go('requests-progress'),'requests-process':()=>go('requests-process'),registry:()=>go('registry'),'registry-movements':()=>{this.registryTab='MOVIMENTI';go('registry-list')},'registry-audit':()=>{this.registryTab='AUDIT';go('registry-list')},'registry-export':async()=>{const n=await this.excel.exportRegistry();this.toast(`${n} esportato.`)},admin:()=>go('admin'),'admin-operators':()=>go('admin-operators'),'admin-operator-new':()=>go('admin-operator',{id:''}),'admin-sites':()=>go('admin-sites'),'admin-site-new':()=>go('admin-site',{id:''}),'admin-roles':()=>go('admin-roles'),'admin-pin-generate':()=>this.generateAdminPin(),'admin-pin-dismiss':()=>{this.adminGeneratedPin='';this.renderView()},'activity-today':()=>{this.activityDate=localDateInput();this.renderView()},'activity-date-open':()=>{const input=document.getElementById(el.dataset.target);if(!input)return;try{input.focus({preventScroll:true})}catch{input.focus?.()}if(typeof input.showPicker==='function'){try{input.showPicker();return}catch{}}input.click?.()},'registry-filter-toggle':()=>document.getElementById('registryFilters')?.classList.toggle('hidden')};
+    const map={back:()=>this.router.back(),home:()=>this.router.home(),login:()=>{this.sounds?.click?.();this.openLogin()},'login-submit':()=>this.login(),logout:()=>{this.sounds?.click?.();this.logout()},'site-switch':()=>this.openSiteSwitcher(),'site-select':()=>this.selectSite(el.dataset.site),'site-choice-cancel':()=>this.cancelSiteChoice(),'toggle-pin':()=>{const p=document.getElementById('loginPin'),show=p.type==='password';p.type=show?'text':'password';const i=el.querySelector('i');if(i)i.className=`ph-duotone ph-${show?'eye-slash':'eye'}`;el.setAttribute('aria-label',show?'Nascondi PIN':'Mostra PIN');p.focus()},'view-desktop':()=>this.applyView('desktop'),'view-phone':()=>this.applyView('smartphone'),notifications:()=>this.openNotifications(),master:()=>go('master'),'master-view':()=>go('master'),'master-filter-reset':()=>this.resetMasterFilters(),'master-request-toggle':()=>this.toggleMasterRequestMode(),'master-request-item':()=>this.toggleMasterRequestItem(el.dataset.item),'master-request-locations':()=>this.toggleMasterRequestLocations(el.dataset.item,el),'master-request-review':()=>this.openMasterRequestReview(),'master-request-review-close':()=>document.getElementById('masterRequestDialog')?.close(),'master-request-remove':()=>this.removeMasterRequestItem(el.dataset.item),'master-request-qty-minus':()=>this.adjustMasterRequestQty(el.dataset.item,-1),'master-request-qty-plus':()=>this.adjustMasterRequestQty(el.dataset.item,1),'master-request-send':()=>this.sendMasterRequest(),'master-page-prev':()=>{this.masterView.page=Math.max(1,this.masterView.page-1);this.renderMasterViewerBody()},'master-page-next':()=>{this.masterView.page+=1;this.renderMasterViewerBody()},'master-edit-close':()=>this.closeMasterEdit(),'master-edit-save':()=>this.saveMasterEdit(),'master-import':()=>{if(!this.auth.can('MASTER_IMPORT'))throw new Error('Non hai il permesso per importare il Master.');document.getElementById('masterFile').click()},'master-export':async()=>{if(!this.auth.can('MASTER_EXPORT'))throw new Error('Non hai il permesso per esportare il Master.');const n=await this.excel.export();this.toast(`${n} esportato.`)},'legacy-migrate':()=>{if(!confirm('Migrare una COPIA dei dati REMOTO in NOVA? REMOTO non verrà modificato.'))return;this.excel.migrateLocalLegacy();this.toast('Copia REMOTO migrata in NOVA.');this.router.home()},receiving:()=>go('receiving'),'receipt-new':()=>this.openReceiptNew(),'receipts-pending':()=>go('receipts',{mode:'PENDING'}),'receipts-all':()=>go('receipts',{mode:'ALL'}),'receipt-line-add':()=>this.addReceiptLine(),'receipt-article-add':()=>this.addReceiptArticle(),'receipt-confirm':()=>this.confirmReceipt(),'ddt-camera':()=>document.getElementById('ddtCamera').click(),'ddt-file':()=>document.getElementById('ddtFile').click(),'ddt-analyze':()=>this.openAnalysis('DDT'),'request-camera':()=>document.getElementById('requestCamera').click(),'request-file':()=>document.getElementById('requestFile').click(),'request-analyze':()=>this.openAnalysis('REQUEST'),'analysis-share':()=>this.shareAnalysis(),'analysis-copy':()=>this.copyAnalysisPrompt(),'analysis-import':()=>this.importAnalysisJson(),stock:()=>{if(this.require('STOCK_VIEW'))go('stock')},'rectify-new':()=>{this.rectDraft=null;go('rectify',{key:''})},rectify:()=>{this.rectDraft=null;go('rectify',{key:''})},'rect-filter-toggle':()=>{this.rectFiltersOpen=!this.rectFiltersOpen;this.renderView()},'rect-change':()=>{this.rectDraft=null;this.renderView()},'rect-step-minus':()=>this.stepRect(-1),'rect-step-plus':()=>this.stepRect(1),'rect-cancel':()=>{this.rectDraft=null;this.router.back()},'rectify-save':()=>this.saveRectify(el),count:()=>{this.countDraft=this.countDraft||this.loadCountSession();go('count')},'count-load':()=>this.loadCount(),'count-finalize':()=>this.finalizeCount(),'count-apply':()=>this.applyCount(el),'count-abandon':()=>this.abandonCount(),issue:()=>go('issue'),'issue-confirm':()=>this.confirmIssue(),transfer:()=>go('transfer'),'transfer-confirm':()=>this.confirmTransfer(),requests:()=>go('requests-progress'),'request-new':()=>this.openRequestNew(),'request-line-add':()=>this.addRequestLine(),'request-save':()=>this.saveRequest(),'requests-progress':()=>go('requests-progress'),'requests-process':()=>go('requests-process'),registry:()=>go('registry'),'registry-movements':()=>{this.registryTab='MOVIMENTI';go('registry-list')},'registry-audit':()=>{this.registryTab='AUDIT';go('registry-list')},'registry-export':async()=>{const n=await this.excel.exportRegistry();this.toast(`${n} esportato.`)},admin:()=>go('admin'),'admin-operators':()=>go('admin-operators'),'admin-operator-new':()=>go('admin-operator',{id:''}),'admin-sites':()=>go('admin-sites'),'admin-site-new':()=>go('admin-site',{id:''}),'admin-roles':()=>go('admin-roles'),'admin-pin-generate':()=>this.generateAdminPin(),'admin-pin-dismiss':()=>{this.adminGeneratedPin='';this.renderView()},'activity-today':()=>{this.activityDate=localDateInput();this.renderView()},'activity-date-open':()=>{const input=document.getElementById(el.dataset.target);if(!input)return;try{input.focus({preventScroll:true})}catch{input.focus?.()}if(typeof input.showPicker==='function'){try{input.showPicker();return}catch{}}input.click?.()},'receipt-picker-open':()=>{const input=document.getElementById(el.dataset.target);if(!input)return;try{input.focus({preventScroll:true})}catch{input.focus?.()}if(typeof input.showPicker==='function'){try{input.showPicker();return}catch{}}input.click?.()},'registry-filter-toggle':()=>document.getElementById('registryFilters')?.classList.toggle('hidden')};
     if(map[action])return map[action]();
     if(action==='request-delete')return this.openRequestDelete(el.dataset.id);if(action==='request-delete-close')return this.closeRequestDelete();if(action==='request-delete-confirm')return this.confirmRequestDelete();if(action==='request-delete-toggle-pin')return this.toggleRequestDeletePin();
     if(action==='receipt-article-remove')return this.removeReceiptArticle(el.dataset.group);if(action==='receipt-variant-add')return this.addReceiptVariant(el.dataset.group);if(action==='receipt-variant-remove')return this.removeReceiptVariant(el.dataset.line);if(action==='master-edit-row')return this.openMasterEdit(el.dataset.key);if(action==='admin-operator-edit')return go('admin-operator',{id:el.dataset.id});if(action==='admin-operator-save')return this.saveAdminOperator(el.dataset.id||'');if(action==='admin-site-edit')return go('admin-site',{id:el.dataset.id});if(action==='admin-site-save')return this.saveAdminSite(el.dataset.id||'');if(action==='stock-suggest')return this.applyStockSuggestion(el);if(action==='receipt-line-remove')return this.removeReceiptLine(el.dataset.line);if(action==='partial-add')return this.addPartial(el.dataset.line);if(action==='partial-undo')return this.undoPartial(el.dataset.line);if(action==='partial-clear')return this.clearPartial(el.dataset.line);if(action==='receipt-open')return go('receipt-detail',{id:el.dataset.id});if(action==='putaway-open')return go('putaway',{receipt:el.dataset.receipt,line:el.dataset.line});if(action==='putaway-confirm')return this.confirmPutAway(el.dataset.receipt,el.dataset.line);if(action==='rectify-open'){this.rectDraft=null;return go('rectify',{key:el.dataset.key})}if(action==='rect-select')return this.selectRect(el.dataset.key);if(action==='count-confirm-row')return this.confirmCountRow(el.dataset.dom);if(action==='count-edit')return this.editCountRow(el.dataset.dom);if(action==='count-zero')return this.countZero(el.dataset.dom);if(action==='count-extra-add')return this.addCountExtra();if(action==='count-extra-remove')return this.removeCountExtra(el.dataset.dom);if(action==='request-line-remove')return this.removeRequestLine(el.dataset.line);if(action==='request-open')return go('request-detail',{id:el.dataset.id});if(action==='request-pick')return go('request-pick',{id:el.dataset.id});if(action==='request-pick-save')return this.saveRequestPick(el.dataset.id);if(action==='ledger-cancel')return this.cancelLedger(el.dataset.id);if(action==='notif-read'){this.domain.notifications.markRead(el.dataset.id);this.store.save('notification:read');document.getElementById('notificationDialog').close();if(el.dataset.entity==='RECEIPT')go('receipt-detail',{id:el.dataset.entityId});else if(el.dataset.entity==='REQUEST')go('request-detail',{id:el.dataset.entityId});return}
@@ -15265,6 +15347,6 @@ try{globalThis.__NOVA_LEGACY_AVAILABLE=!!localStorage.getItem(CONFIG.legacyStora
 const switchSite=async siteId=>{await ui.selectSite(siteId);return auth.site()};
 globalThis.NOVA=Object.freeze({version:CONFIG.appVersion,schema:CONFIG.version,identityVersion:CONFIG.identityVersion,store,auth,router,domain,excel,ui,sounds,sites:SITES,operators:OPERATORS,roles:ROLE_DEFS,saveIdentityRegistry,capabilities:Object.freeze({operational:ALL_CAPS,master:MASTER_CAPS,administration:ADMIN_CAPS,globalAdmin:GLOBAL_ADMIN_CAPS}),identityValidation:IDENTITY_VALIDATION,switchSite});
 ui.render();</script>
-<!-- SOMA_BUILD:R31.29-20260924 -->
+<!-- SOMA_BUILD:R31.30-20260924 -->
 </body>
 </html>
