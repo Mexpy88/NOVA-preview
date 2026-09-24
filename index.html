@@ -8120,6 +8120,325 @@ body.desktop-mode .activity-desktop .activity-kpi.wide{grid-column:auto!importan
   .admin-control-card-action{min-height:46px!important}
 }
 </style>
+<style id="r31-10-master-prerequisite-ux">
+/* ===== R31.10 · MASTER PREREQUISITE — SAFE NAVIGATION + PREMIUM UX ===== */
+
+/* Dashboard: dependent actions stay discoverable but clearly signal the prerequisite. */
+.module-action.master-dependent-locked{
+  background:#fffaf0!important;
+  border-color:#ead8ad!important;
+}
+.module-action.master-dependent-locked>b{
+  color:#6f5a2b!important;
+}
+.module-action.master-dependent-locked .action-icon{
+  background:#fff2cf!important;
+  color:#a67210!important;
+}
+.module-master-lock{
+  min-height:29px!important;
+  display:inline-flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  gap:5px!important;
+  padding:0 9px!important;
+  border:1px solid #e5ca88!important;
+  border-radius:999px!important;
+  background:#fff6dc!important;
+  color:#986a10!important;
+  font-size:8px!important;
+  font-weight:950!important;
+  letter-spacing:.055em!important;
+  white-space:nowrap!important;
+}
+.module-master-lock>.ph{font-size:12px!important}
+@media(hover:hover) and (pointer:fine){
+  .module-action.master-dependent-locked:hover{
+    background:#fff6e4!important;
+    border-color:#dfbd6f!important;
+  }
+}
+
+/* Full-page prerequisite state. */
+.master-required-view{
+  min-height:calc(100dvh - 170px)!important;
+  display:grid!important;
+  place-items:center!important;
+  padding:24px 0 80px!important;
+}
+.master-required-card{
+  width:min(760px,100%)!important;
+  display:grid!important;
+  grid-template-columns:76px minmax(0,1fr)!important;
+  gap:0 20px!important;
+  padding:28px!important;
+  border:1px solid #dfd4ba!important;
+  border-radius:26px!important;
+  background:linear-gradient(180deg,#fffdfa 0%,#fff 64%)!important;
+  box-shadow:0 18px 46px rgba(44,57,68,.09)!important;
+}
+.master-required-icon{
+  grid-column:1!important;
+  grid-row:1/4!important;
+  width:76px!important;
+  height:76px!important;
+  display:grid!important;
+  place-items:center!important;
+  border:1px solid #ead8a9!important;
+  border-radius:21px!important;
+  background:#fff5d8!important;
+  color:#b17a10!important;
+}
+.master-required-icon>.ph{font-size:38px!important}
+.master-required-copy{
+  grid-column:2!important;
+  min-width:0!important;
+}
+.master-required-copy>small{
+  display:block!important;
+  margin-bottom:6px!important;
+  color:#a16f13!important;
+  font-size:9.5px!important;
+  font-weight:950!important;
+  letter-spacing:.12em!important;
+}
+.master-required-copy h1{
+  margin:0!important;
+  color:#26435f!important;
+  font-size:30px!important;
+  line-height:1.08!important;
+  letter-spacing:-.025em!important;
+}
+.master-required-copy p{
+  margin:9px 0 0!important;
+  color:#6f8190!important;
+  font-size:13px!important;
+  line-height:1.5!important;
+  font-weight:700!important;
+}
+.master-required-copy p b{color:#3a5870!important}
+.master-required-status{
+  grid-column:2!important;
+  margin-top:18px!important;
+}
+.master-required-status>span{
+  min-height:58px!important;
+  display:flex!important;
+  align-items:center!important;
+  gap:11px!important;
+  padding:10px 13px!important;
+  border:1px solid #ead8ad!important;
+  border-radius:15px!important;
+  background:#fff9e9!important;
+  color:#9b6b0e!important;
+}
+.master-required-status>.ph{font-size:23px!important}
+.master-required-status small{
+  display:block!important;
+  margin-bottom:3px!important;
+  color:#9a7b42!important;
+  font-size:8px!important;
+  font-weight:950!important;
+  letter-spacing:.1em!important;
+}
+.master-required-status b{
+  display:block!important;
+  color:#81590b!important;
+  font-size:12px!important;
+  font-weight:950!important;
+}
+.master-required-actions{
+  grid-column:1/-1!important;
+  display:grid!important;
+  grid-template-columns:1fr 1fr!important;
+  gap:10px!important;
+  margin-top:24px!important;
+  padding-top:20px!important;
+  border-top:1px solid #eee5d3!important;
+}
+.master-required-actions button{
+  min-height:52px!important;
+  display:flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  gap:8px!important;
+  border-radius:14px!important;
+  font-size:11px!important;
+  font-weight:950!important;
+  letter-spacing:.02em!important;
+}
+.master-required-actions button>.ph{font-size:17px!important}
+.master-required-primary{
+  border:1px solid #bd8621!important;
+  background:#c99024!important;
+  color:#fff!important;
+  box-shadow:0 8px 18px rgba(166,112,15,.16)!important;
+}
+.master-required-secondary{
+  border:1px solid #d3dee6!important;
+  background:#f7fafc!important;
+  color:#36566f!important;
+}
+.master-required-permission{
+  grid-column:1/-1!important;
+  min-height:45px!important;
+  display:flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  gap:7px!important;
+  margin-top:10px!important;
+  padding:9px 12px!important;
+  border-radius:12px!important;
+  background:#f6f8fa!important;
+  color:#758997!important;
+  font-size:10.5px!important;
+  font-weight:800!important;
+}
+.master-required-permission>.ph{font-size:15px!important}
+
+/* Receiving: prerequisite is visible before the user can make a wrong turn. */
+.master-required-inline{
+  display:grid!important;
+  grid-template-columns:52px minmax(0,1fr) auto!important;
+  align-items:center!important;
+  gap:14px!important;
+  margin:0 0 14px!important;
+  padding:13px 14px!important;
+  border:1px solid #e6d3a5!important;
+  border-radius:17px!important;
+  background:#fffaf0!important;
+}
+.master-required-inline-icon{
+  width:52px!important;
+  height:52px!important;
+  display:grid!important;
+  place-items:center!important;
+  border-radius:15px!important;
+  background:#fff0c9!important;
+  color:#a8710d!important;
+}
+.master-required-inline-icon>.ph{font-size:26px!important}
+.master-required-inline>div{min-width:0!important}
+.master-required-inline>div>small{
+  display:block!important;
+  margin-bottom:4px!important;
+  color:#9d711d!important;
+  font-size:8.5px!important;
+  font-weight:950!important;
+  letter-spacing:.1em!important;
+}
+.master-required-inline>div>b{
+  display:block!important;
+  color:#5c4b27!important;
+  font-size:13px!important;
+  line-height:1.25!important;
+}
+.master-required-inline>div>p{
+  margin:4px 0 0!important;
+  color:#8c8068!important;
+  font-size:10px!important;
+  line-height:1.3!important;
+  font-weight:700!important;
+}
+.master-required-inline>button{
+  min-height:44px!important;
+  padding:0 14px!important;
+  display:flex!important;
+  align-items:center!important;
+  gap:7px!important;
+  border:1px solid #d7ae54!important;
+  border-radius:12px!important;
+  background:#fff3d6!important;
+  color:#8a5d09!important;
+  font-size:9.5px!important;
+  font-weight:950!important;
+  white-space:nowrap!important;
+}
+.master-required-inline>button>.ph{font-size:16px!important}
+.master-required-inline-lock{
+  display:flex!important;
+  align-items:center!important;
+  gap:6px!important;
+  color:#927b4d!important;
+  font-size:9.5px!important;
+  font-weight:850!important;
+}
+.receiving-row-master-locked{
+  cursor:not-allowed!important;
+  opacity:1!important;
+  background:#fcfaf5!important;
+}
+.receiving-row-master-locked .receiving-row-icon{
+  color:#aa7a1d!important;
+}
+.receiving-row-master-locked span>b{color:#7c6a47!important}
+.receiving-row-master-locked span>small{display:block!important;color:#a09379!important}
+.receiving-row-master-locked>em{
+  justify-self:end!important;
+  padding:5px 8px!important;
+  border-radius:999px!important;
+  background:#fff1ca!important;
+  color:#96660d!important;
+  font-size:7.5px!important;
+  font-style:normal!important;
+  font-weight:950!important;
+  letter-spacing:.055em!important;
+  white-space:nowrap!important;
+}
+
+/* Mobile */
+@media(max-width:700px){
+  .module-master-lock{
+    min-height:25px!important;
+    padding:0 7px!important;
+    font-size:7px!important;
+  }
+  .master-required-view{
+    min-height:calc(100dvh - 130px)!important;
+    padding:14px 0 70px!important;
+  }
+  .master-required-card{
+    grid-template-columns:54px minmax(0,1fr)!important;
+    gap:0 13px!important;
+    padding:18px!important;
+    border-radius:20px!important;
+  }
+  .master-required-icon{
+    width:54px!important;
+    height:54px!important;
+    border-radius:16px!important;
+  }
+  .master-required-icon>.ph{font-size:28px!important}
+  .master-required-copy h1{font-size:23px!important}
+  .master-required-copy p{font-size:11px!important}
+  .master-required-status{
+    grid-column:1/-1!important;
+    margin-top:15px!important;
+  }
+  .master-required-actions{
+    grid-template-columns:1fr!important;
+    margin-top:16px!important;
+    padding-top:15px!important;
+  }
+  .master-required-actions button{min-height:48px!important}
+  .master-required-inline{
+    grid-template-columns:44px minmax(0,1fr)!important;
+    gap:10px!important;
+    padding:11px!important;
+  }
+  .master-required-inline-icon{
+    width:44px!important;
+    height:44px!important;
+    border-radius:13px!important;
+  }
+  .master-required-inline>button,
+  .master-required-inline-lock{
+    grid-column:1/-1!important;
+    width:100%!important;
+    justify-content:center!important;
+  }
+}
+</style>
 </head>
 <body>
 <header id="topbar" class="topbar"></header>
@@ -8918,7 +9237,15 @@ class UI{
   toast(msg,type=''){const h=document.getElementById('toastHost'),d=document.createElement('div');d.className=`toast ${type}`;d.textContent=msg;h.appendChild(d);setTimeout(()=>d.remove(),3000)}
   applyView(mode){const desktop=mode==='desktop';document.body.classList.toggle('desktop-mode',desktop);try{localStorage.setItem(CONFIG.viewKey,desktop?'desktop':'smartphone')}catch{}this.renderHeader()}
   masterReady(){return this.store.db.master.rows.length>0}
-  require(cap,{master=false}={}){if(!this.auth.user){this.openLogin();return false}if(!this.auth.can(cap)){this.toast('Operazione non autorizzata per questo utente.','error');return false}if(master&&!this.masterReady()){this.toast('Prima importa il Master Excel.','error');this.router.go('master');return false}return true}
+  require(cap,{master=false}={}){if(!this.auth.user){this.openLogin();return false}if(!this.auth.can(cap)){this.toast('Operazione non autorizzata per questo utente.','error');return false}if(master&&!this.masterReady()){this.toast('Per continuare è necessario caricare il Master Excel.','error');return false}return true}
+  masterRequiredView({context='continuare con questa operazione',backAction='home',backLabel='TORNA ALLA DASHBOARD'}={}){
+    const canImport=this.auth.can('MASTER_IMPORT'),site=this.auth.site();
+    return `<section class="master-required-view"><div class="master-required-card"><span class="master-required-icon">${phRegular('file-xls')}</span><div class="master-required-copy"><small>PREREQUISITO OPERATIVO</small><h1>Master Excel necessario</h1><p>Per ${esc(context)} devi prima caricare il file Master della sede <b>${esc(site.name)}</b>.</p></div><div class="master-required-status"><span>${phRegular('warning-circle')}<div><small>STATO</small><b>MASTER NON CARICATO</b></div></span></div><div class="master-required-actions">${canImport?`<button class="master-required-primary" data-action="master-import">${phRegular('upload-simple')} IMPORTA MASTER EXCEL</button>`:''}<button class="master-required-secondary" data-action="${esc(backAction)}">${phRegular('arrow-left')} ${esc(backLabel)}</button></div>${canImport?'':`<div class="master-required-permission">${phRegular('lock-key')}<span>Il Master deve essere caricato da un operatore autorizzato.</span></div>`}</div></section>`
+  }
+  masterRequiredInline(context='utilizzare questa funzione'){
+    const canImport=this.auth.can('MASTER_IMPORT');
+    return `<section class="master-required-inline"><span class="master-required-inline-icon">${phRegular('file-xls')}</span><div><small>MASTER EXCEL NECESSARIO</small><b>Carica il Master per ${esc(context)}.</b><p>Le funzioni di consultazione storica restano disponibili.</p></div>${canImport?`<button data-action="master-import">${phRegular('upload-simple')} IMPORTA MASTER</button>`:`<span class="master-required-inline-lock">${phRegular('lock-key')} Operatore autorizzato richiesto</span>`}</section>`
+  }
 
   render(){this.renderHeader();this.renderView()}
   renderHeader(){
@@ -8938,7 +9265,7 @@ class UI{
   afterRender(name){if(name==='master'){this.renderMasterViewerBody();this.renderMasterRequestDock()}if(name==='stock')this.renderStockResults();if(name==='rectify')this.renderRectResults();if(name==='registry-list')this.renderRegistryResults();if(name==='request-pick')this.renderRequestPickSources();if(name==='count'&&this.countDraft)this.renderCountBody()}
   landing(){return `<section class="landing landing-shell"><div class="landing-watermark" aria-hidden="true">${phIcon('warehouse')}</div><div class="landing-stage"><div class="landing-copy"><img class="landing-brand" src="${LOGO}" alt="Servizi Ospedalieri"><div class="landing-kicker">SOMA HUB</div><h1>Gestione<br>Magazzino</h1><p class="landing-lead">Un unico ambiente per accedere in modo semplice e sicuro alle attività del tuo magazzino.</p></div><aside class="landing-access-card"><div class="landing-access-head"><span class="landing-access-icon">${phIcon('shield-check')}</span><div class="landing-access-titleblock"><div class="landing-access-eyebrow">ACCESSO OPERATORE</div><h2>Accedi al magazzino</h2></div></div><p>Inserisci il tuo PIN personale per entrare nell'area operativa.</p><button class="landing-login" data-action="login"><i class="ph ph-sign-in landing-login-icon" aria-hidden="true"></i><span>ACCEDI</span></button><small>${phIcon('lock-key')} Accesso riservato agli operatori autorizzati</small></aside></div></section>`}
   sectionTitle(eyebrow,title,sub=''){return `<div class="page-title"><div class="eyebrow">${esc(eyebrow)}</div><h1>${esc(title)}</h1></div>`}
-  actionRow(action,label,ico,sub=''){return `<button class="module-action" data-action="${action}">${phDashboardActionIcon(action,ico)}<b>${label}</b></button>`}
+  actionRow(action,label,ico,sub=''){const masterDependent=['receipt-new','stock','rectify-new','count','issue','transfer','request-new'].includes(action),locked=masterDependent&&!this.masterReady();return `<button class="module-action ${locked?'master-dependent-locked':''}" data-action="${action}" ${locked?'data-master-locked="true"':''}>${phDashboardActionIcon(action,ico)}<b>${label}</b>${locked?`<span class="module-master-lock">${phRegular('lock-key')} MASTER</span>`:''}</button>`}
   module(kind,title,sub,headAction,actions){const hero=phDashboardIcon(PHOSPHOR_MODULES[kind]||'squares-four',kind==='registry'?'registry-hero-icon':'');return `<section class="module ${kind}"><button class="module-head" data-action="${headAction}"><span class="module-icon transparent-hero">${hero}</span><span class="module-title"><b>${title}</b></span><span class="module-open">${phDashboardIcon('caret-right')}</span></button><div class="module-actions">${actions.join('')}</div></section>`}
 
   home(){const p=this.auth.profile(),lina=this.auth.isLina(),cards=[];if(lina||this.auth.can('RECEIVE'))cards.push(this.module('receiving','ENTRATA MERCI',lina?'Arrivi e disponibilità':'Ricevi, controlla e ubica','receiving',[lina?this.actionRow('receipts-all','MERCE ARRIVATA','history'):this.actionRow('receipt-new','NUOVA ENTRATA','plus')+(this.auth.can('MOVE')?this.actionRow('receipts-pending','DA UBICARE','calendar'):'')+this.actionRow('receipts-all','STORICO ENTRATE','history')]));if(this.auth.can('MOVE'))cards.push(this.module('movement','MOVIMENTAZIONE','Scarica e sposta merce','issue',[this.actionRow('issue','SCARICA','down'),this.actionRow('transfer','SPOSTA','swap')]));if(this.auth.can('STOCK_VIEW')){const acts=[this.actionRow('stock','CERCA','search')];if(this.auth.can('RECTIFY'))acts.push(this.actionRow('rectify-new','RETTIFICA','check'));if(this.auth.can('COUNT'))acts.push(this.actionRow('count','CONTEGGIO ASSISTITO','registry'));cards.push(this.module('stock','GIACENZE',lina?'Cerca articoli e posizioni':'Cerca, rettifica e verifica','stock',acts))}if(this.auth.can('REQUEST_VIEW')||this.auth.can('REQUEST_CREATE')){const acts=[];if(this.auth.can('REQUEST_CREATE'))acts.push(this.actionRow('request-new','NUOVA RICHIESTA','plus'));if(this.auth.can('REQUEST_VIEW'))acts.push(this.actionRow('requests-progress','AVANZAMENTO','registry'));if(this.auth.can('REQUEST_PROCESS'))acts.push(this.actionRow('requests-process','COMPLETAMENTO','check'));cards.push(this.module('requests','RICHIESTE','Prelievi e avanzamento','requests-progress',acts))}if(this.auth.can('REGISTRY_VIEW'))cards.push(this.module('registry','REGISTRO','Movimenti e storico','registry',[this.actionRow('registry-movements','MOVIMENTI','registry'),...(this.auth.can('AUDIT_VIEW')?[this.actionRow('registry-audit','AUDIT','shield')]:[]),...(this.auth.can('EXPORT')?[this.actionRow('registry-export','ESPORTA MOVIMENTI','download')]:[])]));if(this.auth.canManageOperators()||this.auth.canManageSites()||this.auth.canManageRoles())cards.push(this.module('administration','AMMINISTRAZIONE','Operatori, sedi e permessi','admin',[...(this.auth.canManageOperators()?[this.actionRow('admin-operators','OPERATORI','users-three')]:[]),...(this.auth.canManageSites()?[this.actionRow('admin-sites','SEDI','buildings')]:[]),...(this.auth.canManageRoles()?[this.actionRow('admin-roles','RUOLI E PERMESSI','shield-check')]:[])]));
@@ -9126,13 +9453,15 @@ class UI{
     const receipts=this.store.db.receipts;
     const pending=receipts.filter(r=>this.domain.receiving.stats(r).pending>0);
     const pieces=pending.reduce((n,r)=>n+this.domain.receiving.stats(r).pending,0);
-    const write=this.auth.can('RECEIVE');
+    const write=this.auth.can('RECEIVE'),ready=this.masterReady();
     const emptyState=receipts.length?'':`<div class="empty receiving-empty">${phRegular('package','empty-icon')}<div><b>Nessuna entrata registrata</b><small>Le nuove consegne compariranno qui.</small></div></div>`;
-    return `${this.sectionTitle('RICEVIMENTO','Entrata merci')}<div class="intro good receiving-intro"><b>${phIcon('package','inline-icon')} Flusso ricevimento</b><span>Controlla il DDT, verifica i pezzi e porta in giacenza solo il materiale confermato.</span></div><div class="stat-pair receiving-stats"><div><b>${pending.length}</b><span>Entrate da ubicare</span></div><div><b>${pieces}</b><span>Pezzi in ricevimento</span></div></div><section class="list-card receiving-list">${write?`<button data-action="receipt-new">${phRegular('plus-circle','receiving-row-icon')}<span><b>NUOVA ENTRATA</b><small>DDT, controllo e conferma</small></span>${phRegular('caret-right','receiving-row-chevron')}</button><button data-action="receipts-pending">${phRegular('map-pin-line','receiving-row-icon')}<span><b>DA UBICARE</b><small>${pending.length} ${pending.length===1?'consegna':'consegne'} aperte</small></span>${phRegular('caret-right','receiving-row-chevron')}</button>`:''}<button data-action="receipts-all">${phRegular('clock-counter-clockwise','receiving-row-icon')}<span><b>${write?'STORICO ENTRATE':'MERCE ARRIVATA'}</b><small>${write?'Consulta tutte le consegne':'Visualizzazione in sola lettura'}</small></span>${phRegular('caret-right','receiving-row-chevron')}</button></section>${emptyState}`;
+    const masterNotice=!ready&&write?this.masterRequiredInline('registrare una nuova entrata'):'';
+    const newEntry=write?(ready?`<button data-action="receipt-new">${phRegular('plus-circle','receiving-row-icon')}<span><b>NUOVA ENTRATA</b><small>DDT, controllo e conferma</small></span>${phRegular('caret-right','receiving-row-chevron')}</button>`:`<button class="receiving-row-master-locked" type="button" disabled aria-disabled="true">${phRegular('lock-key','receiving-row-icon')}<span><b>NUOVA ENTRATA</b><small>Carica prima il Master Excel</small></span><em>MASTER NECESSARIO</em></button>`):'';
+    return `${this.sectionTitle('RICEVIMENTO','Entrata merci')}${masterNotice}<div class="intro good receiving-intro"><b>${phIcon('package','inline-icon')} Flusso ricevimento</b><span>Controlla il DDT, verifica i pezzi e porta in giacenza solo il materiale confermato.</span></div><div class="stat-pair receiving-stats"><div><b>${pending.length}</b><span>Entrate da ubicare</span></div><div><b>${pieces}</b><span>Pezzi in ricevimento</span></div></div><section class="list-card receiving-list">${newEntry}${write?`<button data-action="receipts-pending">${phRegular('map-pin-line','receiving-row-icon')}<span><b>DA UBICARE</b><small>${pending.length} ${pending.length===1?'consegna':'consegne'} aperte</small></span>${phRegular('caret-right','receiving-row-chevron')}</button>`:''}<button data-action="receipts-all">${phRegular('clock-counter-clockwise','receiving-row-icon')}<span><b>${write?'STORICO ENTRATE':'MERCE ARRIVATA'}</b><small>${write?'Consulta tutte le consegne':'Visualizzazione in sola lettura'}</small></span>${phRegular('caret-right','receiving-row-chevron')}</button></section>${emptyState}`;
   }
   newReceiptLine(seed={}){return{id:uid(),article:normalizeArticle(seed.article||seed.article_base),size:norm(seed.size),state:norm(seed.state||'NUOVO')||'NUOVO',ddtQuantity:Number(seed.ddtQuantity??seed.ddt_quantity??seed.quantity??0)||0,checkedQuantity:Number(seed.checkedQuantity??0)||0,pallet:norm(seed.pallet||'P01')||'P01',note:String(seed.note||''),partials:[]}}
-  openReceiptNew(){if(!this.require('RECEIVE',{master:true}))return;this.ddtFiles=[];this.receiptDraft={supplier:'',ddtNumber:'',ddtDate:localDateInput(),receivedAt:localDateTimeInput(),note:'',attachments:[],lines:[this.newReceiptLine()]};this.router.go('receipt-new')}
-  receiptNew(){if(!this.receiptDraft)this.receiptDraft={supplier:'',ddtNumber:'',ddtDate:localDateInput(),receivedAt:localDateTimeInput(),note:'',attachments:[],lines:[this.newReceiptLine()]};const d=this.receiptDraft;return `${this.sectionTitle('NUOVA CONSEGNA','Ricevi e controlla')}<section class="form-card"><div class="step-title"><i>1</i><div><b>Documento e fornitore</b><small>Dati della consegna</small></div></div><label>Fornitore *<input class="field" data-bind="receipt:header:supplier" value="${esc(d.supplier)}"></label><div class="two"><label>Numero DDT<input class="field" data-bind="receipt:header:ddtNumber" value="${esc(d.ddtNumber)}"></label><label>Data DDT<input type="date" class="field" data-bind="receipt:header:ddtDate" value="${esc(d.ddtDate)}"></label></div><label>Arrivo merce<input type="datetime-local" class="field" data-bind="receipt:header:receivedAt" value="${esc(d.receivedAt)}"></label><div class="scan-row"><button class="primary small" data-action="ddt-camera">${phIcon('camera','inline-icon')} SCANSIONA DDT</button><button class="soft small" data-action="ddt-file">${phIcon('paperclip','inline-icon')} ALLEGA DDT</button></div>${this.ddtFiles.length?`<div class="file-chips">${this.ddtFiles.map(f=>`<span>${esc(f.name)}</span>`).join('')}</div><button class="soft" data-action="ddt-analyze">ANALIZZA DDT E COMPILA</button>`:''}</section><section class="form-card"><div class="step-title"><i>2</i><div><b>Articoli ricevuti</b><small>Confronta DDT e quantità fisica</small></div></div>${d.lines.map((l,i)=>this.receiptLineForm(l,i)).join('')}<button class="add-btn" data-action="receipt-line-add">${phRegular('plus','ph-bridge inline-icon')} AGGIUNGI ARTICOLO</button></section><section class="form-card"><div class="step-title"><i>3</i><div><b>Conferma entrata</b><small>Solo la quantità controllata entra in giacenza</small></div></div><label>Note consegna<textarea class="field textarea" data-bind="receipt:header:note">${esc(d.note)}</textarea></label><button class="success" data-action="receipt-confirm">CONTROLLA E CONFERMA</button></section>`}
+  openReceiptNew(){if(!this.require('RECEIVE'))return;if(!this.masterReady()){this.toast('Per registrare una nuova entrata è necessario il Master Excel.','error');this.router.go('receipt-new');return}this.ddtFiles=[];this.receiptDraft={supplier:'',ddtNumber:'',ddtDate:localDateInput(),receivedAt:localDateTimeInput(),note:'',attachments:[],lines:[this.newReceiptLine()]};this.router.go('receipt-new')}
+  receiptNew(){if(!this.require('RECEIVE'))return'';if(!this.masterReady())return this.masterRequiredView({context:'registrare una nuova entrata',backAction:'receiving',backLabel:'TORNA A ENTRATA MERCI'});if(!this.receiptDraft)this.receiptDraft={supplier:'',ddtNumber:'',ddtDate:localDateInput(),receivedAt:localDateTimeInput(),note:'',attachments:[],lines:[this.newReceiptLine()]};const d=this.receiptDraft;return `${this.sectionTitle('NUOVA CONSEGNA','Ricevi e controlla')}<section class="form-card"><div class="step-title"><i>1</i><div><b>Documento e fornitore</b><small>Dati della consegna</small></div></div><label>Fornitore *<input class="field" data-bind="receipt:header:supplier" value="${esc(d.supplier)}"></label><div class="two"><label>Numero DDT<input class="field" data-bind="receipt:header:ddtNumber" value="${esc(d.ddtNumber)}"></label><label>Data DDT<input type="date" class="field" data-bind="receipt:header:ddtDate" value="${esc(d.ddtDate)}"></label></div><label>Arrivo merce<input type="datetime-local" class="field" data-bind="receipt:header:receivedAt" value="${esc(d.receivedAt)}"></label><div class="scan-row"><button class="primary small" data-action="ddt-camera">${phIcon('camera','inline-icon')} SCANSIONA DDT</button><button class="soft small" data-action="ddt-file">${phIcon('paperclip','inline-icon')} ALLEGA DDT</button></div>${this.ddtFiles.length?`<div class="file-chips">${this.ddtFiles.map(f=>`<span>${esc(f.name)}</span>`).join('')}</div><button class="soft" data-action="ddt-analyze">ANALIZZA DDT E COMPILA</button>`:''}</section><section class="form-card"><div class="step-title"><i>2</i><div><b>Articoli ricevuti</b><small>Confronta DDT e quantità fisica</small></div></div>${d.lines.map((l,i)=>this.receiptLineForm(l,i)).join('')}<button class="add-btn" data-action="receipt-line-add">${phRegular('plus','ph-bridge inline-icon')} AGGIUNGI ARTICOLO</button></section><section class="form-card"><div class="step-title"><i>3</i><div><b>Conferma entrata</b><small>Solo la quantità controllata entra in giacenza</small></div></div><label>Note consegna<textarea class="field textarea" data-bind="receipt:header:note">${esc(d.note)}</textarea></label><button class="success" data-action="receipt-confirm">CONTROLLA E CONFERMA</button></section>`}
   receiptLineForm(l,i){const sug=this.domain.stock.suggest(l.article,l.size,l.state),diff=Number(l.ddtQuantity)!==Number(l.checkedQuantity),sum=(l.partials||[]).reduce((n,x)=>n+Number(x),0),ddt=Number(l.ddtQuantity||0);return `<article class="line-form ${diff?'warn-border':''}"><div class="line-top"><b>ARTICOLO ${i+1}</b>${this.receiptDraft.lines.length>1?`<button data-action="receipt-line-remove" data-line="${l.id}">RIMUOVI</button>`:''}</div><label>Codice articolo<input class="field" data-bind="receipt:${l.id}:article" value="${esc(l.article)}"></label><div class="two"><label>Taglia / variante<input class="field" data-bind="receipt:${l.id}:size" value="${esc(l.size)}"></label><label>Stato merce<select class="field" data-bind="receipt:${l.id}:state">${CONFIG.states.slice(0,3).map(s=>`<option ${l.state===s?'selected':''}>${s}</option>`).join('')}</select></label></div><div class="two"><label>Quantità DDT<input type="number" min="0" class="field" data-bind="receipt:${l.id}:ddtQuantity" value="${l.ddtQuantity}"></label><label>Quantità controllata *<input type="number" min="0" class="field" data-bind="receipt:${l.id}:checkedQuantity" value="${l.checkedQuantity}"></label></div><div class="partial-box"><div><b>CONTEGGIO PARZIALE</b><span class="partial-total ${Number(l.checkedQuantity)===ddt&&ddt>0?'ok':Number(l.checkedQuantity)>ddt?'over':'pending'}">${l.checkedQuantity} / ${ddt}</span></div><div class="partial-input"><input id="partial-${l.id}" type="number" min="1" class="field" placeholder="es. 6"><button class="primary small" data-action="partial-add" data-line="${l.id}">AGGIUNGI</button></div>${l.partials.length?`<div class="chips">${l.partials.map(x=>`<span>${x}</span>`).join('')}<small>${l.partials.join(' + ')} = <b>${sum}</b></small></div><div class="mini-actions"><button data-action="partial-undo" data-line="${l.id}">ANNULLA ULTIMO</button><button data-action="partial-clear" data-line="${l.id}">AZZERA</button></div>`:''}</div><label>Pallet / collo in ricevimento<input class="field" data-bind="receipt:${l.id}:pallet" value="${esc(l.pallet)}"></label><div class="suggest ${sug?'found':''}">${phRegular('map-pin-line','suggest-icon')}<div><span>POSIZIONE - FILA - SCAFFALE</span><b>${sug?`${esc(sug.location)}${sug.pallet?` · Bancale ${esc(sug.pallet)}`:''}`:'Nessuna posizione abituale trovata'}</b>${sug?`<small>Stesso articolo già presente · ${sug.quantity} pezzi</small>`:''}</div></div><label>Note riga<input class="field" data-bind="receipt:${l.id}:note" value="${esc(l.note)}"></label></article>`}
   addReceiptLine(){this.receiptDraft.lines.push(this.newReceiptLine({pallet:this.receiptDraft.lines.at(-1)?.pallet||'P01'}));this.renderView()}
   removeReceiptLine(id){this.receiptDraft.lines=this.receiptDraft.lines.filter(x=>x.id!==id);if(!this.receiptDraft.lines.length)this.receiptDraft.lines.push(this.newReceiptLine());this.renderView()}
@@ -9146,7 +9475,7 @@ class UI{
   putAway(receiptId,lineId){const r=this.store.db.receipts.find(x=>x.id===receiptId),l=r?.lines.find(x=>x.id===lineId);if(!l)return this.emptyPage('Riga non trovata.');const pending=this.domain.receiving.pendingForLine(lineId);return `${this.sectionTitle('UBICAZIONE',`${l.article}${l.size?` · ${l.size}`:''}`)}<section class="form-card"><div class="big-number">${pending}</div><p>pezzi ancora in Area Ricevimento</p><label>Quantità da ubicare<input id="putQty" type="number" min="1" max="${pending}" value="${pending}" class="field"></label><label>Fila/Scaffale<input id="putLocation" class="field" value="${esc(l.suggestedLocation)}"></label><label>Bancale/Carrello<input id="putPallet" class="field" value="${esc(l.suggestedPallet)}"></label><button class="success" data-action="putaway-confirm" data-receipt="${receiptId}" data-line="${lineId}">${phIcon('check-circle','inline-icon')} CONFERMA UBICAZIONE</button></section>`}
   confirmPutAway(receipt,line){this.domain.receiving.putAway(receipt,line,Number(document.getElementById('putQty').value),{location:document.getElementById('putLocation').value,pallet:document.getElementById('putPallet').value});this.toast('Merce ubicata.');this.router.go('receipt-detail',{id:receipt})}
 
-  stock(){return `${this.sectionTitle('GIACENZE','Cerca articoli e posizioni')}<section class="filter-card stock-search-card stock-step4 stock-search-v2"><div class="stock-search-main"><span class="stock-search-icon">${svg('search')}</span><input id="stockQuery" class="field" autocomplete="off" placeholder="Articolo e taglia · es. SZ242 42"></div><div id="stockSuggestions" class="stock-suggestions"></div><div class="stock-filter-row stock-filter-row-v2"><label class="stock-filter-control"><span>STATO</span><select id="stockState" class="field"><option value="">TUTTI GLI STATI</option>${CONFIG.states.map(s=>`<option>${s}</option>`).join('')}</select></label><label class="stock-filter-control stock-filter-location"><span>POSIZIONE - FILA - SCAFFALE</span><input id="stockLocation" class="field" autocomplete="off" placeholder="Es. STANZONE CDS FERRI"></label><label class="stock-filter-control stock-filter-pallet"><span>BANCALE</span><input id="stockPallet" class="field" autocomplete="off" placeholder="Es. DISMESSI 19"></label></div></section><div id="stockResults"></div>`}
+  stock(){if(!this.require('STOCK_VIEW'))return'';if(!this.masterReady())return this.masterRequiredView({context:'consultare le giacenze',backAction:'home',backLabel:'TORNA ALLA DASHBOARD'});return `${this.sectionTitle('GIACENZE','Cerca articoli e posizioni')}<section class="filter-card stock-search-card stock-step4 stock-search-v2"><div class="stock-search-main"><span class="stock-search-icon">${svg('search')}</span><input id="stockQuery" class="field" autocomplete="off" placeholder="Articolo e taglia · es. SZ242 42"></div><div id="stockSuggestions" class="stock-suggestions"></div><div class="stock-filter-row stock-filter-row-v2"><label class="stock-filter-control"><span>STATO</span><select id="stockState" class="field"><option value="">TUTTI GLI STATI</option>${CONFIG.states.map(s=>`<option>${s}</option>`).join('')}</select></label><label class="stock-filter-control stock-filter-location"><span>POSIZIONE - FILA - SCAFFALE</span><input id="stockLocation" class="field" autocomplete="off" placeholder="Es. STANZONE CDS FERRI"></label><label class="stock-filter-control stock-filter-pallet"><span>BANCALE</span><input id="stockPallet" class="field" autocomplete="off" placeholder="Es. DISMESSI 19"></label></div></section><div id="stockResults"></div>`}
   parseStockQuery(value){const raw=norm(value).replace(/[.·\-]+/g,' ').replace(/\s+/g,' ').trim();if(!raw)return{raw:'',article:'',size:'',hasSize:false};const parts=raw.split(' ').filter(Boolean);if(parts.length>=2){const size=norm(parts.pop()),article=normalizeArticle(parts.join(''));return{raw,article,size,hasSize:!!article&&!!size}}return{raw,article:normalizeArticle(raw),size:'',hasSize:false}}
   stockStateClass(state){return `state-${String(state||'NON_CHIARO').toLowerCase().replace(/[^a-z0-9]+/g,'-')}`}
   scheduleStockRender(delay=65){clearTimeout(this.stockSearchTimer);this.stockSearchTimer=setTimeout(()=>{this.stockSearchTimer=null;this.renderStockResults()},delay)}
@@ -9172,7 +9501,7 @@ class UI{
   }
   makeRectDraft(r){return r?{key:bucketKey(r),article:r.article,size:r.size,state:r.state,location:r.location,pallet:r.pallet,current:Number(r.quantity||0),counted:Number(r.quantity||0),reason:'CONTEGGIO FISICO',note:''}:null}
   rectify(key=''){
-    if(!this.require('RECTIFY',{master:true}))return'';if(key&&this.rectDraft?.key!==key)this.rectDraft=this.makeRectDraft(this.domain.stock.findByKey(key));const d=this.rectDraft;
+    if(!this.require('RECTIFY'))return'';if(!this.masterReady())return this.masterRequiredView({context:'rettificare le giacenze',backAction:'home',backLabel:'TORNA ALLA DASHBOARD'});if(key&&this.rectDraft?.key!==key)this.rectDraft=this.makeRectDraft(this.domain.stock.findByKey(key));const d=this.rectDraft;
     return `${this.sectionTitle('GIACENZE','Rettifica','Seleziona una giacenza esistente e registra il nuovo conteggio reale.')}<section class="filter-card rectify-step4"><div class="stock-flow-head rectify-flow-head"><span>${phIcon('sliders-horizontal')}</span><div><b>Rettifica giacenza</b><small>Aggiorna il conteggio reale mantenendo la tracciabilità</small></div></div><label>Articolo<div class="rect-search-wrap"><input id="rectSearch" class="field" autocomplete="off" placeholder="Scrivi codice articolo o taglia…" value="${d?esc(d.article):''}"><div id="rectSearchResults" class="rect-results ${d?'hidden':''}"></div></div></label><button class="rect-advanced-toggle" data-action="rect-filter-toggle">${phIcon('funnel-simple')}<span>FILTRI AVANZATI</span>${phIcon(this.rectFiltersOpen?'caret-up':'caret-down')}</button><div id="rectAdvanced" class="rect-advanced ${this.rectFiltersOpen?'':'hidden'}"><div class="two"><label>Stato<select id="rectFilterState" class="field"><option value="">TUTTI</option>${CONFIG.states.map(s=>`<option>${s}</option>`).join('')}</select></label><label>Taglia<input id="rectFilterSize" class="field" placeholder="Es. M"></label></div><div class="two"><label>Fila<input id="rectFilterLocation" class="field" placeholder="Es. 64"></label><label>Bancale<input id="rectFilterPallet" class="field" placeholder="Es. 135"></label></div></div></section>${d?`<section class="form-card rect-selected"><div class="rect-selected-head"><div><h2>${esc(d.article)}${d.size?` · ${esc(d.size)}`:''}</h2><p>${esc(d.state)} · Fila/Scaffale ${esc(d.location||'—')} · Bancale ${esc(d.pallet||'—')}</p></div><button class="soft small" data-action="rect-change">${phIcon('arrows-clockwise','inline-icon')} CAMBIA</button></div><div class="rect-current"><span>GIACENZA ATTUALE</span><strong>${d.current}</strong></div><div style="padding:0 22px 22px"><label>Nuova quantità<div class="rect-qty"><button type="button" data-action="rect-step-minus" aria-label="Diminuisci">${phIcon('minus')}</button><input id="rectCounted" type="number" min="0" class="field" value="${d.counted}"><button type="button" data-action="rect-step-plus" aria-label="Aumenta">${phIcon('plus')}</button></div></label><div id="rectDeltaPreview" class="rect-delta-preview ${d.counted-d.current<0?'negative':d.counted-d.current>0?'positive':''}">${this.rectDeltaText(d.counted-d.current)}</div><label>Motivo rettifica<select id="rectReason" class="field"><option>CONTEGGIO FISICO</option><option>ERRORE INSERIMENTO</option><option>MERCE DANNEGGIATA</option><option>ALTRO</option></select></label><label>Nota<textarea id="rectNote" class="field textarea" placeholder="Dettaglio facoltativo">${esc(d.note||'')}</textarea></label></div></section>`:''}<div class="sticky-actions"><button class="soft" data-action="rect-cancel">${phIcon('x-circle','inline-icon')} ANNULLA</button><button class="primary rectify-save-cta" data-action="rectify-save" ${d?'':'disabled'}>${phIcon('check-circle','inline-icon')} SALVA RETTIFICA</button></div>`
   }
   rectDeltaText(delta){const d=Number(delta||0);return d===0?'Nessuna variazione':`Variazione: ${d>0?'+':''}${d} pezzi`}
@@ -9188,7 +9517,7 @@ class UI{
   persistCountSession(){if(!this.countDraft)return;this.countDraft.updatedAt=nowIso();this.countDraft.masterFingerprint=this.countFingerprint();try{localStorage.setItem(siteCountSessionKey(this.auth.siteId),JSON.stringify(this.countDraft))}catch{}}
   clearCountSession(){this.countDraft=null;try{localStorage.removeItem(siteCountSessionKey(this.auth.siteId))}catch{}}
   nextCountId(){const day=localDateInput();if(this.store.db.counters.countDate!==day){this.store.db.counters.countDate=day;this.store.db.counters.count=0}this.store.db.counters.count=(this.store.db.counters.count||0)+1;this.store.save('count:id');return `CNT-${day}-${String(this.store.db.counters.count).padStart(3,'0')}`}
-  count(){if(!this.require('COUNT',{master:true}))return'';const d=this.countDraft;return `${this.sectionTitle('GIACENZE','Conteggio assistito','Il conteggio resta salvato sul dispositivo finché non lo concludi o lo annulli.')}<section class="form-card count-step4"><div class="stock-flow-head count-flow-head"><span>${phIcon('list-checks')}</span><div><b>Conteggio assistito</b><small>Verifica fisicamente una posizione senza modificare subito le giacenze</small></div></div>${d?`<div class="count-session-banner"><div><b>${esc(d.id)}</b><span>Sessione in corso · ${esc(d.location)} / ${esc(d.pallet||'tutti i bancali')}</span></div><span>Salvataggio automatico</span></div>`:''}<div class="two"><label>Fila/Scaffale<input id="countLocation" class="field" value="${esc(d?.location||'')}"></label><label>Bancale<input id="countPallet" class="field" value="${esc(d?.pallet||'')}"></label></div><button class="primary count-load-cta" data-action="count-load">${phIcon('map-pin-line','inline-icon')} ${d?'RICARICA POSIZIONE':'CARICA POSIZIONE'}</button></section><div id="countBody"></div>`}
+  count(){if(!this.require('COUNT'))return'';if(!this.masterReady())return this.masterRequiredView({context:'avviare un conteggio assistito',backAction:'home',backLabel:'TORNA ALLA DASHBOARD'});const d=this.countDraft;return `${this.sectionTitle('GIACENZE','Conteggio assistito','Il conteggio resta salvato sul dispositivo finché non lo concludi o lo annulli.')}<section class="form-card count-step4"><div class="stock-flow-head count-flow-head"><span>${phIcon('list-checks')}</span><div><b>Conteggio assistito</b><small>Verifica fisicamente una posizione senza modificare subito le giacenze</small></div></div>${d?`<div class="count-session-banner"><div><b>${esc(d.id)}</b><span>Sessione in corso · ${esc(d.location)} / ${esc(d.pallet||'tutti i bancali')}</span></div><span>Salvataggio automatico</span></div>`:''}<div class="two"><label>Fila/Scaffale<input id="countLocation" class="field" value="${esc(d?.location||'')}"></label><label>Bancale<input id="countPallet" class="field" value="${esc(d?.pallet||'')}"></label></div><button class="primary count-load-cta" data-action="count-load">${phIcon('map-pin-line','inline-icon')} ${d?'RICARICA POSIZIONE':'CARICA POSIZIONE'}</button></section><div id="countBody"></div>`}
   loadCount(){const location=norm(document.getElementById('countLocation').value),pallet=norm(document.getElementById('countPallet').value);if(!location)throw new Error('Inserisci Fila/Scaffale.');if(this.countDraft&&(this.countDraft.location!==location||this.countDraft.pallet!==pallet)){const done=this.countDraft.rows.filter(r=>r.verified).length;if(done&&!confirm(`Il conteggio ${this.countDraft.id} ha ${done} righe confermate. Avviare una nuova sessione e scartare quella attuale?`))return;this.clearCountSession()}const rows=this.domain.stock.positive().filter(r=>r.location===location&&(!pallet||r.pallet===pallet));if(!rows.length&&!confirm('Nessuna giacenza prevista in questa posizione. Vuoi comunque aprire il conteggio per registrare materiale trovato?'))return;this.countDraft={schema:1,id:this.nextCountId(),operator:this.auth.user,startedAt:nowIso(),updatedAt:nowIso(),masterFingerprint:this.countFingerprint(),location,pallet,rows:rows.map((r,i)=>({domId:`c${i}`,key:bucketKey(r),source:clone(r),counted:null,verified:false})),extras:[]};this.persistCountSession();this.renderCountBody()}
   countStats(){const d=this.countDraft;if(!d)return{total:0,done:0,diff:0,remaining:0,positive:0,negative:0,net:0};const done=d.rows.filter(r=>r.verified).length,diffs=d.rows.filter(r=>r.verified&&Number(r.counted)!==Number(r.source.quantity)),positive=diffs.reduce((n,r)=>n+Math.max(0,Number(r.counted)-Number(r.source.quantity)),0),negative=diffs.reduce((n,r)=>n+Math.min(0,Number(r.counted)-Number(r.source.quantity)),0);return{total:d.rows.length,done,diff:diffs.length,remaining:d.rows.length-done,positive,negative,net:positive+negative}}
   renderCountBody(){const host=document.getElementById('countBody');if(!host||!this.countDraft)return;const d=this.countDraft,s=this.countStats(),pct=s.total?Math.round(s.done/s.total*100):100,expected=d.rows.map(r=>{const delta=r.verified?Number(r.counted)-Number(r.source.quantity):0;return `<article class="count-card v20 ${r.verified?'verified':''}"><div class="count-card-title"><div><b>${esc(r.source.article)}${r.source.size?` · ${esc(r.source.size)}`:''}</b><small>${esc(r.source.state)} · Fila ${esc(r.source.location)} · Bancale ${esc(r.source.pallet||'—')}</small></div>${r.verified?`<button class="count-edit" data-action="count-edit" data-dom="${r.domId}" aria-label="Modifica conteggio">${phIcon('pencil-simple')}</button>`:''}</div><div class="count-system"><span>SISTEMA</span><strong>${r.source.quantity}</strong></div>${r.verified?`<div class="count-confirmed"><span>${phIcon('check-circle')} Contato <strong>${r.counted}</strong></span><span class="delta-pill ${delta===0?'zero':delta<0?'neg':'pos'}">${delta>0?'+':''}${delta}</span></div>`:`<div class="count-entry"><input id="count-value-${r.domId}" type="number" min="0" class="field" inputmode="numeric" placeholder="Quantità contata" value="${r.counted??''}"><button class="primary" data-action="count-confirm-row" data-dom="${r.domId}">${phIcon('check','inline-icon')} CONFERMA</button></div><button class="soft small" data-action="count-zero" data-dom="${r.domId}">${phIcon('minus-circle','inline-icon')} NON PRESENTE · 0</button>`}</article>`}).join(''),extras=(d.extras||[]).map((r,i)=>`<article class="count-card count-extra v20"><div class="line-top"><b>MATERIALE TROVATO ${i+1}</b><button data-action="count-extra-remove" data-dom="${r.domId}">${phIcon('trash')} RIMUOVI</button></div><label>Codice articolo<input class="field" data-count-extra="article" data-dom="${r.domId}" value="${esc(r.article)}"></label><div class="count-extra-grid"><label>Taglia<input class="field" data-count-extra="size" data-dom="${r.domId}" value="${esc(r.size)}"></label><label>Stato<select class="field" data-count-extra="state" data-dom="${r.domId}">${CONFIG.states.map(x=>`<option ${r.state===x?'selected':''}>${x}</option>`).join('')}</select></label><label>Bancale<input class="field" data-count-extra="pallet" data-dom="${r.domId}" value="${esc(r.pallet||d.pallet)}"></label><label>Quantità contata<input type="number" min="0" class="field" data-count-extra="counted" data-dom="${r.domId}" value="${Number(r.counted||0)}"></label></div></article>`).join('');host.innerHTML=`<section class="count-progress"><div class="count-progress-top"><div><span>AVANZAMENTO</span><b>${s.done} / ${s.total} articoli</b></div><strong>${pct}%</strong></div><div class="progress-track"><i style="width:${pct}%"></i></div><div class="count-kpis"><div><b>${s.remaining}</b><span>Da contare</span></div><div><b>${s.done-s.diff}</b><span>Confermati</span></div><div><b>${s.diff}</b><span>Differenze</span></div></div></section>${expected||'<div class="empty compact">Nessun articolo previsto in questa posizione.</div>'}<section class="count-extra-section"><div class="section-label">MATERIALE NON PREVISTO</div>${extras}<button class="add-btn count-extra-add" data-action="count-extra-add">${phIcon('plus-circle','inline-icon')} MATERIALE TROVATO NON PREVISTO</button></section><div class="sticky-actions"><button class="soft" data-action="count-abandon">${phIcon('x-circle','inline-icon')} ANNULLA SESSIONE</button><button class="success count-finalize-cta" data-action="count-finalize">${phIcon('check-circle','inline-icon')} CONCLUDI CONTEGGIO</button></div>`}
@@ -9205,22 +9534,22 @@ class UI{
   abandonCount(){if(!this.countDraft)return;if(!confirm(`Annullare la sessione ${this.countDraft.id}? I conteggi salvati verranno eliminati, senza modificare il magazzino.`))return;this.clearCountSession();this.toast('Sessione di conteggio annullata.');this.router.home()}
 
   sourceSelect(id='sourceSelect'){const rows=this.domain.stock.positive();return `<select id="${id}" class="field">${rows.length?rows.map(r=>`<option value="${esc(bucketKey(r))}">${esc(r.article)}${r.size?` · ${esc(r.size)}`:''} — ${r.quantity} — ${esc(r.location)} / ${esc(r.pallet||'—')} ${r.location===CONFIG.receivingLocation?'[DA UBICARE]':''}</option>`).join(''):'<option value="">Nessuna giacenza disponibile</option>'}</select>`}
-  issue(){if(!this.require('MOVE',{master:true}))return'';return `${this.sectionTitle('MOVIMENTAZIONE','Scarica')}<section class="form-card movement-form movement-issue"><div class="movement-form-head"><span class="movement-form-icon">${phIcon('arrow-down')}</span><div><b>Scarico merce</b><small>Preleva pezzi dalla giacenza selezionata</small></div></div><label>Giacenza da prelevare${this.sourceSelect('issueSource')}</label><div class="two movement-two"><label>Quantità in pezzi<input id="issueQty" type="number" min="1" class="field"></label><label>Destinazione<select id="issueDestination" class="field">${CONFIG.destinations.map(d=>`<option>${d}</option>`).join('')}</select></label></div><label>Note<input id="issueNote" class="field"></label><button class="danger movement-cta" data-action="issue-confirm">${phIcon('arrow-down','inline-icon')} CONFERMA SCARICO</button></section>`}
+  issue(){if(!this.require('MOVE'))return'';if(!this.masterReady())return this.masterRequiredView({context:'scaricare merce dalla giacenza',backAction:'home',backLabel:'TORNA ALLA DASHBOARD'});return `${this.sectionTitle('MOVIMENTAZIONE','Scarica')}<section class="form-card movement-form movement-issue"><div class="movement-form-head"><span class="movement-form-icon">${phIcon('arrow-down')}</span><div><b>Scarico merce</b><small>Preleva pezzi dalla giacenza selezionata</small></div></div><label>Giacenza da prelevare${this.sourceSelect('issueSource')}</label><div class="two movement-two"><label>Quantità in pezzi<input id="issueQty" type="number" min="1" class="field"></label><label>Destinazione<select id="issueDestination" class="field">${CONFIG.destinations.map(d=>`<option>${d}</option>`).join('')}</select></label></div><label>Note<input id="issueNote" class="field"></label><button class="danger movement-cta" data-action="issue-confirm">${phIcon('arrow-down','inline-icon')} CONFERMA SCARICO</button></section>`}
   confirmIssue(){const issue=this.domain.movements.issue({sourceKey:document.getElementById('issueSource').value,quantity:document.getElementById('issueQty').value,destination:document.getElementById('issueDestination').value,note:document.getElementById('issueNote').value});this.toast(`Scarico ${issue.id} registrato.`);this.router.home()}
-  transfer(){if(!this.require('MOVE',{master:true}))return'';return `${this.sectionTitle('MOVIMENTAZIONE','Sposta')}<section class="form-card movement-form movement-transfer"><div class="movement-form-head"><span class="movement-form-icon">${phIcon('arrows-left-right')}</span><div><b>Spostamento interno</b><small>Trasferisci la giacenza mantenendo la tracciabilità</small></div></div><label>Giacenza da spostare${this.sourceSelect('transferSource')}</label><label>Quantità<input id="transferQty" type="number" min="1" class="field"></label><div class="two movement-two"><label>Nuova Fila/Scaffale<input id="transferLocation" class="field"></label><label>Nuovo Bancale/Carrello<input id="transferPallet" class="field"></label></div><label>Note<input id="transferNote" class="field"></label><button class="primary movement-cta" data-action="transfer-confirm">${phIcon('arrows-left-right','inline-icon')} CONFERMA SPOSTAMENTO</button></section>`}
+  transfer(){if(!this.require('MOVE'))return'';if(!this.masterReady())return this.masterRequiredView({context:'spostare merce tra le posizioni',backAction:'home',backLabel:'TORNA ALLA DASHBOARD'});return `${this.sectionTitle('MOVIMENTAZIONE','Sposta')}<section class="form-card movement-form movement-transfer"><div class="movement-form-head"><span class="movement-form-icon">${phIcon('arrows-left-right')}</span><div><b>Spostamento interno</b><small>Trasferisci la giacenza mantenendo la tracciabilità</small></div></div><label>Giacenza da spostare${this.sourceSelect('transferSource')}</label><label>Quantità<input id="transferQty" type="number" min="1" class="field"></label><div class="two movement-two"><label>Nuova Fila/Scaffale<input id="transferLocation" class="field"></label><label>Nuovo Bancale/Carrello<input id="transferPallet" class="field"></label></div><label>Note<input id="transferNote" class="field"></label><button class="primary movement-cta" data-action="transfer-confirm">${phIcon('arrows-left-right','inline-icon')} CONFERMA SPOSTAMENTO</button></section>`}
   confirmTransfer(){this.domain.movements.transfer({sourceKey:document.getElementById('transferSource').value,quantity:document.getElementById('transferQty').value,location:document.getElementById('transferLocation').value,pallet:document.getElementById('transferPallet').value,note:document.getElementById('transferNote').value});this.toast('Spostamento registrato.');this.router.home()}
 
   newRequestLine(seed={}){return{id:uid(),article:normalizeArticle(seed.article||seed.article_base),size:norm(seed.size),cartonsRequested:Math.max(0,Math.floor(Number(seed.cartonsRequested??seed.cartons??seed.quantity)||0)),marker:String(seed.marker||'').includes('*')?'*':'',note:String(seed.note||'')}}
   requestAvailabilityHtml(l){if(!l?.article)return'';const available=this.domain.stock.total(l.article,l.size),receiving=this.domain.stock.receivingTotal(l.article,l.size);if(available<=0)return `<div class="availability-line request-availability unavailable">${phIcon('warning-circle','inline-icon')} <b>ARTICOLO NON DISPONIBILE IN MAGAZZINO</b></div>`;return `<div class="availability-line request-availability">${phIcon('package','inline-icon')} Disponibili: <b>${available} pezzi</b>${receiving?` · <strong>${receiving} appena arrivati / da ubicare</strong>`:''}</div>`}
-  openRequestNew(){if(!this.require('REQUEST_CREATE',{master:true}))return;this.requestFiles=[];this.requestDraft={destination:'LINA',reference:'',requestedAt:localDateTimeInput(),note:'',lines:[this.newRequestLine()]};this.router.go('request-new')}
-  requestNew(){if(!this.requestDraft)this.requestDraft={destination:'LINA',reference:'',requestedAt:localDateTimeInput(),note:'',lines:[this.newRequestLine()]};const d=this.requestDraft;return `${this.sectionTitle('RICHIESTE','Nuova richiesta')}<section class="form-card request-form-card"><div class="request-form-hero">${phIcon('clipboard-text','request-form-hero-icon')}<div><b>Nuova richiesta</b><small>Articoli, taglie e cartoni richiesti</small></div></div><div class="scan-row request-scan-row"><button class="primary small" data-action="request-camera">${phIcon('camera','inline-icon')} SCANSIONA RICHIESTA</button><button class="soft small" data-action="request-file">${phIcon('paperclip','inline-icon')} ALLEGA FOTO</button></div>${this.requestFiles.length?`<div class="file-chips">${this.requestFiles.map(f=>`<span>${esc(f.name)}</span>`).join('')}</div><button class="soft" data-action="request-analyze">${phIcon('sparkle','inline-icon')} ANALIZZA E COMPILA</button>`:''}<div class="two request-header-grid"><label>Destinazione<select class="field" data-bind="request:header:destination">${CONFIG.destinations.map(x=>`<option ${d.destination===x?'selected':''}>${x}</option>`).join('')}</select></label><label>Data richiesta<input type="datetime-local" class="field" data-bind="request:header:requestedAt" value="${esc(d.requestedAt)}"></label></div><label>Riferimento<input class="field" data-bind="request:header:reference" value="${esc(d.reference)}"></label><div class="request-lines">${d.lines.map((l,i)=>`<article class="line-form request-line-form"><div class="line-top"><b>RIGA ${i+1}</b>${d.lines.length>1?`<button data-action="request-line-remove" data-line="${l.id}">${phIcon('trash','inline-icon')} RIMUOVI</button>`:''}</div><label>Codice articolo<input class="field" data-bind="request:${l.id}:article" value="${esc(l.article)}"></label><div class="two"><label>Taglia<input class="field" data-bind="request:${l.id}:size" value="${esc(l.size)}"></label><label>Cartoni richiesti *<input type="number" min="0" class="field" data-bind="request:${l.id}:cartonsRequested" value="${l.cartonsRequested}"></label></div>${l.marker?'<div class="marker-box request-marker">* Segnalazione presente sulla richiesta originale</div>':''}<label>Note<input class="field" data-bind="request:${l.id}:note" value="${esc(l.note)}"></label>${this.requestAvailabilityHtml(l)}</article>`).join('')}</div><button class="add-btn request-add" data-action="request-line-add">${phRegular('plus','ph-bridge inline-icon')} AGGIUNGI ARTICOLO</button><label>Note richiesta<textarea class="field textarea" data-bind="request:header:note">${esc(d.note)}</textarea></label><button class="primary request-submit" data-action="request-save">${phIcon('paper-plane-tilt','inline-icon')} INVIA RICHIESTA</button></section>`}
+  openRequestNew(){if(!this.require('REQUEST_CREATE'))return;if(!this.masterReady()){this.toast('Per creare una richiesta è necessario il Master Excel.','error');this.router.go('request-new');return}this.requestFiles=[];this.requestDraft={destination:'LINA',reference:'',requestedAt:localDateTimeInput(),note:'',lines:[this.newRequestLine()]};this.router.go('request-new')}
+  requestNew(){if(!this.require('REQUEST_CREATE'))return'';if(!this.masterReady())return this.masterRequiredView({context:'creare una nuova richiesta',backAction:'requests-progress',backLabel:'TORNA ALLE RICHIESTE'});if(!this.requestDraft)this.requestDraft={destination:'LINA',reference:'',requestedAt:localDateTimeInput(),note:'',lines:[this.newRequestLine()]};const d=this.requestDraft;return `${this.sectionTitle('RICHIESTE','Nuova richiesta')}<section class="form-card request-form-card"><div class="request-form-hero">${phIcon('clipboard-text','request-form-hero-icon')}<div><b>Nuova richiesta</b><small>Articoli, taglie e cartoni richiesti</small></div></div><div class="scan-row request-scan-row"><button class="primary small" data-action="request-camera">${phIcon('camera','inline-icon')} SCANSIONA RICHIESTA</button><button class="soft small" data-action="request-file">${phIcon('paperclip','inline-icon')} ALLEGA FOTO</button></div>${this.requestFiles.length?`<div class="file-chips">${this.requestFiles.map(f=>`<span>${esc(f.name)}</span>`).join('')}</div><button class="soft" data-action="request-analyze">${phIcon('sparkle','inline-icon')} ANALIZZA E COMPILA</button>`:''}<div class="two request-header-grid"><label>Destinazione<select class="field" data-bind="request:header:destination">${CONFIG.destinations.map(x=>`<option ${d.destination===x?'selected':''}>${x}</option>`).join('')}</select></label><label>Data richiesta<input type="datetime-local" class="field" data-bind="request:header:requestedAt" value="${esc(d.requestedAt)}"></label></div><label>Riferimento<input class="field" data-bind="request:header:reference" value="${esc(d.reference)}"></label><div class="request-lines">${d.lines.map((l,i)=>`<article class="line-form request-line-form"><div class="line-top"><b>RIGA ${i+1}</b>${d.lines.length>1?`<button data-action="request-line-remove" data-line="${l.id}">${phIcon('trash','inline-icon')} RIMUOVI</button>`:''}</div><label>Codice articolo<input class="field" data-bind="request:${l.id}:article" value="${esc(l.article)}"></label><div class="two"><label>Taglia<input class="field" data-bind="request:${l.id}:size" value="${esc(l.size)}"></label><label>Cartoni richiesti *<input type="number" min="0" class="field" data-bind="request:${l.id}:cartonsRequested" value="${l.cartonsRequested}"></label></div>${l.marker?'<div class="marker-box request-marker">* Segnalazione presente sulla richiesta originale</div>':''}<label>Note<input class="field" data-bind="request:${l.id}:note" value="${esc(l.note)}"></label>${this.requestAvailabilityHtml(l)}</article>`).join('')}</div><button class="add-btn request-add" data-action="request-line-add">${phRegular('plus','ph-bridge inline-icon')} AGGIUNGI ARTICOLO</button><label>Note richiesta<textarea class="field textarea" data-bind="request:header:note">${esc(d.note)}</textarea></label><button class="primary request-submit" data-action="request-save">${phIcon('paper-plane-tilt','inline-icon')} INVIA RICHIESTA</button></section>`}
   addRequestLine(){this.requestDraft.lines.push(this.newRequestLine());this.renderView()}
   removeRequestLine(id){this.requestDraft.lines=this.requestDraft.lines.filter(x=>x.id!==id);if(!this.requestDraft.lines.length)this.requestDraft.lines.push(this.newRequestLine());this.renderView()}
   saveRequest(){const r=this.domain.requests.create({...this.requestDraft,requestedAt:isoFromLocalInput(this.requestDraft.requestedAt)});this.requestDraft=null;this.requestFiles=[];this.toast(`Richiesta ${r.id} inviata.`);this.router.go('request-detail',{id:r.id})}
   requestList(mode='PROGRESS'){const rows=this.store.db.requests.filter(r=>this.domain.requests.visible(r)).filter(r=>mode!=='PROCESS'||r.status!=='COMPLETATA');return `${this.sectionTitle('RICHIESTE',mode==='PROCESS'?'Completamento':'Avanzamento')}<div class="request-list request-list-premium">${rows.length?rows.map(r=>this.requestCard(r,mode)).join(''):`<div class="empty request-empty">${phIcon(mode==='PROCESS'?'check-circle':'clipboard-text','empty-icon')}<div><b>Nessuna richiesta.</b><small>${mode==='PROCESS'?'Non ci sono richieste da completare.':'Qui compariranno le richieste inviate.'}</small></div></div>`}</div>`}
   requestCard(r,mode){const s=this.domain.requests.summary(r),statusIcon=r.status==='COMPLETATA'?'check-circle':r.status==='PARZIALE'?'circle-half':'clock';return `<article class="request-card request-card-premium"><div class="request-head request-head-premium"><div class="request-identity"><span class="request-id">${r.id}</span><h2>${esc(r.destination)}</h2><p>${fmtDateTime(r.requestedAt)} · ${esc(r.operator)}</p></div><em class="status-pill ${r.status==='COMPLETATA'?'done':r.status==='PARZIALE'?'partial':'to-prepare'}">${phIcon(statusIcon,'status-icon')}${r.status}</em></div><div class="request-progress-wrap"><div class="request-progress-label"><span>AVANZAMENTO</span><b>${s.percent}%</b></div><div class="progress request-progress"><i style="width:${s.percent}%"></i></div></div><div class="metrics request-metrics"><div><b>${s.requested}</b><span>Cartoni richiesti</span></div><div><b>${s.delivered}</b><span>Cartoni presi</span></div><div><b>${s.remaining}</b><span>Cartoni residui</span></div></div><button class="soft request-card-action" data-action="${mode==='PROCESS'?'request-pick':'request-open'}" data-id="${r.id}">${phIcon(mode==='PROCESS'?'package':'folder-open','inline-icon')}${mode==='PROCESS'?'PREPARA':'APRI DETTAGLIO'}</button></article>`}
   requestDetail(id){const r=this.store.db.requests.find(x=>x.id===id);if(!r)return this.emptyPage('Richiesta non trovata.');const s=this.domain.requests.summary(r);return `${this.sectionTitle(r.id,`Richiesta · ${r.destination}`,`${fmtDateTime(r.requestedAt)} · ${r.status}`)}<div class="request-detail-status"><em class="status-pill ${r.status==='COMPLETATA'?'done':r.status==='PARZIALE'?'partial':'to-prepare'}">${phIcon(r.status==='COMPLETATA'?'check-circle':r.status==='PARZIALE'?'circle-half':'clock','status-icon')}${r.status}</em></div><div class="summary-three request-summary"><div><b>${s.requested}</b><span>Cartoni richiesti</span></div><div><b>${s.delivered}</b><span>Cartoni presi</span></div><div><b>${s.remaining}</b><span>Cartoni residui</span></div></div>${r.lines.map(l=>{const d=this.domain.requests.deliveredForLine(r,l.id),rem=Math.max(0,l.cartonsRequested-d.cartons);return `<article class="detail-line request-detail-line"><div class="detail-line-top"><div><b>${l.article}${l.size?` · ${l.size}`:''}</b><span>${esc(l.note)}</span></div><strong>${rem}</strong></div><div class="line-metrics request-line-metrics"><span>${phIcon('package','metric-icon')}Cartoni richiesti <b>${l.cartonsRequested}</b></span><span>${phIcon('check-circle','metric-icon')}Cartoni presi <b>${d.cartons}</b></span><span>${phIcon('arrow-down','metric-icon')}Pezzi scaricati <b>${d.pieces}</b></span><span>${phIcon('package','metric-icon')}Pezzi disponibili <b>${this.domain.stock.total(l.article,l.size)}</b></span></div>${this.domain.stock.receivingTotal(l.article,l.size)?`<div class="available-badge request-receiving-badge">${phIcon('tray','inline-icon')}${this.domain.stock.receivingTotal(l.article,l.size)} PEZZI DISPONIBILI IN AREA RICEVIMENTO</div>`:''}${l.marker?'<div class="marker-box request-marker">* Segnalazione presente sulla richiesta originale</div>':''}</article>`}).join('')}${this.auth.can('REQUEST_PROCESS')&&r.status!=='COMPLETATA'?`<button class="success request-prepare" data-action="request-pick" data-id="${r.id}">${phIcon('package','inline-icon')} PREPARA RICHIESTA</button>`:''}`}
-  requestPick(id){const r=this.store.db.requests.find(x=>x.id===id);if(!r)return this.emptyPage('Richiesta non trovata.');return `${this.sectionTitle('PRELIEVO',r.id)}<div class="request-pick-hero">${phIcon('package','request-pick-hero-icon')}<div><b>Preparazione richiesta</b><small>Cartoni = avanzamento · Pezzi = scarico reale dalla giacenza</small></div></div><div id="requestPickSources" data-request="${r.id}"></div><section class="form-card extra-pick request-extra"><h2>${phIcon('plus-circle','inline-icon')} Materiale non richiesto</h2><label>Giacenza${this.sourceSelect('extraPickSource')}</label><div class="two"><label>Cartoni<input id="extraPickCartons" type="number" min="0" value="0" class="field"></label><label>Pezzi<input id="extraPickPieces" type="number" min="0" value="0" class="field"></label></div></section><label>Note consegna<textarea id="requestPickNote" class="field textarea"></textarea></label><button class="success request-pick-confirm" data-action="request-pick-save" data-id="${r.id}">${phIcon('check-circle','inline-icon')} CONFERMA CARTONI E SCARICA PEZZI</button>`}
+  requestPick(id){if(!this.require('REQUEST_PROCESS'))return'';if(!this.masterReady())return this.masterRequiredView({context:'preparare e scaricare una richiesta',backAction:'requests-process',backLabel:'TORNA AL COMPLETAMENTO'});const r=this.store.db.requests.find(x=>x.id===id);if(!r)return this.emptyPage('Richiesta non trovata.');return `${this.sectionTitle('PRELIEVO',r.id)}<div class="request-pick-hero">${phIcon('package','request-pick-hero-icon')}<div><b>Preparazione richiesta</b><small>Cartoni = avanzamento · Pezzi = scarico reale dalla giacenza</small></div></div><div id="requestPickSources" data-request="${r.id}"></div><section class="form-card extra-pick request-extra"><h2>${phIcon('plus-circle','inline-icon')} Materiale non richiesto</h2><label>Giacenza${this.sourceSelect('extraPickSource')}</label><div class="two"><label>Cartoni<input id="extraPickCartons" type="number" min="0" value="0" class="field"></label><label>Pezzi<input id="extraPickPieces" type="number" min="0" value="0" class="field"></label></div></section><label>Note consegna<textarea id="requestPickNote" class="field textarea"></textarea></label><button class="success request-pick-confirm" data-action="request-pick-save" data-id="${r.id}">${phIcon('check-circle','inline-icon')} CONFERMA CARTONI E SCARICA PEZZI</button>`}
   renderRequestPickSources(){
     const host=document.getElementById('requestPickSources');if(!host)return;const r=this.store.db.requests.find(x=>x.id===host.dataset.request);
     host.innerHTML=r.lines.map(l=>{const done=this.domain.requests.deliveredForLine(r,l.id),rem=Math.max(0,l.cartonsRequested-done.cartons),sources=this.domain.stock.sources(l.article,l.size);return `<article class="pick-line pick-line-premium request-pick-line"><div class="pick-line-head"><div class="pick-line-identity"><span class="pick-line-article">${esc(l.article)}</span>${l.size?`<span class="pick-line-size">${esc(l.size)}</span>`:''}</div><div class="pick-remaining"><small>CARTONI RESIDUI</small><strong>${rem}</strong></div></div><div class="pick-source-list">${sources.map((s,i)=>{const receiving=s.location===CONFIG.receivingLocation,stateClass=this.stockStateClass(s.state);return `<div class="pick-source pick-source-premium request-pick-source ${stateClass} ${receiving?'receiving':''}" data-pick-row data-line="${l.id}" data-key="${esc(bucketKey(s))}"><span class="pick-dot">${i+1}</span><div class="pick-source-main"><div class="pick-source-top"><span class="stock-state-pill ${stateClass}"><i></i>${esc(s.state)}</span><span class="pick-available"><strong>${s.quantity}</strong><small>PEZZI DISPONIBILI</small></span></div><div class="pick-location"><span class="pick-location-icon">${phIcon(receiving?'tray':'map-pin-line')}</span><div><small>POSIZIONE</small><b>${receiving?'AREA RICEVIMENTO':`FILA/SCAFFALE ${esc(s.location||'—')}`}</b></div></div><div class="pick-pallet"><span class="pick-pallet-icon">${phIcon('stack')}</span><div><small>BANCALE</small><b>${esc(s.pallet||'—')}</b></div></div></div><div class="pick-pair"><label class="pick-input pick-input-cartons"><span>${phIcon('package','pick-label-icon')} CARTONI</span><input type="number" min="0" max="${rem}" value="0" data-pick-cartons></label><label class="pick-input pick-input-pieces"><span>${phIcon('hash','pick-label-icon')} PEZZI</span><input type="number" min="0" max="${s.quantity}" value="0" data-pick-pieces></label></div></div>`}).join('')||`<div class="empty compact request-no-stock">${phIcon('warning-circle','empty-icon')}<div><b>Nessuna disponibilità</b><small>Non risultano pezzi disponibili per questo articolo.</small></div></div>`}</div></article>`}).join('')
@@ -9286,7 +9615,7 @@ class UI{
 
   action(action,el){
     const go=(name,params={})=>this.router.go(name,params);
-    const map={back:()=>this.router.back(),home:()=>this.router.home(),login:()=>{this.sounds?.click?.();this.openLogin()},'login-submit':()=>this.login(),logout:()=>{this.sounds?.click?.();this.logout()},'site-switch':()=>this.openSiteSwitcher(),'site-select':()=>this.selectSite(el.dataset.site),'site-choice-cancel':()=>this.cancelSiteChoice(),'toggle-pin':()=>{const p=document.getElementById('loginPin'),show=p.type==='password';p.type=show?'text':'password';const i=el.querySelector('i');if(i)i.className=`ph-duotone ph-${show?'eye-slash':'eye'}`;el.setAttribute('aria-label',show?'Nascondi PIN':'Mostra PIN');p.focus()},'view-desktop':()=>this.applyView('desktop'),'view-phone':()=>this.applyView('smartphone'),notifications:()=>this.openNotifications(),master:()=>go('master'),'master-view':()=>go('master'),'master-filter-reset':()=>this.resetMasterFilters(),'master-request-toggle':()=>this.toggleMasterRequestMode(),'master-request-item':()=>this.toggleMasterRequestItem(el.dataset.item),'master-request-locations':()=>this.toggleMasterRequestLocations(el.dataset.item,el),'master-request-review':()=>this.openMasterRequestReview(),'master-request-review-close':()=>document.getElementById('masterRequestDialog')?.close(),'master-request-remove':()=>this.removeMasterRequestItem(el.dataset.item),'master-request-qty-minus':()=>this.adjustMasterRequestQty(el.dataset.item,-1),'master-request-qty-plus':()=>this.adjustMasterRequestQty(el.dataset.item,1),'master-request-send':()=>this.sendMasterRequest(),'master-page-prev':()=>{this.masterView.page=Math.max(1,this.masterView.page-1);this.renderMasterViewerBody()},'master-page-next':()=>{this.masterView.page+=1;this.renderMasterViewerBody()},'master-edit-close':()=>this.closeMasterEdit(),'master-edit-save':()=>this.saveMasterEdit(),'master-import':()=>{if(!this.auth.can('MASTER_IMPORT'))throw new Error('Non hai il permesso per importare il Master.');document.getElementById('masterFile').click()},'master-export':async()=>{if(!this.auth.can('MASTER_EXPORT'))throw new Error('Non hai il permesso per esportare il Master.');const n=await this.excel.export();this.toast(`${n} esportato.`)},'legacy-migrate':()=>{if(!confirm('Migrare una COPIA dei dati REMOTO in NOVA? REMOTO non verrà modificato.'))return;this.excel.migrateLocalLegacy();this.toast('Copia REMOTO migrata in NOVA.');this.router.home()},receiving:()=>go('receiving'),'receipt-new':()=>this.openReceiptNew(),'receipts-pending':()=>go('receipts',{mode:'PENDING'}),'receipts-all':()=>go('receipts',{mode:'ALL'}),'receipt-line-add':()=>this.addReceiptLine(),'receipt-confirm':()=>this.confirmReceipt(),'ddt-camera':()=>document.getElementById('ddtCamera').click(),'ddt-file':()=>document.getElementById('ddtFile').click(),'ddt-analyze':()=>this.openAnalysis('DDT'),'request-camera':()=>document.getElementById('requestCamera').click(),'request-file':()=>document.getElementById('requestFile').click(),'request-analyze':()=>this.openAnalysis('REQUEST'),'analysis-share':()=>this.shareAnalysis(),'analysis-copy':()=>this.copyAnalysisPrompt(),'analysis-import':()=>this.importAnalysisJson(),stock:()=>{if(this.require('STOCK_VIEW',{master:true}))go('stock')},'rectify-new':()=>{this.rectDraft=null;go('rectify',{key:''})},rectify:()=>{this.rectDraft=null;go('rectify',{key:''})},'rect-filter-toggle':()=>{this.rectFiltersOpen=!this.rectFiltersOpen;this.renderView()},'rect-change':()=>{this.rectDraft=null;this.renderView()},'rect-step-minus':()=>this.stepRect(-1),'rect-step-plus':()=>this.stepRect(1),'rect-cancel':()=>{this.rectDraft=null;this.router.back()},'rectify-save':()=>this.saveRectify(el),count:()=>{this.countDraft=this.countDraft||this.loadCountSession();go('count')},'count-load':()=>this.loadCount(),'count-finalize':()=>this.finalizeCount(),'count-apply':()=>this.applyCount(el),'count-abandon':()=>this.abandonCount(),issue:()=>go('issue'),'issue-confirm':()=>this.confirmIssue(),transfer:()=>go('transfer'),'transfer-confirm':()=>this.confirmTransfer(),requests:()=>go('requests-progress'),'request-new':()=>this.openRequestNew(),'request-line-add':()=>this.addRequestLine(),'request-save':()=>this.saveRequest(),'requests-progress':()=>go('requests-progress'),'requests-process':()=>go('requests-process'),registry:()=>go('registry'),'registry-movements':()=>{this.registryTab='MOVIMENTI';go('registry-list')},'registry-audit':()=>{this.registryTab='AUDIT';go('registry-list')},'registry-export':async()=>{const n=await this.excel.exportRegistry();this.toast(`${n} esportato.`)},admin:()=>go('admin'),'admin-operators':()=>go('admin-operators'),'admin-operator-new':()=>go('admin-operator',{id:''}),'admin-sites':()=>go('admin-sites'),'admin-site-new':()=>go('admin-site',{id:''}),'admin-roles':()=>go('admin-roles'),'admin-pin-generate':()=>this.generateAdminPin(),'admin-pin-dismiss':()=>{this.adminGeneratedPin='';this.renderView()},'activity-today':()=>{this.activityDate=localDateInput();this.renderView()},'activity-date-open':()=>{const input=document.getElementById(el.dataset.target);if(!input)return;try{input.focus({preventScroll:true})}catch{input.focus?.()}if(typeof input.showPicker==='function'){try{input.showPicker();return}catch{}}input.click?.()},'registry-filter-toggle':()=>document.getElementById('registryFilters')?.classList.toggle('hidden')};
+    const map={back:()=>this.router.back(),home:()=>this.router.home(),login:()=>{this.sounds?.click?.();this.openLogin()},'login-submit':()=>this.login(),logout:()=>{this.sounds?.click?.();this.logout()},'site-switch':()=>this.openSiteSwitcher(),'site-select':()=>this.selectSite(el.dataset.site),'site-choice-cancel':()=>this.cancelSiteChoice(),'toggle-pin':()=>{const p=document.getElementById('loginPin'),show=p.type==='password';p.type=show?'text':'password';const i=el.querySelector('i');if(i)i.className=`ph-duotone ph-${show?'eye-slash':'eye'}`;el.setAttribute('aria-label',show?'Nascondi PIN':'Mostra PIN');p.focus()},'view-desktop':()=>this.applyView('desktop'),'view-phone':()=>this.applyView('smartphone'),notifications:()=>this.openNotifications(),master:()=>go('master'),'master-view':()=>go('master'),'master-filter-reset':()=>this.resetMasterFilters(),'master-request-toggle':()=>this.toggleMasterRequestMode(),'master-request-item':()=>this.toggleMasterRequestItem(el.dataset.item),'master-request-locations':()=>this.toggleMasterRequestLocations(el.dataset.item,el),'master-request-review':()=>this.openMasterRequestReview(),'master-request-review-close':()=>document.getElementById('masterRequestDialog')?.close(),'master-request-remove':()=>this.removeMasterRequestItem(el.dataset.item),'master-request-qty-minus':()=>this.adjustMasterRequestQty(el.dataset.item,-1),'master-request-qty-plus':()=>this.adjustMasterRequestQty(el.dataset.item,1),'master-request-send':()=>this.sendMasterRequest(),'master-page-prev':()=>{this.masterView.page=Math.max(1,this.masterView.page-1);this.renderMasterViewerBody()},'master-page-next':()=>{this.masterView.page+=1;this.renderMasterViewerBody()},'master-edit-close':()=>this.closeMasterEdit(),'master-edit-save':()=>this.saveMasterEdit(),'master-import':()=>{if(!this.auth.can('MASTER_IMPORT'))throw new Error('Non hai il permesso per importare il Master.');document.getElementById('masterFile').click()},'master-export':async()=>{if(!this.auth.can('MASTER_EXPORT'))throw new Error('Non hai il permesso per esportare il Master.');const n=await this.excel.export();this.toast(`${n} esportato.`)},'legacy-migrate':()=>{if(!confirm('Migrare una COPIA dei dati REMOTO in NOVA? REMOTO non verrà modificato.'))return;this.excel.migrateLocalLegacy();this.toast('Copia REMOTO migrata in NOVA.');this.router.home()},receiving:()=>go('receiving'),'receipt-new':()=>this.openReceiptNew(),'receipts-pending':()=>go('receipts',{mode:'PENDING'}),'receipts-all':()=>go('receipts',{mode:'ALL'}),'receipt-line-add':()=>this.addReceiptLine(),'receipt-confirm':()=>this.confirmReceipt(),'ddt-camera':()=>document.getElementById('ddtCamera').click(),'ddt-file':()=>document.getElementById('ddtFile').click(),'ddt-analyze':()=>this.openAnalysis('DDT'),'request-camera':()=>document.getElementById('requestCamera').click(),'request-file':()=>document.getElementById('requestFile').click(),'request-analyze':()=>this.openAnalysis('REQUEST'),'analysis-share':()=>this.shareAnalysis(),'analysis-copy':()=>this.copyAnalysisPrompt(),'analysis-import':()=>this.importAnalysisJson(),stock:()=>{if(this.require('STOCK_VIEW'))go('stock')},'rectify-new':()=>{this.rectDraft=null;go('rectify',{key:''})},rectify:()=>{this.rectDraft=null;go('rectify',{key:''})},'rect-filter-toggle':()=>{this.rectFiltersOpen=!this.rectFiltersOpen;this.renderView()},'rect-change':()=>{this.rectDraft=null;this.renderView()},'rect-step-minus':()=>this.stepRect(-1),'rect-step-plus':()=>this.stepRect(1),'rect-cancel':()=>{this.rectDraft=null;this.router.back()},'rectify-save':()=>this.saveRectify(el),count:()=>{this.countDraft=this.countDraft||this.loadCountSession();go('count')},'count-load':()=>this.loadCount(),'count-finalize':()=>this.finalizeCount(),'count-apply':()=>this.applyCount(el),'count-abandon':()=>this.abandonCount(),issue:()=>go('issue'),'issue-confirm':()=>this.confirmIssue(),transfer:()=>go('transfer'),'transfer-confirm':()=>this.confirmTransfer(),requests:()=>go('requests-progress'),'request-new':()=>this.openRequestNew(),'request-line-add':()=>this.addRequestLine(),'request-save':()=>this.saveRequest(),'requests-progress':()=>go('requests-progress'),'requests-process':()=>go('requests-process'),registry:()=>go('registry'),'registry-movements':()=>{this.registryTab='MOVIMENTI';go('registry-list')},'registry-audit':()=>{this.registryTab='AUDIT';go('registry-list')},'registry-export':async()=>{const n=await this.excel.exportRegistry();this.toast(`${n} esportato.`)},admin:()=>go('admin'),'admin-operators':()=>go('admin-operators'),'admin-operator-new':()=>go('admin-operator',{id:''}),'admin-sites':()=>go('admin-sites'),'admin-site-new':()=>go('admin-site',{id:''}),'admin-roles':()=>go('admin-roles'),'admin-pin-generate':()=>this.generateAdminPin(),'admin-pin-dismiss':()=>{this.adminGeneratedPin='';this.renderView()},'activity-today':()=>{this.activityDate=localDateInput();this.renderView()},'activity-date-open':()=>{const input=document.getElementById(el.dataset.target);if(!input)return;try{input.focus({preventScroll:true})}catch{input.focus?.()}if(typeof input.showPicker==='function'){try{input.showPicker();return}catch{}}input.click?.()},'registry-filter-toggle':()=>document.getElementById('registryFilters')?.classList.toggle('hidden')};
     if(map[action])return map[action]();
     if(action==='master-edit-row')return this.openMasterEdit(el.dataset.key);if(action==='admin-operator-edit')return go('admin-operator',{id:el.dataset.id});if(action==='admin-operator-save')return this.saveAdminOperator(el.dataset.id||'');if(action==='admin-site-edit')return go('admin-site',{id:el.dataset.id});if(action==='admin-site-save')return this.saveAdminSite(el.dataset.id||'');if(action==='stock-suggest')return this.applyStockSuggestion(el);if(action==='receipt-line-remove')return this.removeReceiptLine(el.dataset.line);if(action==='partial-add')return this.addPartial(el.dataset.line);if(action==='partial-undo')return this.undoPartial(el.dataset.line);if(action==='partial-clear')return this.clearPartial(el.dataset.line);if(action==='receipt-open')return go('receipt-detail',{id:el.dataset.id});if(action==='putaway-open')return go('putaway',{receipt:el.dataset.receipt,line:el.dataset.line});if(action==='putaway-confirm')return this.confirmPutAway(el.dataset.receipt,el.dataset.line);if(action==='rectify-open'){this.rectDraft=null;return go('rectify',{key:el.dataset.key})}if(action==='rect-select')return this.selectRect(el.dataset.key);if(action==='count-confirm-row')return this.confirmCountRow(el.dataset.dom);if(action==='count-edit')return this.editCountRow(el.dataset.dom);if(action==='count-zero')return this.countZero(el.dataset.dom);if(action==='count-extra-add')return this.addCountExtra();if(action==='count-extra-remove')return this.removeCountExtra(el.dataset.dom);if(action==='request-line-remove')return this.removeRequestLine(el.dataset.line);if(action==='request-open')return go('request-detail',{id:el.dataset.id});if(action==='request-pick')return go('request-pick',{id:el.dataset.id});if(action==='request-pick-save')return this.saveRequestPick(el.dataset.id);if(action==='ledger-cancel')return this.cancelLedger(el.dataset.id);if(action==='notif-read'){this.domain.notifications.markRead(el.dataset.id);this.store.save('notification:read');document.getElementById('notificationDialog').close();if(el.dataset.entity==='RECEIPT')go('receipt-detail',{id:el.dataset.entityId});else if(el.dataset.entity==='REQUEST')go('request-detail',{id:el.dataset.entityId});return}
   }
