@@ -1,13 +1,13 @@
 <!doctype html>
 <html lang="it">
 <head>
-<meta name="soma-build" content="R31.13-20260924">
+<meta name="soma-build" content="R31.14-20260924">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
 <script id="soma-build-freshness">
 (() => {
-  const CURRENT_BUILD='R31.13-20260924',CHECK_KEY='soma:last-build-refresh';
+  const CURRENT_BUILD='R31.14-20260924',CHECK_KEY='soma:last-build-refresh';
   globalThis.SOMA_BUILD=CURRENT_BUILD;
   const check=async()=>{
     try{
@@ -8551,8 +8551,8 @@ body.desktop-mode .activity-desktop .activity-kpi.wide{grid-column:auto!importan
   }
 }
 </style>
-<style id="r31-13-receiving-control-center">
-/* ===== R31.13 · RECEIVING — CONTROL CENTER UX ===== */
+<style id="r31-14-receiving-control-center">
+/* ===== R31.14 · RECEIVING — CONTROL CENTER UX ===== */
 .receiving-control-center{
   --rv-ink:#244363;
   --rv-muted:#71879a;
@@ -10023,7 +10023,7 @@ class UI{
     const receipts=this.store.db.receipts||[],pending=receipts.filter(r=>this.domain.receiving.stats(r).pending>0),pieces=pending.reduce((n,r)=>n+this.domain.receiving.stats(r).pending,0),today=localDateInput(),todayReceipts=receipts.filter(r=>{const ts=r.receivedAt||r.createdAt||r.at;return ts&&dateKeyLocal(ts)===today}).length,write=this.auth.can('RECEIVE'),ready=this.masterReady(),canImport=this.auth.can('MASTER_IMPORT');
     const masterNotice=!ready&&write?this.masterRequiredInline('registrare una nuova entrata'):'';
     const newEntryCard=write?`<button class="receiving-control-card new-entry ${ready?'':'blocked'}" ${ready?'data-action="receipt-new"':canImport?'data-action="master-import"':'type="button" disabled aria-disabled="true"'}><span class="receiving-control-card-icon">${phRegular(ready?'plus-circle':'file-xls')}</span><span class="receiving-control-card-head"><small>NUOVA CONSEGNA</small><b>Nuova entrata</b><span>Registra DDT, articoli ricevuti e quantità effettivamente controllate.</span></span><span class="receiving-control-card-status ${ready?'ready':'blocked'}">${phRegular(ready?'check-circle':'warning-circle')}<span><strong>${ready?'PRONTO':'MASTER NECESSARIO'}</strong><small>${ready?'Master disponibile per la registrazione':canImport?'Caricalo per iniziare una nuova entrata':'Richiedi il caricamento a un operatore autorizzato'}</small></span></span><span class="receiving-control-card-action"><b>${ready?'REGISTRA NUOVA ENTRATA':canImport?'IMPORTA MASTER EXCEL':'FUNZIONE NON DISPONIBILE'}</b>${phRegular(ready?'arrow-right':canImport?'upload-simple':'lock-key')}</span></button>`:''; 
-    const pendingCard=write?`<button class="receiving-control-card pending" data-action="receipts-pending"><span class="receiving-control-card-icon">${phRegular('map-pin-line')}</span><span class="receiving-control-card-head"><small>MESSA A DIMORA</small><b>Da ubicare</b><span>Porta in giacenza il materiale controllato scegliendo posizione e bancale.</span></span><span class="receiving-control-card-stats"><span><strong>${pending.length}</strong><small>${pending.length===1?'ENTRATA APERTA':'ENTRATE APERTE'}</small></span><span><strong>${pieces}</strong><small>PEZZI DA UBICARE</small></span></span><span class="receiving-control-card-action"><b>APRI DA UBICARE</b>${phRegular('arrow-right')}</span></button>`:''; 
+    const pendingCard=write?`<button class="receiving-control-card pending" data-action="receipts-pending"><span class="receiving-control-card-icon">${phRegular('map-pin-line')}</span><span class="receiving-control-card-head"><small>MESSA A DIMORA</small><b>Da ubicare</b><span>Porta in giacenza il materiale controllato scegliendo posizione e bancale.</span></span><span class="receiving-control-card-stats"><span><strong>${pending.length}</strong><small>${pending.length===1?'ENTRATA DA UBICARE':'ENTRATE DA UBICARE'}</small></span><span><strong>${pieces}</strong><small>PEZZI IN RICEVIMENTO</small></span></span><span class="receiving-control-card-action"><b>APRI DA UBICARE</b>${phRegular('arrow-right')}</span></button>`:''; 
     const historyTitle=write?'Storico entrate':'Merce arrivata',historyCta=write?'APRI STORICO':'APRI MERCE ARRIVATA';
     const historyCard=`<button class="receiving-control-card history" data-action="receipts-all"><span class="receiving-control-card-icon">${phRegular('clock-counter-clockwise')}</span><span class="receiving-control-card-head"><small>CONSULTAZIONE</small><b>${historyTitle}</b><span>${write?'Consulta tutte le consegne registrate e il loro stato operativo.':'Consulta le consegne registrate in sola lettura.'}</span></span><span class="receiving-control-card-stats"><span><strong>${receipts.length}</strong><small>ENTRATE TOTALI</small></span><span><strong>${todayReceipts}</strong><small>OGGI</small></span></span><span class="receiving-control-card-action"><b>${historyCta}</b>${phRegular('arrow-right')}</span></button>`;
     const cardCount=(write?2:0)+1,gridClass=cardCount===3?'three':cardCount===2?'two':'one';
@@ -10210,6 +10210,6 @@ try{globalThis.__NOVA_LEGACY_AVAILABLE=!!localStorage.getItem(CONFIG.legacyStora
 const switchSite=async siteId=>{await ui.selectSite(siteId);return auth.site()};
 globalThis.NOVA=Object.freeze({version:CONFIG.appVersion,schema:CONFIG.version,identityVersion:CONFIG.identityVersion,store,auth,router,domain,excel,ui,sounds,sites:SITES,operators:OPERATORS,roles:ROLE_DEFS,saveIdentityRegistry,capabilities:Object.freeze({operational:ALL_CAPS,master:MASTER_CAPS,administration:ADMIN_CAPS,globalAdmin:GLOBAL_ADMIN_CAPS}),identityValidation:IDENTITY_VALIDATION,switchSite});
 ui.render();</script>
-<!-- SOMA_BUILD:R31.13-20260924 -->
+<!-- SOMA_BUILD:R31.14-20260924 -->
 </body>
 </html>
