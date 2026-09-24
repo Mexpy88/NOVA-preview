@@ -1,13 +1,13 @@
 <!doctype html>
 <html lang="it">
 <head>
-<meta name="soma-build" content="R31.19-20260924">
+<meta name="soma-build" content="R31.20-20260924">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
 <script id="soma-build-freshness">
 (() => {
-  const CURRENT_BUILD='R31.19-20260924',CHECK_KEY='soma:last-build-refresh';
+  const CURRENT_BUILD='R31.20-20260924',CHECK_KEY='soma:last-build-refresh';
   globalThis.SOMA_BUILD=CURRENT_BUILD;
   const check=async()=>{
     try{
@@ -9889,6 +9889,297 @@ body.desktop-mode .activity-desktop .activity-kpi.wide{grid-column:auto!importan
  .request-detail-v3-note,.request-detail-v3-marker{max-width:calc(100% - 48px)!important;margin-left:48px!important;font-size:10px!important}
 }
 </style>
+
+<style id="r31-20-request-detail-fullwidth">
+/* ===== R31.20 · REQUEST DETAIL — FULL-WIDTH DESKTOP + LARGE TYPE ===== */
+@media(min-width:981px){
+  body.desktop-mode .app-view:has(.request-detail-v3){
+    width:100%!important;
+    max-width:none!important;
+    margin:0!important;
+    padding-left:18px!important;
+    padding-right:18px!important;
+  }
+
+  body.desktop-mode .request-detail-v3{
+    width:100%!important;
+    max-width:none!important;
+    margin:0!important;
+    padding:6px 0 0!important;
+  }
+
+  body.desktop-mode .request-detail-v3-hero{
+    margin-bottom:26px!important;
+  }
+
+  body.desktop-mode .request-detail-v3-title{
+    gap:19px!important;
+  }
+
+  body.desktop-mode .request-detail-v3-title-icon{
+    width:76px!important;
+    height:76px!important;
+    flex-basis:76px!important;
+    border-radius:22px!important;
+  }
+
+  body.desktop-mode .request-detail-v3-title-icon>.ph{
+    font-size:39px!important;
+  }
+
+  body.desktop-mode .request-detail-v3-title small{
+    font-size:13px!important;
+    letter-spacing:.11em!important;
+  }
+
+  body.desktop-mode .request-detail-v3-title h1{
+    margin-top:7px!important;
+    font-size:52px!important;
+    line-height:.98!important;
+  }
+
+  body.desktop-mode .request-detail-v3-title p{
+    margin-top:10px!important;
+    font-size:16px!important;
+    line-height:1.4!important;
+  }
+
+  body.desktop-mode .request-detail-v3-status{
+    min-height:48px!important;
+    padding:0 18px!important;
+    gap:9px!important;
+    font-size:13px!important;
+  }
+
+  body.desktop-mode .request-detail-v3-status>.ph{
+    font-size:20px!important;
+  }
+
+  body.desktop-mode .request-detail-v3-overview{
+    grid-template-columns:minmax(0,1.45fr) minmax(560px,.55fr)!important;
+    gap:18px!important;
+    margin-bottom:22px!important;
+  }
+
+  body.desktop-mode .request-detail-v3-progress,
+  body.desktop-mode .request-detail-v3-kpis{
+    min-height:178px!important;
+    border-radius:24px!important;
+  }
+
+  body.desktop-mode .request-detail-v3-progress{
+    padding:28px 30px 24px!important;
+  }
+
+  body.desktop-mode .request-detail-v3-progress-top small{
+    font-size:12px!important;
+  }
+
+  body.desktop-mode .request-detail-v3-progress-top span{
+    margin-top:8px!important;
+    font-size:17px!important;
+  }
+
+  body.desktop-mode .request-detail-v3-progress-top strong{
+    font-size:54px!important;
+  }
+
+  body.desktop-mode .request-detail-v3-progress-top strong i{
+    font-size:23px!important;
+  }
+
+  body.desktop-mode .request-detail-v3-progress-bar{
+    height:11px!important;
+    margin-top:25px!important;
+  }
+
+  body.desktop-mode .request-detail-v3-progress-foot{
+    margin-top:13px!important;
+    font-size:13px!important;
+  }
+
+  body.desktop-mode .request-detail-v3-kpis{
+    padding:15px!important;
+  }
+
+  body.desktop-mode .request-detail-v3-kpis>span{
+    padding:18px 20px!important;
+  }
+
+  body.desktop-mode .request-detail-v3-kpis small{
+    font-size:11px!important;
+  }
+
+  body.desktop-mode .request-detail-v3-kpis b{
+    margin-top:9px!important;
+    font-size:41px!important;
+  }
+
+  body.desktop-mode .request-detail-v3-kpis em{
+    margin-top:6px!important;
+    font-size:11px!important;
+  }
+
+  body.desktop-mode .request-detail-v3-integrity{
+    margin-bottom:28px!important;
+    padding:20px 22px!important;
+    border-radius:20px!important;
+  }
+
+  body.desktop-mode .request-detail-v3-integrity>.ph{
+    font-size:31px!important;
+  }
+
+  body.desktop-mode .request-detail-v3-integrity>div>b{
+    font-size:17px!important;
+  }
+
+  body.desktop-mode .request-detail-v3-integrity>div>p{
+    font-size:14px!important;
+  }
+
+  body.desktop-mode .request-detail-v3-integrity span{
+    padding:10px 14px!important;
+    font-size:11px!important;
+  }
+
+  body.desktop-mode .request-detail-v3-integrity strong{
+    font-size:12px!important;
+  }
+
+  body.desktop-mode .request-detail-v3-section-head{
+    margin:30px 4px 16px!important;
+  }
+
+  body.desktop-mode .request-detail-v3-section-head small{
+    font-size:12px!important;
+  }
+
+  body.desktop-mode .request-detail-v3-section-head h2{
+    margin-top:6px!important;
+    font-size:30px!important;
+  }
+
+  body.desktop-mode .request-detail-v3-section-head>span{
+    padding:10px 15px!important;
+    font-size:12px!important;
+  }
+
+  body.desktop-mode .request-detail-v3-lines{
+    gap:15px!important;
+  }
+
+  body.desktop-mode .request-detail-v3-line{
+    padding:22px 24px 20px 26px!important;
+    border-radius:23px!important;
+    box-shadow:0 10px 28px rgba(30,62,86,.055)!important;
+  }
+
+  body.desktop-mode .request-detail-v3-line-main{
+    grid-template-columns:54px minmax(0,1fr) 190px!important;
+    gap:18px!important;
+  }
+
+  body.desktop-mode .request-detail-v3-line-index{
+    width:54px!important;
+    height:54px!important;
+    border-radius:16px!important;
+    font-size:14px!important;
+  }
+
+  body.desktop-mode .request-detail-v3-line-id small{
+    font-size:11px!important;
+  }
+
+  body.desktop-mode .request-detail-v3-line-id b{
+    margin-top:5px!important;
+    font-size:25px!important;
+    line-height:1.12!important;
+  }
+
+  body.desktop-mode .request-detail-v3-line-id span{
+    margin-top:6px!important;
+    font-size:13px!important;
+  }
+
+  body.desktop-mode .request-detail-v3-line-rem{
+    min-width:190px!important;
+  }
+
+  body.desktop-mode .request-detail-v3-line-rem small{
+    font-size:11px!important;
+  }
+
+  body.desktop-mode .request-detail-v3-line-rem strong{
+    margin-top:4px!important;
+    font-size:45px!important;
+  }
+
+  body.desktop-mode .request-detail-v3-line-rem span{
+    margin-left:6px!important;
+    font-size:11px!important;
+  }
+
+  body.desktop-mode .request-detail-v3-line-progress{
+    width:calc(100% - 72px)!important;
+    height:7px!important;
+    margin:17px 0 14px 72px!important;
+  }
+
+  body.desktop-mode .request-detail-v3-line-stats{
+    width:calc(100% - 72px)!important;
+    margin-left:72px!important;
+    border-radius:17px!important;
+  }
+
+  body.desktop-mode .request-detail-v3-line-stats>span{
+    min-height:88px!important;
+    padding:14px 19px!important;
+  }
+
+  body.desktop-mode .request-detail-v3-line-stats small{
+    font-size:11px!important;
+  }
+
+  body.desktop-mode .request-detail-v3-line-stats b{
+    margin-top:8px!important;
+    font-size:32px!important;
+  }
+
+  body.desktop-mode .request-detail-v3-line-stats em{
+    font-size:11px!important;
+  }
+
+  body.desktop-mode .request-detail-v3-note,
+  body.desktop-mode .request-detail-v3-marker{
+    max-width:calc(100% - 72px)!important;
+    min-height:42px!important;
+    margin-left:72px!important;
+    padding:10px 13px!important;
+    font-size:12px!important;
+  }
+
+  body.desktop-mode .request-detail-v3-note>.ph,
+  body.desktop-mode .request-detail-v3-marker>.ph{
+    font-size:17px!important;
+  }
+
+  body.desktop-mode .request-detail-v3-actions{
+    margin-top:24px!important;
+    padding:19px!important;
+  }
+
+  body.desktop-mode .request-detail-v3-primary,
+  body.desktop-mode .request-detail-v3-delete{
+    min-height:60px!important;
+    font-size:13px!important;
+  }
+
+  body.desktop-mode .request-detail-v3-primary{
+    min-width:310px!important;
+  }
+}
+</style>
 </head>
 <body>
 <header id="topbar" class="topbar"></header>
@@ -11146,6 +11437,6 @@ try{globalThis.__NOVA_LEGACY_AVAILABLE=!!localStorage.getItem(CONFIG.legacyStora
 const switchSite=async siteId=>{await ui.selectSite(siteId);return auth.site()};
 globalThis.NOVA=Object.freeze({version:CONFIG.appVersion,schema:CONFIG.version,identityVersion:CONFIG.identityVersion,store,auth,router,domain,excel,ui,sounds,sites:SITES,operators:OPERATORS,roles:ROLE_DEFS,saveIdentityRegistry,capabilities:Object.freeze({operational:ALL_CAPS,master:MASTER_CAPS,administration:ADMIN_CAPS,globalAdmin:GLOBAL_ADMIN_CAPS}),identityValidation:IDENTITY_VALIDATION,switchSite});
 ui.render();</script>
-<!-- SOMA_BUILD:R31.19-20260924 -->
+<!-- SOMA_BUILD:R31.20-20260924 -->
 </body>
 </html>
