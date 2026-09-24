@@ -1,13 +1,13 @@
 <!doctype html>
 <html lang="it">
 <head>
-<meta name="soma-build" content="R31.18-20260924">
+<meta name="soma-build" content="R31.19-20260924">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
 <script id="soma-build-freshness">
 (() => {
-  const CURRENT_BUILD='R31.18-20260924',CHECK_KEY='soma:last-build-refresh';
+  const CURRENT_BUILD='R31.19-20260924',CHECK_KEY='soma:last-build-refresh';
   globalThis.SOMA_BUILD=CURRENT_BUILD;
   const check=async()=>{
     try{
@@ -9809,6 +9809,86 @@ body.desktop-mode .activity-desktop .activity-kpi.wide{grid-column:auto!importan
   .request-detail-v3-line-rem strong{font-size:23px!important}
 }
 </style>
+
+<style id="r31-19-request-detail-enterprise-rebalance">
+/* R31.19 — Request detail enterprise rebalance */
+.request-detail-v3{max-width:1540px!important;margin:0 auto!important;padding-top:6px!important}
+.request-detail-v3-hero{margin-bottom:22px!important}
+.request-detail-v3-title-icon{width:68px!important;height:68px!important;flex-basis:68px!important;border-radius:20px!important}
+.request-detail-v3-title-icon>.ph{font-size:34px!important}
+.request-detail-v3-title small{font-size:12px!important}
+.request-detail-v3-title h1{font-size:46px!important}
+.request-detail-v3-title p{font-size:14px!important}
+.request-detail-v3-status{min-height:44px!important;padding:0 16px!important;font-size:12px!important}
+.request-detail-v3-status>.ph{font-size:18px!important}
+
+.request-detail-v3-overview{grid-template-columns:minmax(0,1.35fr) minmax(480px,.65fr)!important;gap:16px!important;margin-bottom:18px!important}
+.request-detail-v3-progress,.request-detail-v3-kpis{min-height:156px!important;border-radius:22px!important}
+.request-detail-v3-progress{padding:24px 26px 20px!important}
+.request-detail-v3-progress-top small{font-size:11px!important}.request-detail-v3-progress-top span{font-size:15px!important}
+.request-detail-v3-progress-top strong{font-size:46px!important}.request-detail-v3-progress-top strong i{font-size:20px!important}
+.request-detail-v3-progress-bar{height:10px!important;margin-top:22px!important}.request-detail-v3-progress-foot{font-size:12px!important;margin-top:12px!important}
+.request-detail-v3-kpis{padding:14px!important}.request-detail-v3-kpis>span{padding:16px 18px!important}
+.request-detail-v3-kpis small{font-size:10px!important}.request-detail-v3-kpis b{font-size:35px!important}.request-detail-v3-kpis em{font-size:10px!important}
+
+.request-detail-v3-integrity{width:100%!important;max-width:none!important;grid-template-columns:40px minmax(0,1fr)!important;margin:0 0 24px!important;padding:17px 19px!important;border-radius:18px!important}
+.request-detail-v3-integrity>.ph{font-size:28px!important}
+.request-detail-v3-integrity>div{display:grid!important;grid-template-columns:minmax(280px,1fr) auto!important;grid-template-areas:"title states" "copy states"!important;column-gap:24px!important;align-items:center!important}
+.request-detail-v3-integrity>div>b{grid-area:title!important;font-size:15px!important}
+.request-detail-v3-integrity>div>p{grid-area:copy!important;margin:4px 0 0!important;font-size:12px!important}
+.request-detail-v3-integrity>div>div{grid-area:states!important;display:flex!important;align-items:center!important;justify-content:flex-end!important;gap:9px!important}
+.request-detail-v3-integrity span{padding:9px 12px!important;font-size:10px!important}.request-detail-v3-integrity strong{font-size:11px!important}
+
+.request-detail-v3-section-head{margin:26px 2px 14px!important}.request-detail-v3-section-head small{font-size:11px!important}
+.request-detail-v3-section-head h2{font-size:25px!important}.request-detail-v3-section-head>span{font-size:11px!important;padding:9px 13px!important}
+
+.request-detail-v3-lines{gap:12px!important}
+.request-detail-v3-line{min-height:0!important;padding:18px 20px 17px 22px!important;border-radius:21px!important;box-shadow:0 9px 25px rgba(30,62,86,.05)!important}
+.request-detail-v3-line:before{width:5px!important}
+.request-detail-v3-line-main{grid-template-columns:46px minmax(0,1fr) 150px!important;gap:15px!important;align-items:center!important}
+.request-detail-v3-line-index{width:46px!important;height:46px!important;border-radius:14px!important;font-size:12px!important}
+.request-detail-v3-line-id small{font-size:10px!important}.request-detail-v3-line-id b{margin-top:4px!important;font-size:20px!important}
+.request-detail-v3-line-id span{margin-top:5px!important;font-size:11px!important}
+.request-detail-v3-line-rem{min-width:150px!important}.request-detail-v3-line-rem small{font-size:10px!important}
+.request-detail-v3-line-rem strong{font-size:36px!important}.request-detail-v3-line-rem span{font-size:10px!important}
+
+.request-detail-v3-line-progress{width:calc(100% - 61px)!important;max-width:none!important;height:6px!important;margin:14px 0 12px 61px!important}
+.request-detail-v3-line-stats{width:calc(100% - 61px)!important;max-width:none!important;margin-left:61px!important;grid-template-columns:repeat(4,minmax(0,1fr))!important;gap:0!important;overflow:hidden!important;border:1px solid #dde7ed!important;border-radius:15px!important;background:#f7fafc!important}
+.request-detail-v3-line-stats>span{min-height:76px!important;padding:12px 16px!important;border:0!important;border-right:1px solid #e0e8ee!important;border-radius:0!important;background:transparent!important}
+.request-detail-v3-line-stats>span:last-child{border-right:0!important}
+.request-detail-v3-line-stats small{font-size:10px!important}.request-detail-v3-line-stats b{margin-top:7px!important;font-size:26px!important}
+.request-detail-v3-line-stats em{font-size:10px!important}
+.request-detail-v3-line-stats>span.unavailable{background:#fff3f1!important}.request-detail-v3-line-stats>span.available{background:#f0f8f4!important}
+.request-detail-v3-line-foot{display:none!important}
+.request-detail-v3-note,.request-detail-v3-marker{max-width:calc(100% - 61px)!important;min-height:38px!important;margin:10px 0 0 61px!important;padding:9px 11px!important;font-size:11px!important}
+.request-detail-v3-note>.ph,.request-detail-v3-marker>.ph{font-size:16px!important}
+
+.request-detail-v3-actions{margin-top:22px!important;padding:17px!important}
+.request-detail-v3-primary,.request-detail-v3-delete{min-height:56px!important;font-size:12px!important}.request-detail-v3-primary{min-width:285px!important}
+
+@media(max-width:1100px){
+ .request-detail-v3-overview{grid-template-columns:1fr!important}
+ .request-detail-v3-integrity>div{grid-template-columns:1fr!important;grid-template-areas:"title" "copy" "states"!important}
+ .request-detail-v3-integrity>div>div{justify-content:flex-start!important;margin-top:9px!important}
+}
+@media(max-width:700px){
+ .request-detail-v3{padding:0!important}
+ .request-detail-v3-title-icon{width:52px!important;height:52px!important;flex-basis:52px!important}.request-detail-v3-title-icon>.ph{font-size:27px!important}
+ .request-detail-v3-title small{font-size:10px!important}.request-detail-v3-title h1{font-size:35px!important}.request-detail-v3-title p{font-size:11.5px!important}
+ .request-detail-v3-status{min-height:38px!important;font-size:10px!important}
+ .request-detail-v3-integrity{grid-template-columns:30px minmax(0,1fr)!important;padding:14px!important}.request-detail-v3-integrity>div{display:block!important}
+ .request-detail-v3-integrity>div>div{display:flex!important;flex-direction:column!important;align-items:stretch!important}
+ .request-detail-v3-integrity span{width:100%!important;justify-content:space-between!important;font-size:9px!important}
+ .request-detail-v3-line{padding:15px 14px 14px 17px!important}.request-detail-v3-line-main{grid-template-columns:38px minmax(0,1fr) 72px!important;gap:10px!important}
+ .request-detail-v3-line-index{width:38px!important;height:38px!important;font-size:10px!important}.request-detail-v3-line-id b{font-size:15.5px!important}.request-detail-v3-line-rem{min-width:72px!important}.request-detail-v3-line-rem strong{font-size:27px!important}
+ .request-detail-v3-line-progress{width:calc(100% - 48px)!important;margin:11px 0 10px 48px!important}
+ .request-detail-v3-line-stats{width:calc(100% - 48px)!important;margin-left:48px!important;grid-template-columns:1fr 1fr!important}
+ .request-detail-v3-line-stats>span{min-height:64px!important;padding:10px!important;border-right:1px solid #e0e8ee!important;border-bottom:1px solid #e0e8ee!important}
+ .request-detail-v3-line-stats>span:nth-child(2n){border-right:0!important}.request-detail-v3-line-stats>span:nth-last-child(-n+2){border-bottom:0!important}
+ .request-detail-v3-line-stats small{font-size:8px!important}.request-detail-v3-line-stats b{font-size:21px!important}.request-detail-v3-line-stats em{font-size:8px!important}
+ .request-detail-v3-note,.request-detail-v3-marker{max-width:calc(100% - 48px)!important;margin-left:48px!important;font-size:10px!important}
+}
+</style>
 </head>
 <body>
 <header id="topbar" class="topbar"></header>
@@ -11066,6 +11146,6 @@ try{globalThis.__NOVA_LEGACY_AVAILABLE=!!localStorage.getItem(CONFIG.legacyStora
 const switchSite=async siteId=>{await ui.selectSite(siteId);return auth.site()};
 globalThis.NOVA=Object.freeze({version:CONFIG.appVersion,schema:CONFIG.version,identityVersion:CONFIG.identityVersion,store,auth,router,domain,excel,ui,sounds,sites:SITES,operators:OPERATORS,roles:ROLE_DEFS,saveIdentityRegistry,capabilities:Object.freeze({operational:ALL_CAPS,master:MASTER_CAPS,administration:ADMIN_CAPS,globalAdmin:GLOBAL_ADMIN_CAPS}),identityValidation:IDENTITY_VALIDATION,switchSite});
 ui.render();</script>
-<!-- SOMA_BUILD:R31.18-20260924 -->
+<!-- SOMA_BUILD:R31.19-20260924 -->
 </body>
 </html>
