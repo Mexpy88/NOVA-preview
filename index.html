@@ -1,13 +1,13 @@
 <!doctype html>
 <html lang="it">
 <head>
-<meta name="soma-build" content="R31.17-20260924">
+<meta name="soma-build" content="R31.18-20260924">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
 <script id="soma-build-freshness">
 (() => {
-  const CURRENT_BUILD='R31.17-20260924',CHECK_KEY='soma:last-build-refresh';
+  const CURRENT_BUILD='R31.18-20260924',CHECK_KEY='soma:last-build-refresh';
   globalThis.SOMA_BUILD=CURRENT_BUILD;
   const check=async()=>{
     try{
@@ -9391,6 +9391,424 @@ body.desktop-mode .activity-desktop .activity-kpi.wide{grid-column:auto!importan
   .request-detail-v3-line,.request-detail-v3-delete{transition:none!important}
 }
 </style>
+
+<style id="r31-18-request-detail-scale-polish">
+/* ===== R31.18 · REQUEST DETAIL — DESKTOP SCALE / TYPOGRAPHY / PROPORTION POLISH ===== */
+.request-detail-v3{
+  max-width:1480px!important;
+  margin:0 auto!important;
+  padding:2px 2px 0!important;
+}
+
+/* Header: stronger visual hierarchy, no micro-type */
+.request-detail-v3-hero{
+  gap:24px!important;
+  margin-bottom:22px!important;
+}
+.request-detail-v3-title{gap:16px!important}
+.request-detail-v3-title-icon{
+  width:64px!important;
+  height:64px!important;
+  flex-basis:64px!important;
+  border-radius:19px!important;
+}
+.request-detail-v3-title-icon>.ph{font-size:32px!important}
+.request-detail-v3-title small{
+  font-size:11px!important;
+  line-height:1.25!important;
+  letter-spacing:.105em!important;
+}
+.request-detail-v3-title h1{
+  margin-top:6px!important;
+  font-size:clamp(36px,2.6vw,46px)!important;
+  line-height:1!important;
+}
+.request-detail-v3-title p{
+  margin-top:9px!important;
+  font-size:13px!important;
+  line-height:1.4!important;
+}
+.request-detail-v3-status{
+  min-height:40px!important;
+  gap:8px!important;
+  padding:0 14px!important;
+  font-size:11px!important;
+  letter-spacing:.035em!important;
+}
+.request-detail-v3-status>.ph{font-size:17px!important}
+
+/* Overview: controlled widths and readable information density */
+.request-detail-v3-overview{
+  grid-template-columns:minmax(0,1fr) 460px!important;
+  gap:16px!important;
+  margin-bottom:18px!important;
+}
+.request-detail-v3-progress,
+.request-detail-v3-kpis{
+  min-height:138px!important;
+  border-radius:22px!important;
+  box-shadow:0 9px 28px rgba(30,62,86,.055)!important;
+}
+.request-detail-v3-progress{
+  padding:22px 22px 18px!important;
+}
+.request-detail-v3-progress-top small{
+  font-size:10px!important;
+  letter-spacing:.09em!important;
+}
+.request-detail-v3-progress-top span{
+  margin-top:7px!important;
+  font-size:14px!important;
+}
+.request-detail-v3-progress-top strong{
+  font-size:42px!important;
+  line-height:.9!important;
+}
+.request-detail-v3-progress-top strong i{
+  font-size:18px!important;
+}
+.request-detail-v3-progress-bar{
+  height:9px!important;
+  margin-top:20px!important;
+}
+.request-detail-v3-progress-foot{
+  margin-top:11px!important;
+  font-size:11px!important;
+}
+.request-detail-v3-kpis{
+  padding:12px!important;
+}
+.request-detail-v3-kpis>span{
+  padding:14px 16px!important;
+}
+.request-detail-v3-kpis small{
+  font-size:9.5px!important;
+  letter-spacing:.075em!important;
+}
+.request-detail-v3-kpis b{
+  margin-top:8px!important;
+  font-size:32px!important;
+}
+.request-detail-v3-kpis em{
+  margin-top:5px!important;
+  font-size:10px!important;
+}
+
+/* Integrity message: informative but no longer a full-width warning banner */
+.request-detail-v3-integrity{
+  width:min(980px,100%)!important;
+  grid-template-columns:38px minmax(0,1fr)!important;
+  gap:13px!important;
+  margin:0 0 20px!important;
+  padding:16px 17px!important;
+  border-radius:17px!important;
+}
+.request-detail-v3-integrity>.ph{
+  font-size:27px!important;
+}
+.request-detail-v3-integrity b{
+  font-size:14px!important;
+}
+.request-detail-v3-integrity p{
+  margin:4px 0 11px!important;
+  font-size:12px!important;
+  line-height:1.4!important;
+}
+.request-detail-v3-integrity span{
+  gap:7px!important;
+  padding:7px 10px!important;
+  border-radius:10px!important;
+  font-size:9.5px!important;
+  letter-spacing:.035em!important;
+}
+.request-detail-v3-integrity strong{
+  font-size:10.5px!important;
+}
+
+/* Section heading */
+.request-detail-v3-section-head{
+  margin:26px 0 13px!important;
+  padding:0 3px!important;
+}
+.request-detail-v3-section-head small{
+  font-size:10px!important;
+  letter-spacing:.09em!important;
+}
+.request-detail-v3-section-head h2{
+  margin-top:5px!important;
+  font-size:23px!important;
+}
+.request-detail-v3-section-head>span{
+  padding:8px 12px!important;
+  font-size:10.5px!important;
+}
+
+/* Article rows: enterprise density, larger type, compact metric group */
+.request-detail-v3-lines{
+  gap:12px!important;
+}
+.request-detail-v3-line{
+  padding:17px 18px 15px 20px!important;
+  border-radius:20px!important;
+  box-shadow:0 7px 20px rgba(30,62,86,.045)!important;
+}
+.request-detail-v3-line:before{
+  width:5px!important;
+}
+.request-detail-v3-line-main{
+  grid-template-columns:42px minmax(0,1fr) auto!important;
+  gap:14px!important;
+}
+.request-detail-v3-line-index{
+  width:42px!important;
+  height:42px!important;
+  border-radius:13px!important;
+  font-size:11px!important;
+}
+.request-detail-v3-line-id small{
+  font-size:9px!important;
+  letter-spacing:.08em!important;
+}
+.request-detail-v3-line-id b{
+  margin-top:4px!important;
+  font-size:18px!important;
+  line-height:1.15!important;
+}
+.request-detail-v3-line-id span{
+  margin-top:5px!important;
+  font-size:11px!important;
+}
+.request-detail-v3-line-rem{
+  min-width:105px!important;
+}
+.request-detail-v3-line-rem small{
+  font-size:9px!important;
+  letter-spacing:.075em!important;
+}
+.request-detail-v3-line-rem strong{
+  margin-top:4px!important;
+  font-size:30px!important;
+}
+.request-detail-v3-line-rem span{
+  margin-left:5px!important;
+  font-size:10px!important;
+}
+.request-detail-v3-line-progress{
+  height:5px!important;
+  width:min(760px,calc(100% - 58px))!important;
+  margin:13px 0 11px 56px!important;
+}
+.request-detail-v3-line-stats{
+  display:grid!important;
+  grid-template-columns:repeat(4,minmax(130px,1fr))!important;
+  gap:8px!important;
+  width:min(760px,calc(100% - 58px))!important;
+  margin-left:56px!important;
+}
+.request-detail-v3-line-stats>span{
+  min-height:64px!important;
+  grid-template-columns:auto 1fr!important;
+  column-gap:7px!important;
+  padding:10px 11px!important;
+  border-radius:12px!important;
+}
+.request-detail-v3-line-stats small{
+  font-size:8.5px!important;
+  letter-spacing:.065em!important;
+}
+.request-detail-v3-line-stats b{
+  margin-top:4px!important;
+  font-size:21px!important;
+}
+.request-detail-v3-line-stats em{
+  padding-bottom:2px!important;
+  font-size:8.5px!important;
+}
+.request-detail-v3-line-foot{
+  width:max-content!important;
+  max-width:calc(100% - 58px)!important;
+  min-height:36px!important;
+  gap:8px!important;
+  margin:9px 0 0 56px!important;
+  padding:8px 11px!important;
+  border-radius:11px!important;
+  font-size:10.5px!important;
+  line-height:1.25!important;
+}
+.request-detail-v3-line-foot>.ph{
+  font-size:16px!important;
+}
+.request-detail-v3-note,
+.request-detail-v3-marker{
+  width:max-content!important;
+  max-width:calc(100% - 58px)!important;
+  min-height:34px!important;
+  gap:7px!important;
+  margin:8px 0 0 56px!important;
+  padding:8px 10px!important;
+  border-radius:10px!important;
+  font-size:10px!important;
+  line-height:1.3!important;
+}
+.request-detail-v3-note>.ph,
+.request-detail-v3-marker>.ph{
+  font-size:15px!important;
+}
+
+/* Actions */
+.request-detail-v3-actions{
+  gap:10px!important;
+  margin-top:20px!important;
+  padding:16px!important;
+  border-radius:19px!important;
+}
+.request-detail-v3-primary{
+  min-width:260px!important;
+  min-height:54px!important;
+  padding:0 17px!important;
+  border-radius:15px!important;
+  font-size:11px!important;
+}
+.request-detail-v3-primary .ph{font-size:18px!important}
+.request-detail-v3-delete{
+  min-height:54px!important;
+  padding:0 16px!important;
+  border-radius:15px!important;
+  font-size:11px!important;
+}
+.request-detail-v3-delete>.ph{font-size:18px!important}
+
+/* Large desktop: keep content deliberate instead of stretching to the viewport */
+@media(min-width:1600px){
+  .request-detail-v3{max-width:1500px!important}
+  .request-detail-v3-overview{grid-template-columns:minmax(0,1fr) 480px!important}
+  .request-detail-v3-line-stats,
+  .request-detail-v3-line-progress{width:790px!important;max-width:calc(100% - 58px)!important}
+}
+
+/* Tablet */
+@media(max-width:1050px){
+  .request-detail-v3{
+    max-width:none!important;
+  }
+  .request-detail-v3-overview{
+    grid-template-columns:1fr!important;
+  }
+  .request-detail-v3-integrity{
+    width:100%!important;
+  }
+  .request-detail-v3-line-stats,
+  .request-detail-v3-line-progress{
+    width:calc(100% - 56px)!important;
+  }
+}
+
+/* Mobile remains comfortably readable, never micro-sized */
+@media(max-width:700px){
+  .request-detail-v3{
+    padding:0!important;
+  }
+  .request-detail-v3-hero{
+    gap:13px!important;
+    margin-bottom:18px!important;
+  }
+  .request-detail-v3-title{gap:12px!important}
+  .request-detail-v3-title-icon{
+    width:50px!important;
+    height:50px!important;
+    flex-basis:50px!important;
+  }
+  .request-detail-v3-title-icon>.ph{font-size:26px!important}
+  .request-detail-v3-title small{font-size:9.5px!important}
+  .request-detail-v3-title h1{font-size:clamp(30px,8.5vw,38px)!important}
+  .request-detail-v3-title p{font-size:11px!important}
+  .request-detail-v3-status{
+    min-height:36px!important;
+    font-size:10px!important;
+  }
+  .request-detail-v3-progress,
+  .request-detail-v3-kpis{
+    min-height:0!important;
+  }
+  .request-detail-v3-progress{
+    padding:17px!important;
+  }
+  .request-detail-v3-progress-top small{font-size:9px!important}
+  .request-detail-v3-progress-top span{font-size:12px!important}
+  .request-detail-v3-progress-top strong{font-size:35px!important}
+  .request-detail-v3-progress-foot{font-size:10px!important}
+  .request-detail-v3-kpis>span{padding:10px!important}
+  .request-detail-v3-kpis small{font-size:8px!important}
+  .request-detail-v3-kpis b{font-size:25px!important}
+  .request-detail-v3-kpis em{font-size:8.5px!important}
+  .request-detail-v3-integrity{
+    grid-template-columns:30px minmax(0,1fr)!important;
+    padding:13px!important;
+  }
+  .request-detail-v3-integrity>.ph{font-size:22px!important}
+  .request-detail-v3-integrity b{font-size:12px!important}
+  .request-detail-v3-integrity p{font-size:10.5px!important}
+  .request-detail-v3-integrity span{font-size:8.5px!important}
+  .request-detail-v3-integrity strong{font-size:9px!important}
+  .request-detail-v3-section-head small{font-size:9px!important}
+  .request-detail-v3-section-head h2{font-size:20px!important}
+  .request-detail-v3-section-head>span{font-size:9px!important}
+
+  .request-detail-v3-line{
+    padding:15px 14px 14px 17px!important;
+  }
+  .request-detail-v3-line-main{
+    grid-template-columns:36px minmax(0,1fr) auto!important;
+    gap:10px!important;
+  }
+  .request-detail-v3-line-index{
+    width:36px!important;
+    height:36px!important;
+    font-size:10px!important;
+  }
+  .request-detail-v3-line-id small{font-size:8px!important}
+  .request-detail-v3-line-id b{font-size:15px!important}
+  .request-detail-v3-line-id span{font-size:10px!important}
+  .request-detail-v3-line-rem{
+    min-width:64px!important;
+  }
+  .request-detail-v3-line-rem small{font-size:8px!important}
+  .request-detail-v3-line-rem strong{font-size:25px!important}
+  .request-detail-v3-line-rem span{font-size:8.5px!important}
+  .request-detail-v3-line-progress{
+    width:calc(100% - 46px)!important;
+    margin:11px 0 10px 46px!important;
+  }
+  .request-detail-v3-line-stats{
+    width:calc(100% - 46px)!important;
+    margin-left:46px!important;
+    grid-template-columns:1fr 1fr!important;
+  }
+  .request-detail-v3-line-stats>span{
+    min-height:60px!important;
+    padding:9px 10px!important;
+  }
+  .request-detail-v3-line-stats small{font-size:8px!important}
+  .request-detail-v3-line-stats b{font-size:19px!important}
+  .request-detail-v3-line-stats em{font-size:8px!important}
+  .request-detail-v3-line-foot,
+  .request-detail-v3-note,
+  .request-detail-v3-marker{
+    max-width:calc(100% - 46px)!important;
+    margin-left:46px!important;
+    font-size:9.5px!important;
+  }
+}
+@media(max-width:430px){
+  .request-detail-v3-kpis{
+    grid-template-columns:repeat(3,minmax(0,1fr))!important;
+  }
+  .request-detail-v3-kpis>span{padding:8px 7px!important}
+  .request-detail-v3-kpis b{font-size:22px!important}
+  .request-detail-v3-line-id b{font-size:14px!important}
+  .request-detail-v3-line-rem strong{font-size:23px!important}
+}
+</style>
 </head>
 <body>
 <header id="topbar" class="topbar"></header>
@@ -10648,6 +11066,6 @@ try{globalThis.__NOVA_LEGACY_AVAILABLE=!!localStorage.getItem(CONFIG.legacyStora
 const switchSite=async siteId=>{await ui.selectSite(siteId);return auth.site()};
 globalThis.NOVA=Object.freeze({version:CONFIG.appVersion,schema:CONFIG.version,identityVersion:CONFIG.identityVersion,store,auth,router,domain,excel,ui,sounds,sites:SITES,operators:OPERATORS,roles:ROLE_DEFS,saveIdentityRegistry,capabilities:Object.freeze({operational:ALL_CAPS,master:MASTER_CAPS,administration:ADMIN_CAPS,globalAdmin:GLOBAL_ADMIN_CAPS}),identityValidation:IDENTITY_VALIDATION,switchSite});
 ui.render();</script>
-<!-- SOMA_BUILD:R31.17-20260924 -->
+<!-- SOMA_BUILD:R31.18-20260924 -->
 </body>
 </html>
