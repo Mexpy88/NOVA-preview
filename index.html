@@ -1,13 +1,13 @@
 <!doctype html>
 <html lang="it">
 <head>
-<meta name="soma-build" content="R31.39-20260925">
+<meta name="soma-build" content="R31.40-20260925">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
 <script id="soma-build-freshness">
 (() => {
-  const CURRENT_BUILD='R31.39-20260925',CHECK_KEY='soma:last-build-refresh';
+  const CURRENT_BUILD='R31.40-20260925',CHECK_KEY='soma:last-build-refresh';
   globalThis.SOMA_BUILD=CURRENT_BUILD;
   const check=async()=>{
     try{
@@ -16282,22 +16282,56 @@ class RequestDocumentService{
     const name=this.fileName(r,'pdf');doc.save(name);this.record('REQUEST_PDF_EXPORTED',r,{format:'PDF_A4',orientation,name});return name
   }
   async excel(id,preferred='auto'){
-    const model=this.model(id),r=model.request,s=model.summary,orientation=this.resolveOrientation(r,preferred),ExcelJS=await ensureSomaExcelJs(),wb=new ExcelJS.Workbook(),ws=wb.addWorksheet('RICHIESTA'),logo=await somaLogoPng(),logoId=wb.addImage({base64:logo.split(',')[1],extension:'png'});
-    wb.creator='SOMA HUB';wb.company='Servizi Ospedalieri';wb.created=new Date();
+    const model=this.model(id),r=model.request,s=model.summary,orientation=this.resolveOrientation(r,preferred),ExcelJS=await ensureSomaExcelJs(),wb=new ExcelJS.Workbook(),ws=wb.addWorksheet('RICHIESTA',{properties:{defaultRowHeight:18},views:[{state:'normal',showGridLines:false,zoomScale:90}]}),logo=await somaLogoPng(),logoId=wb.addImage({base64:logo.split(',')[1],extension:'png'});
+    const C={navy:'FF173B5C',ink:'FF294C68',muted:'FF71879A',line:'FFD9E4EA',lineStrong:'FFC8D7E0',surface:'FFF8FAFB',surface2:'FFF3F7F9',green:'FF197A58',greenSoft:'FFEDF7F2',amber:'FFB98522',amberSoft:'FFFFF7E5',red:'FFB24B45',redSoft:'FFFFF0EE',white:'FFFFFFFF',slate:'FF60778D',slateSoft:'FFF0F4F7'};
+    const edge=(style='thin',color=C.line)=>({style,color:{argb:color}}),allBorder=(color=C.line)=>({top:edge('thin',color),left:edge('thin',color),bottom:edge('thin',color),right:edge('thin',color)});
+    const rect=(r1,c1,r2,c2,fn)=>{for(let rr=r1;rr<=r2;rr++)for(let cc=c1;cc<=c2;cc++)fn(ws.getCell(rr,cc),rr,cc)};
+    const outline=(r1,c1,r2,c2,color=C.lineStrong)=>rect(r1,c1,r2,c2,(cell,rr,cc)=>{const b={};if(rr===r1)b.top=edge('thin',color);if(rr===r2)b.bottom=edge('thin',color);if(cc===c1)b.left=edge('thin',color);if(cc===c2)b.right=edge('thin',color);cell.border=b});
+    const metaCard=(r1,c1,c2,label,value,{accent=C.navy,fill=C.surface}={})=>{
+      ws.mergeCells(r1,c1,r1,c2);ws.mergeCells(r1+1,c1,r1+1,c2);rect(r1,c1,r1+1,c2,c=>{c.fill={type:'pattern',pattern:'solid',fgColor:{argb:fill}}});outline(r1,c1,r1+1,c2);
+      const l=ws.getCell(r1,c1),v=ws.getCell(r1+1,c1);l.value=label;l.font={name:'Arial',size:8,bold:true,color:{argb:C.muted}};l.alignment={vertical:'bottom',horizontal:'left'};v.value=value||'—';v.font={name:'Arial',size:11,bold:true,color:{argb:accent}};v.alignment={vertical:'top',horizontal:'left',wrapText:true}
+    };
+    wb.creator='SOMA HUB';wb.company='Servizi Ospedalieri';wb.created=new Date();wb.modified=new Date();
     ws.pageSetup={paperSize:9,orientation,fitToPage:true,fitToWidth:1,fitToHeight:0,horizontalCentered:true,margins:{left:.394,right:.394,top:.394,bottom:.394,header:.15,footer:.15}};
-    ws.pageSetup.printTitlesRow='8:8';ws.headerFooter.oddFooter='&LServizi Ospedalieri · SOMA HUB · '+r.id+'&RPagina &P di &N';
-    ws.addImage(logoId,{tl:{col:0,row:0},ext:{width:190,height:49}});
-    ws.mergeCells('D1:I1');ws.getCell('D1').value='SOMA HUB · RICHIESTA DI MAGAZZINO';ws.getCell('D1').font={name:'Arial',size:16,bold:true,color:{argb:'FF173B5C'}};ws.getCell('D1').alignment={vertical:'middle'};
-    ws.mergeCells('D2:I2');ws.getCell('D2').value=r.id;ws.getCell('D2').font={name:'Arial',size:12,bold:true,color:{argb:'FFB98522'}};
-    const metas=[['DESTINAZIONE',r.destination||'—'],['RICHIEDENTE',r.operator||'—'],['DATA',fmtDateTime(r.requestedAt)],['STATO',r.status||'DA PREPARARE'],['SEDE',model.site.name||'—'],['RIFERIMENTO',r.reference||'—']];
-    metas.forEach((x,i)=>{const c=i+1;ws.getCell(4,c).value=x[0];ws.getCell(4,c).font={name:'Arial',size:8,bold:true,color:{argb:'FF7890A0'}};ws.getCell(5,c).value=x[1];ws.getCell(5,c).font={name:'Arial',size:10,bold:true,color:{argb:'FF294C68'}};ws.getCell(5,c).alignment={wrapText:true,vertical:'top'}});
-    ws.mergeCells('A6:I6');ws.getCell('A6').value=r.note?'NOTE: '+r.note:' ';ws.getCell('A6').font={name:'Arial',size:9,color:{argb:'FF65512B'}};ws.getCell('A6').fill={type:'pattern',pattern:'solid',fgColor:{argb:'FFFFF9EB'}};ws.getCell('A6').alignment={wrapText:true,vertical:'middle'};
-    const header=['N.','ARTICOLO','TAGLIA','CARTONI RICHIESTI','CARTONI PRELEVATI','PEZZI SCARICATI','STATO','POSIZIONE / BANCALE','NOTE'];ws.addRow([]);const hr=ws.addRow(header);hr.height=28;hr.eachCell(c=>{c.font={name:'Arial',size:9,bold:true,color:{argb:'FF28654C'}};c.fill={type:'pattern',pattern:'solid',fgColor:{argb:'FFEDF7F2'}};c.alignment={wrapText:true,vertical:'middle',horizontal:'center'};c.border={top:{style:'thin',color:{argb:'FFD9E3E9'}},left:{style:'thin',color:{argb:'FFD9E3E9'}},bottom:{style:'thin',color:{argb:'FFD9E3E9'}},right:{style:'thin',color:{argb:'FFD9E3E9'}}}});
-    model.rows.forEach(x=>{const row=ws.addRow([x.n,x.article,x.size||'—',x.requested,x.picked,x.pieces,x.status,x.source,x.note||'—']);row.eachCell((c,col)=>{c.font={name:'Arial',size:9,color:{argb:'FF2B485F'}};c.alignment={wrapText:true,vertical:'top',horizontal:[1,4,5,6].includes(col)?'center':'left'};c.border={top:{style:'thin',color:{argb:'FFE0E8ED'}},left:{style:'thin',color:{argb:'FFE0E8ED'}},bottom:{style:'thin',color:{argb:'FFE0E8ED'}},right:{style:'thin',color:{argb:'FFE0E8ED'}}}});row.height=30});
-    const sr=ws.addRow(['','','TOTALI',s.requested,s.delivered,s.pieces,'RESIDUI: '+s.remaining,'','']);sr.eachCell(c=>{c.font={name:'Arial',size:9,bold:true,color:{argb:'FF173B5C'}};c.fill={type:'pattern',pattern:'solid',fgColor:{argb:'FFF8FAFB'}};c.border={top:{style:'thin',color:{argb:'FFD9E3E9'}}}});
-    ws.addRow([]);const sig=ws.addRow(['Preparato da / Firma','','','','','Ritirato da / Firma','','','']);sig.height=36;sig.getCell(1).border={top:{style:'thin',color:{argb:'FFAEBEC9'}}};sig.getCell(6).border={top:{style:'thin',color:{argb:'FFAEBEC9'}}};
-    ws.columns=[{width:5},{width:17},{width:10},{width:13},{width:13},{width:12},{width:16},{width:38},{width:30}];ws.views=[{state:'frozen',ySplit:8}];ws.pageSetup.printArea='A1:I'+ws.rowCount;
-    const out=await wb.xlsx.writeBuffer(),name=this.fileName(r,'xlsx');somaDownloadBlob(new Blob([out],{type:'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'}),name);this.record('REQUEST_EXCEL_EXPORTED',r,{format:'XLSX_A4',orientation,name});return name
+    ws.headerFooter.oddFooter='&LServizi Ospedalieri · SOMA HUB · '+r.id+'&CPagina &P di &N&R'+fmtDateTime(model.generatedAt.toISOString());
+    ws.properties.tabColor={argb:C.green};
+
+    ws.columns=[{width:5.5},{width:20},{width:9.5},{width:13.5},{width:13.5},{width:12.5},{width:18},{width:34},{width:31}];
+    ws.getRow(1).height=27;ws.getRow(2).height=23;ws.getRow(3).height=9;ws.getRow(4).height=7;
+    ws.addImage(logoId,{tl:{col:.15,row:.22},ext:{width:150,height:39}});
+    ws.mergeCells('C1:I1');const title=ws.getCell('C1');title.value='SOMA HUB · RICHIESTA DI MAGAZZINO';title.font={name:'Arial',size:18,bold:true,color:{argb:C.navy}};title.alignment={vertical:'middle',horizontal:'left'};
+    ws.mergeCells('C2:F2');const sub=ws.getCell('C2');sub.value='Documento operativo di magazzino';sub.font={name:'Arial',size:9,color:{argb:C.muted}};sub.alignment={vertical:'middle'};
+    ws.mergeCells('G2:I2');const reqId=ws.getCell('G2');reqId.value=r.id;reqId.font={name:'Arial',size:12,bold:true,color:{argb:C.amber}};reqId.alignment={vertical:'middle',horizontal:'right'};
+    rect(3,1,3,9,c=>{c.fill={type:'pattern',pattern:'solid',fgColor:{argb:C.green}}});ws.getRow(3).height=3;
+
+    ws.getRow(5).height=16;ws.getRow(6).height=27;metaCard(5,1,3,'DESTINAZIONE',r.destination||'—',{accent:C.navy});metaCard(5,4,6,'RICHIEDENTE',r.operator||'—',{accent:C.navy});metaCard(5,7,9,'DATA RICHIESTA',fmtDateTime(r.requestedAt),{accent:C.navy});
+    ws.getRow(7).height=7;ws.getRow(8).height=16;ws.getRow(9).height=27;const statusColor=(r.status||'DA PREPARARE')==='COMPLETATA'?C.green:(r.status||'')==='PARZIALE'?C.amber:C.slate,statusFill=(r.status||'DA PREPARARE')==='COMPLETATA'?C.greenSoft:(r.status||'')==='PARZIALE'?C.amberSoft:C.slateSoft;
+    metaCard(8,1,3,'STATO',r.status||'DA PREPARARE',{accent:statusColor,fill:statusFill});metaCard(8,4,6,'SEDE',model.site.name||'—',{accent:C.navy});metaCard(8,7,9,'RIFERIMENTO',r.reference||'—',{accent:C.navy});
+    ws.getRow(10).height=7;ws.mergeCells('A11:I11');const note=ws.getCell('A11');note.value=r.note?'NOTE RICHIESTA  ·  '+r.note:'NESSUNA NOTA AGGIUNTIVA';note.font={name:'Arial',size:9,bold:!!r.note,color:{argb:r.note?'FF65512B':C.muted}};note.fill={type:'pattern',pattern:'solid',fgColor:{argb:r.note?C.amberSoft:C.surface}};note.alignment={vertical:'middle',horizontal:'left',wrapText:true};note.border=allBorder(r.note?'FFE7D29E':C.line);ws.getRow(11).height=r.note?28:22;
+    ws.getRow(12).height=7;
+
+    const headerRow=13,header=['N.','ARTICOLO','TAGLIA','CARTONI\nRICHIESTI','CARTONI\nPRELEVATI','PEZZI\nSCARICATI','STATO','POSIZIONE / BANCALE','NOTE'];const hr=ws.getRow(headerRow);hr.values=header;hr.height=34;for(let col=1;col<=9;col++){const c=ws.getCell(headerRow,col);c.font={name:'Arial',size:9,bold:true,color:{argb:C.white}};c.fill={type:'pattern',pattern:'solid',fgColor:{argb:C.green}};c.alignment={wrapText:true,vertical:'middle',horizontal:'center'};c.border=allBorder('FF126548')}
+    ws.pageSetup.printTitlesRow=headerRow+':'+headerRow;
+
+    const firstData=headerRow+1;model.rows.forEach((x,index)=>{
+      const rr=firstData+index,row=ws.getRow(rr),zebra=index%2===1;row.values=[x.n,x.article,String(x.size||'—'),x.requested,x.picked,x.pieces,x.status,x.source,x.note||'—'];row.height=Math.max(28,Math.min(46,26+Math.max(String(x.source||'').length,String(x.note||'').length)/24*6));
+      for(let col=1;col<=9;col++){const c=ws.getCell(rr,col);c.font={name:'Arial',size:9,color:{argb:C.ink},bold:col===2};c.fill={type:'pattern',pattern:'solid',fgColor:{argb:zebra?C.surface:'FFFFFFFF'}};c.alignment={wrapText:true,vertical:'middle',horizontal:[1,3,4,5,6].includes(col)?'center':'left'};c.border=allBorder(C.line)}
+      ws.getCell(rr,2).numFmt='@';ws.getCell(rr,3).numFmt='@';ws.getCell(rr,8).numFmt='@';ws.getCell(rr,9).numFmt='@';
+      const st=ws.getCell(rr,7),state=String(x.status||'');if(state==='COMPLETATA'){st.fill={type:'pattern',pattern:'solid',fgColor:{argb:C.greenSoft}};st.font={name:'Arial',size:9,bold:true,color:{argb:C.green}}}else if(state==='PARZIALE'){st.fill={type:'pattern',pattern:'solid',fgColor:{argb:C.amberSoft}};st.font={name:'Arial',size:9,bold:true,color:{argb:C.amber}}}else{st.fill={type:'pattern',pattern:'solid',fgColor:{argb:C.slateSoft}};st.font={name:'Arial',size:9,bold:true,color:{argb:C.slate}}}
+    });
+
+    const dataEnd=Math.max(headerRow,firstData+model.rows.length-1),sumTitle=dataEnd+2,sumLabel=sumTitle+1,sumValue=sumTitle+2;ws.mergeCells(sumTitle,1,sumTitle,9);const stl=ws.getCell(sumTitle,1);stl.value='RIEPILOGO RICHIESTA';stl.font={name:'Arial',size:10,bold:true,color:{argb:C.white}};stl.fill={type:'pattern',pattern:'solid',fgColor:{argb:C.navy}};stl.alignment={vertical:'middle',horizontal:'left'};stl.border=allBorder(C.navy);ws.getRow(sumTitle).height=24;
+    const summaryBlocks=[[1,2,'CARTONI RICHIESTI',s.requested],[3,4,'CARTONI PRELEVATI',s.delivered],[5,6,'CARTONI RESIDUI',s.remaining],[7,9,'PEZZI SCARICATI',s.pieces]];
+    for(const [c1,c2,label,value] of summaryBlocks){ws.mergeCells(sumLabel,c1,sumLabel,c2);ws.mergeCells(sumValue,c1,sumValue,c2);rect(sumLabel,c1,sumValue,c2,c=>{c.fill={type:'pattern',pattern:'solid',fgColor:{argb:C.surface}}});outline(sumLabel,c1,sumValue,c2);const l=ws.getCell(sumLabel,c1),v=ws.getCell(sumValue,c1);l.value=label;l.font={name:'Arial',size:8,bold:true,color:{argb:C.muted}};l.alignment={vertical:'bottom',horizontal:'center'};v.value=value;v.font={name:'Arial',size:15,bold:true,color:{argb:C.navy}};v.alignment={vertical:'top',horizontal:'center'}}
+    ws.getRow(sumLabel).height=18;ws.getRow(sumValue).height=28;
+
+    const signTop=sumValue+3,signLine=signTop+3;ws.mergeCells(signTop,1,signTop,4);ws.mergeCells(signTop,6,signTop,9);ws.getCell(signTop,1).value='PREPARATO DA / FIRMA';ws.getCell(signTop,6).value='RITIRATO DA / FIRMA';for(const c of [ws.getCell(signTop,1),ws.getCell(signTop,6)]){c.font={name:'Arial',size:8,bold:true,color:{argb:C.muted}};c.alignment={vertical:'middle',horizontal:'left'}}
+    ws.mergeCells(signTop+1,1,signLine,4);ws.mergeCells(signTop+1,6,signLine,9);outline(signTop+1,1,signLine,4,C.lineStrong);outline(signTop+1,6,signLine,9,C.lineStrong);rect(signTop+1,1,signLine,4,c=>{c.fill={type:'pattern',pattern:'solid',fgColor:{argb:'FFFFFFFF'}}});rect(signTop+1,6,signLine,9,c=>{c.fill={type:'pattern',pattern:'solid',fgColor:{argb:'FFFFFFFF'}}});for(let rr=signTop+1;rr<=signLine;rr++)ws.getRow(rr).height=22;
+
+    const footRow=signLine+2;ws.mergeCells(footRow,1,footRow,5);ws.mergeCells(footRow,6,footRow,9);ws.getCell(footRow,1).value='Servizi Ospedalieri · SOMA HUB';ws.getCell(footRow,6).value='Generato '+model.generatedAt.toLocaleString('it-IT')+' · '+model.generatedBy;for(const c of [ws.getCell(footRow,1),ws.getCell(footRow,6)]){c.font={name:'Arial',size:7,color:{argb:C.muted}};c.alignment={vertical:'middle',horizontal:c===ws.getCell(footRow,1)?'left':'right'}}ws.getRow(footRow).height=19;
+
+    ws.autoFilter={from:{row:headerRow,column:1},to:{row:dataEnd,column:9}};ws.pageSetup.printArea='A1:I'+footRow;ws.views=[{state:'normal',showGridLines:false,zoomScale:90,activeCell:'A1'}];
+    const out=await wb.xlsx.writeBuffer(),name=this.fileName(r,'xlsx');somaDownloadBlob(new Blob([out],{type:'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'}),name);this.record('REQUEST_EXCEL_EXPORTED',r,{format:'XLSX_A4',orientation,name,layout:'enterprise-v2'});return name
   }
   async excelList(requests,label='RICHIESTE'){
     const list=(requests||[]).filter(r=>r&&!r.deletedAt&&this.domain.requests.visible(r));if(!list.length)throw new Error('Nessuna richiesta da esportare.');
@@ -17002,6 +17036,6 @@ try{globalThis.__NOVA_LEGACY_AVAILABLE=!!localStorage.getItem(CONFIG.legacyStora
 const switchSite=async siteId=>{await ui.selectSite(siteId);return auth.site()};
 globalThis.NOVA=Object.freeze({version:CONFIG.appVersion,schema:CONFIG.version,identityVersion:CONFIG.identityVersion,store,auth,router,domain,excel,requestDocs,ui,sounds,sites:SITES,operators:OPERATORS,roles:ROLE_DEFS,saveIdentityRegistry,capabilities:Object.freeze({operational:ALL_CAPS,master:MASTER_CAPS,administration:ADMIN_CAPS,globalAdmin:GLOBAL_ADMIN_CAPS}),identityValidation:IDENTITY_VALIDATION,switchSite});
 ui.render();</script>
-<!-- SOMA_BUILD:R31.39-20260925 -->
+<!-- SOMA_BUILD:R31.40-20260925 -->
 </body>
 </html>
