@@ -1,13 +1,13 @@
 <!doctype html>
 <html lang="it">
 <head>
-<meta name="soma-build" content="R31.36-20260925">
+<meta name="soma-build" content="R31.37-20260925">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
 <script id="soma-build-freshness">
 (() => {
-  const CURRENT_BUILD='R31.36-20260925',CHECK_KEY='soma:last-build-refresh';
+  const CURRENT_BUILD='R31.37-20260925',CHECK_KEY='soma:last-build-refresh';
   globalThis.SOMA_BUILD=CURRENT_BUILD;
   const check=async()=>{
     try{
@@ -15038,6 +15038,163 @@ body.desktop-mode .app-view:has(.receipt-new-shell){width:100%!important;max-wid
   }
 }
 </style>
+
+<style id="r31-37-desktop-master-remove">
+/* ===== R31.37 · DESKTOP MASTER REMOVE =====
+   Desktop-only destructive workflow. Smartphone layout remains untouched. */
+@media(min-width:981px){
+  body.desktop-mode .warehouse-data-actions .master-remove-trigger{
+    border-color:#edcfcc!important;
+    background:#fff8f7!important;
+    color:#aa4741!important;
+  }
+  body.desktop-mode .warehouse-data-actions .master-remove-trigger:hover{
+    border-color:#d9847e!important;
+    background:#fff0ee!important;
+    color:#9b3934!important;
+  }
+  body.desktop-mode .warehouse-data-actions .master-remove-trigger>.ph{
+    font-size:17px!important;
+  }
+
+  body.desktop-mode .master-summary-actions .master-remove-trigger-summary{
+    width:auto!important;
+    min-height:43px!important;
+    margin:0 auto 0 0!important;
+    padding:0 14px!important;
+    display:inline-flex!important;
+    align-items:center!important;
+    gap:7px!important;
+    border:1px solid #edcfcc!important;
+    border-radius:13px!important;
+    background:#fff8f7!important;
+    color:#aa4741!important;
+    font-size:11px!important;
+    font-weight:950!important;
+  }
+  body.desktop-mode .master-summary-actions .master-remove-trigger-summary:hover{
+    border-color:#d9847e!important;
+    background:#fff0ee!important;
+    color:#963b36!important;
+  }
+  body.desktop-mode .master-summary-actions .master-remove-trigger-summary>.ph{
+    font-size:18px!important;
+  }
+
+  .master-remove-dialog{
+    width:min(92vw,660px)!important;
+    max-width:660px!important;
+    padding:0!important;
+    border:0!important;
+    border-radius:26px!important;
+    overflow:hidden!important;
+    background:#fff!important;
+    box-shadow:0 30px 90px rgba(20,43,64,.28)!important;
+  }
+  .master-remove-dialog::backdrop{
+    background:rgba(18,41,59,.43)!important;
+    backdrop-filter:blur(7px)!important;
+  }
+  .master-remove-head{
+    display:grid!important;
+    grid-template-columns:54px minmax(0,1fr) 42px!important;
+    gap:14px!important;
+    align-items:center!important;
+    padding:23px 24px 18px!important;
+    border-bottom:1px solid #e8eef2!important;
+  }
+  .master-remove-head-icon{
+    width:54px!important;height:54px!important;display:grid!important;place-items:center!important;
+    border-radius:16px!important;background:#fff0ee!important;color:#b44943!important;
+  }
+  .master-remove-head-icon>.ph{font-size:27px!important}
+  .master-remove-head small{
+    display:block!important;color:#b44943!important;font-size:9px!important;font-weight:950!important;letter-spacing:.12em!important;
+  }
+  .master-remove-head h2{
+    margin:5px 0 0!important;color:#203f61!important;font-size:25px!important;line-height:1.05!important;letter-spacing:-.025em!important;
+  }
+  .master-remove-close{
+    width:42px!important;height:42px!important;display:grid!important;place-items:center!important;border-radius:13px!important;
+    background:#f0f4f7!important;color:#637b8f!important;
+  }
+  .master-remove-close>.ph{font-size:21px!important}
+
+  .master-remove-warning{
+    display:flex!important;gap:12px!important;margin:18px 22px 0!important;padding:15px 16px!important;
+    border:1px solid #efcfcc!important;border-radius:16px!important;background:#fff6f5!important;color:#8f3f39!important;
+  }
+  .master-remove-warning>.ph{flex:0 0 auto!important;margin-top:1px!important;font-size:23px!important;color:#b44943!important}
+  .master-remove-warning b,.master-remove-warning span{display:block!important}
+  .master-remove-warning b{font-size:14px!important;line-height:1.25!important}
+  .master-remove-warning span{margin-top:5px!important;font-size:12px!important;line-height:1.48!important;font-weight:700!important}
+
+  .master-remove-dirty{
+    display:flex!important;gap:11px!important;margin:12px 22px 0!important;padding:13px 15px!important;
+    border:1px solid #ecd49d!important;border-radius:15px!important;background:#fff8e8!important;color:#835d13!important;
+  }
+  .master-remove-dirty>.ph{flex:0 0 auto!important;margin-top:1px!important;font-size:21px!important}
+  .master-remove-dirty b,.master-remove-dirty span{display:block!important}
+  .master-remove-dirty b{font-size:12.5px!important}
+  .master-remove-dirty span{margin-top:4px!important;font-size:11px!important;line-height:1.45!important;font-weight:700!important}
+
+  .master-remove-info{
+    display:grid!important;grid-template-columns:1.45fr .7fr .75fr .95fr!important;gap:8px!important;margin:14px 22px 0!important;
+  }
+  .master-remove-info>div{
+    min-width:0!important;padding:12px!important;border:1px solid #e1e9ef!important;border-radius:14px!important;background:#f8fafc!important;
+  }
+  .master-remove-info small{
+    display:block!important;color:#8093a2!important;font-size:8px!important;font-weight:950!important;letter-spacing:.08em!important;
+  }
+  .master-remove-info b{
+    display:block!important;margin-top:5px!important;color:#31516d!important;font-size:12px!important;line-height:1.2!important;
+    overflow:hidden!important;text-overflow:ellipsis!important;white-space:nowrap!important;
+  }
+  .master-remove-info b.is-danger{color:#ad453f!important}
+
+  .master-remove-preserve{
+    display:flex!important;gap:11px!important;margin:12px 22px 0!important;padding:14px 15px!important;
+    border:1px solid #cfe7da!important;border-radius:15px!important;background:#f1faf5!important;color:#286b4d!important;
+  }
+  .master-remove-preserve>.ph{flex:0 0 auto!important;margin-top:1px!important;font-size:22px!important;color:#269064!important}
+  .master-remove-preserve b,.master-remove-preserve span{display:block!important}
+  .master-remove-preserve b{font-size:12.5px!important}
+  .master-remove-preserve span{margin-top:4px!important;font-size:11px!important;line-height:1.45!important;font-weight:700!important}
+
+  .master-remove-auth{
+    margin:14px 22px 0!important;padding:16px!important;border:1px solid #dce6ed!important;border-radius:17px!important;background:#fbfdfe!important;
+  }
+  .master-remove-auth-copy small{display:block!important;color:#647d94!important;font-size:8.5px!important;font-weight:950!important;letter-spacing:.1em!important}
+  .master-remove-auth-copy b{display:block!important;margin-top:4px!important;color:#244363!important;font-size:15px!important}
+  .master-remove-auth-copy p{margin:5px 0 12px!important;color:#7c8f9e!important;font-size:11px!important;line-height:1.4!important;font-weight:700!important}
+  .master-remove-pin-wrap{
+    display:grid!important;grid-template-columns:46px minmax(0,1fr) 46px!important;align-items:center!important;
+    border:2px solid #d7e2ea!important;border-radius:15px!important;background:#fff!important;overflow:hidden!important;
+  }
+  .master-remove-pin-wrap:focus-within{border-color:#c86861!important;box-shadow:0 0 0 4px rgba(184,76,68,.09)!important}
+  .master-remove-pin-wrap>span,.master-remove-pin-wrap>button{height:50px!important;display:grid!important;place-items:center!important;background:transparent!important;color:#71869a!important}
+  .master-remove-pin-wrap>span>.ph,.master-remove-pin-wrap>button>.ph{font-size:20px!important}
+  .master-remove-pin-wrap input{
+    width:100%!important;height:50px!important;border:0!important;outline:0!important;background:#fff!important;color:#284762!important;
+    font-size:22px!important;font-weight:900!important;letter-spacing:.16em!important;
+  }
+
+  .master-remove-error{margin:12px 22px 0!important}
+  .master-remove-actions{
+    display:grid!important;grid-template-columns:minmax(0,1fr) minmax(0,1fr)!important;gap:10px!important;padding:18px 22px 22px!important;
+  }
+  .master-remove-actions button{
+    min-height:52px!important;border-radius:15px!important;font-size:11px!important;font-weight:950!important;letter-spacing:.025em!important;
+  }
+  .master-remove-cancel{border:1px solid #dbe5ec!important;background:#f4f7f9!important;color:#566f84!important}
+  .master-remove-confirm{
+    display:flex!important;align-items:center!important;justify-content:center!important;gap:8px!important;border:1px solid #b84c44!important;
+    background:#b84c44!important;color:#fff!important;box-shadow:0 8px 18px rgba(184,76,68,.14)!important;
+  }
+  .master-remove-confirm>.ph{font-size:18px!important}
+}
+</style>
 </head>
 <body>
 <header id="topbar" class="topbar"></header>
@@ -15080,6 +15237,24 @@ body.desktop-mode .app-view:has(.receipt-new-shell){width:100%!important;max-wid
   <label>Motivo<input id="masterEditReason" class="field" value="CORREZIONE MASTER" maxlength="120"></label>
   <div class="master-edit-safety"><i class="ph-duotone ph-shield-check" aria-hidden="true"></i><span>NOVA registra la differenza come movimento tracciato. La formula originale del file Excel non viene sostituita con un valore statico.</span></div>
   <div class="two"><button class="soft" data-action="master-edit-close">ANNULLA</button><button class="primary" data-action="master-edit-save"><i class="ph ph-check" aria-hidden="true"></i> SALVA MODIFICA</button></div>
+</dialog>
+
+<dialog id="masterRemoveDialog" class="dialog master-remove-dialog" aria-labelledby="masterRemoveTitle">
+  <div class="master-remove-head">
+    <span class="master-remove-head-icon"><i class="ph ph-trash" aria-hidden="true"></i></span>
+    <div><small>AZIONE PROTETTA</small><h2 id="masterRemoveTitle">Rimuovi Master Excel</h2></div>
+    <button type="button" class="master-remove-close" data-action="master-remove-close" aria-label="Chiudi"><i class="ph ph-x" aria-hidden="true"></i></button>
+  </div>
+  <div class="master-remove-warning"><i class="ph ph-warning-circle" aria-hidden="true"></i><div><b>Rimuovere il file Master da SOMA HUB?</b><span>Il file Excel e la baseline di giacenza verranno rimossi da questa sede. Questa operazione non può essere annullata dall’app.</span></div></div>
+  <div id="masterRemoveDirty" class="master-remove-dirty hidden"></div>
+  <div id="masterRemoveInfo" class="master-remove-info"></div>
+  <div class="master-remove-preserve"><i class="ph ph-shield-check" aria-hidden="true"></i><div><b>I dati storici restano intatti</b><span>Registro, Audit, entrate merci, richieste, movimenti, operatori e configurazioni non vengono eliminati.</span></div></div>
+  <div class="master-remove-auth">
+    <div class="master-remove-auth-copy"><small>CONFERMA IDENTITÀ</small><b>PIN di <span id="masterRemoveOperator">—</span></b><p>Inserisci il PIN dell’operatore attualmente connesso per autorizzare la rimozione.</p></div>
+    <div class="master-remove-pin-wrap"><span><i class="ph ph-lock-key" aria-hidden="true"></i></span><input id="masterRemovePin" type="password" inputmode="numeric" maxlength="4" pattern="[0-9]*" autocomplete="off" enterkeyhint="done" aria-label="PIN operatore per rimuovere il Master"><button type="button" data-action="master-remove-toggle-pin" aria-label="Mostra PIN"><i class="ph ph-eye" aria-hidden="true"></i></button></div>
+  </div>
+  <div id="masterRemoveError" class="error-box master-remove-error hidden"></div>
+  <div class="master-remove-actions"><button type="button" class="master-remove-cancel" data-action="master-remove-close">ANNULLA</button><button type="button" class="master-remove-confirm" data-action="master-remove-confirm"><i class="ph ph-trash" aria-hidden="true"></i><span>RIMUOVI MASTER</span></button></div>
 </dialog>
 
 <dialog id="requestDeleteDialog" class="dialog request-delete-dialog" aria-labelledby="requestDeleteTitle">
@@ -15528,6 +15703,7 @@ async function ensureJsZip(){
 function openDb(){return new Promise((resolve,reject)=>{const r=indexedDB.open(IDB_NAME,1);r.onupgradeneeded=()=>{if(!r.result.objectStoreNames.contains(STORE))r.result.createObjectStore(STORE)};r.onsuccess=()=>resolve(r.result);r.onerror=()=>reject(r.error)})}
 async function idbPut(key,value){const d=await openDb();return new Promise((resolve,reject)=>{const tx=d.transaction(STORE,'readwrite');tx.objectStore(STORE).put(value,key);tx.oncomplete=()=>{d.close();resolve()};tx.onerror=()=>{const e=tx.error;d.close();reject(e)}})}
 async function idbGet(key){const d=await openDb();return new Promise((resolve,reject)=>{const tx=d.transaction(STORE,'readonly'),r=tx.objectStore(STORE).get(key);r.onsuccess=()=>{const v=r.result;d.close();resolve(v)};r.onerror=()=>{const e=r.error;d.close();reject(e)}})}
+async function idbDelete(key){const d=await openDb();return new Promise((resolve,reject)=>{const tx=d.transaction(STORE,'readwrite');tx.objectStore(STORE).delete(key);tx.oncomplete=()=>{d.close();resolve()};tx.onerror=()=>{const e=tx.error;d.close();reject(e)}})}
 
 const headerNorm=v=>norm(v).normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^A-Z0-9]+/g,' ').trim();
 const aliases={article:['CODICE SAP','CODICE ARTICOLO','ARTICOLO','CODICE'],size:['TAGLIA','VARIANTE','SIZE'],description:['DESCRIZIONE','DESCRIZIONE ARTICOLO'],location:['FILA SCAFFALE','FILA/SCAFFALE','SCAFFALE FILA','SCAFFALE/FILA','SCAFFALE / FILA','POSIZIONE'],fila:['FILA'],scaffale:['SCAFFALE'],pallet:['BANCALE','PALLET','BANCALE CARRELLO','CARRELLO'],state:['STATO','STATO MERCE'],quantity:['QUANTITA','QTA','QUANTITY'],NUOVO:['NUOVO'],SCARICATO:['SCARICATO'],USATO:['USATO'],DISMESSO:['DISMESSO'],NON_CHIARO:['NON CHIARO','NON_CHIARO']};
@@ -15596,6 +15772,21 @@ class ExcelService{
   }
   #reconcileMigratedReceipts(db){for(const r of db.receipts||[])for(const l of r.lines||[]){const available=(db.master.rows||[]).filter(x=>normalizeArticle(x.article)===normalizeArticle(l.article)&&norm(x.size)===norm(l.size)&&norm(x.state)===norm(l.state)&&norm(x.location)===CONFIG.receivingLocation&&norm(x.pallet)===norm(l.receivingPallet)).reduce((n,x)=>n+Number(x.quantity||0),0);l.remainingToPutAway=Math.min(Number(l.checkedQuantity||0),Math.max(0,available))}}
   async hasOriginal(){return !!(await this.originalBytes())}
+  async removeMaster(){
+    const m=this.store.db.master,rows=Array.isArray(m?.rows)?m.rows.length:0;
+    if(!rows)throw new Error('Nessun Master caricato da rimuovere.');
+    const dirty=this.dirtyCount(),summary={filename:m.filename||'Master Excel',rows,sheetName:m.sheetName||'MAGAZZINO',importedAt:m.importedAt||null,importedBy:m.importedBy||'',siteId:this.store.siteId,dirty};
+    await idbDelete(this.masterKey());
+    if(norm(this.store.siteId)===CONFIG.defaultSiteId)await idbDelete(MASTER_KEY_LEGACY).catch(()=>{});
+    this.store.db.master=createEmptyDb(this.store.siteId).master;
+    this.lastValidation=null;this.exportTableRanges=new Map();this.exportTableHeaders=new Map();this.tableBlueprints=[];
+    this.domain.stock.invalidate?.();
+    const removedAudit=this.domain.audit.record('MASTER_REMOVED','MASTER',summary.filename,summary,{filename:'',rows:0},{dirtyDiscarded:dirty,siteId:this.store.siteId});
+    this.store.db.settings.lastExportAt=removedAudit.at;
+    this.store.db.settings.lastExportName='';
+    this.store.save('master:remove');
+    return summary
+  }
   dirtyCount(){const t=new Date(this.store.db.settings?.lastExportAt||this.store.db.master.importedAt||0).getTime();return(this.store.db.audits||[]).filter(a=>new Date(a.at||0).getTime()>t).length}
   legacyAvailable(){try{return !!globalThis.localStorage?.getItem?.(CONFIG.legacyStorageKey)}catch{return false}}
   migrateLocalLegacy(){
@@ -15834,13 +16025,13 @@ class UI{
     document.addEventListener('click',e=>{const el=e.target.closest('[data-action]');if(!el)return;e.preventDefault();this.safe(()=>this.action(el.dataset.action,el))});
     document.addEventListener('click',e=>{const box=e.target.closest('.receipt-picker-field');if(!box||e.target.closest('[data-action]')||!document.body.classList.contains('desktop-mode')||(globalThis.innerWidth||document.documentElement.clientWidth||0)<=980)return;const input=box.querySelector('input[type="date"],input[type="datetime-local"]');if(!input)return;try{input.focus({preventScroll:true})}catch{input.focus?.()}if(typeof input.showPicker==='function'){try{input.showPicker();return}catch{}}input.click?.()});
     document.addEventListener('input',e=>this.input(e.target));document.addEventListener('change',e=>this.change(e.target));
-    document.addEventListener('keydown',e=>{if(e.key!=='Enter'||e.shiftKey||e.ctrlKey||e.altKey||e.metaKey)return;const requestDelete=document.getElementById('requestDeleteDialog');if(requestDelete?.open){e.preventDefault();this.safe(()=>this.confirmRequestDelete());return}const login=document.getElementById('loginDialog');if(login?.open){e.preventDefault();this.safe(()=>this.login())}});
+    document.addEventListener('keydown',e=>{if(e.key!=='Enter'||e.shiftKey||e.ctrlKey||e.altKey||e.metaKey)return;const masterRemove=document.getElementById('masterRemoveDialog');if(masterRemove?.open){e.preventDefault();this.safe(()=>this.confirmMasterRemove());return}const requestDelete=document.getElementById('requestDeleteDialog');if(requestDelete?.open){e.preventDefault();this.safe(()=>this.confirmRequestDelete());return}const login=document.getElementById('loginDialog');if(login?.open){e.preventDefault();this.safe(()=>this.login())}});
     document.getElementById('masterFile')?.addEventListener('change',e=>this.importMaster(e.target));
     document.getElementById('ddtCamera')?.addEventListener('change',e=>this.addDdtFiles(e.target));document.getElementById('ddtFile')?.addEventListener('change',e=>this.addDdtFiles(e.target));
     document.getElementById('requestCamera')?.addEventListener('change',e=>this.addRequestFiles(e.target));document.getElementById('requestFile')?.addEventListener('change',e=>this.addRequestFiles(e.target));
     this.store.bus.on('db:changed',()=>{this.renderHeader();if(this.router.route.name==='home')this.renderView()});
     document.addEventListener('focusin',e=>{if(['loginPin','requestDeletePin'].includes(e.target?.id)){document.documentElement.classList.add('nova-keyboard-open');this.syncVisualViewport();setTimeout(()=>{this.syncVisualViewport();e.target?.scrollIntoView?.({block:'center',behavior:'smooth'})},120)}});
-    document.getElementById('loginDialog')?.addEventListener('close',()=>document.documentElement.classList.remove('nova-keyboard-open'));document.getElementById('requestDeleteDialog')?.addEventListener('close',()=>{document.documentElement.classList.remove('nova-keyboard-open');this.pendingRequestDeleteId='';this.lastDeletePinLength=0;const p=document.getElementById('requestDeletePin');if(p)p.value=''});document.getElementById('siteDialog')?.addEventListener('cancel',e=>{if(this.siteChoiceRequired)e.preventDefault();else{this.siteChoiceSource='';this.siteChoiceRequired=false}});
+    document.getElementById('loginDialog')?.addEventListener('close',()=>document.documentElement.classList.remove('nova-keyboard-open'));document.getElementById('masterRemoveDialog')?.addEventListener('close',()=>{const p=document.getElementById('masterRemovePin');if(p)p.value='';const e=document.getElementById('masterRemoveError');if(e){e.textContent='';e.classList.add('hidden')}});document.getElementById('requestDeleteDialog')?.addEventListener('close',()=>{document.documentElement.classList.remove('nova-keyboard-open');this.pendingRequestDeleteId='';this.lastDeletePinLength=0;const p=document.getElementById('requestDeletePin');if(p)p.value=''});document.getElementById('siteDialog')?.addEventListener('cancel',e=>{if(this.siteChoiceRequired)e.preventDefault();else{this.siteChoiceSource='';this.siteChoiceRequired=false}});
   }
   setupVisualViewport(){
     const vv=globalThis.visualViewport;
@@ -15897,15 +16088,15 @@ class UI{
     const search=this.auth.can('STOCK_VIEW')?`<button class="command-search home-command-search" data-action="stock">${phDashboardIcon('magnifying-glass')}<span>Cerca articolo, taglia o posizione…</span><span class="command-go">${phDashboardIcon('arrow-right')}</span></button>`:'';
     const modules=cards.join('');
     return `<section class="home-layout home-layout-desktop"><div class="desktop-home-tools">${master}${search}</div><div class="modules desktop-home-modules">${modules}</div>${this.activity('desktop')}</section><section class="home-layout home-layout-mobile">${hero}${master}${search}<div class="modules home-modules mobile-home-modules">${modules}</div>${this.activity('mobile')}</section>${this.exportBar()}`}
-  masterCompact(){const m=this.store.db.master,ready=this.masterReady(),dirty=this.excel.dirtyCount(),site=this.auth.site(),canImport=this.auth.can('MASTER_IMPORT');return `<section class="warehouse-data-card ${ready?'is-ready':'is-empty'}"><button class="warehouse-data-main" data-action="master"><span class="warehouse-data-icon">${phDashboardIcon('microsoft-excel-logo')}</span><span class="warehouse-data-copy"><small>DATI MAGAZZINO</small><b>${ready?esc(m.filename):`Master ${esc(site.name)}`}</b>${ready?`<span>${m.rows.length} righe · Aggiornato ${fmtDateTime(m.importedAt)}</span>`:`<span>Sede ${esc(site.name)}</span>`}</span><span class="ready ${ready?'ok':'off'}">${ready?'PRONTO':'NON CARICATO'}</span><span class="warehouse-data-arrow">${phDashboardIcon('caret-right')}</span></button><div class="warehouse-data-actions">${ready?`<button data-action="master-view">${phDashboardIcon('table')}<span>VISUALIZZA</span></button>`:''}${canImport?`<button data-action="master-import">${phDashboardIcon(ready?'arrows-clockwise':'upload-simple')}<span>${ready?'AGGIORNA':'IMPORTA'}</span></button>`:''}</div>${dirty&&ready?`<div class="warehouse-data-dirty">${phDashboardIcon('warning-circle')} ${dirty} ${dirty===1?'modifica non esportata':'modifiche non esportate'}</div>`:''}</section>${this.excel.lastValidation?.ok?`<div class="excel-validation">✓ Export verificato</div>`:''}`}
+  masterCompact(){const m=this.store.db.master,ready=this.masterReady(),dirty=this.excel.dirtyCount(),site=this.auth.site(),canImport=this.auth.can('MASTER_IMPORT'),desktop=document.body.classList.contains('desktop-mode'),canRemove=desktop&&ready&&canImport;return `<section class="warehouse-data-card ${ready?'is-ready':'is-empty'}"><button class="warehouse-data-main" data-action="master"><span class="warehouse-data-icon">${phDashboardIcon('microsoft-excel-logo')}</span><span class="warehouse-data-copy"><small>DATI MAGAZZINO</small><b>${ready?esc(m.filename):`Master ${esc(site.name)}`}</b>${ready?`<span>${m.rows.length} righe · Aggiornato ${fmtDateTime(m.importedAt)}</span>`:`<span>Sede ${esc(site.name)}</span>`}</span><span class="ready ${ready?'ok':'off'}">${ready?'PRONTO':'NON CARICATO'}</span><span class="warehouse-data-arrow">${phDashboardIcon('caret-right')}</span></button><div class="warehouse-data-actions">${ready?`<button data-action="master-view">${phDashboardIcon('table')}<span>VISUALIZZA</span></button>`:''}${canImport?`<button data-action="master-import">${phDashboardIcon(ready?'arrows-clockwise':'upload-simple')}<span>${ready?'AGGIORNA':'IMPORTA'}</span></button>`:''}${canRemove?`<button class="master-remove-trigger master-remove-trigger-compact" data-action="master-remove-open">${phRegular('trash')}<span>RIMUOVI</span></button>`:''}</div>${dirty&&ready?`<div class="warehouse-data-dirty">${phDashboardIcon('warning-circle')} ${dirty} ${dirty===1?'modifica non esportata':'modifiche non esportate'}</div>`:''}</section>${this.excel.lastValidation?.ok?`<div class="excel-validation">✓ Export verificato</div>`:''}`}
   exportBar(){const dirty=this.excel.dirtyCount();return this.auth.can('EXPORT')&&this.masterReady()&&dirty?`<div class="export-float"><button data-action="master-export">ESPORTA ORA <span>${dirty}</span></button></div>`:''}
   activity(mode='mobile'){const key=this.activityDate,today=key===localDateInput(),s=activityForDay(this.store.db,key,this.auth.user),items=this.auth.isLina()?[[s.received,'Richieste ricevute','clipboard-text'],[s.completed,'Richieste completate','check-circle'],[s.latest?fmtDateTime(s.latest):'—','Ultima attività','clock-counter-clockwise']]:[[s.car,'Entrate','package'],[s.scar,'Scarichi','truck'],[s.sp,'Spostamenti','arrows-left-right'],[s.received,'Richieste','clipboard-text'],[s.completed,'Completate','check-circle'],[s.latest?fmtDateTime(s.latest):'—','Ultima attività','clock-counter-clockwise']],dateId=`activityDate-${mode}`;return `<section class="activity activity-${mode}"><div class="activity-head"><div><b>ATTIVITÀ SVOLTE</b></div><div>${today?'':`<button data-action="activity-today">OGGI</button>`}<span class="calendar-picker"><button type="button" class="calendar-btn" data-action="activity-date-open" data-target="${dateId}" title="Scegli data" aria-label="Scegli data">${phRegular('calendar-blank','calendar-glyph')}</button><input id="${dateId}" class="activity-date-native" type="date" max="${localDateInput()}" value="${key}" aria-label="Data attività"></span></div></div><div class="activity-grid">${items.map(([v,l,i],idx)=>`<div class="activity-kpi ${idx===items.length-1?'wide':''}"><span>${phDashboardIcon(i)}</span><p><b>${esc(v)}</b><small>${l}</small></p></div>`).join('')}</div></section>`}
 
   master(){
-    if(!this.require('MASTER_VIEW'))return'';const m=this.store.db.master,ready=this.masterReady(),hasLegacy=this.excel.legacyAvailable(),site=this.auth.site(),dirty=this.excel.dirtyCount();
+    if(!this.require('MASTER_VIEW'))return'';const m=this.store.db.master,ready=this.masterReady(),hasLegacy=this.excel.legacyAvailable(),site=this.auth.site(),dirty=this.excel.dirtyCount(),desktop=document.body.classList.contains('desktop-mode'),canRemove=desktop&&ready&&this.auth.can('MASTER_IMPORT');
     if(!ready)return `<section class="master-page-clean"><section class="master-empty-panel">${phIcon('microsoft-excel-logo')}<h2>Master non caricato</h2><p>Per ${esc(site.name)} non è ancora presente un file Excel.</p>${this.auth.can('MASTER_IMPORT')?`<button class="primary" data-action="master-import">${phIcon('upload-simple')} IMPORTA MASTER EXCEL</button>`:''}${!ready&&hasLegacy&&site.id===CONFIG.defaultSiteId&&this.auth.can('MASTER_IMPORT')?`<button class="soft" data-action="legacy-migrate">MIGRA DATI REMOTO</button>`:''}</section></section>`;
     const rows=this.domain.stock.positive(),sizes=[...new Set(rows.map(r=>r.size).filter(Boolean))].sort((a,b)=>a.localeCompare(b,'it',{numeric:true})),canQuick=this.auth.can('REQUEST_CREATE');
-    return `<section class="master-page-clean ${this.masterRequestMode?'master-request-active':''}"><section class="master-summary-card master-summary-card-clean"><div class="master-file-identity"><span>${phIcon('microsoft-excel-logo')}</span><div><small>FILE MASTER</small><b>${esc(m.filename)}</b><p>${rows.length} giacenze attive · Foglio ${esc(m.sheetName||'MAGAZZINO')}</p></div></div><div class="master-summary-meta"><div><small>CARICATO</small><b>${fmtDateTime(m.importedAt)}</b></div><div><small>OPERATORE</small><b>${esc(m.importedBy||'—')}</b></div><div><small>MODIFICHE DA ESPORTARE</small><b class="${dirty?'warn-text':''}">${dirty}</b></div></div><div class="master-summary-actions">${this.auth.can('MASTER_IMPORT')?`<button class="soft" data-action="master-import">${phIcon('arrows-clockwise')} AGGIORNA MASTER</button>`:''}${this.auth.can('MASTER_EXPORT')?`<button class="success" data-action="master-export">${phIcon('microsoft-excel-logo')} ESPORTA AGGIORNATO</button>`:''}</div></section><section class="master-workspace master-workspace-clean"><div class="master-toolbar"><div class="master-search-box">${phIcon('magnifying-glass')}<input id="masterQuery" autocomplete="off" placeholder="${this.masterRequestMode?'Cerca articolo, taglia o descrizione…':'Ricerca libera: articolo, taglia, stato, descrizione…'}" value="${esc(this.masterView.query)}"></div><div class="master-filter-grid"><label>Articolo<input id="masterFilterArticle" autocomplete="off" value="${esc(this.masterView.article)}" placeholder="Es. SZ242"></label><label>Taglia<select id="masterFilterSize"><option value="">TUTTE</option>${sizes.map(x=>`<option value="${esc(x)}" ${this.masterView.size===x?'selected':''}>${esc(x)}</option>`).join('')}</select></label><label>POSIZIONE - FILA - SCAFFALE<input id="masterFilterLocation" autocomplete="off" value="${esc(this.masterView.location)}" placeholder="Es. STANZONE CDS FERRI"></label><label>Bancale<input id="masterFilterPallet" autocomplete="off" value="${esc(this.masterView.pallet)}" placeholder="Es. DISMESSI 19"></label><label class="master-filter-sort">Ordina<select id="masterSort"><option value="article" ${this.masterView.sort==='article'?'selected':''}>Articolo</option><option value="qty_desc" ${this.masterView.sort==='qty_desc'?'selected':''}>Quantità ↓</option><option value="qty_asc" ${this.masterView.sort==='qty_asc'?'selected':''}>Quantità ↑</option><option value="location" ${this.masterView.sort==='location'?'selected':''}>Posizione - Fila - Scaffale</option><option value="pallet" ${this.masterView.sort==='pallet'?'selected':''}>Bancale</option></select></label></div><div class="master-toolbar-foot"><span>${phIcon('funnel-simple')} ${this.masterRequestMode?'Ricerca per articolo e taglia · disponibilità aggregata':'Tutti i filtri sono combinabili'}</span><div class="master-toolbar-actions"><button data-action="master-filter-reset">AZZERA FILTRI</button>${canQuick?`<button class="master-request-toggle ${this.masterRequestMode?'active':''}" data-action="master-request-toggle">${phRegular(this.masterRequestMode?'x':'check-square')}<span>${this.masterRequestMode?'ESCI DA RICHIESTA':'CREA RICHIESTA'}</span></button>`:''}</div></div>${canQuick&&this.masterRequestMode?`<div class="master-request-mode-banner">${phRegular('clipboard-text')}<div><b>Modalità richiesta rapida</b><small>Una riga per articolo + taglia: vedi subito il totale disponibile e la composizione per stato. Le posizioni restano consultabili solo quando servono.</small></div></div>`:''}</div><div class="master-permission-note">${phIcon(this.auth.can('MASTER_EDIT_STOCK')?'shield-check':'eye')}<span>${this.auth.can('MASTER_EDIT_STOCK')?'Puoi modificare le quantità. SOMA registra solo la variazione e preserva le formule Excel originali.':'Visualizzazione in sola lettura per il tuo ruolo.'}</span></div><div id="masterViewerMeta" class="master-viewer-meta"></div><div id="masterViewerBody"></div></section>${canQuick?`<div id="masterRequestDock"></div><dialog id="masterRequestDialog" class="dialog master-request-dialog" aria-labelledby="masterRequestDialogTitle"><div class="master-request-dialog-head"><div><small>RICHIESTA RAPIDA</small><h2 id="masterRequestDialogTitle">Rivedi richiesta</h2><p>Controlla articoli e cartoni prima dell'invio.</p></div><button type="button" data-action="master-request-review-close" aria-label="Chiudi">${phRegular('x')}</button></div><div id="masterRequestDialogBody" class="master-request-dialog-body"></div><div class="master-request-dialog-actions"><button class="soft" data-action="master-request-review-close">${phRegular('arrow-left')} TORNA ALLE GIACENZE</button><button class="primary master-request-send-dialog" data-action="master-request-send">${phRegular('paper-plane-tilt')} INVIA RICHIESTA</button></div></dialog>`:''}</section>`
+    return `<section class="master-page-clean ${this.masterRequestMode?'master-request-active':''}"><section class="master-summary-card master-summary-card-clean"><div class="master-file-identity"><span>${phIcon('microsoft-excel-logo')}</span><div><small>FILE MASTER</small><b>${esc(m.filename)}</b><p>${rows.length} giacenze attive · Foglio ${esc(m.sheetName||'MAGAZZINO')}</p></div></div><div class="master-summary-meta"><div><small>CARICATO</small><b>${fmtDateTime(m.importedAt)}</b></div><div><small>OPERATORE</small><b>${esc(m.importedBy||'—')}</b></div><div><small>MODIFICHE DA ESPORTARE</small><b class="${dirty?'warn-text':''}">${dirty}</b></div></div><div class="master-summary-actions">${canRemove?`<button class="master-remove-trigger master-remove-trigger-summary" data-action="master-remove-open">${phRegular('trash')} RIMUOVI MASTER</button>`:''}${this.auth.can('MASTER_IMPORT')?`<button class="soft" data-action="master-import">${phIcon('arrows-clockwise')} AGGIORNA MASTER</button>`:''}${this.auth.can('MASTER_EXPORT')?`<button class="success" data-action="master-export">${phIcon('microsoft-excel-logo')} ESPORTA AGGIORNATO</button>`:''}</div></section><section class="master-workspace master-workspace-clean"><div class="master-toolbar"><div class="master-search-box">${phIcon('magnifying-glass')}<input id="masterQuery" autocomplete="off" placeholder="${this.masterRequestMode?'Cerca articolo, taglia o descrizione…':'Ricerca libera: articolo, taglia, stato, descrizione…'}" value="${esc(this.masterView.query)}"></div><div class="master-filter-grid"><label>Articolo<input id="masterFilterArticle" autocomplete="off" value="${esc(this.masterView.article)}" placeholder="Es. SZ242"></label><label>Taglia<select id="masterFilterSize"><option value="">TUTTE</option>${sizes.map(x=>`<option value="${esc(x)}" ${this.masterView.size===x?'selected':''}>${esc(x)}</option>`).join('')}</select></label><label>POSIZIONE - FILA - SCAFFALE<input id="masterFilterLocation" autocomplete="off" value="${esc(this.masterView.location)}" placeholder="Es. STANZONE CDS FERRI"></label><label>Bancale<input id="masterFilterPallet" autocomplete="off" value="${esc(this.masterView.pallet)}" placeholder="Es. DISMESSI 19"></label><label class="master-filter-sort">Ordina<select id="masterSort"><option value="article" ${this.masterView.sort==='article'?'selected':''}>Articolo</option><option value="qty_desc" ${this.masterView.sort==='qty_desc'?'selected':''}>Quantità ↓</option><option value="qty_asc" ${this.masterView.sort==='qty_asc'?'selected':''}>Quantità ↑</option><option value="location" ${this.masterView.sort==='location'?'selected':''}>Posizione - Fila - Scaffale</option><option value="pallet" ${this.masterView.sort==='pallet'?'selected':''}>Bancale</option></select></label></div><div class="master-toolbar-foot"><span>${phIcon('funnel-simple')} ${this.masterRequestMode?'Ricerca per articolo e taglia · disponibilità aggregata':'Tutti i filtri sono combinabili'}</span><div class="master-toolbar-actions"><button data-action="master-filter-reset">AZZERA FILTRI</button>${canQuick?`<button class="master-request-toggle ${this.masterRequestMode?'active':''}" data-action="master-request-toggle">${phRegular(this.masterRequestMode?'x':'check-square')}<span>${this.masterRequestMode?'ESCI DA RICHIESTA':'CREA RICHIESTA'}</span></button>`:''}</div></div>${canQuick&&this.masterRequestMode?`<div class="master-request-mode-banner">${phRegular('clipboard-text')}<div><b>Modalità richiesta rapida</b><small>Una riga per articolo + taglia: vedi subito il totale disponibile e la composizione per stato. Le posizioni restano consultabili solo quando servono.</small></div></div>`:''}</div><div class="master-permission-note">${phIcon(this.auth.can('MASTER_EDIT_STOCK')?'shield-check':'eye')}<span>${this.auth.can('MASTER_EDIT_STOCK')?'Puoi modificare le quantità. SOMA registra solo la variazione e preserva le formule Excel originali.':'Visualizzazione in sola lettura per il tuo ruolo.'}</span></div><div id="masterViewerMeta" class="master-viewer-meta"></div><div id="masterViewerBody"></div></section>${canQuick?`<div id="masterRequestDock"></div><dialog id="masterRequestDialog" class="dialog master-request-dialog" aria-labelledby="masterRequestDialogTitle"><div class="master-request-dialog-head"><div><small>RICHIESTA RAPIDA</small><h2 id="masterRequestDialogTitle">Rivedi richiesta</h2><p>Controlla articoli e cartoni prima dell'invio.</p></div><button type="button" data-action="master-request-review-close" aria-label="Chiudi">${phRegular('x')}</button></div><div id="masterRequestDialogBody" class="master-request-dialog-body"></div><div class="master-request-dialog-actions"><button class="soft" data-action="master-request-review-close">${phRegular('arrow-left')} TORNA ALLE GIACENZE</button><button class="primary master-request-send-dialog" data-action="master-request-send">${phRegular('paper-plane-tilt')} INVIA RICHIESTA</button></div></dialog>`:''}</section>`
   }
   masterFilteredRows(){
     const all=this.domain.stock.positive(),v=this.masterView,q=String(v.query||'').trim(),parsed=this.parseStockQuery(q),article=normalizeArticle(v.article||''),size=norm(v.size),loc=norm(v.location),pallet=norm(v.pallet);let rows=all.filter(r=>{
@@ -16428,6 +16619,34 @@ class UI{
     if(kind==='request'&&this.requestDraft){if(id==='header'){this.requestDraft[key]=value;return}const l=this.requestDraft.lines.find(x=>x.id===id);if(l){if(key==='cartonsRequested')l[key]=Math.max(0,Math.floor(Number(value)||0));else if(key==='article')l[key]=normalizeArticle(value);else if(key==='size')l[key]=norm(value);else l[key]=value}}
   }
 
+  openMasterRemove(){
+    const desktop=document.body.classList.contains('desktop-mode')&&(globalThis.innerWidth||document.documentElement.clientWidth||0)>980;
+    if(!desktop)throw new Error('La rimozione del Master è disponibile solo nella versione desktop.');
+    if(!this.auth.can('MASTER_IMPORT'))throw new Error('Non hai il permesso per rimuovere il Master.');
+    if(!this.masterReady())throw new Error('Nessun Master caricato da rimuovere.');
+    const d=document.getElementById('masterRemoveDialog'),m=this.store.db.master,dirty=this.excel.dirtyCount(),info=document.getElementById('masterRemoveInfo'),warn=document.getElementById('masterRemoveDirty'),err=document.getElementById('masterRemoveError'),pin=document.getElementById('masterRemovePin');
+    document.getElementById('masterRemoveOperator').textContent=this.auth.user||'—';
+    info.innerHTML=`<div><small>FILE</small><b>${esc(m.filename||'—')}</b></div><div><small>RIGHE MASTER</small><b>${Number(m.rows?.length||0)}</b></div><div><small>SEDE</small><b>${esc(this.auth.site().name)}</b></div><div><small>MODIFICHE NON ESPORTATE</small><b class="${dirty?'is-danger':''}">${dirty}</b></div>`;
+    warn.innerHTML=dirty?`${phRegular('warning')}<div><b>${dirty} ${dirty===1?'modifica non esportata':'modifiche non esportate'}</b><span>Rimuovendo il Master, queste modifiche non verranno salvate in un file Excel. Esporta prima se vuoi conservarle nel file.</span></div>`:'';
+    warn.classList.toggle('hidden',!dirty);
+    err.textContent='';err.classList.add('hidden');pin.value='';pin.type='password';
+    const eye=d.querySelector('[data-action="master-remove-toggle-pin"] i');if(eye)eye.className='ph ph-eye';
+    d.showModal();setTimeout(()=>pin.focus(),80)
+  }
+  closeMasterRemove(){document.getElementById('masterRemoveDialog')?.close()}
+  toggleMasterRemovePin(){const p=document.getElementById('masterRemovePin');if(!p)return;const show=p.type==='password';p.type=show?'text':'password';const b=document.querySelector('[data-action="master-remove-toggle-pin"]'),i=b?.querySelector('i');if(i)i.className=`ph ph-${show?'eye-slash':'eye'}`;b?.setAttribute('aria-label',show?'Nascondi PIN':'Mostra PIN');p.focus()}
+  masterRemoveError(message){const e=document.getElementById('masterRemoveError');if(!e)return;e.textContent=message;e.classList.remove('hidden')}
+  async confirmMasterRemove(){
+    if(!this.auth.can('MASTER_IMPORT'))throw new Error('Non hai il permesso per rimuovere il Master.');
+    const pin=String(document.getElementById('masterRemovePin')?.value||'').replace(/\D/g,'').slice(0,CONFIG.pinLength);
+    if(pin.length!==CONFIG.pinLength){this.masterRemoveError(`Inserisci il PIN di ${CONFIG.pinLength} cifre.`);return}
+    if(!(await this.auth.verifyCurrentPin(pin))){this.masterRemoveError('PIN non corretto. La rimozione non è stata eseguita.');this.sounds?.error?.();return}
+    const removed=await this.excel.removeMaster();
+    this.masterView={query:'',article:'',size:'',location:'',pallet:'',sort:'article',page:1,pageSize:100};this.masterEditKey='';this.masterRequestMode=false;this.masterRequestItems=[];this.masterRequestOpenKey='';this.countDraft=null;this.rectDraft=null;
+    try{globalThis.sessionStorage?.removeItem?.(siteCountSessionKey(this.store.siteId))}catch{}
+    this.closeMasterRemove();this.sounds?.success?.();this.toast(`${removed.filename} rimosso. Storico e Audit conservati.`);this.router.home()
+  }
+
   async importMaster(input){const file=input.files?.[0];input.value='';if(!file)return;if(this.masterReady()&&this.excel.dirtyCount()&&!confirm(`Ci sono ${this.excel.dirtyCount()} modifiche non esportate. Importare comunque?`))return;const r=await this.excel.importFile(file,{restoreHistory:true});this.countDraft=this.loadCountSession();this.rectDraft=null;this.toast(`${r.filename} importato · ${r.rows} righe.`);this.router.home()}
   addDdtFiles(input){for(const f of input.files||[])this.ddtFiles.push(f);input.value='';this.renderView()}
   addRequestFiles(input){for(const f of input.files||[])this.requestFiles.push(f);input.value='';this.renderView()}
@@ -16441,7 +16660,7 @@ class UI{
 
   action(action,el){
     const go=(name,params={})=>this.router.go(name,params);
-    const map={back:()=>this.router.back(),home:()=>this.router.home(),login:()=>{this.sounds?.click?.();this.openLogin()},'login-submit':()=>this.login(),logout:()=>{this.sounds?.click?.();this.logout()},'site-switch':()=>this.openSiteSwitcher(),'site-select':()=>this.selectSite(el.dataset.site),'site-choice-cancel':()=>this.cancelSiteChoice(),'toggle-pin':()=>{const p=document.getElementById('loginPin'),show=p.type==='password';p.type=show?'text':'password';const i=el.querySelector('i');if(i)i.className=`ph-duotone ph-${show?'eye-slash':'eye'}`;el.setAttribute('aria-label',show?'Nascondi PIN':'Mostra PIN');p.focus()},'view-desktop':()=>this.applyView('desktop'),'view-phone':()=>this.applyView('smartphone'),notifications:()=>this.openNotifications(),master:()=>go('master'),'master-view':()=>go('master'),'master-filter-reset':()=>this.resetMasterFilters(),'master-request-toggle':()=>this.toggleMasterRequestMode(),'master-request-item':()=>this.toggleMasterRequestItem(el.dataset.item),'master-request-locations':()=>this.toggleMasterRequestLocations(el.dataset.item,el),'master-request-review':()=>this.openMasterRequestReview(),'master-request-review-close':()=>document.getElementById('masterRequestDialog')?.close(),'master-request-remove':()=>this.removeMasterRequestItem(el.dataset.item),'master-request-qty-minus':()=>this.adjustMasterRequestQty(el.dataset.item,-1),'master-request-qty-plus':()=>this.adjustMasterRequestQty(el.dataset.item,1),'master-request-send':()=>this.sendMasterRequest(),'master-page-prev':()=>{this.masterView.page=Math.max(1,this.masterView.page-1);this.renderMasterViewerBody()},'master-page-next':()=>{this.masterView.page+=1;this.renderMasterViewerBody()},'master-edit-close':()=>this.closeMasterEdit(),'master-edit-save':()=>this.saveMasterEdit(),'master-import':()=>{if(!this.auth.can('MASTER_IMPORT'))throw new Error('Non hai il permesso per importare il Master.');document.getElementById('masterFile').click()},'master-export':async()=>{if(!this.auth.can('MASTER_EXPORT'))throw new Error('Non hai il permesso per esportare il Master.');const n=await this.excel.export();this.toast(`${n} esportato.`)},'legacy-migrate':()=>{if(!confirm('Migrare una COPIA dei dati REMOTO in NOVA? REMOTO non verrà modificato.'))return;this.excel.migrateLocalLegacy();this.toast('Copia REMOTO migrata in NOVA.');this.router.home()},receiving:()=>go('receiving'),'receipt-new':()=>this.openReceiptNew(),'receipts-pending':()=>go('receipts',{mode:'PENDING'}),'receipts-all':()=>go('receipts',{mode:'ALL'}),'receipt-line-add':()=>this.addReceiptLine(),'receipt-article-add':()=>this.addReceiptArticle(),'receipt-confirm':()=>this.confirmReceipt(),'ddt-camera':()=>document.getElementById('ddtCamera').click(),'ddt-file':()=>document.getElementById('ddtFile').click(),'ddt-analyze':()=>this.openAnalysis('DDT'),'request-camera':()=>document.getElementById('requestCamera').click(),'request-file':()=>document.getElementById('requestFile').click(),'request-analyze':()=>this.openAnalysis('REQUEST'),'analysis-share':()=>this.shareAnalysis(),'analysis-copy':()=>this.copyAnalysisPrompt(),'analysis-import':()=>this.importAnalysisJson(),stock:()=>{if(this.require('STOCK_VIEW'))go('stock')},'rectify-new':()=>{this.rectDraft=null;go('rectify',{key:''})},rectify:()=>{this.rectDraft=null;go('rectify',{key:''})},'rect-filter-toggle':()=>{this.rectFiltersOpen=!this.rectFiltersOpen;this.renderView()},'rect-change':()=>{this.rectDraft=null;this.renderView()},'rect-step-minus':()=>this.stepRect(-1),'rect-step-plus':()=>this.stepRect(1),'rect-cancel':()=>{this.rectDraft=null;this.router.back()},'rectify-save':()=>this.saveRectify(el),count:()=>{this.countDraft=this.countDraft||this.loadCountSession();go('count')},'count-load':()=>this.loadCount(),'count-finalize':()=>this.finalizeCount(),'count-apply':()=>this.applyCount(el),'count-abandon':()=>this.abandonCount(),issue:()=>go('issue'),'issue-confirm':()=>this.confirmIssue(),transfer:()=>go('transfer'),'transfer-confirm':()=>this.confirmTransfer(),requests:()=>go('requests-progress'),'request-new':()=>this.openRequestNew(),'request-line-add':()=>this.addRequestLine(),'request-save':()=>this.saveRequest(),'requests-progress':()=>go('requests-progress'),'requests-process':()=>go('requests-process'),registry:()=>go('registry'),'registry-movements':()=>{this.registryTab='MOVIMENTI';go('registry-list')},'registry-audit':()=>{this.registryTab='AUDIT';go('registry-list')},'registry-export':async()=>{const n=await this.excel.exportRegistry();this.toast(`${n} esportato.`)},admin:()=>go('admin'),'admin-operators':()=>go('admin-operators'),'admin-operator-new':()=>go('admin-operator',{id:''}),'admin-sites':()=>go('admin-sites'),'admin-site-new':()=>go('admin-site',{id:''}),'admin-roles':()=>go('admin-roles'),'admin-pin-generate':()=>this.generateAdminPin(),'admin-pin-dismiss':()=>{this.adminGeneratedPin='';this.renderView()},'activity-today':()=>{this.activityDate=localDateInput();this.renderView()},'activity-date-open':()=>{const input=document.getElementById(el.dataset.target);if(!input)return;try{input.focus({preventScroll:true})}catch{input.focus?.()}if(typeof input.showPicker==='function'){try{input.showPicker();return}catch{}}input.click?.()},'receipt-picker-open':()=>{const input=document.getElementById(el.dataset.target);if(!input)return;try{input.focus({preventScroll:true})}catch{input.focus?.()}if(typeof input.showPicker==='function'){try{input.showPicker();return}catch{}}input.click?.()},'registry-filter-toggle':()=>document.getElementById('registryFilters')?.classList.toggle('hidden')};
+    const map={back:()=>this.router.back(),home:()=>this.router.home(),login:()=>{this.sounds?.click?.();this.openLogin()},'login-submit':()=>this.login(),logout:()=>{this.sounds?.click?.();this.logout()},'site-switch':()=>this.openSiteSwitcher(),'site-select':()=>this.selectSite(el.dataset.site),'site-choice-cancel':()=>this.cancelSiteChoice(),'toggle-pin':()=>{const p=document.getElementById('loginPin'),show=p.type==='password';p.type=show?'text':'password';const i=el.querySelector('i');if(i)i.className=`ph-duotone ph-${show?'eye-slash':'eye'}`;el.setAttribute('aria-label',show?'Nascondi PIN':'Mostra PIN');p.focus()},'view-desktop':()=>this.applyView('desktop'),'view-phone':()=>this.applyView('smartphone'),notifications:()=>this.openNotifications(),master:()=>go('master'),'master-view':()=>go('master'),'master-filter-reset':()=>this.resetMasterFilters(),'master-request-toggle':()=>this.toggleMasterRequestMode(),'master-request-item':()=>this.toggleMasterRequestItem(el.dataset.item),'master-request-locations':()=>this.toggleMasterRequestLocations(el.dataset.item,el),'master-request-review':()=>this.openMasterRequestReview(),'master-request-review-close':()=>document.getElementById('masterRequestDialog')?.close(),'master-request-remove':()=>this.removeMasterRequestItem(el.dataset.item),'master-request-qty-minus':()=>this.adjustMasterRequestQty(el.dataset.item,-1),'master-request-qty-plus':()=>this.adjustMasterRequestQty(el.dataset.item,1),'master-request-send':()=>this.sendMasterRequest(),'master-page-prev':()=>{this.masterView.page=Math.max(1,this.masterView.page-1);this.renderMasterViewerBody()},'master-page-next':()=>{this.masterView.page+=1;this.renderMasterViewerBody()},'master-edit-close':()=>this.closeMasterEdit(),'master-edit-save':()=>this.saveMasterEdit(),'master-remove-open':()=>this.openMasterRemove(),'master-remove-close':()=>this.closeMasterRemove(),'master-remove-confirm':()=>this.confirmMasterRemove(),'master-remove-toggle-pin':()=>this.toggleMasterRemovePin(),'master-import':()=>{if(!this.auth.can('MASTER_IMPORT'))throw new Error('Non hai il permesso per importare il Master.');document.getElementById('masterFile').click()},'master-export':async()=>{if(!this.auth.can('MASTER_EXPORT'))throw new Error('Non hai il permesso per esportare il Master.');const n=await this.excel.export();this.toast(`${n} esportato.`)},'legacy-migrate':()=>{if(!confirm('Migrare una COPIA dei dati REMOTO in NOVA? REMOTO non verrà modificato.'))return;this.excel.migrateLocalLegacy();this.toast('Copia REMOTO migrata in NOVA.');this.router.home()},receiving:()=>go('receiving'),'receipt-new':()=>this.openReceiptNew(),'receipts-pending':()=>go('receipts',{mode:'PENDING'}),'receipts-all':()=>go('receipts',{mode:'ALL'}),'receipt-line-add':()=>this.addReceiptLine(),'receipt-article-add':()=>this.addReceiptArticle(),'receipt-confirm':()=>this.confirmReceipt(),'ddt-camera':()=>document.getElementById('ddtCamera').click(),'ddt-file':()=>document.getElementById('ddtFile').click(),'ddt-analyze':()=>this.openAnalysis('DDT'),'request-camera':()=>document.getElementById('requestCamera').click(),'request-file':()=>document.getElementById('requestFile').click(),'request-analyze':()=>this.openAnalysis('REQUEST'),'analysis-share':()=>this.shareAnalysis(),'analysis-copy':()=>this.copyAnalysisPrompt(),'analysis-import':()=>this.importAnalysisJson(),stock:()=>{if(this.require('STOCK_VIEW'))go('stock')},'rectify-new':()=>{this.rectDraft=null;go('rectify',{key:''})},rectify:()=>{this.rectDraft=null;go('rectify',{key:''})},'rect-filter-toggle':()=>{this.rectFiltersOpen=!this.rectFiltersOpen;this.renderView()},'rect-change':()=>{this.rectDraft=null;this.renderView()},'rect-step-minus':()=>this.stepRect(-1),'rect-step-plus':()=>this.stepRect(1),'rect-cancel':()=>{this.rectDraft=null;this.router.back()},'rectify-save':()=>this.saveRectify(el),count:()=>{this.countDraft=this.countDraft||this.loadCountSession();go('count')},'count-load':()=>this.loadCount(),'count-finalize':()=>this.finalizeCount(),'count-apply':()=>this.applyCount(el),'count-abandon':()=>this.abandonCount(),issue:()=>go('issue'),'issue-confirm':()=>this.confirmIssue(),transfer:()=>go('transfer'),'transfer-confirm':()=>this.confirmTransfer(),requests:()=>go('requests-progress'),'request-new':()=>this.openRequestNew(),'request-line-add':()=>this.addRequestLine(),'request-save':()=>this.saveRequest(),'requests-progress':()=>go('requests-progress'),'requests-process':()=>go('requests-process'),registry:()=>go('registry'),'registry-movements':()=>{this.registryTab='MOVIMENTI';go('registry-list')},'registry-audit':()=>{this.registryTab='AUDIT';go('registry-list')},'registry-export':async()=>{const n=await this.excel.exportRegistry();this.toast(`${n} esportato.`)},admin:()=>go('admin'),'admin-operators':()=>go('admin-operators'),'admin-operator-new':()=>go('admin-operator',{id:''}),'admin-sites':()=>go('admin-sites'),'admin-site-new':()=>go('admin-site',{id:''}),'admin-roles':()=>go('admin-roles'),'admin-pin-generate':()=>this.generateAdminPin(),'admin-pin-dismiss':()=>{this.adminGeneratedPin='';this.renderView()},'activity-today':()=>{this.activityDate=localDateInput();this.renderView()},'activity-date-open':()=>{const input=document.getElementById(el.dataset.target);if(!input)return;try{input.focus({preventScroll:true})}catch{input.focus?.()}if(typeof input.showPicker==='function'){try{input.showPicker();return}catch{}}input.click?.()},'receipt-picker-open':()=>{const input=document.getElementById(el.dataset.target);if(!input)return;try{input.focus({preventScroll:true})}catch{input.focus?.()}if(typeof input.showPicker==='function'){try{input.showPicker();return}catch{}}input.click?.()},'registry-filter-toggle':()=>document.getElementById('registryFilters')?.classList.toggle('hidden')};
     if(map[action])return map[action]();
     if(action==='request-delete')return this.openRequestDelete(el.dataset.id);if(action==='request-delete-close')return this.closeRequestDelete();if(action==='request-delete-confirm')return this.confirmRequestDelete();if(action==='request-delete-toggle-pin')return this.toggleRequestDeletePin();
     if(action==='receipt-article-remove')return this.removeReceiptArticle(el.dataset.group);if(action==='receipt-variant-add')return this.addReceiptVariant(el.dataset.group);if(action==='receipt-variant-remove')return this.removeReceiptVariant(el.dataset.line);if(action==='master-edit-row')return this.openMasterEdit(el.dataset.key);if(action==='admin-operator-edit')return go('admin-operator',{id:el.dataset.id});if(action==='admin-operator-save')return this.saveAdminOperator(el.dataset.id||'');if(action==='admin-site-edit')return go('admin-site',{id:el.dataset.id});if(action==='admin-site-save')return this.saveAdminSite(el.dataset.id||'');if(action==='stock-suggest')return this.applyStockSuggestion(el);if(action==='receipt-line-remove')return this.removeReceiptLine(el.dataset.line);if(action==='partial-add')return this.addPartial(el.dataset.line);if(action==='partial-undo')return this.undoPartial(el.dataset.line);if(action==='partial-clear')return this.clearPartial(el.dataset.line);if(action==='receipt-open')return go('receipt-detail',{id:el.dataset.id});if(action==='putaway-open')return go('putaway',{receipt:el.dataset.receipt,line:el.dataset.line});if(action==='putaway-confirm')return this.confirmPutAway(el.dataset.receipt,el.dataset.line);if(action==='rectify-open'){this.rectDraft=null;return go('rectify',{key:el.dataset.key})}if(action==='rect-select')return this.selectRect(el.dataset.key);if(action==='count-confirm-row')return this.confirmCountRow(el.dataset.dom);if(action==='count-edit')return this.editCountRow(el.dataset.dom);if(action==='count-zero')return this.countZero(el.dataset.dom);if(action==='count-extra-add')return this.addCountExtra();if(action==='count-extra-remove')return this.removeCountExtra(el.dataset.dom);if(action==='request-line-remove')return this.removeRequestLine(el.dataset.line);if(action==='request-open')return go('request-detail',{id:el.dataset.id});if(action==='request-pick')return go('request-pick',{id:el.dataset.id});if(action==='request-pick-save')return this.saveRequestPick(el.dataset.id);if(action==='ledger-cancel')return this.cancelLedger(el.dataset.id);if(action==='notif-read'){this.domain.notifications.markRead(el.dataset.id);this.store.save('notification:read');document.getElementById('notificationDialog').close();if(el.dataset.entity==='RECEIPT')go('receipt-detail',{id:el.dataset.entityId});else if(el.dataset.entity==='REQUEST')go('request-detail',{id:el.dataset.entityId});return}
@@ -16466,6 +16685,6 @@ try{globalThis.__NOVA_LEGACY_AVAILABLE=!!localStorage.getItem(CONFIG.legacyStora
 const switchSite=async siteId=>{await ui.selectSite(siteId);return auth.site()};
 globalThis.NOVA=Object.freeze({version:CONFIG.appVersion,schema:CONFIG.version,identityVersion:CONFIG.identityVersion,store,auth,router,domain,excel,ui,sounds,sites:SITES,operators:OPERATORS,roles:ROLE_DEFS,saveIdentityRegistry,capabilities:Object.freeze({operational:ALL_CAPS,master:MASTER_CAPS,administration:ADMIN_CAPS,globalAdmin:GLOBAL_ADMIN_CAPS}),identityValidation:IDENTITY_VALIDATION,switchSite});
 ui.render();</script>
-<!-- SOMA_BUILD:R31.36-20260925 -->
+<!-- SOMA_BUILD:R31.37-20260925 -->
 </body>
 </html>
