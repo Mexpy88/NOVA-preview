@@ -15941,7 +15941,7 @@ class ExcelService{
     this.store.save('master:remove');
     return summary
   }
-  dirtyCount(){const t=new Date(this.store.db.settings?.lastExportAt||this.store.db.master.importedAt||0).getTime();return(this.store.db.audits||[]).filter(a=>new Date(a.at||0).getTime()>t).length}
+  dirtyCount(){const t=new Date(this.store.db.settings?.lastExportAt||this.store.db.master.importedAt||0).getTime();return(this.store.db.audits||[]).filter(a=>new Date(a.at||0).getTime()>t&&a?.meta?.document!==true).length}
   legacyAvailable(){try{return !!globalThis.localStorage?.getItem?.(CONFIG.legacyStorageKey)}catch{return false}}
   migrateLocalLegacy(){
     const raw=globalThis.localStorage?.getItem?.(CONFIG.legacyStorageKey);if(!raw)throw new Error('Nessun database REMOTO trovato sul dispositivo.');
