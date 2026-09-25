@@ -1,13 +1,13 @@
 <!doctype html>
 <html lang="it">
 <head>
-<meta name="soma-build" content="R31.43-20260925">
+<meta name="soma-build" content="R31.44-20260925">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
 <script id="soma-build-freshness">
 (() => {
-  const CURRENT_BUILD='R31.43-20260925',CHECK_KEY='soma:last-build-refresh';
+  const CURRENT_BUILD='R31.44-20260925',CHECK_KEY='soma:last-build-refresh';
   globalThis.SOMA_BUILD=CURRENT_BUILD;
   const check=async()=>{
     try{
@@ -15548,6 +15548,133 @@ body.desktop-mode .app-view:has(.receipt-new-shell){width:100%!important;max-wid
 @media(max-width:980px){.issue-selected-card{grid-template-columns:minmax(190px,.8fr) minmax(280px,1.2fr) 90px auto}.issue-source-option{grid-template-columns:minmax(150px,.9fr) minmax(180px,1fr) minmax(120px,.7fr) 60px 18px}.issue-change-source span{display:none}}
 @media(max-width:700px){.movement-issue-v2{padding:12px!important;border-radius:18px!important}.issue-step{padding:10px;border-radius:14px}.issue-selected-card{grid-template-columns:minmax(0,1fr) 70px;grid-template-areas:"identity qty" "meta meta" "change change";gap:8px;padding:11px}.issue-selected-identity{grid-area:identity}.issue-selected-meta{grid-area:meta;grid-template-columns:1fr 1fr}.issue-selected-qty{grid-area:qty}.issue-change-source{grid-area:change;width:100%}.issue-change-source span{display:inline}.issue-details-grid{grid-template-columns:1fr}.issue-confirm-bar{grid-template-columns:1fr;padding:10px}.issue-source-option{grid-template-columns:minmax(0,1fr) 58px 18px;grid-template-areas:"main stock go" "loc loc loc" "pallet pallet pallet";gap:3px 6px;padding:8px}.issue-source-main{grid-area:main}.issue-source-location{grid-area:loc}.issue-source-pallet{grid-area:pallet}.issue-source-stock{grid-area:stock}.issue-source-go{grid-area:go}.issue-source-location b,.issue-source-pallet b{white-space:normal}.issue-source-list{max-height:310px}}
 </style>
+
+<style id="soma-r31-44-issue-readability">
+/* R31.44 · Scarica · readability + safe clear-selection action */
+.movement-issue-v2{padding:20px!important}
+.issue-form-head-v2{padding-bottom:17px!important;margin-bottom:14px!important}
+.issue-form-head-v2>div>b{font-size:21px!important;line-height:1.15}
+.issue-form-head-v2>div>small{font-size:13px!important;line-height:1.4;margin-top:5px!important}
+.issue-form-head-v2 .movement-form-icon{font-size:38px!important}
+
+.issue-step{padding:16px;margin-top:12px}
+.issue-step-head{gap:12px;margin-bottom:14px}
+.issue-step-head>span{width:34px;height:34px;border-radius:10px;font-size:13px}
+.issue-step-head b{font-size:17px;line-height:1.2}
+.issue-step-head small{font-size:12px;line-height:1.4;margin-top:2px}
+
+.issue-selected-card{
+  grid-template-columns:minmax(240px,.86fr) minmax(390px,1.3fr) 120px minmax(190px,auto);
+  gap:14px;min-height:96px;padding:14px 14px 14px 18px
+}
+.issue-selected-identity>small{font-size:9.5px;margin-bottom:6px}
+.issue-selected-identity>div{gap:9px}
+.issue-selected-identity>div b{font-size:20px;line-height:1.15}
+.issue-selected-identity>div span{min-width:38px;height:30px;padding:0 9px;font-size:13px}
+.issue-selected-identity>.stock-state-pill{margin-top:9px;min-height:27px;padding:4px 9px;font-size:10.5px;gap:6px}
+.issue-selected-identity>.stock-state-pill i{width:6px;height:6px}
+
+.issue-selected-meta{gap:10px}
+.issue-selected-meta>div{gap:10px;padding:11px 12px;border-radius:13px}
+.issue-meta-icon{font-size:21px}
+.issue-selected-meta small{font-size:9px;margin-bottom:3px}
+.issue-selected-meta b{font-size:13px}
+.issue-selected-meta em{font-size:8.5px;padding:3px 6px}
+
+.issue-selected-qty small{font-size:9.5px}
+.issue-selected-qty strong{font-size:36px}
+.issue-selected-qty span{font-size:10px;margin-top:2px}
+
+.issue-selected-actions{display:flex;align-items:center;justify-content:flex-end;gap:8px;flex-wrap:wrap}
+.issue-change-source,.issue-delete-source{
+  min-height:40px;padding:0 12px;border-radius:10px;
+  display:inline-flex;align-items:center;justify-content:center;gap:6px;
+  font-size:11.5px;font-weight:950;white-space:nowrap
+}
+.issue-change-source .ph,.issue-delete-source .ph{font-size:16px}
+.issue-delete-source{border:1px solid #efc7c4;background:#fff7f6;color:#c44742}
+.issue-delete-source:hover{background:#ffefed;border-color:#e8aaa5}
+.issue-selected-empty{min-height:82px;padding:14px 16px;gap:12px}
+.issue-selected-empty>.ph{font-size:28px}
+.issue-selected-empty b{font-size:15px}
+.issue-selected-empty small{font-size:12px;line-height:1.35}
+.issue-selected-empty.is-cleared{border-color:#ddd9f5;background:#faf9ff;color:#6654d9}
+.issue-selected-empty.is-cleared small{color:#7d7894}
+
+.issue-picker{padding:12px;margin-top:12px}
+.issue-picker-search>span{left:15px;font-size:20px}
+.issue-picker-search .field{height:48px!important;min-height:48px!important;padding-left:44px!important;font-size:14.5px!important}
+.issue-source-result-head{min-height:39px;padding:7px 4px}
+.issue-source-result-head span{font-size:12px}
+.issue-source-result-head b{font-size:15px}
+.issue-source-result-head small{font-size:10px}
+.issue-source-list{max-height:410px}
+.issue-source-option{min-height:58px;padding:9px 11px;grid-template-columns:minmax(200px,.9fr) minmax(250px,1.1fr) minmax(165px,.72fr) 78px 24px}
+.issue-source-name b{font-size:13px}
+.issue-source-name i{min-width:34px;height:27px;font-size:10.5px}
+.issue-source-main>.stock-state-pill{min-height:24px;padding:3px 7px;font-size:9px}
+.issue-source-location>.ph,.issue-source-pallet>.ph{font-size:17px}
+.issue-source-location b,.issue-source-pallet b{font-size:11.5px}
+.issue-source-stock small{font-size:8px}
+.issue-source-stock strong{font-size:20px}
+.issue-source-go{font-size:16px}
+.issue-source-none b{font-size:14px}
+.issue-source-none small{font-size:11.5px}
+
+.issue-details-step{padding-bottom:16px}
+.issue-details-grid{gap:12px}
+.issue-field-label{margin-bottom:7px;font-size:10.5px}
+.issue-field-label em{font-size:8px;padding:3px 6px}
+.movement-issue-v2 .issue-details-step .field{
+  height:52px!important;min-height:52px!important;border-radius:13px!important;
+  font-size:15px!important
+}
+.issue-qty-input .field{font-size:21px!important;padding-right:48px!important}
+.issue-qty-input>span{right:15px;font-size:11px}
+.issue-qty-hint{min-height:18px;margin-top:7px;font-size:11.5px}
+.issue-note-control{margin-top:13px!important}
+
+.issue-confirm-bar{margin-top:14px;padding:14px 14px 14px 16px;gap:16px}
+.issue-confirm-bar>div{gap:11px}
+.issue-confirm-bar>div>.ph{font-size:27px}
+.issue-confirm-bar>div b{font-size:13.5px}
+.issue-confirm-bar>div small{font-size:11px;line-height:1.35}
+.issue-confirm-btn{min-height:50px!important;font-size:13px!important}
+
+@media(max-width:1180px){
+  .issue-selected-card{grid-template-columns:minmax(210px,.8fr) minmax(300px,1.15fr) 105px minmax(150px,auto)}
+  .issue-change-source,.issue-delete-source{padding:0 9px;font-size:10.5px}
+}
+@media(max-width:980px){
+  .issue-selected-card{grid-template-columns:minmax(190px,.8fr) minmax(270px,1.1fr) 95px auto}
+  .issue-selected-actions{display:grid;grid-template-columns:1fr;gap:6px}
+  .issue-change-source span,.issue-delete-source span{display:none}
+  .issue-change-source,.issue-delete-source{width:42px;padding:0}
+}
+@media(max-width:700px){
+  .movement-issue-v2{padding:12px!important}
+  .issue-form-head-v2>div>b{font-size:19px!important}
+  .issue-form-head-v2>div>small{font-size:12px!important}
+  .issue-step{padding:11px}
+  .issue-step-head b{font-size:15px}
+  .issue-step-head small{font-size:11px}
+  .issue-selected-card{
+    grid-template-columns:minmax(0,1fr) 78px;
+    grid-template-areas:"identity qty" "meta meta" "actions actions";
+    gap:9px;padding:12px
+  }
+  .issue-selected-identity{grid-area:identity}
+  .issue-selected-meta{grid-area:meta}
+  .issue-selected-qty{grid-area:qty}
+  .issue-selected-actions{grid-area:actions;display:grid;grid-template-columns:1fr 1fr;gap:8px}
+  .issue-change-source,.issue-delete-source{width:100%;min-height:42px}
+  .issue-change-source span,.issue-delete-source span{display:inline}
+  .issue-selected-identity>div b{font-size:17px}
+  .issue-selected-meta b{font-size:11.5px}
+  .issue-details-grid{grid-template-columns:1fr}
+  .issue-confirm-bar{grid-template-columns:1fr}
+}
+</style>
 </head>
 <body>
 <header id="topbar" class="topbar"></header>
@@ -17090,15 +17217,16 @@ class UI{
     return this.domain.stock.positive().slice().sort((a,b)=>collator.compare(normalizeArticle(a.article),normalizeArticle(b.article))||compareSize(a.size,b.size)||collator.compare(norm(a.location),norm(b.location))||collator.compare(norm(a.pallet),norm(b.pallet))||collator.compare(norm(a.state),norm(b.state)))
   }
   issueSelected(){
-    const rows=this.issueRows();if(!rows.length){this.issueSourceKey='';return null}
+    const rows=this.issueRows();if(!rows.length){this.issueSourceKey='';this.issueSourceCleared=false;return null}
+    if(this.issueSourceCleared)return null;
     const current=this.issueSourceKey?this.domain.stock.findByKey(this.issueSourceKey):null;
     if(current&&Number(current.quantity||0)>0)return current;
     this.issueSourceKey=bucketKey(rows[0]);return rows[0]
   }
   issueSelectedHtml(r){
-    if(!r)return `<div class="issue-selected-empty">${phIcon('warning-circle')}<div><b>Nessuna giacenza disponibile</b><small>Non ci sono righe con quantità positiva da scaricare.</small></div></div>`;
+    if(!r){const hasRows=this.issueRows().length>0;return hasRows?`<div class="issue-selected-empty is-cleared">${phIcon('cursor-click')}<div><b>Nessuna giacenza selezionata</b><small>Scegli la giacenza corretta dall'elenco qui sotto.</small></div></div>`:`<div class="issue-selected-empty">${phIcon('warning-circle')}<div><b>Nessuna giacenza disponibile</b><small>Non ci sono righe con quantità positiva da scaricare.</small></div></div>`}
     const receiving=r.location===CONFIG.receivingLocation,stateClass=this.stockStateClass(r.state);
-    return `<article class="issue-selected-card ${stateClass}"><div class="issue-selected-identity"><small>ARTICOLO SELEZIONATO</small><div><b>${esc(r.article)}</b>${r.size?`<span>${esc(r.size)}</span>`:''}</div><span class="stock-state-pill ${stateClass}"><i></i>${esc(r.state)}</span></div><div class="issue-selected-meta"><div><span class="issue-meta-icon">${phIcon('map-pin-line')}</span><span><small>POSIZIONE · FILA · SCAFFALE</small><b>${esc(receiving?'AREA RICEVIMENTO':r.location||'—')}</b>${receiving?'<em>DA UBICARE</em>':''}</span></div><div><span class="issue-meta-icon">${phIcon('stack')}</span><span><small>BANCALE</small><b>${esc(r.pallet||'—')}</b></span></div></div><div class="issue-selected-qty"><small>DISPONIBILI</small><strong>${Number(r.quantity||0)}</strong><span>pezzi</span></div><button type="button" class="issue-change-source" data-action="issue-picker-toggle">${phIcon('arrows-clockwise')}<span>CAMBIA</span></button></article>`
+    return `<article class="issue-selected-card ${stateClass}"><div class="issue-selected-identity"><small>ARTICOLO SELEZIONATO</small><div><b>${esc(r.article)}</b>${r.size?`<span>${esc(r.size)}</span>`:''}</div><span class="stock-state-pill ${stateClass}"><i></i>${esc(r.state)}</span></div><div class="issue-selected-meta"><div><span class="issue-meta-icon">${phIcon('map-pin-line')}</span><span><small>POSIZIONE · FILA · SCAFFALE</small><b>${esc(receiving?'AREA RICEVIMENTO':r.location||'—')}</b>${receiving?'<em>DA UBICARE</em>':''}</span></div><div><span class="issue-meta-icon">${phIcon('stack')}</span><span><small>BANCALE</small><b>${esc(r.pallet||'—')}</b></span></div></div><div class="issue-selected-qty"><small>DISPONIBILI</small><strong>${Number(r.quantity||0)}</strong><span>pezzi</span></div><div class="issue-selected-actions"><button type="button" class="issue-change-source" data-action="issue-picker-toggle">${phIcon('arrows-clockwise')}<span>CAMBIA</span></button><button type="button" class="issue-delete-source" data-action="issue-source-clear">${phIcon('trash')}<span>ELIMINA</span></button></div></article>`
   }
   issue(){
     if(!this.require('MOVE'))return'';if(!this.masterReady())return this.masterRequiredView({context:'scaricare merce dalla giacenza',backAction:'home',backLabel:'TORNA ALLA DASHBOARD'});
@@ -17119,13 +17247,23 @@ class UI{
   }
   selectIssueSource(key){
     const row=this.domain.stock.findByKey(key);if(!row||Number(row.quantity||0)<=0){this.toast('Questa giacenza non è più disponibile.','error');this.renderIssueSources();return}
-    this.issueSourceKey=key;this.issuePickerOpen=false;
+    this.issueSourceKey=key;this.issueSourceCleared=false;this.issuePickerOpen=false;
     const hidden=document.getElementById('issueSource');if(hidden)hidden.value=key;
     const selected=document.getElementById('issueSelectedHost');if(selected)selected.innerHTML=this.issueSelectedHtml(row);
     document.getElementById('issuePicker')?.classList.add('hidden');
     const search=document.getElementById('issueSourceSearch');if(search)search.value='';
     const qty=document.getElementById('issueQty');if(qty){qty.value='';qty.max=String(Number(row.quantity||0))}
     this.updateIssueQtyState();requestAnimationFrame(()=>qty?.focus())
+  }
+  clearIssueSource(){
+    this.issueSourceKey='';this.issueSourceCleared=true;this.issuePickerOpen=true;
+    const hidden=document.getElementById('issueSource');if(hidden)hidden.value='';
+    const selected=document.getElementById('issueSelectedHost');if(selected)selected.innerHTML=this.issueSelectedHtml(null);
+    const panel=document.getElementById('issuePicker');panel?.classList.remove('hidden');
+    const search=document.getElementById('issueSourceSearch');if(search)search.value='';
+    const qty=document.getElementById('issueQty');if(qty){qty.value='';qty.removeAttribute('max')}
+    this.renderIssueSources();this.updateIssueQtyState();
+    requestAnimationFrame(()=>document.getElementById('issueSourceSearch')?.focus())
   }
   updateIssueQtyState(){
     const sourceKey=document.getElementById('issueSource')?.value||'',row=sourceKey?this.domain.stock.findByKey(sourceKey):null,qty=document.getElementById('issueQty'),hint=document.getElementById('issueQtyHint'),button=document.querySelector('.issue-confirm-btn');
@@ -17142,7 +17280,7 @@ class UI{
   }
   confirmIssue(){
     const issue=this.domain.movements.issue({sourceKey:document.getElementById('issueSource').value,quantity:document.getElementById('issueQty').value,destination:document.getElementById('issueDestination').value,note:document.getElementById('issueNote').value});
-    this.issueSourceKey='';this.issuePickerOpen=false;this.toast(`Scarico ${issue.id} registrato.`);this.router.home()
+    this.issueSourceKey='';this.issueSourceCleared=false;this.issuePickerOpen=false;this.toast(`Scarico ${issue.id} registrato.`);this.router.home()
   }
   transfer(){if(!this.require('MOVE'))return'';if(!this.masterReady())return this.masterRequiredView({context:'spostare merce tra le posizioni',backAction:'home',backLabel:'TORNA ALLA DASHBOARD'});return `${this.sectionTitle('MOVIMENTAZIONE','Sposta')}<section class="form-card movement-form movement-transfer"><div class="movement-form-head"><span class="movement-form-icon">${phIcon('arrows-left-right')}</span><div><b>Spostamento interno</b><small>Trasferisci la giacenza mantenendo la tracciabilità</small></div></div><label>Giacenza da spostare${this.sourceSelect('transferSource')}</label><label>Quantità<input id="transferQty" type="number" min="1" class="field"></label><div class="two movement-two"><label>Nuova Fila/Scaffale<input id="transferLocation" class="field"></label><label>Nuovo Bancale/Carrello<input id="transferPallet" class="field"></label></div><label>Note<input id="transferNote" class="field"></label><button class="primary movement-cta" data-action="transfer-confirm">${phIcon('arrows-left-right','inline-icon')} CONFERMA SPOSTAMENTO</button></section>`}
   confirmTransfer(){this.domain.movements.transfer({sourceKey:document.getElementById('transferSource').value,quantity:document.getElementById('transferQty').value,location:document.getElementById('transferLocation').value,pallet:document.getElementById('transferPallet').value,note:document.getElementById('transferNote').value});this.toast('Spostamento registrato.');this.router.home()}
@@ -17310,7 +17448,7 @@ class UI{
 
   action(action,el){
     const go=(name,params={})=>this.router.go(name,params);
-    const map={back:()=>this.router.back(),home:()=>this.router.home(),login:()=>{this.sounds?.click?.();this.openLogin()},'login-submit':()=>this.login(),logout:()=>{this.sounds?.click?.();this.logout()},'site-switch':()=>this.openSiteSwitcher(),'site-select':()=>this.selectSite(el.dataset.site),'site-choice-cancel':()=>this.cancelSiteChoice(),'toggle-pin':()=>{const p=document.getElementById('loginPin'),show=p.type==='password';p.type=show?'text':'password';const i=el.querySelector('i');if(i)i.className=`ph-duotone ph-${show?'eye-slash':'eye'}`;el.setAttribute('aria-label',show?'Nascondi PIN':'Mostra PIN');p.focus()},'view-desktop':()=>this.applyView('desktop'),'view-phone':()=>this.applyView('smartphone'),notifications:()=>this.openNotifications(),master:()=>go('master'),'master-view':()=>go('master'),'master-filter-reset':()=>this.resetMasterFilters(),'master-request-toggle':()=>this.toggleMasterRequestMode(),'master-request-item':()=>this.toggleMasterRequestItem(el.dataset.item),'master-request-locations':()=>this.toggleMasterRequestLocations(el.dataset.item,el),'master-request-review':()=>this.openMasterRequestReview(),'master-request-review-close':()=>document.getElementById('masterRequestDialog')?.close(),'master-request-remove':()=>this.removeMasterRequestItem(el.dataset.item),'master-request-qty-minus':()=>this.adjustMasterRequestQty(el.dataset.item,-1),'master-request-qty-plus':()=>this.adjustMasterRequestQty(el.dataset.item,1),'master-request-send':()=>this.sendMasterRequest(),'master-page-prev':()=>{this.masterView.page=Math.max(1,this.masterView.page-1);this.renderMasterViewerBody()},'master-page-next':()=>{this.masterView.page+=1;this.renderMasterViewerBody()},'master-edit-close':()=>this.closeMasterEdit(),'master-edit-save':()=>this.saveMasterEdit(),'master-remove-open':()=>this.openMasterRemove(),'master-remove-close':()=>this.closeMasterRemove(),'master-remove-confirm':()=>this.confirmMasterRemove(),'master-remove-toggle-pin':()=>this.toggleMasterRemovePin(),'master-import':()=>{if(!this.auth.can('MASTER_IMPORT'))throw new Error('Non hai il permesso per importare il Master.');document.getElementById('masterFile').click()},'master-export':async()=>{if(!this.auth.can('MASTER_EXPORT'))throw new Error('Non hai il permesso per esportare il Master.');const n=await this.excel.export();this.toast(`${n} esportato.`)},'legacy-migrate':()=>{if(!confirm('Migrare una COPIA dei dati REMOTO in NOVA? REMOTO non verrà modificato.'))return;this.excel.migrateLocalLegacy();this.toast('Copia REMOTO migrata in NOVA.');this.router.home()},receiving:()=>go('receiving'),'receipt-new':()=>this.openReceiptNew(),'receipts-pending':()=>go('receipts',{mode:'PENDING'}),'receipts-all':()=>go('receipts',{mode:'ALL'}),'receipt-line-add':()=>this.addReceiptLine(),'receipt-article-add':()=>this.addReceiptArticle(),'receipt-confirm':()=>this.confirmReceipt(),'ddt-camera':()=>document.getElementById('ddtCamera').click(),'ddt-file':()=>document.getElementById('ddtFile').click(),'ddt-analyze':()=>this.openAnalysis('DDT'),'request-camera':()=>document.getElementById('requestCamera').click(),'request-file':()=>document.getElementById('requestFile').click(),'request-analyze':()=>this.openAnalysis('REQUEST'),'analysis-share':()=>this.shareAnalysis(),'analysis-copy':()=>this.copyAnalysisPrompt(),'analysis-import':()=>this.importAnalysisJson(),stock:()=>{if(this.require('STOCK_VIEW'))go('stock')},'rectify-new':()=>{this.rectDraft=null;go('rectify',{key:''})},rectify:()=>{this.rectDraft=null;go('rectify',{key:''})},'rect-filter-toggle':()=>{this.rectFiltersOpen=!this.rectFiltersOpen;this.renderView()},'rect-change':()=>{this.rectDraft=null;this.renderView()},'rect-step-minus':()=>this.stepRect(-1),'rect-step-plus':()=>this.stepRect(1),'rect-cancel':()=>{this.rectDraft=null;this.router.back()},'rectify-save':()=>this.saveRectify(el),count:()=>{this.countDraft=this.countDraft||this.loadCountSession();go('count')},'count-load':()=>this.loadCount(),'count-finalize':()=>this.finalizeCount(),'count-apply':()=>this.applyCount(el),'count-abandon':()=>this.abandonCount(),issue:()=>go('issue'),'issue-picker-toggle':()=>this.toggleIssuePicker(),'issue-source-select':()=>this.selectIssueSource(el.dataset.key),'issue-confirm':()=>this.confirmIssue(),transfer:()=>go('transfer'),'transfer-confirm':()=>this.confirmTransfer(),requests:()=>go('requests-progress'),'request-new':()=>this.openRequestNew(),'request-line-add':()=>this.addRequestLine(),'request-save':()=>this.saveRequest(),'requests-progress':()=>go('requests-progress'),'requests-process':()=>go('requests-process'),'request-print':()=>this.exportRequestDocument('print',el.dataset.id),'request-pdf':()=>this.exportRequestDocument('pdf',el.dataset.id),'request-excel':()=>this.exportRequestDocument('excel',el.dataset.id),'request-list-excel':()=>this.exportRequestList(el.dataset.mode||'PROGRESS'),registry:()=>go('registry'),'registry-movements':()=>{this.registryTab='MOVIMENTI';go('registry-list')},'registry-audit':()=>{this.registryTab='AUDIT';go('registry-list')},'registry-export':async()=>{const n=await this.excel.exportRegistry();this.toast(`${n} esportato.`)},admin:()=>go('admin'),'admin-operators':()=>go('admin-operators'),'admin-operator-new':()=>go('admin-operator',{id:''}),'admin-sites':()=>go('admin-sites'),'admin-site-new':()=>go('admin-site',{id:''}),'admin-roles':()=>go('admin-roles'),'admin-pin-generate':()=>this.generateAdminPin(),'admin-pin-dismiss':()=>{this.adminGeneratedPin='';this.renderView()},'activity-today':()=>{this.activityDate=localDateInput();this.renderView()},'activity-date-open':()=>{const input=document.getElementById(el.dataset.target);if(!input)return;try{input.focus({preventScroll:true})}catch{input.focus?.()}if(typeof input.showPicker==='function'){try{input.showPicker();return}catch{}}input.click?.()},'receipt-picker-open':()=>{const input=document.getElementById(el.dataset.target);if(!input)return;try{input.focus({preventScroll:true})}catch{input.focus?.()}if(typeof input.showPicker==='function'){try{input.showPicker();return}catch{}}input.click?.()},'registry-filter-toggle':()=>document.getElementById('registryFilters')?.classList.toggle('hidden')};
+    const map={back:()=>this.router.back(),home:()=>this.router.home(),login:()=>{this.sounds?.click?.();this.openLogin()},'login-submit':()=>this.login(),logout:()=>{this.sounds?.click?.();this.logout()},'site-switch':()=>this.openSiteSwitcher(),'site-select':()=>this.selectSite(el.dataset.site),'site-choice-cancel':()=>this.cancelSiteChoice(),'toggle-pin':()=>{const p=document.getElementById('loginPin'),show=p.type==='password';p.type=show?'text':'password';const i=el.querySelector('i');if(i)i.className=`ph-duotone ph-${show?'eye-slash':'eye'}`;el.setAttribute('aria-label',show?'Nascondi PIN':'Mostra PIN');p.focus()},'view-desktop':()=>this.applyView('desktop'),'view-phone':()=>this.applyView('smartphone'),notifications:()=>this.openNotifications(),master:()=>go('master'),'master-view':()=>go('master'),'master-filter-reset':()=>this.resetMasterFilters(),'master-request-toggle':()=>this.toggleMasterRequestMode(),'master-request-item':()=>this.toggleMasterRequestItem(el.dataset.item),'master-request-locations':()=>this.toggleMasterRequestLocations(el.dataset.item,el),'master-request-review':()=>this.openMasterRequestReview(),'master-request-review-close':()=>document.getElementById('masterRequestDialog')?.close(),'master-request-remove':()=>this.removeMasterRequestItem(el.dataset.item),'master-request-qty-minus':()=>this.adjustMasterRequestQty(el.dataset.item,-1),'master-request-qty-plus':()=>this.adjustMasterRequestQty(el.dataset.item,1),'master-request-send':()=>this.sendMasterRequest(),'master-page-prev':()=>{this.masterView.page=Math.max(1,this.masterView.page-1);this.renderMasterViewerBody()},'master-page-next':()=>{this.masterView.page+=1;this.renderMasterViewerBody()},'master-edit-close':()=>this.closeMasterEdit(),'master-edit-save':()=>this.saveMasterEdit(),'master-remove-open':()=>this.openMasterRemove(),'master-remove-close':()=>this.closeMasterRemove(),'master-remove-confirm':()=>this.confirmMasterRemove(),'master-remove-toggle-pin':()=>this.toggleMasterRemovePin(),'master-import':()=>{if(!this.auth.can('MASTER_IMPORT'))throw new Error('Non hai il permesso per importare il Master.');document.getElementById('masterFile').click()},'master-export':async()=>{if(!this.auth.can('MASTER_EXPORT'))throw new Error('Non hai il permesso per esportare il Master.');const n=await this.excel.export();this.toast(`${n} esportato.`)},'legacy-migrate':()=>{if(!confirm('Migrare una COPIA dei dati REMOTO in NOVA? REMOTO non verrà modificato.'))return;this.excel.migrateLocalLegacy();this.toast('Copia REMOTO migrata in NOVA.');this.router.home()},receiving:()=>go('receiving'),'receipt-new':()=>this.openReceiptNew(),'receipts-pending':()=>go('receipts',{mode:'PENDING'}),'receipts-all':()=>go('receipts',{mode:'ALL'}),'receipt-line-add':()=>this.addReceiptLine(),'receipt-article-add':()=>this.addReceiptArticle(),'receipt-confirm':()=>this.confirmReceipt(),'ddt-camera':()=>document.getElementById('ddtCamera').click(),'ddt-file':()=>document.getElementById('ddtFile').click(),'ddt-analyze':()=>this.openAnalysis('DDT'),'request-camera':()=>document.getElementById('requestCamera').click(),'request-file':()=>document.getElementById('requestFile').click(),'request-analyze':()=>this.openAnalysis('REQUEST'),'analysis-share':()=>this.shareAnalysis(),'analysis-copy':()=>this.copyAnalysisPrompt(),'analysis-import':()=>this.importAnalysisJson(),stock:()=>{if(this.require('STOCK_VIEW'))go('stock')},'rectify-new':()=>{this.rectDraft=null;go('rectify',{key:''})},rectify:()=>{this.rectDraft=null;go('rectify',{key:''})},'rect-filter-toggle':()=>{this.rectFiltersOpen=!this.rectFiltersOpen;this.renderView()},'rect-change':()=>{this.rectDraft=null;this.renderView()},'rect-step-minus':()=>this.stepRect(-1),'rect-step-plus':()=>this.stepRect(1),'rect-cancel':()=>{this.rectDraft=null;this.router.back()},'rectify-save':()=>this.saveRectify(el),count:()=>{this.countDraft=this.countDraft||this.loadCountSession();go('count')},'count-load':()=>this.loadCount(),'count-finalize':()=>this.finalizeCount(),'count-apply':()=>this.applyCount(el),'count-abandon':()=>this.abandonCount(),issue:()=>go('issue'),'issue-picker-toggle':()=>this.toggleIssuePicker(),'issue-source-select':()=>this.selectIssueSource(el.dataset.key),'issue-source-clear':()=>this.clearIssueSource(),'issue-confirm':()=>this.confirmIssue(),transfer:()=>go('transfer'),'transfer-confirm':()=>this.confirmTransfer(),requests:()=>go('requests-progress'),'request-new':()=>this.openRequestNew(),'request-line-add':()=>this.addRequestLine(),'request-save':()=>this.saveRequest(),'requests-progress':()=>go('requests-progress'),'requests-process':()=>go('requests-process'),'request-print':()=>this.exportRequestDocument('print',el.dataset.id),'request-pdf':()=>this.exportRequestDocument('pdf',el.dataset.id),'request-excel':()=>this.exportRequestDocument('excel',el.dataset.id),'request-list-excel':()=>this.exportRequestList(el.dataset.mode||'PROGRESS'),registry:()=>go('registry'),'registry-movements':()=>{this.registryTab='MOVIMENTI';go('registry-list')},'registry-audit':()=>{this.registryTab='AUDIT';go('registry-list')},'registry-export':async()=>{const n=await this.excel.exportRegistry();this.toast(`${n} esportato.`)},admin:()=>go('admin'),'admin-operators':()=>go('admin-operators'),'admin-operator-new':()=>go('admin-operator',{id:''}),'admin-sites':()=>go('admin-sites'),'admin-site-new':()=>go('admin-site',{id:''}),'admin-roles':()=>go('admin-roles'),'admin-pin-generate':()=>this.generateAdminPin(),'admin-pin-dismiss':()=>{this.adminGeneratedPin='';this.renderView()},'activity-today':()=>{this.activityDate=localDateInput();this.renderView()},'activity-date-open':()=>{const input=document.getElementById(el.dataset.target);if(!input)return;try{input.focus({preventScroll:true})}catch{input.focus?.()}if(typeof input.showPicker==='function'){try{input.showPicker();return}catch{}}input.click?.()},'receipt-picker-open':()=>{const input=document.getElementById(el.dataset.target);if(!input)return;try{input.focus({preventScroll:true})}catch{input.focus?.()}if(typeof input.showPicker==='function'){try{input.showPicker();return}catch{}}input.click?.()},'registry-filter-toggle':()=>document.getElementById('registryFilters')?.classList.toggle('hidden')};
     if(map[action])return map[action]();
     if(action==='request-delete')return this.openRequestDelete(el.dataset.id);if(action==='request-delete-close')return this.closeRequestDelete();if(action==='request-delete-confirm')return this.confirmRequestDelete();if(action==='request-delete-toggle-pin')return this.toggleRequestDeletePin();
     if(action==='receipt-article-remove')return this.removeReceiptArticle(el.dataset.group);if(action==='receipt-variant-add')return this.addReceiptVariant(el.dataset.group);if(action==='receipt-variant-remove')return this.removeReceiptVariant(el.dataset.line);if(action==='master-edit-row')return this.openMasterEdit(el.dataset.key);if(action==='admin-operator-edit')return go('admin-operator',{id:el.dataset.id});if(action==='admin-operator-save')return this.saveAdminOperator(el.dataset.id||'');if(action==='admin-site-edit')return go('admin-site',{id:el.dataset.id});if(action==='admin-site-save')return this.saveAdminSite(el.dataset.id||'');if(action==='stock-suggest')return this.applyStockSuggestion(el);if(action==='receipt-line-remove')return this.removeReceiptLine(el.dataset.line);if(action==='partial-add')return this.addPartial(el.dataset.line);if(action==='partial-undo')return this.undoPartial(el.dataset.line);if(action==='partial-clear')return this.clearPartial(el.dataset.line);if(action==='receipt-open')return go('receipt-detail',{id:el.dataset.id});if(action==='putaway-open')return go('putaway',{receipt:el.dataset.receipt,line:el.dataset.line});if(action==='putaway-confirm')return this.confirmPutAway(el.dataset.receipt,el.dataset.line);if(action==='rectify-open'){this.rectDraft=null;return go('rectify',{key:el.dataset.key})}if(action==='rect-select')return this.selectRect(el.dataset.key);if(action==='count-confirm-row')return this.confirmCountRow(el.dataset.dom);if(action==='count-edit')return this.editCountRow(el.dataset.dom);if(action==='count-zero')return this.countZero(el.dataset.dom);if(action==='count-extra-add')return this.addCountExtra();if(action==='count-extra-remove')return this.removeCountExtra(el.dataset.dom);if(action==='request-line-remove')return this.removeRequestLine(el.dataset.line);if(action==='request-open')return go('request-detail',{id:el.dataset.id});if(action==='request-pick')return go('request-pick',{id:el.dataset.id});if(action==='request-pick-save')return this.saveRequestPick(el.dataset.id);if(action==='ledger-cancel')return this.cancelLedger(el.dataset.id);if(action==='notif-read'){this.domain.notifications.markRead(el.dataset.id);this.store.save('notification:read');document.getElementById('notificationDialog').close();if(el.dataset.entity==='RECEIPT')go('receipt-detail',{id:el.dataset.entityId});else if(el.dataset.entity==='REQUEST')go('request-detail',{id:el.dataset.entityId});return}
@@ -17336,6 +17474,6 @@ try{globalThis.__NOVA_LEGACY_AVAILABLE=!!localStorage.getItem(CONFIG.legacyStora
 const switchSite=async siteId=>{await ui.selectSite(siteId);return auth.site()};
 globalThis.NOVA=Object.freeze({version:CONFIG.appVersion,schema:CONFIG.version,identityVersion:CONFIG.identityVersion,store,auth,router,domain,excel,requestDocs,ui,sounds,sites:SITES,operators:OPERATORS,roles:ROLE_DEFS,saveIdentityRegistry,capabilities:Object.freeze({operational:ALL_CAPS,master:MASTER_CAPS,administration:ADMIN_CAPS,globalAdmin:GLOBAL_ADMIN_CAPS}),identityValidation:IDENTITY_VALIDATION,switchSite});
 ui.render();</script>
-<!-- SOMA_BUILD:R31.43-20260925 -->
+<!-- SOMA_BUILD:R31.44-20260925 -->
 </body>
 </html>
