@@ -16330,7 +16330,7 @@ class RequestDocumentService{
 
     ws.autoFilter={from:{row:headerRow,column:1},to:{row:dataEnd,column:9}};ws.pageSetup.printArea='A1:I'+signLine;ws.views=[{state:'normal',showGridLines:false,zoomScale:90,activeCell:'A1'}];
     const raw=await wb.xlsx.writeBuffer(),JSZip=await ensureJsZip(),zip=await JSZip.loadAsync(raw),sheet=zip.file('xl/worksheets/sheet1.xml');
-    if(sheet&&model.rows.length){const xml=await sheet.async('string'),sqref='C'+firstData+':C'+dataEnd,ignored='<ignoredErrors><ignoredError sqref="'+sqref+'" numberStoredAsText="1"/></ignoredErrors>';zip.file('xl/worksheets/sheet1.xml',xml.includes('<ignoredErrors>')?xml:xml.replace('</worksheet>',ignored+'</worksheet>'))}
+    if(sheet&&model.rows.length){const xml=await sheet.async('string'),sqref='C'+firstData+':C'+dataEnd,ignored='<ignoredErrors><ignoredError sqref="'+sqref+'" numberStoredAsText="1"/></ignoredErrors>',anchor=xml.search(/<(?:smartTags|drawing|legacyDrawing|legacyDrawingHF|picture|oleObjects|controls|webPublishItems|tableParts|extLst)\b/),patched=xml.includes('<ignoredErrors>')?xml:(anchor>=0?xml.slice(0,anchor)+ignored+xml.slice(anchor):xml.replace('</worksheet>',ignored+'</worksheet>'));zip.file('xl/worksheets/sheet1.xml',patched)}
     const out=await zip.generateAsync({type:'arraybuffer',compression:'DEFLATE',compressionOptions:{level:6}}),name=this.fileName(r,'xlsx');somaDownloadBlob(new Blob([out],{type:'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'}),name);this.record('REQUEST_EXCEL_EXPORTED',r,{format:'XLSX_A4',orientation,name,layout:'enterprise-v2'});return name
   }
   async excelList(requests,label='RICHIESTE'){
