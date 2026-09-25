@@ -1,13 +1,13 @@
 <!doctype html>
 <html lang="it">
 <head>
-<meta name="soma-build" content="R31.41-20260925">
+<meta name="soma-build" content="R31.42-20260925">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
 <script id="soma-build-freshness">
 (() => {
-  const CURRENT_BUILD='R31.41-20260925',CHECK_KEY='soma:last-build-refresh';
+  const CURRENT_BUILD='R31.42-20260925',CHECK_KEY='soma:last-build-refresh';
   globalThis.SOMA_BUILD=CURRENT_BUILD;
   const check=async()=>{
     try{
@@ -15508,6 +15508,25 @@ body.desktop-mode .app-view:has(.receipt-new-shell){width:100%!important;max-wid
   .stock-rectify-compact-v3 span,.stock-rectify-compact-v3 .ph:last-child{display:none}
 }
 </style>
+
+<style id="soma-r31-42-stock-infinite-scroll">
+.stock-infinite-v3{
+  min-height:64px;margin:10px 0 4px;border:1px dashed #d9d3fb;border-radius:15px;
+  background:linear-gradient(180deg,#fbfaff,#f7f5ff);color:#6654d9;
+  display:flex;align-items:center;justify-content:center;gap:10px;text-align:left
+}
+.stock-infinite-v3>span{
+  width:32px;height:32px;border-radius:50%;display:grid;place-items:center;
+  background:#eeeaff;color:#6654d9;font-size:17px
+}
+.stock-infinite-v3 div{display:grid;gap:2px}
+.stock-infinite-v3 b{font-size:9px;letter-spacing:.08em}
+.stock-infinite-v3 small{font-size:10px;color:#7d8797;font-weight:700}
+@media(max-width:700px){
+  .stock-infinite-v3{min-height:58px;margin-top:8px}
+  .stock-infinite-v3 small{font-size:9.5px}
+}
+</style>
 </head>
 <body>
 <header id="topbar" class="topbar"></header>
@@ -16968,10 +16987,45 @@ class UI{
     }
     const suggestHost=document.getElementById('stockSuggestions'),suggestions=this.stockSuggestionRows(indexed,parsed);
     if(suggestHost)suggestHost.innerHTML=suggestions.length?`<div class="stock-suggest-label">SUGGERIMENTI</div><div class="stock-suggest-list">${suggestions.map(x=>`<button type="button" data-action="stock-suggest" data-article="${esc(x.article)}" data-size="${esc(x.size)}"><b>${esc(x.article)}</b>${x.size?`<span>${esc(x.size)}</span>`:''}</button>`).join('')}</div>`:'';
-    const limit=80,rows=matches.slice(0,limit),truncated=matches.length>limit,groups=[];
+    const signature=[query,st,loc,pallet].join('␟');
+    if(this.stockResultSignature!==signature){
+      this.stockResultSignature=signature;
+      this.stockVisibleLimit=120;
+      if(this.stockInfiniteObserver){this.stockInfiniteObserver.disconnect();this.stockInfiniteObserver=null}
+    }
+    const batch=120,target=Math.max(batch,Number(this.stockVisibleLimit)||batch);
+    let visibleEnd=Math.min(target,matches.length);
+    if(visibleEnd>0&&visibleEnd<matches.length){
+      const cutKey=normalizeArticle(matches[visibleEnd-1].article);
+      while(visibleEnd<matches.length&&normalizeArticle(matches[visibleEnd].article)===cutKey)visibleEnd++
+    }
+    this.stockVisibleLimit=visibleEnd||batch;
+    const rows=matches.slice(0,visibleEnd),hasMore=visibleEnd<matches.length,groups=[];
     for(const row of rows){const key=normalizeArticle(row.article),last=groups[groups.length-1];if(last&&last.key===key)last.rows.push(row);else groups.push({key,article:row.article,rows:[row]})}
-    const resultMeta=`<div class="stock-result-bar-v3"><div class="stock-result-main-v3"><b>${matches.length}</b><span>${matches.length===1?'giacenza':'giacenze'}</span><i></i><strong>${groups.length}</strong><span>${groups.length===1?'articolo in vista':'articoli in vista'}</span></div><div class="stock-result-tools-v3"><span class="stock-order-v3">${phIcon('sort-ascending')} A–Z · TAGLIE PROGRESSIVE</span>${truncated?`<small>Prime ${limit} righe · affina la ricerca per restringere i risultati</small>`:''}</div></div>`;
-    host.innerHTML=matches.length?resultMeta+`<div class="stock-groups-v3">${groups.map(group=>{const total=group.rows.reduce((sum,row)=>sum+Number(row.quantity||0),0);return `<section class="stock-group-v3"><header class="stock-group-head-v3"><div class="stock-group-title-v3"><small>ARTICOLO</small><h3>${esc(group.article)}</h3></div><div class="stock-group-summary-v3"><span><small>RIGHE</small><b>${group.rows.length}</b></span><span><small>GIACENZA TOTALE</small><strong>${total}</strong></span></div></header><div class="stock-grid-head-v3"><span>TAGLIA</span><span>STATO</span><span>POSIZIONE · FILA · SCAFFALE</span><span>BANCALE</span><span>GIACENZA</span><span>AZIONE</span></div><div class="stock-group-body-v3">${group.rows.map(r=>{const receiving=r.location===CONFIG.receivingLocation,stateClass=this.stockStateClass(r.state);return `<div class="stock-row-v3 ${stateClass}"><div class="stock-cell-size-v3"><span>${esc(r.size||'—')}</span></div><div class="stock-cell-state-v3"><span class="stock-state-pill ${stateClass}"><i></i>${esc(r.state)}</span></div><div class="stock-cell-location-v3"><span class="stock-inline-icon-v3">${phIcon('map-pin-line')}</span><b>${esc(receiving?'AREA RICEVIMENTO':r.location||'—')}</b>${receiving?'<em>DA UBICARE</em>':''}</div><div class="stock-cell-pallet-v3"><span class="stock-inline-icon-v3">${phIcon('stack')}</span><b>${esc(r.pallet||'—')}</b></div><div class="stock-cell-qty-v3"><strong>${r.quantity}</strong></div><div class="stock-cell-action-v3">${this.auth.can('RECTIFY')?`<button class="stock-rectify-compact-v3" data-action="rectify-open" data-key="${esc(bucketKey(r))}">${phIcon('sliders-horizontal')}<span>Rettifica</span>${phIcon('caret-right')}</button>`:'<span class="stock-no-action-v3">—</span>'}</div></div>`}).join('')}</div></section>`}).join('')}</div>`:`<div class="empty stock-empty">${phIcon('magnifying-glass','empty-icon')}<div><b>Nessuna giacenza trovata.</b><small>Prova a cambiare articolo, taglia, stato, posizione / fila / scaffale o bancale.</small></div></div>`
+    const totalArticles=new Set(matches.map(row=>normalizeArticle(row.article))).size;
+    const resultMeta=`<div class="stock-result-bar-v3"><div class="stock-result-main-v3"><b>${matches.length}</b><span>${matches.length===1?'giacenza':'giacenze'}</span><i></i><strong>${totalArticles}</strong><span>${totalArticles===1?'articolo':'articoli'}</span></div><div class="stock-result-tools-v3"><span class="stock-order-v3">${phIcon('sort-ascending')} A–Z · TAGLIE PROGRESSIVE</span>${hasMore?`<small>Mostrate ${rows.length} di ${matches.length} righe · continua a scorrere</small>`:''}</div></div>`;
+    const infiniteHint=hasMore?`<div id="stockInfiniteSentinel" class="stock-infinite-v3"><span>${phIcon('arrow-down')}</span><div><b>CARICAMENTO AUTOMATICO</b><small>Continua a scorrere per vedere le altre giacenze</small></div></div>`:'';
+    host.innerHTML=matches.length?resultMeta+`<div class="stock-groups-v3">${groups.map(group=>{const total=group.rows.reduce((sum,row)=>sum+Number(row.quantity||0),0);return `<section class="stock-group-v3"><header class="stock-group-head-v3"><div class="stock-group-title-v3"><small>ARTICOLO</small><h3>${esc(group.article)}</h3></div><div class="stock-group-summary-v3"><span><small>RIGHE</small><b>${group.rows.length}</b></span><span><small>GIACENZA TOTALE</small><strong>${total}</strong></span></div></header><div class="stock-grid-head-v3"><span>TAGLIA</span><span>STATO</span><span>POSIZIONE · FILA · SCAFFALE</span><span>BANCALE</span><span>GIACENZA</span><span>AZIONE</span></div><div class="stock-group-body-v3">${group.rows.map(r=>{const receiving=r.location===CONFIG.receivingLocation,stateClass=this.stockStateClass(r.state);return `<div class="stock-row-v3 ${stateClass}"><div class="stock-cell-size-v3"><span>${esc(r.size||'—')}</span></div><div class="stock-cell-state-v3"><span class="stock-state-pill ${stateClass}"><i></i>${esc(r.state)}</span></div><div class="stock-cell-location-v3"><span class="stock-inline-icon-v3">${phIcon('map-pin-line')}</span><b>${esc(receiving?'AREA RICEVIMENTO':r.location||'—')}</b>${receiving?'<em>DA UBICARE</em>':''}</div><div class="stock-cell-pallet-v3"><span class="stock-inline-icon-v3">${phIcon('stack')}</span><b>${esc(r.pallet||'—')}</b></div><div class="stock-cell-qty-v3"><strong>${r.quantity}</strong></div><div class="stock-cell-action-v3">${this.auth.can('RECTIFY')?`<button class="stock-rectify-compact-v3" data-action="rectify-open" data-key="${esc(bucketKey(r))}">${phIcon('sliders-horizontal')}<span>Rettifica</span>${phIcon('caret-right')}</button>`:'<span class="stock-no-action-v3">—</span>'}</div></div>`}).join('')}</div></section>`}).join('')}</div>`+infiniteHint:`<div class="empty stock-empty">${phIcon('magnifying-glass','empty-icon')}<div><b>Nessuna giacenza trovata.</b><small>Prova a cambiare articolo, taglia, stato, posizione / fila / scaffale o bancale.</small></div></div>`;
+    if(this.stockInfiniteObserver){this.stockInfiniteObserver.disconnect();this.stockInfiniteObserver=null}
+    if(hasMore){
+      const sentinel=document.getElementById('stockInfiniteSentinel');
+      if(sentinel){
+        if('IntersectionObserver' in globalThis){
+          const currentSignature=signature;
+          this.stockInfiniteObserver=new IntersectionObserver(entries=>{
+            if(!entries.some(entry=>entry.isIntersecting)||this.stockResultSignature!==currentSignature)return;
+            this.stockInfiniteObserver?.disconnect();
+            this.stockInfiniteObserver=null;
+            this.stockVisibleLimit=Math.min(matches.length,visibleEnd+batch);
+            requestAnimationFrame(()=>this.renderStockResults())
+          },{root:null,rootMargin:'700px 0px',threshold:0});
+          this.stockInfiniteObserver.observe(sentinel)
+        }else{
+          this.stockVisibleLimit=matches.length;
+          setTimeout(()=>this.renderStockResults(),0)
+        }
+      }
+    }
   }
   makeRectDraft(r){return r?{key:bucketKey(r),article:r.article,size:r.size,state:r.state,location:r.location,pallet:r.pallet,current:Number(r.quantity||0),counted:Number(r.quantity||0),reason:'CONTEGGIO FISICO',note:''}:null}
   rectify(key=''){
@@ -17202,6 +17256,6 @@ try{globalThis.__NOVA_LEGACY_AVAILABLE=!!localStorage.getItem(CONFIG.legacyStora
 const switchSite=async siteId=>{await ui.selectSite(siteId);return auth.site()};
 globalThis.NOVA=Object.freeze({version:CONFIG.appVersion,schema:CONFIG.version,identityVersion:CONFIG.identityVersion,store,auth,router,domain,excel,requestDocs,ui,sounds,sites:SITES,operators:OPERATORS,roles:ROLE_DEFS,saveIdentityRegistry,capabilities:Object.freeze({operational:ALL_CAPS,master:MASTER_CAPS,administration:ADMIN_CAPS,globalAdmin:GLOBAL_ADMIN_CAPS}),identityValidation:IDENTITY_VALIDATION,switchSite});
 ui.render();</script>
-<!-- SOMA_BUILD:R31.41-20260925 -->
+<!-- SOMA_BUILD:R31.42-20260925 -->
 </body>
 </html>
