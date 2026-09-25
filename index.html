@@ -1,13 +1,13 @@
 <!doctype html>
 <html lang="it">
 <head>
-<meta name="soma-build" content="R31.40-20260925">
+<meta name="soma-build" content="R31.41-20260925">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
 <script id="soma-build-freshness">
 (() => {
-  const CURRENT_BUILD='R31.40-20260925',CHECK_KEY='soma:last-build-refresh';
+  const CURRENT_BUILD='R31.41-20260925',CHECK_KEY='soma:last-build-refresh';
   globalThis.SOMA_BUILD=CURRENT_BUILD;
   const check=async()=>{
     try{
@@ -15349,6 +15349,165 @@ body.desktop-mode .app-view:has(.receipt-new-shell){width:100%!important;max-wid
   body.desktop-mode .request-list-docbar>button>.ph{font-size:19px!important}
 }
 </style>
+
+<style id="soma-r31-41-stock-command-view">
+/* R31.41 · GIACENZE · compact grouped command view */
+.stock-command-v3{
+  margin:10px 0 12px;padding:12px;border:1px solid #d9e4ec;border-radius:20px;
+  background:rgba(255,255,255,.96);box-shadow:0 8px 24px rgba(23,59,92,.055)
+}
+.stock-command-search{position:relative}
+.stock-command-search-icon{
+  position:absolute;left:15px;top:50%;transform:translateY(-50%);z-index:2;
+  display:grid;place-items:center;color:#6c5eea;font-size:21px;pointer-events:none
+}
+.stock-command-v3 .field{
+  min-height:48px;height:48px;border:1px solid #d2e0ea;border-radius:14px;
+  background:#fff;font-size:14px;font-weight:750;box-shadow:none
+}
+.stock-command-search .field{padding-left:46px;font-size:15px}
+.stock-command-v3 .field:focus{border-color:#8175eb;box-shadow:0 0 0 3px rgba(108,94,234,.10)}
+.stock-command-filters{
+  display:grid;grid-template-columns:minmax(180px,.48fr) minmax(300px,1fr) minmax(220px,.62fr);
+  gap:8px;margin-top:8px
+}
+.stock-command-filter{margin:0!important;min-width:0}
+.stock-command-filter>span{
+  display:block;margin:0 0 5px 2px;color:#74899b;font-size:9px;font-weight:950;letter-spacing:.1em
+}
+.stock-suggestions-v3{margin-top:8px}
+.stock-results-v3{margin-top:0}
+.stock-result-bar-v3{
+  min-height:40px;margin:6px 2px 8px;display:flex;align-items:center;justify-content:space-between;gap:14px
+}
+.stock-result-main-v3,.stock-result-tools-v3{display:flex;align-items:center;gap:7px;min-width:0}
+.stock-result-main-v3 b{font-size:15px;color:#6b54df}
+.stock-result-main-v3 strong{font-size:13px;color:#254b69}
+.stock-result-main-v3 span{font-size:11px;font-weight:800;color:#71879a}
+.stock-result-main-v3 i{width:3px;height:3px;border-radius:50%;background:#b9c5cf}
+.stock-result-tools-v3{justify-content:flex-end}
+.stock-result-tools-v3 small{color:#8999a7;font-size:9.5px;font-weight:700}
+.stock-order-v3{
+  display:inline-flex;align-items:center;gap:5px;height:27px;padding:0 9px;border:1px solid #ddd8fb;
+  border-radius:999px;background:#f7f5ff;color:#6654d9;font-size:9px;font-weight:950;letter-spacing:.035em;white-space:nowrap
+}
+.stock-order-v3 .ph{font-size:13px}
+.stock-groups-v3{display:grid;gap:8px}
+.stock-group-v3{
+  overflow:hidden;border:1px solid #dbe5ec;border-radius:16px;background:#fff;
+  box-shadow:0 5px 16px rgba(28,61,89,.045)
+}
+.stock-group-head-v3{
+  min-height:52px;padding:9px 13px 9px 15px;display:flex;align-items:center;justify-content:space-between;gap:18px;
+  border-bottom:1px solid #e2e9ef;background:linear-gradient(180deg,#fff,#fbfdfe)
+}
+.stock-group-title-v3{min-width:0}
+.stock-group-title-v3 small{
+  display:block;margin-bottom:2px;color:#8395a5;font-size:8px;font-weight:950;letter-spacing:.12em
+}
+.stock-group-title-v3 h3{
+  margin:0;color:#173b5c;font-size:17px;line-height:1.1;font-weight:950;letter-spacing:-.01em;overflow-wrap:anywhere
+}
+.stock-group-summary-v3{display:flex;align-items:center;gap:18px;flex:0 0 auto}
+.stock-group-summary-v3>span{display:grid;text-align:right}
+.stock-group-summary-v3 small{font-size:7.5px;font-weight:950;letter-spacing:.1em;color:#8798a6}
+.stock-group-summary-v3 b{font-size:13px;color:#536f86}
+.stock-group-summary-v3 strong{font-size:21px;line-height:1;color:#6c55e1}
+.stock-grid-head-v3,.stock-row-v3{
+  display:grid;grid-template-columns:76px 132px minmax(220px,1.55fr) minmax(145px,.8fr) 90px 112px;
+  column-gap:0;align-items:center
+}
+.stock-grid-head-v3{
+  min-height:27px;padding:0 10px;background:#f5f8fa;border-bottom:1px solid #dfe7ed
+}
+.stock-grid-head-v3 span{
+  padding:0 8px;color:#8193a2;font-size:7.5px;font-weight:950;letter-spacing:.085em
+}
+.stock-grid-head-v3 span:nth-child(5){text-align:center}
+.stock-grid-head-v3 span:last-child{text-align:right}
+.stock-row-v3{
+  position:relative;min-height:50px;padding:0 10px;border-bottom:1px solid #e4ebf0;background:#fff
+}
+.stock-row-v3:last-child{border-bottom:0}
+.stock-row-v3:hover{background:#fbfcff}
+.stock-row-v3:before{
+  content:"";position:absolute;left:0;top:8px;bottom:8px;width:3px;border-radius:0 3px 3px 0;background:#8a9aa8
+}
+.stock-row-v3.state-nuovo:before{background:#16a36a}
+.stock-row-v3.state-scaricato:before{background:#2f78c4}
+.stock-row-v3.state-usato:before{background:#d28b18}
+.stock-row-v3.state-dismesso:before{background:#a64d57}
+.stock-row-v3.state-non-chiaro:before{background:#7c62b5}
+.stock-row-v3>div{min-width:0;padding:7px 8px}
+.stock-cell-size-v3 span{
+  display:inline-grid;place-items:center;min-width:37px;height:28px;padding:0 8px;border-radius:8px;
+  background:#f0edff;color:#684fde;font-size:12px;font-weight:950
+}
+.stock-row-v3 .stock-state-pill{
+  min-height:24px;padding:3px 7px;gap:5px;font-size:9px;white-space:nowrap
+}
+.stock-row-v3 .stock-state-pill i{width:5px;height:5px}
+.stock-cell-location-v3,.stock-cell-pallet-v3{
+  display:flex;align-items:center;gap:7px;color:#274961
+}
+.stock-inline-icon-v3{display:grid;place-items:center;flex:0 0 auto;color:#7965e4;font-size:17px}
+.stock-cell-location-v3 b,.stock-cell-pallet-v3 b{
+  min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:11px
+}
+.stock-cell-location-v3 em{
+  flex:0 0 auto;padding:3px 6px;border-radius:999px;background:#fff3d5;color:#8d6818;
+  font-size:7.5px;font-style:normal;font-weight:950
+}
+.stock-cell-qty-v3{text-align:center}
+.stock-cell-qty-v3 strong{font-size:18px;line-height:1;color:#604bdd}
+.stock-cell-action-v3{text-align:right}
+.stock-rectify-compact-v3{
+  min-height:31px;padding:0 8px 0 9px;border:1px solid #ded9fb;border-radius:9px;background:#f6f4ff;color:#604ed5;
+  display:inline-flex;align-items:center;justify-content:center;gap:5px;font-size:9.5px;font-weight:950
+}
+.stock-rectify-compact-v3:hover{background:#eeeaff;border-color:#cfc7f7}
+.stock-rectify-compact-v3 .ph{font-size:13px}
+.stock-rectify-compact-v3 .ph:last-child{font-size:10px}
+.stock-no-action-v3{color:#a7b2bc}
+@media(max-width:980px){
+  .stock-command-filters{grid-template-columns:.55fr 1fr .75fr}
+  .stock-grid-head-v3,.stock-row-v3{grid-template-columns:66px 118px minmax(170px,1.45fr) minmax(120px,.75fr) 74px 96px}
+  .stock-rectify-compact-v3 span{display:none}
+}
+@media(max-width:700px){
+  .stock-command-v3{padding:10px;border-radius:17px}
+  .stock-command-v3 .field{min-height:45px;height:45px;font-size:12px}
+  .stock-command-search .field{padding-left:42px;font-size:13px}
+  .stock-command-search-icon{left:13px;font-size:19px}
+  .stock-command-filters{grid-template-columns:1fr 1fr;gap:7px}
+  .stock-command-location{grid-column:1/-1}
+  .stock-command-pallet{grid-column:2}
+  .stock-result-bar-v3{align-items:flex-start;flex-direction:column;gap:5px;margin:8px 2px}
+  .stock-result-tools-v3{width:100%;justify-content:space-between;flex-wrap:wrap}
+  .stock-group-head-v3{padding:10px 12px}
+  .stock-group-title-v3 h3{font-size:15px}
+  .stock-group-summary-v3{gap:11px}
+  .stock-grid-head-v3{display:none}
+  .stock-row-v3{
+    min-height:0;padding:9px 9px 9px 11px;
+    grid-template-columns:48px minmax(0,1fr) 62px;grid-template-areas:
+      "size state qty"
+      "loc loc loc"
+      "pal pal action";
+    row-gap:4px
+  }
+  .stock-row-v3>div{padding:3px 5px}
+  .stock-cell-size-v3{grid-area:size}
+  .stock-cell-state-v3{grid-area:state}
+  .stock-cell-qty-v3{grid-area:qty;text-align:right}
+  .stock-cell-location-v3{grid-area:loc}
+  .stock-cell-pallet-v3{grid-area:pal}
+  .stock-cell-action-v3{grid-area:action}
+  .stock-cell-location-v3 b,.stock-cell-pallet-v3 b{white-space:normal;font-size:10.5px}
+  .stock-rectify-compact-v3{width:34px;padding:0}
+  .stock-rectify-compact-v3 span,.stock-rectify-compact-v3 .ph:last-child{display:none}
+}
+</style>
 </head>
 <body>
 <header id="topbar" class="topbar"></header>
@@ -16784,7 +16943,7 @@ class UI{
   putAway(receiptId,lineId){const r=this.store.db.receipts.find(x=>x.id===receiptId),l=r?.lines.find(x=>x.id===lineId);if(!l)return this.emptyPage('Riga non trovata.');const pending=this.domain.receiving.pendingForLine(lineId);return `${this.sectionTitle('UBICAZIONE',`${l.article}${l.size?` · ${l.size}`:''}`)}<section class="form-card"><div class="big-number">${pending}</div><p>pezzi ancora in Area Ricevimento</p><label>Quantità da ubicare<input id="putQty" type="number" min="1" max="${pending}" value="${pending}" class="field"></label><label>Fila/Scaffale<input id="putLocation" class="field" value="${esc(l.suggestedLocation)}"></label><label>Bancale/Carrello<input id="putPallet" class="field" value="${esc(l.suggestedPallet)}"></label><button class="success" data-action="putaway-confirm" data-receipt="${receiptId}" data-line="${lineId}">${phIcon('check-circle','inline-icon')} CONFERMA UBICAZIONE</button></section>`}
   confirmPutAway(receipt,line){this.domain.receiving.putAway(receipt,line,Number(document.getElementById('putQty').value),{location:document.getElementById('putLocation').value,pallet:document.getElementById('putPallet').value});this.toast('Merce ubicata.');this.router.go('receipt-detail',{id:receipt})}
 
-  stock(){if(!this.require('STOCK_VIEW'))return'';if(!this.masterReady())return this.masterRequiredView({context:'consultare le giacenze',backAction:'home',backLabel:'TORNA ALLA DASHBOARD'});return `${this.sectionTitle('GIACENZE','Cerca articoli e posizioni')}<section class="filter-card stock-search-card stock-step4 stock-search-v2"><div class="stock-search-main"><span class="stock-search-icon">${svg('search')}</span><input id="stockQuery" class="field" autocomplete="off" placeholder="Articolo e taglia · es. SZ242 42"></div><div id="stockSuggestions" class="stock-suggestions"></div><div class="stock-filter-row stock-filter-row-v2"><label class="stock-filter-control"><span>STATO</span><select id="stockState" class="field"><option value="">TUTTI GLI STATI</option>${CONFIG.states.map(s=>`<option>${s}</option>`).join('')}</select></label><label class="stock-filter-control stock-filter-location"><span>POSIZIONE - FILA - SCAFFALE</span><input id="stockLocation" class="field" autocomplete="off" placeholder="Es. STANZONE CDS FERRI"></label><label class="stock-filter-control stock-filter-pallet"><span>BANCALE</span><input id="stockPallet" class="field" autocomplete="off" placeholder="Es. DISMESSI 19"></label></div></section><div id="stockResults"></div>`}
+  stock(){if(!this.require('STOCK_VIEW'))return'';if(!this.masterReady())return this.masterRequiredView({context:'consultare le giacenze',backAction:'home',backLabel:'TORNA ALLA DASHBOARD'});return `${this.sectionTitle('GIACENZE','Cerca articoli e posizioni')}<section class="stock-command-v3"><div class="stock-command-search"><span class="stock-command-search-icon">${phIcon('magnifying-glass')}</span><input id="stockQuery" class="field" autocomplete="off" placeholder="Articolo e taglia · es. SZ242 42"></div><div id="stockSuggestions" class="stock-suggestions stock-suggestions-v3"></div><div class="stock-command-filters"><label class="stock-command-filter stock-command-state"><span>STATO</span><select id="stockState" class="field"><option value="">TUTTI GLI STATI</option>${CONFIG.states.map(s=>`<option>${s}</option>`).join('')}</select></label><label class="stock-command-filter stock-command-location"><span>POSIZIONE · FILA · SCAFFALE</span><input id="stockLocation" class="field" autocomplete="off" placeholder="Es. STANZONE CDS FERRI"></label><label class="stock-command-filter stock-command-pallet"><span>BANCALE</span><input id="stockPallet" class="field" autocomplete="off" placeholder="Es. DISMESSI 19"></label></div></section><div id="stockResults" class="stock-results-v3"></div>`}
   parseStockQuery(value){const raw=norm(value).replace(/[.·\-]+/g,' ').replace(/\s+/g,' ').trim();if(!raw)return{raw:'',article:'',size:'',hasSize:false};const parts=raw.split(' ').filter(Boolean);if(parts.length>=2){const size=norm(parts.pop()),article=normalizeArticle(parts.join(''));return{raw,article,size,hasSize:!!article&&!!size}}return{raw,article:normalizeArticle(raw),size:'',hasSize:false}}
   stockStateClass(state){return `state-${String(state||'NON_CHIARO').toLowerCase().replace(/[^a-z0-9]+/g,'-')}`}
   scheduleStockRender(delay=65){clearTimeout(this.stockSearchTimer);this.stockSearchTimer=setTimeout(()=>{this.stockSearchTimer=null;this.renderStockResults()},delay)}
@@ -16793,7 +16952,11 @@ class UI{
   applyStockSuggestion(el){const input=document.getElementById('stockQuery');if(!input)return;input.value=`${el.dataset.article}${el.dataset.size?` · ${el.dataset.size}`:''}`;clearTimeout(this.stockSearchTimer);this.renderStockResults();input.focus()}
   renderStockResults(){
     const host=document.getElementById('stockResults');if(!host)return;
-    const all=this.domain.stock.positive(),query=document.getElementById('stockQuery')?.value||'',parsed=this.parseStockQuery(query),st=norm(document.getElementById('stockState')?.value),loc=norm(document.getElementById('stockLocation')?.value),pallet=norm(document.getElementById('stockPallet')?.value);
+    const collator=new Intl.Collator('it',{numeric:true,sensitivity:'base'}),apparelOrder=new Map([['XXS',10],['XS',20],['S',30],['M',40],['L',50],['XL',60],['XXL',70],['XXXL',80],['XXXXL',90]]);
+    const sizeKey=value=>{const raw=norm(value).replace(/\s+/g,''),numeric=Number(raw.replace(',','.'));if(raw!==''&&Number.isFinite(numeric))return[0,numeric,raw];if(apparelOrder.has(raw))return[1,apparelOrder.get(raw),raw];return[2,0,raw]};
+    const compareSize=(a,b)=>{const aa=sizeKey(a),bb=sizeKey(b);return aa[0]-bb[0]||aa[1]-bb[1]||collator.compare(aa[2],bb[2])};
+    const compareRows=(a,b)=>collator.compare(normalizeArticle(a.article),normalizeArticle(b.article))||compareSize(a.size,b.size)||collator.compare(norm(a.location),norm(b.location))||collator.compare(norm(a.pallet),norm(b.pallet))||collator.compare(norm(a.state),norm(b.state));
+    const all=this.domain.stock.positive().slice().sort(compareRows),query=document.getElementById('stockQuery')?.value||'',parsed=this.parseStockQuery(query),st=norm(document.getElementById('stockState')?.value),loc=norm(document.getElementById('stockLocation')?.value),pallet=norm(document.getElementById('stockPallet')?.value);
     const indexed=all.map(row=>({row,article:normalizeArticle(row.article),size:norm(row.size),location:norm(row.location),pallet:norm(row.pallet)}));
     const exactExists=parsed.hasSize&&indexed.some(x=>x.article.includes(parsed.article)&&x.size===parsed.size);
     const matches=[];
@@ -16805,8 +16968,10 @@ class UI{
     }
     const suggestHost=document.getElementById('stockSuggestions'),suggestions=this.stockSuggestionRows(indexed,parsed);
     if(suggestHost)suggestHost.innerHTML=suggestions.length?`<div class="stock-suggest-label">SUGGERIMENTI</div><div class="stock-suggest-list">${suggestions.map(x=>`<button type="button" data-action="stock-suggest" data-article="${esc(x.article)}" data-size="${esc(x.size)}"><b>${esc(x.article)}</b>${x.size?`<span>${esc(x.size)}</span>`:''}</button>`).join('')}</div>`:'';
-    const limit=80,rows=matches.slice(0,limit),truncated=matches.length>limit;
-    host.innerHTML=matches.length?`<div class="stock-result-count"><span><b>${matches.length}</b> ${matches.length===1?'giacenza trovata':'giacenze trovate'}</span>${truncated?`<small>Mostrate le prime ${limit} · affina la ricerca per vedere il record desiderato</small>`:''}</div>${rows.map(r=>{const receiving=r.location===CONFIG.receivingLocation,stateClass=this.stockStateClass(r.state);return `<article class="stock-card stock-card-premium ${stateClass}"><div class="stock-card-head"><div class="stock-identity"><span class="stock-article">${esc(r.article)}</span>${r.size?`<span class="stock-size">${esc(r.size)}</span>`:''}</div><div class="stock-quantity"><small>GIACENZA</small><strong>${r.quantity}</strong></div></div><div class="stock-state-row"><span class="stock-state-pill ${stateClass}"><i></i>${esc(r.state)}</span>${receiving?'<span class="stock-available-pill">DISPONIBILE · DA UBICARE</span>':''}</div><div class="stock-data-grid"><div class="stock-data-block stock-location-block"><span class="stock-data-icon">${phIcon('map-pin-line')}</span><div><small>POSIZIONE - FILA - SCAFFALE</small><b>${esc(receiving?'AREA RICEVIMENTO':r.location||'—')}</b></div></div><div class="stock-data-block stock-pallet-block"><span class="stock-data-icon">${phIcon('stack')}</span><div><small>BANCALE</small><b>${esc(r.pallet||'—')}</b></div></div></div>${this.auth.can('RECTIFY')?`<div class="stock-actions"><button class="stock-rectify-btn" data-action="rectify-open" data-key="${esc(bucketKey(r))}"><span>${phIcon('sliders-horizontal')} RETTIFICA GIACENZA</span>${phIcon('caret-right')}</button></div>`:''}</article>`}).join('')}`:`<div class="empty stock-empty">${phIcon('magnifying-glass','empty-icon')}<div><b>Nessuna giacenza trovata.</b><small>Prova a cambiare articolo, taglia, stato, posizione / fila / scaffale o bancale.</small></div></div>`
+    const limit=80,rows=matches.slice(0,limit),truncated=matches.length>limit,groups=[];
+    for(const row of rows){const key=normalizeArticle(row.article),last=groups[groups.length-1];if(last&&last.key===key)last.rows.push(row);else groups.push({key,article:row.article,rows:[row]})}
+    const resultMeta=`<div class="stock-result-bar-v3"><div class="stock-result-main-v3"><b>${matches.length}</b><span>${matches.length===1?'giacenza':'giacenze'}</span><i></i><strong>${groups.length}</strong><span>${groups.length===1?'articolo in vista':'articoli in vista'}</span></div><div class="stock-result-tools-v3"><span class="stock-order-v3">${phIcon('sort-ascending')} A–Z · TAGLIE PROGRESSIVE</span>${truncated?`<small>Prime ${limit} righe · affina la ricerca per restringere i risultati</small>`:''}</div></div>`;
+    host.innerHTML=matches.length?resultMeta+`<div class="stock-groups-v3">${groups.map(group=>{const total=group.rows.reduce((sum,row)=>sum+Number(row.quantity||0),0);return `<section class="stock-group-v3"><header class="stock-group-head-v3"><div class="stock-group-title-v3"><small>ARTICOLO</small><h3>${esc(group.article)}</h3></div><div class="stock-group-summary-v3"><span><small>RIGHE</small><b>${group.rows.length}</b></span><span><small>GIACENZA TOTALE</small><strong>${total}</strong></span></div></header><div class="stock-grid-head-v3"><span>TAGLIA</span><span>STATO</span><span>POSIZIONE · FILA · SCAFFALE</span><span>BANCALE</span><span>GIACENZA</span><span>AZIONE</span></div><div class="stock-group-body-v3">${group.rows.map(r=>{const receiving=r.location===CONFIG.receivingLocation,stateClass=this.stockStateClass(r.state);return `<div class="stock-row-v3 ${stateClass}"><div class="stock-cell-size-v3"><span>${esc(r.size||'—')}</span></div><div class="stock-cell-state-v3"><span class="stock-state-pill ${stateClass}"><i></i>${esc(r.state)}</span></div><div class="stock-cell-location-v3"><span class="stock-inline-icon-v3">${phIcon('map-pin-line')}</span><b>${esc(receiving?'AREA RICEVIMENTO':r.location||'—')}</b>${receiving?'<em>DA UBICARE</em>':''}</div><div class="stock-cell-pallet-v3"><span class="stock-inline-icon-v3">${phIcon('stack')}</span><b>${esc(r.pallet||'—')}</b></div><div class="stock-cell-qty-v3"><strong>${r.quantity}</strong></div><div class="stock-cell-action-v3">${this.auth.can('RECTIFY')?`<button class="stock-rectify-compact-v3" data-action="rectify-open" data-key="${esc(bucketKey(r))}">${phIcon('sliders-horizontal')}<span>Rettifica</span>${phIcon('caret-right')}</button>`:'<span class="stock-no-action-v3">—</span>'}</div></div>`}).join('')}</div></section>`}).join('')}</div>`:`<div class="empty stock-empty">${phIcon('magnifying-glass','empty-icon')}<div><b>Nessuna giacenza trovata.</b><small>Prova a cambiare articolo, taglia, stato, posizione / fila / scaffale o bancale.</small></div></div>`
   }
   makeRectDraft(r){return r?{key:bucketKey(r),article:r.article,size:r.size,state:r.state,location:r.location,pallet:r.pallet,current:Number(r.quantity||0),counted:Number(r.quantity||0),reason:'CONTEGGIO FISICO',note:''}:null}
   rectify(key=''){
@@ -17037,6 +17202,6 @@ try{globalThis.__NOVA_LEGACY_AVAILABLE=!!localStorage.getItem(CONFIG.legacyStora
 const switchSite=async siteId=>{await ui.selectSite(siteId);return auth.site()};
 globalThis.NOVA=Object.freeze({version:CONFIG.appVersion,schema:CONFIG.version,identityVersion:CONFIG.identityVersion,store,auth,router,domain,excel,requestDocs,ui,sounds,sites:SITES,operators:OPERATORS,roles:ROLE_DEFS,saveIdentityRegistry,capabilities:Object.freeze({operational:ALL_CAPS,master:MASTER_CAPS,administration:ADMIN_CAPS,globalAdmin:GLOBAL_ADMIN_CAPS}),identityValidation:IDENTITY_VALIDATION,switchSite});
 ui.render();</script>
-<!-- SOMA_BUILD:R31.40-20260925 -->
+<!-- SOMA_BUILD:R31.41-20260925 -->
 </body>
 </html>
