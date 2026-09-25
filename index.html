@@ -1,13 +1,13 @@
 <!doctype html>
 <html lang="it">
 <head>
-<meta name="soma-build" content="R31.38-20260925">
+<meta name="soma-build" content="R31.39-20260925">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
 <script id="soma-build-freshness">
 (() => {
-  const CURRENT_BUILD='R31.38-20260925',CHECK_KEY='soma:last-build-refresh';
+  const CURRENT_BUILD='R31.39-20260925',CHECK_KEY='soma:last-build-refresh';
   globalThis.SOMA_BUILD=CURRENT_BUILD;
   const check=async()=>{
     try{
@@ -16078,10 +16078,247 @@ const phDashboardIcon=(name,extra='')=>phRegular(name,extra);
 const phDashboardActionIcon=(action,fallback='')=>phRegular(PHOSPHOR_ACTIONS[action]||PHOSPHOR_ACTIONS[fallback]||fallback||'circle');
 
 
+/* ===== R31.39 · REQUEST DOCUMENT ENGINE — A4 PRINT / PDF / EXCEL ===== */
+const SOMA_JSPDF_URL='https://cdn.jsdelivr.net/npm/jspdf@2.5.2/dist/jspdf.umd.min.js';
+const SOMA_AUTOTABLE_URL='https://cdn.jsdelivr.net/npm/jspdf-autotable@3.8.4/dist/jspdf.plugin.autotable.min.js';
+const SOMA_EXCELJS_URL='https://cdn.jsdelivr.net/npm/exceljs@4.4.0/dist/exceljs.min.js';
+const somaLoadScript=(src,key,ready)=>new Promise((resolve,reject)=>{
+  if(ready())return resolve();
+  const found=document.querySelector('script[data-soma-lib="'+key+'"]');
+  if(found){found.addEventListener('load',()=>ready()?resolve():reject(new Error('Libreria '+key+' non disponibile.')),{once:true});found.addEventListener('error',()=>reject(new Error('Impossibile caricare '+key+'.')),{once:true});return}
+  const s=document.createElement('script');s.src=src;s.async=true;s.dataset.somaLib=key;s.onload=()=>ready()?resolve():reject(new Error('Libreria '+key+' non disponibile.'));s.onerror=()=>reject(new Error('Impossibile caricare '+key+'. Verifica la connessione.'));document.head.appendChild(s)
+});
+let somaPdfPromise=null,somaExcelJsPromise=null,somaLogoPngPromise=null;
+async function ensureSomaPdf(){
+  if(globalThis.jspdf?.jsPDF&&globalThis.jspdf?.jsPDF?.API?.autoTable)return globalThis.jspdf.jsPDF;
+  if(!somaPdfPromise)somaPdfPromise=(async()=>{
+    await somaLoadScript(SOMA_JSPDF_URL,'jspdf',()=>!!globalThis.jspdf?.jsPDF);
+    await somaLoadScript(SOMA_AUTOTABLE_URL,'jspdf-autotable',()=>!!globalThis.jspdf?.jsPDF?.API?.autoTable);
+    return globalThis.jspdf.jsPDF
+  })().catch(e=>{somaPdfPromise=null;throw e});
+  return somaPdfPromise
+}
+async function ensureSomaExcelJs(){
+  if(globalThis.ExcelJS?.Workbook)return globalThis.ExcelJS;
+  if(!somaExcelJsPromise)somaExcelJsPromise=somaLoadScript(SOMA_EXCELJS_URL,'exceljs',()=>!!globalThis.ExcelJS?.Workbook).then(()=>globalThis.ExcelJS).catch(e=>{somaExcelJsPromise=null;throw e});
+  return somaExcelJsPromise
+}
+async function somaLogoPng(){
+  if(somaLogoPngPromise)return somaLogoPngPromise;
+  somaLogoPngPromise=new Promise((resolve,reject)=>{
+    const img=new Image();
+    img.onload=()=>{try{const c=document.createElement('canvas');c.width=780;c.height=200;const x=c.getContext('2d');x.clearRect(0,0,c.width,c.height);x.drawImage(img,0,0,c.width,c.height);resolve(c.toDataURL('image/png'))}catch(e){reject(e)}};
+    img.onerror=()=>reject(new Error('Logo Servizi Ospedalieri non disponibile.'));
+    img.src=LOGO
+  }).catch(e=>{somaLogoPngPromise=null;throw e});
+  return somaLogoPngPromise
+}
+const somaDownloadBlob=(blob,name)=>{const url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download=name;a.style.display='none';document.body.appendChild(a);a.click();setTimeout(()=>{URL.revokeObjectURL(url);a.remove()},1800)};
+const somaFileStem=v=>String(v||'RICHIESTA').replace(/[^A-Za-z0-9_-]+/g,'_').replace(/^_+|_+$/g,'')||'RICHIESTA';
+
+class RequestDocumentService{
+  constructor({store,domain,auth}){Object.assign(this,{store,domain,auth})}
+  request(id){const r=this.store.db.requests.find(x=>x.id===id);if(!r||r.deletedAt||!this.domain.requests.visible(r))throw new Error('Richiesta non disponibile.');return r}
+  resolveOrientation(r,preferred='auto'){
+    const p=String(preferred||'auto').toLowerCase();
+    if(p==='portrait'||p==='landscape')return p;
+    const rows=r?.lines||[],longText=rows.some(l=>String(l.note||'').length>18||this.sourceText(r,l).length>32);
+    return rows.length>0||longText?'landscape':'portrait'
+  }
+  sourceRows(r,l){
+    const out=[],seen=new Set(),push=(location,pallet,state)=>{
+      const loc=String(location||'').trim(),pal=String(pallet||'').trim(),st=String(state||'').trim(),key=[loc,pal,st].join('|');
+      if((loc||pal)&&!seen.has(key)){seen.add(key);out.push({location:loc,pallet:pal,state:st})}
+    };
+    for(const d of r.deliveries||[])for(const i of d.items||[])if(i.lineId===l.id&&!i.extra)push(i.source?.location,i.source?.pallet,i.state||i.item?.state);
+    if(!out.length)for(const s of this.domain.stock.sources(l.article,l.size).slice(0,4))push(s.location,s.pallet,s.state);
+    return out
+  }
+  sourceText(r,l){
+    const a=this.sourceRows(r,l);if(!a.length)return '—';
+    return a.map(x=>[x.location||'—',x.pallet?('Bancale '+x.pallet):''].filter(Boolean).join(' · ')).join(' / ')
+  }
+  lineStatus(r,l){
+    const d=this.domain.requests.deliveredForLine(r,l.id),requested=integer(l.cartonsRequested);
+    return d.cartons>=requested&&requested>0?'COMPLETATA':d.cartons>0?'PARZIALE':'DA PREPARARE'
+  }
+  model(id){
+    const r=this.request(id),summary=this.domain.requests.summary(r),site=this.auth.site();
+    const rows=(r.lines||[]).map((l,index)=>{
+      const d=this.domain.requests.deliveredForLine(r,l.id),requested=integer(l.cartonsRequested);
+      return {n:index+1,article:l.article||'',size:l.size||'',requested,picked:d.cartons,pieces:d.pieces,remaining:Math.max(0,requested-d.cartons),status:this.lineStatus(r,l),source:this.sourceText(r,l),note:[l.note||'',l.marker?'* Segnalazione originale':''].filter(Boolean).join(' · ')}
+    });
+    return {request:r,summary,site,rows,generatedAt:new Date(),generatedBy:this.auth.user||'—'}
+  }
+  fileName(r,ext){return somaFileStem('SOMA_HUB_'+r.id+'_'+(r.destination||'RICHIESTA'))+'.'+ext}
+  record(action,r,meta={}){
+    this.domain.audit.record(action,'REQUEST',r.id,null,null,{document:true,siteId:this.store.siteId,...meta});
+    this.store.save('request:document')
+  }
+  printHtml(model,orientation){
+    const r=model.request,s=model.summary,o=orientation==='portrait'?'portrait':'landscape';
+    const rows=model.rows.map(x=>'<tr><td>'+x.n+'</td><td><b>'+esc(x.article)+'</b></td><td>'+esc(x.size||'—')+'</td><td class="num">'+x.requested+'</td><td class="num">'+x.picked+'</td><td class="num">'+x.pieces+'</td><td>'+esc(x.status)+'</td><td>'+esc(x.source)+'</td><td>'+esc(x.note||'—')+'</td></tr>').join('');
+    return '<!doctype html><html lang="it"><head><meta charset="utf-8"><title>'+esc(r.id)+' · SOMA HUB</title><style>'+
+      '@page{size:A4 '+o+';margin:10mm}*{box-sizing:border-box}html,body{margin:0;padding:0;font-family:Arial,Helvetica,sans-serif;color:#203f61;background:#fff;font-size:9pt}'+
+      '.doc{width:100%}.head{display:flex;justify-content:space-between;gap:12mm;align-items:flex-start;padding-bottom:5mm;border-bottom:.45mm solid #dfe8ee}.brand{display:flex;align-items:flex-start;gap:5mm}.brand img{width:42mm;height:auto;max-height:14mm;object-fit:contain}.brandcopy small{display:block;font-size:7pt;font-weight:700;letter-spacing:.12em;color:#6f8798}.brandcopy h1{margin:1.4mm 0 0;font-size:17pt;line-height:1;color:#173b5c}.headid{text-align:right}.headid small{font-size:7pt;font-weight:700;color:#7790a1}.headid b{display:block;margin-top:1.2mm;font-size:13pt;color:#b98522}.meta{display:grid;grid-template-columns:1.15fr .8fr .8fr .8fr 1fr;gap:2.2mm;margin:4.5mm 0}.meta div{padding:2.4mm 2.7mm;border:.25mm solid #dfe7ed;border-radius:2mm;background:#f8fafb}.meta small,.summary small{display:block;font-size:6.4pt;font-weight:700;letter-spacing:.08em;color:#7b8f9f}.meta b{display:block;margin-top:1mm;font-size:8.4pt;color:#294c68;overflow-wrap:anywhere}.note{margin:0 0 4mm;padding:2.7mm 3mm;border-left:1.1mm solid #d99a1b;background:#fff9eb;color:#65512b;font-size:8pt}.note b{color:#4c3d20}table{width:100%;border-collapse:collapse;table-layout:fixed}thead{display:table-header-group}tr{break-inside:avoid;page-break-inside:avoid}th,td{border:.25mm solid #d9e3e9;padding:1.7mm 1.5mm;vertical-align:top;overflow-wrap:anywhere;word-break:normal}th{background:#edf7f2;color:#28654c;font-size:6.8pt;text-transform:uppercase;letter-spacing:.035em;text-align:left}td{font-size:'+(o==='portrait'?'6.45':'7.35')+'pt;line-height:1.25}td.num,th.num{text-align:center}.summary{display:grid;grid-template-columns:repeat(4,1fr);gap:2.2mm;margin-top:4mm}.summary div{padding:2.5mm;border:.25mm solid #dfe7ed;border-radius:2mm;background:#f8fafb}.summary b{display:block;margin-top:1mm;font-size:12pt;color:#173b5c}.sign{display:grid;grid-template-columns:1fr 1fr;gap:12mm;margin-top:8mm}.sign div{padding-top:7mm;border-top:.25mm solid #aebec9;color:#6f8392;font-size:7pt}.foot{display:flex;justify-content:space-between;gap:8mm;margin-top:5mm;padding-top:2.5mm;border-top:.25mm solid #e2e9ee;color:#7d8e9b;font-size:6.5pt}'+
+      '</style>
+<style id="r31-39-desktop-request-documents">
+/* ===== R31.39 · DESKTOP REQUEST DOCUMENTS =====
+   Desktop only. Smartphone remains untouched. */
+@media(min-width:981px){
+  body.desktop-mode .request-doc-toolbar{
+    min-height:86px!important;
+    display:grid!important;
+    grid-template-columns:minmax(330px,1fr) minmax(190px,.42fr) auto!important;
+    gap:14px!important;
+    align-items:center!important;
+    margin:0 0 14px!important;
+    padding:14px 16px!important;
+    border:1px solid #e7d9b6!important;
+    border-radius:19px!important;
+    background:linear-gradient(135deg,#fffdf7 0%,#fff 62%)!important;
+    box-shadow:0 7px 22px rgba(56,65,71,.04)!important;
+  }
+  body.desktop-mode .request-doc-toolbar-copy{
+    display:grid!important;
+    grid-template-columns:48px minmax(0,1fr)!important;
+    gap:12px!important;
+    align-items:center!important;
+    min-width:0!important;
+  }
+  body.desktop-mode .request-doc-toolbar-icon{
+    width:48px!important;height:48px!important;display:grid!important;place-items:center!important;
+    border:1px solid #ecd8a7!important;border-radius:14px!important;background:#fff7e5!important;color:#b98522!important;
+  }
+  body.desktop-mode .request-doc-toolbar-icon>.ph{font-size:25px!important}
+  body.desktop-mode .request-doc-toolbar-copy small{
+    display:block!important;color:#a9791f!important;font-size:8.5px!important;line-height:1!important;font-weight:950!important;letter-spacing:.11em!important;
+  }
+  body.desktop-mode .request-doc-toolbar-copy b{
+    display:block!important;margin-top:4px!important;color:#294762!important;font-size:15px!important;line-height:1.15!important;
+  }
+  body.desktop-mode .request-doc-toolbar-copy div>span{
+    display:block!important;margin-top:4px!important;color:#7c8f9f!important;font-size:10.5px!important;font-weight:700!important;
+  }
+  body.desktop-mode .request-doc-orientation{
+    display:grid!important;gap:6px!important;margin:0!important;
+  }
+  body.desktop-mode .request-doc-orientation>span{
+    color:#7b8d9b!important;font-size:8px!important;font-weight:950!important;letter-spacing:.09em!important;
+  }
+  body.desktop-mode .request-doc-orientation select{
+    width:100%!important;height:44px!important;border:1px solid #d9e4eb!important;border-radius:12px!important;
+    padding:0 32px 0 12px!important;background:#fff!important;color:#35546d!important;font-size:10px!important;font-weight:900!important;outline:0!important;
+  }
+  body.desktop-mode .request-doc-orientation select:focus{
+    border-color:#d4ae61!important;box-shadow:0 0 0 3px rgba(185,133,34,.10)!important;
+  }
+  body.desktop-mode .request-doc-actions{
+    display:flex!important;align-items:center!important;gap:8px!important;
+  }
+  body.desktop-mode .request-doc-actions button{
+    min-width:94px!important;min-height:46px!important;display:inline-flex!important;align-items:center!important;justify-content:center!important;gap:7px!important;
+    border:1px solid #e3d5b2!important;border-radius:13px!important;background:#fff!important;color:#8b651b!important;
+    font-size:10px!important;font-weight:950!important;letter-spacing:.02em!important;
+  }
+  body.desktop-mode .request-doc-actions button>.ph{font-size:18px!important}
+  body.desktop-mode .request-doc-actions button[data-action="request-pdf"]{color:#ae4b44!important;border-color:#edd0cd!important;background:#fff8f7!important}
+  body.desktop-mode .request-doc-actions button[data-action="request-excel"]{color:#178552!important;border-color:#cfe5d8!important;background:#f7fcf9!important}
+  @media(hover:hover) and (pointer:fine){
+    body.desktop-mode .request-doc-actions button:hover{transform:translateY(-1px)!important;box-shadow:0 7px 16px rgba(41,67,87,.07)!important}
+  }
+
+  body.desktop-mode .request-list-docbar{
+    min-height:72px!important;
+    display:flex!important;align-items:center!important;justify-content:space-between!important;gap:20px!important;
+    margin:0 0 14px!important;padding:13px 15px!important;
+    border:1px solid #ead9ad!important;border-radius:18px!important;background:#fffaf0!important;
+  }
+  body.desktop-mode .request-list-docbar>div{min-width:0!important}
+  body.desktop-mode .request-list-docbar small{
+    display:block!important;color:#a9791f!important;font-size:8px!important;font-weight:950!important;letter-spacing:.11em!important;
+  }
+  body.desktop-mode .request-list-docbar b{
+    display:block!important;margin-top:4px!important;color:#344f67!important;font-size:14px!important;
+  }
+  body.desktop-mode .request-list-docbar span{
+    display:block!important;margin-top:3px!important;color:#7c8f9d!important;font-size:10px!important;font-weight:700!important;
+  }
+  body.desktop-mode .request-list-docbar>button{
+    min-height:46px!important;display:inline-flex!important;align-items:center!important;justify-content:center!important;gap:8px!important;
+    padding:0 16px!important;border:1px solid #cfe5d8!important;border-radius:13px!important;background:#f4fbf7!important;color:#178552!important;
+    font-size:10px!important;font-weight:950!important;white-space:nowrap!important;
+  }
+  body.desktop-mode .request-list-docbar>button>.ph{font-size:19px!important}
+}
+</style>
+</head><body><main class="doc"><header class="head"><div class="brand"><img src="'+LOGO+'" alt="Servizi Ospedalieri"><div class="brandcopy"><small>SOMA HUB</small><h1>Richiesta di magazzino</h1></div></div><div class="headid"><small>ID RICHIESTA</small><b>'+esc(r.id)+'</b></div></header>'+
+      '<section class="meta"><div><small>DESTINAZIONE</small><b>'+esc(r.destination||'—')+'</b></div><div><small>RICHIEDENTE</small><b>'+esc(r.operator||'—')+'</b></div><div><small>DATA</small><b>'+esc(fmtDateTime(r.requestedAt))+'</b></div><div><small>STATO</small><b>'+esc(r.status||'DA PREPARARE')+'</b></div><div><small>SEDE / RIF.</small><b>'+esc(model.site.name)+(r.reference?' · '+esc(r.reference):'')+'</b></div></section>'+
+      (r.note?'<div class="note"><b>Note richiesta:</b> '+esc(r.note)+'</div>':'')+
+      '<table><colgroup><col style="width:3%"><col style="width:11%"><col style="width:6%"><col style="width:7%"><col style="width:7%"><col style="width:7%"><col style="width:10%"><col style="width:27%"><col style="width:22%"></colgroup><thead><tr><th>N.</th><th>Articolo</th><th>Taglia</th><th class="num">Rich.</th><th class="num">Prel.</th><th class="num">Pezzi</th><th>Stato</th><th>Posizione / Bancale</th><th>Note</th></tr></thead><tbody>'+rows+'</tbody></table>'+
+      '<section class="summary"><div><small>CARTONI RICHIESTI</small><b>'+s.requested+'</b></div><div><small>CARTONI PRELEVATI</small><b>'+s.delivered+'</b></div><div><small>CARTONI RESIDUI</small><b>'+s.remaining+'</b></div><div><small>PEZZI SCARICATI</small><b>'+s.pieces+'</b></div></section>'+
+      '<section class="sign"><div>Preparato da / Firma</div><div>Ritirato da / Firma</div></section><footer class="foot"><span>Servizi Ospedalieri · SOMA HUB</span><span>Generato '+esc(model.generatedAt.toLocaleString('it-IT'))+' · '+esc(model.generatedBy)+'</span></footer></main></body></html>'
+  }
+  print(id,preferred='auto'){
+    const model=this.model(id),orientation=this.resolveOrientation(model.request,preferred),frame=document.createElement('iframe');
+    frame.setAttribute('aria-hidden','true');frame.style.cssText='position:fixed;right:0;bottom:0;width:1px;height:1px;border:0;opacity:0;pointer-events:none';
+    document.body.appendChild(frame);
+    frame.onload=()=>setTimeout(()=>{try{frame.contentWindow.focus();frame.contentWindow.print();this.record('REQUEST_PRINTED',model.request,{format:'A4',orientation})}finally{setTimeout(()=>frame.remove(),30000)}},180);
+    frame.srcdoc=this.printHtml(model,orientation);
+    return orientation
+  }
+  async pdf(id,preferred='auto'){
+    const model=this.model(id),r=model.request,s=model.summary,orientation=this.resolveOrientation(r,preferred),JsPDF=await ensureSomaPdf(),doc=new JsPDF({orientation,unit:'mm',format:'a4'}),pw=doc.internal.pageSize.getWidth(),ph=doc.internal.pageSize.getHeight(),margin=10,logo=await somaLogoPng();
+    doc.addImage(logo,'PNG',margin,9,39,10);doc.setTextColor(102,126,143);doc.setFontSize(7);doc.text('SOMA HUB',margin,24);doc.setTextColor(23,59,92);doc.setFontSize(17);doc.setFont(undefined,'bold');doc.text('Richiesta di magazzino',margin,31);
+    doc.setFontSize(7);doc.setTextColor(120,143,159);doc.text('ID RICHIESTA',pw-margin,15,{align:'right'});doc.setFontSize(13);doc.setTextColor(185,133,34);doc.text(String(r.id||''),pw-margin,22,{align:'right'});
+    doc.setDrawColor(221,232,238);doc.line(margin,35,pw-margin,35);
+    const meta=[['DESTINAZIONE',r.destination||'—'],['RICHIEDENTE',r.operator||'—'],['DATA',fmtDateTime(r.requestedAt)],['STATO',r.status||'DA PREPARARE'],['SEDE',model.site.name||'—']];
+    const boxW=(pw-margin*2-8)/5;meta.forEach((x,i)=>{const bx=margin+i*(boxW+2);doc.setFillColor(248,250,251);doc.setDrawColor(224,232,237);doc.roundedRect(bx,39,boxW,15,1.4,1.4,'FD');doc.setFontSize(5.7);doc.setTextColor(121,143,158);doc.text(x[0],bx+2,44);doc.setFontSize(7.6);doc.setTextColor(45,77,102);doc.text(doc.splitTextToSize(String(x[1]),boxW-4),bx+2,49)});
+    let startY=58;if(r.note){doc.setFillColor(255,249,235);doc.setDrawColor(232,207,155);doc.roundedRect(margin,startY,pw-margin*2,11,1.2,1.2,'FD');doc.setFontSize(7);doc.setTextColor(101,81,43);doc.text(doc.splitTextToSize('Note richiesta: '+r.note,pw-margin*2-5),margin+2.5,startY+4.5);startY+=15}
+    const widths=orientation==='portrait'?[6,22,12,14,14,14,21,45,42]:[7,30,14,18,18,18,25,65,72];
+    doc.autoTable({startY,margin:{left:margin,right:margin,bottom:16},tableWidth:widths.reduce((a,b)=>a+b,0),head:[['N.','Articolo','Taglia','Rich.','Prel.','Pezzi','Stato','Posizione / Bancale','Note']],body:model.rows.map(x=>[x.n,x.article,x.size||'—',x.requested,x.picked,x.pieces,x.status,x.source,x.note||'—']),theme:'grid',styles:{fontSize:orientation==='portrait'?6.4:7.1,cellPadding:1.35,overflow:'linebreak',valign:'middle',textColor:[43,72,95],lineColor:[220,229,235],lineWidth:.15},headStyles:{fillColor:[237,247,242],textColor:[40,101,76],fontStyle:'bold',fontSize:orientation==='portrait'?5.9:6.6},columnStyles:Object.fromEntries(widths.map((w,i)=>[i,{cellWidth:w,halign:[0,3,4,5].includes(i)?'center':'left'}]))});
+    let y=(doc.lastAutoTable?.finalY||startY)+4;if(y>ph-35){doc.addPage();y=15}
+    const labels=[['RICHIESTI',s.requested],['PRELEVATI',s.delivered],['RESIDUI',s.remaining],['PEZZI SCARICATI',s.pieces]],sw=(pw-margin*2-6)/4;labels.forEach((x,i)=>{const bx=margin+i*(sw+2);doc.setFillColor(248,250,251);doc.setDrawColor(224,232,237);doc.roundedRect(bx,y,sw,14,1.2,1.2,'FD');doc.setFontSize(5.8);doc.setTextColor(121,143,158);doc.text(x[0],bx+2,y+4);doc.setFontSize(11);doc.setTextColor(23,59,92);doc.setFont(undefined,'bold');doc.text(String(x[1]),bx+2,y+10)});
+    const pages=doc.getNumberOfPages();for(let p=1;p<=pages;p++){doc.setPage(p);doc.setDrawColor(226,233,238);doc.line(margin,ph-9,pw-margin,ph-9);doc.setFont(undefined,'normal');doc.setFontSize(6.2);doc.setTextColor(126,143,155);doc.text('Servizi Ospedalieri · SOMA HUB · '+r.id,margin,ph-5.5);doc.text('Pagina '+p+' di '+pages,pw-margin,ph-5.5,{align:'right'})}
+    const name=this.fileName(r,'pdf');doc.save(name);this.record('REQUEST_PDF_EXPORTED',r,{format:'PDF_A4',orientation,name});return name
+  }
+  async excel(id,preferred='auto'){
+    const model=this.model(id),r=model.request,s=model.summary,orientation=this.resolveOrientation(r,preferred),ExcelJS=await ensureSomaExcelJs(),wb=new ExcelJS.Workbook(),ws=wb.addWorksheet('RICHIESTA'),logo=await somaLogoPng(),logoId=wb.addImage({base64:logo.split(',')[1],extension:'png'});
+    wb.creator='SOMA HUB';wb.company='Servizi Ospedalieri';wb.created=new Date();
+    ws.pageSetup={paperSize:9,orientation,fitToPage:true,fitToWidth:1,fitToHeight:0,horizontalCentered:true,margins:{left:.394,right:.394,top:.394,bottom:.394,header:.15,footer:.15}};
+    ws.pageSetup.printTitlesRow='8:8';ws.headerFooter.oddFooter='&LServizi Ospedalieri · SOMA HUB · '+r.id+'&RPagina &P di &N';
+    ws.addImage(logoId,{tl:{col:0,row:0},ext:{width:190,height:49}});
+    ws.mergeCells('D1:I1');ws.getCell('D1').value='SOMA HUB · RICHIESTA DI MAGAZZINO';ws.getCell('D1').font={name:'Arial',size:16,bold:true,color:{argb:'FF173B5C'}};ws.getCell('D1').alignment={vertical:'middle'};
+    ws.mergeCells('D2:I2');ws.getCell('D2').value=r.id;ws.getCell('D2').font={name:'Arial',size:12,bold:true,color:{argb:'FFB98522'}};
+    const metas=[['DESTINAZIONE',r.destination||'—'],['RICHIEDENTE',r.operator||'—'],['DATA',fmtDateTime(r.requestedAt)],['STATO',r.status||'DA PREPARARE'],['SEDE',model.site.name||'—'],['RIFERIMENTO',r.reference||'—']];
+    metas.forEach((x,i)=>{const c=i+1;ws.getCell(4,c).value=x[0];ws.getCell(4,c).font={name:'Arial',size:8,bold:true,color:{argb:'FF7890A0'}};ws.getCell(5,c).value=x[1];ws.getCell(5,c).font={name:'Arial',size:10,bold:true,color:{argb:'FF294C68'}};ws.getCell(5,c).alignment={wrapText:true,vertical:'top'}});
+    ws.mergeCells('A6:I6');ws.getCell('A6').value=r.note?'NOTE: '+r.note:' ';ws.getCell('A6').font={name:'Arial',size:9,color:{argb:'FF65512B'}};ws.getCell('A6').fill={type:'pattern',pattern:'solid',fgColor:{argb:'FFFFF9EB'}};ws.getCell('A6').alignment={wrapText:true,vertical:'middle'};
+    const header=['N.','ARTICOLO','TAGLIA','CARTONI RICHIESTI','CARTONI PRELEVATI','PEZZI SCARICATI','STATO','POSIZIONE / BANCALE','NOTE'];ws.addRow([]);const hr=ws.addRow(header);hr.height=28;hr.eachCell(c=>{c.font={name:'Arial',size:9,bold:true,color:{argb:'FF28654C'}};c.fill={type:'pattern',pattern:'solid',fgColor:{argb:'FFEDF7F2'}};c.alignment={wrapText:true,vertical:'middle',horizontal:'center'};c.border={top:{style:'thin',color:{argb:'FFD9E3E9'}},left:{style:'thin',color:{argb:'FFD9E3E9'}},bottom:{style:'thin',color:{argb:'FFD9E3E9'}},right:{style:'thin',color:{argb:'FFD9E3E9'}}}});
+    model.rows.forEach(x=>{const row=ws.addRow([x.n,x.article,x.size||'—',x.requested,x.picked,x.pieces,x.status,x.source,x.note||'—']);row.eachCell((c,col)=>{c.font={name:'Arial',size:9,color:{argb:'FF2B485F'}};c.alignment={wrapText:true,vertical:'top',horizontal:[1,4,5,6].includes(col)?'center':'left'};c.border={top:{style:'thin',color:{argb:'FFE0E8ED'}},left:{style:'thin',color:{argb:'FFE0E8ED'}},bottom:{style:'thin',color:{argb:'FFE0E8ED'}},right:{style:'thin',color:{argb:'FFE0E8ED'}}}});row.height=30});
+    const sr=ws.addRow(['','','TOTALI',s.requested,s.delivered,s.pieces,'RESIDUI: '+s.remaining,'','']);sr.eachCell(c=>{c.font={name:'Arial',size:9,bold:true,color:{argb:'FF173B5C'}};c.fill={type:'pattern',pattern:'solid',fgColor:{argb:'FFF8FAFB'}};c.border={top:{style:'thin',color:{argb:'FFD9E3E9'}}}});
+    ws.addRow([]);const sig=ws.addRow(['Preparato da / Firma','','','','','Ritirato da / Firma','','','']);sig.height=36;sig.getCell(1).border={top:{style:'thin',color:{argb:'FFAEBEC9'}}};sig.getCell(6).border={top:{style:'thin',color:{argb:'FFAEBEC9'}}};
+    ws.columns=[{width:5},{width:17},{width:10},{width:13},{width:13},{width:12},{width:16},{width:38},{width:30}];ws.views=[{state:'frozen',ySplit:8}];ws.pageSetup.printArea='A1:I'+ws.rowCount;
+    const out=await wb.xlsx.writeBuffer(),name=this.fileName(r,'xlsx');somaDownloadBlob(new Blob([out],{type:'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'}),name);this.record('REQUEST_EXCEL_EXPORTED',r,{format:'XLSX_A4',orientation,name});return name
+  }
+  async excelList(requests,label='RICHIESTE'){
+    const list=(requests||[]).filter(r=>r&&!r.deletedAt&&this.domain.requests.visible(r));if(!list.length)throw new Error('Nessuna richiesta da esportare.');
+    const ExcelJS=await ensureSomaExcelJs(),wb=new ExcelJS.Workbook(),ws=wb.addWorksheet('RICHIESTE'),logo=await somaLogoPng(),logoId=wb.addImage({base64:logo.split(',')[1],extension:'png'});
+    wb.creator='SOMA HUB';wb.company='Servizi Ospedalieri';wb.created=new Date();ws.pageSetup={paperSize:9,orientation:'landscape',fitToPage:true,fitToWidth:1,fitToHeight:0,horizontalCentered:true,margins:{left:.394,right:.394,top:.394,bottom:.394,header:.15,footer:.15}};ws.pageSetup.printTitlesRow='7:7';ws.headerFooter.oddFooter='&LServizi Ospedalieri · SOMA HUB · '+label+'&RPagina &P di &N';
+    ws.addImage(logoId,{tl:{col:0,row:0},ext:{width:190,height:49}});ws.mergeCells('D1:L1');ws.getCell('D1').value='SOMA HUB · '+label;ws.getCell('D1').font={name:'Arial',size:16,bold:true,color:{argb:'FF173B5C'}};ws.mergeCells('D2:L2');ws.getCell('D2').value='Sede '+this.auth.site().name+' · '+list.length+' richieste · Generato '+new Date().toLocaleString('it-IT');ws.getCell('D2').font={name:'Arial',size:9,color:{argb:'FF71879A'}};
+    ws.addRow([]);ws.addRow([]);ws.addRow([]);
+    const header=['RICHIESTA','DATA','DESTINAZIONE','RICHIEDENTE','STATO','ARTICOLO','TAGLIA','CARTONI RICH.','CARTONI PREL.','PEZZI','POSIZIONE / BANCALE','NOTE'];const hr=ws.addRow(header);hr.height=28;hr.eachCell(c=>{c.font={name:'Arial',size:8,bold:true,color:{argb:'FF8B610E'}};c.fill={type:'pattern',pattern:'solid',fgColor:{argb:'FFFFF5DF'}};c.alignment={wrapText:true,vertical:'middle',horizontal:'center'};c.border={top:{style:'thin',color:{argb:'FFE8D6A8'}},left:{style:'thin',color:{argb:'FFE8D6A8'}},bottom:{style:'thin',color:{argb:'FFE8D6A8'}},right:{style:'thin',color:{argb:'FFE8D6A8'}}}});
+    for(const r of list)for(const l of r.lines||[]){const d=this.domain.requests.deliveredForLine(r,l.id),row=ws.addRow([r.id,fmtDateTime(r.requestedAt),r.destination||'',r.operator||'',r.status||'DA PREPARARE',l.article||'',l.size||'',integer(l.cartonsRequested),d.cartons,d.pieces,this.sourceText(r,l),[l.note||'',l.marker?'* Segnalazione originale':''].filter(Boolean).join(' · ')]);row.eachCell((c,col)=>{c.font={name:'Arial',size:8,color:{argb:'FF2B485F'}};c.alignment={wrapText:true,vertical:'top',horizontal:[8,9,10].includes(col)?'center':'left'};c.border={bottom:{style:'hair',color:{argb:'FFE4EBEF'}}}});row.height=26}
+    ws.columns=[{width:16},{width:18},{width:16},{width:15},{width:16},{width:15},{width:9},{width:12},{width:12},{width:10},{width:34},{width:28}];ws.views=[{state:'frozen',ySplit:7}];ws.pageSetup.printArea='A1:L'+ws.rowCount;
+    const out=await wb.xlsx.writeBuffer(),name=somaFileStem('SOMA_HUB_'+label+'_'+new Date().toISOString().slice(0,10))+'.xlsx';somaDownloadBlob(new Blob([out],{type:'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'}),name);
+    this.domain.audit.record('REQUEST_LIST_EXCEL_EXPORTED','REQUEST_LIST',label,null,null,{document:true,count:list.length,format:'XLSX_A4',orientation:'landscape',siteId:this.store.siteId,name});this.store.save('request:list-document');return name
+  }
+}
+
+
 class UI{
-  constructor({store,auth,router,domain,excel,sounds}){
-    Object.assign(this,{store,auth,router,domain,excel,sounds});
-    this.activityDate=localDateInput();this.receiptDraft=null;this.requestDraft=null;this.rectDraft=null;this.rectFiltersOpen=false;this.countDraft=this.loadCountSession();this.registryTab='MOVIMENTI';this.ddtFiles=[];this.requestFiles=[];this.analysisKind='';this.stockSearchTimer=null;this.masterSearchTimer=null;this.masterView={query:'',article:'',size:'',location:'',pallet:'',sort:'article',page:1,pageSize:100};this.masterEditKey='';this.masterRequestMode=false;this.masterRequestItems=[];this.masterRequestOpenKey='';this.adminGeneratedPin='';this.siteChoiceRequired=false;this.siteChoiceSource='';this.lastPinLength=0;this.lastDeletePinLength=0;this.pendingRequestDeleteId='';
+  constructor({store,auth,router,domain,excel,requestDocs,sounds}){
+    Object.assign(this,{store,auth,router,domain,excel,requestDocs,sounds});
+    this.activityDate=localDateInput();this.receiptDraft=null;this.requestDraft=null;this.rectDraft=null;this.rectFiltersOpen=false;this.countDraft=this.loadCountSession();this.registryTab='MOVIMENTI';this.ddtFiles=[];this.requestFiles=[];this.analysisKind='';this.stockSearchTimer=null;this.masterSearchTimer=null;this.masterView={query:'',article:'',size:'',location:'',pallet:'',sort:'article',page:1,pageSize:100};this.masterEditKey='';this.masterRequestMode=false;this.masterRequestItems=[];this.masterRequestOpenKey='';this.adminGeneratedPin='';this.siteChoiceRequired=false;this.siteChoiceSource='';this.lastPinLength=0;this.lastDeletePinLength=0;this.pendingRequestDeleteId='';this.requestDocOrientation='auto';
     this.bind();this.setupVisualViewport();this.applyView(globalThis.localStorage?.getItem(CONFIG.viewKey)||'smartphone');
     if(this.auth.user&&this.auth.needsSiteChoice())setTimeout(()=>this.openSiteChoice({required:true,source:'restore'}),0);
   }
@@ -16585,8 +16822,8 @@ class UI{
   removeRequestLine(id){this.requestDraft.lines=this.requestDraft.lines.filter(x=>x.id!==id);if(!this.requestDraft.lines.length)this.requestDraft.lines.push(this.newRequestLine());this.renderView()}
   saveRequest(){const r=this.domain.requests.create({...this.requestDraft,requestedAt:isoFromLocalInput(this.requestDraft.requestedAt)});this.requestDraft=null;this.requestFiles=[];this.toast(`Richiesta ${r.id} inviata.`);this.router.go('request-detail',{id:r.id})}
   requestList(mode='PROGRESS'){
-    const rows=this.store.db.requests.filter(r=>this.domain.requests.visible(r)).filter(r=>mode!=='PROCESS'||r.status!=='COMPLETATA'),process=mode==='PROCESS',title=process?'Completamento richieste':'Avanzamento richieste',subtitle=process?'Prepara le richieste aperte e registra i prelievi reali.':'Controlla stato, quantità e avanzamento delle richieste operative.',icon=process?'check-circle':'chart-bar';
-    return `<section class="request-progress-center ${process?'process-mode':''}"><header class="request-progress-header"><div class="request-progress-titleline"><span class="request-progress-title-icon">${phRegular(icon)}</span><div><h1>${title}</h1><p>${subtitle}</p></div></div></header><div class="request-progress-grid">${rows.length?rows.map(r=>this.requestCard(r,mode)).join(''):`<section class="request-progress-empty">${phRegular(process?'check-circle':'clipboard-text')}<div><b>${process?'Nessuna richiesta da preparare':'Nessuna richiesta operativa'}</b><small>${process?'Tutte le richieste risultano completate oppure non ce ne sono di aperte.':'Le nuove richieste compariranno qui non appena vengono inviate.'}</small></div></section>`}</div></section>`
+    const rows=this.store.db.requests.filter(r=>this.domain.requests.visible(r)).filter(r=>mode!=='PROCESS'||r.status!=='COMPLETATA'),process=mode==='PROCESS',title=process?'Completamento richieste':'Avanzamento richieste',subtitle=process?'Prepara le richieste aperte e registra i prelievi reali.':'Controlla stato, quantità e avanzamento delle richieste operative.',icon=process?'check-circle':'chart-bar',desktop=document.body.classList.contains('desktop-mode')&&(globalThis.innerWidth||document.documentElement.clientWidth||0)>980,docbar=desktop&&rows.length?`<div class="request-list-docbar"><div><small>DOCUMENTI</small><b>Esporta le richieste visualizzate</b><span>${rows.length} ${rows.length===1?'richiesta':'richieste'} · A4 orizzontale · 1 pagina in larghezza</span></div><button data-action="request-list-excel" data-mode="${esc(mode)}">${phRegular('microsoft-excel-logo')}<span>ESPORTA EXCEL</span></button></div>`:'';
+    return `<section class="request-progress-center ${process?'process-mode':''}"><header class="request-progress-header"><div class="request-progress-titleline"><span class="request-progress-title-icon">${phRegular(icon)}</span><div><h1>${title}</h1><p>${subtitle}</p></div></div></header>${docbar}<div class="request-progress-grid">${rows.length?rows.map(r=>this.requestCard(r,mode)).join(''):`<section class="request-progress-empty">${phRegular(process?'check-circle':'clipboard-text')}<div><b>${process?'Nessuna richiesta da preparare':'Nessuna richiesta operativa'}</b><small>${process?'Tutte le richieste risultano completate oppure non ce ne sono di aperte.':'Le nuove richieste compariranno qui non appena vengono inviate.'}</small></div></section>`}</div></section>`
   }
   requestCard(r,mode){
     const s=this.domain.requests.summary(r),status=r.status||'DA PREPARARE',statusClass=status==='COMPLETATA'?'done':status==='PARZIALE'?'partial':'pending',statusIcon=status==='COMPLETATA'?'check-circle':status==='PARZIALE'?'circle-half':'clock',canDelete=this.domain.requests.canDelete(r),inconsistent=(status==='COMPLETATA'&&s.remaining>0)||(status!=='COMPLETATA'&&s.requested>0&&s.remaining===0),process=mode==='PROCESS';
@@ -16594,13 +16831,13 @@ class UI{
   }
   requestDetail(id){
     const r=this.store.db.requests.find(x=>x.id===id);if(!r||r.deletedAt)return this.emptyPage('Richiesta non trovata o non più disponibile.');
-    const s=this.domain.requests.summary(r),status=r.status||'DA PREPARARE',statusClass=status==='COMPLETATA'?'done':status==='PARZIALE'?'partial':'pending',statusIcon=status==='COMPLETATA'?'check-circle':status==='PARZIALE'?'circle-half':'clock',canDelete=this.domain.requests.canDelete(r),calculatedStatus=s.remaining===0?'COMPLETATA':s.delivered>0?'PARZIALE':'DA PREPARARE',inconsistent=status!==calculatedStatus;
+    const s=this.domain.requests.summary(r),status=r.status||'DA PREPARARE',statusClass=status==='COMPLETATA'?'done':status==='PARZIALE'?'partial':'pending',statusIcon=status==='COMPLETATA'?'check-circle':status==='PARZIALE'?'circle-half':'clock',canDelete=this.domain.requests.canDelete(r),calculatedStatus=s.remaining===0?'COMPLETATA':s.delivered>0?'PARZIALE':'DA PREPARARE',inconsistent=status!==calculatedStatus,desktop=document.body.classList.contains('desktop-mode')&&(globalThis.innerWidth||document.documentElement.clientWidth||0)>980,docbar=desktop?`<section class="request-doc-toolbar"><div class="request-doc-toolbar-copy"><span class="request-doc-toolbar-icon">${phRegular('file-arrow-down')}</span><div><small>DOCUMENTO A4</small><b>Stampa ed esportazione</b><span>Margini uniformi · colonne sempre entro pagina</span></div></div><label class="request-doc-orientation"><span>ORIENTAMENTO</span><select id="requestDocOrientation"><option value="auto" ${this.requestDocOrientation==='auto'?'selected':''}>AUTO</option><option value="portrait" ${this.requestDocOrientation==='portrait'?'selected':''}>A4 VERTICALE</option><option value="landscape" ${this.requestDocOrientation==='landscape'?'selected':''}>A4 ORIZZONTALE</option></select></label><div class="request-doc-actions"><button data-action="request-print" data-id="${esc(r.id)}">${phRegular('printer')}<span>STAMPA</span></button><button data-action="request-pdf" data-id="${esc(r.id)}">${phRegular('file-pdf')}<span>PDF</span></button><button data-action="request-excel" data-id="${esc(r.id)}">${phRegular('microsoft-excel-logo')}<span>EXCEL</span></button></div></section>`:'';
     const prepare=this.auth.can('REQUEST_PROCESS')&&status!=='COMPLETATA'?`<button class="request-detail-v3-primary" data-action="request-pick" data-id="${esc(r.id)}"><span>${phRegular('package')} PREPARA RICHIESTA</span>${phRegular('arrow-right')}</button>`:'',remove=canDelete?`<button class="request-detail-v3-delete" data-action="request-delete" data-id="${esc(r.id)}">${phRegular('trash')}<span>ELIMINA RICHIESTA</span></button>`:'';
     const rows=(r.lines||[]).map((l,index)=>{
       const d=this.domain.requests.deliveredForLine(r,l.id),requested=integer(l.cartonsRequested),rem=Math.max(0,requested-d.cartons),percent=requested?Math.min(100,Math.round(d.cartons*100/requested)):0,available=this.domain.stock.total(l.article,l.size),receiving=this.domain.stock.receivingTotal(l.article,l.size),lineState=rem===0?'done':d.cartons>0?'partial':'pending',availabilityClass=available>0?'available':'unavailable';
       return `<article class="request-detail-v3-line ${lineState}"><div class="request-detail-v3-line-main"><span class="request-detail-v3-line-index">${String(index+1).padStart(2,'0')}</span><div class="request-detail-v3-line-id"><small>ARTICOLO</small><b>${esc(l.article)}${l.size?` <i>·</i> ${esc(l.size)}`:''}</b><span>${rem===0?'Riga completata':d.cartons>0?'Prelievo parziale':'Da preparare'}</span></div><div class="request-detail-v3-line-rem"><small>RESIDUI</small><strong>${rem}</strong><span>cartoni</span></div></div><div class="request-detail-v3-line-progress"><i style="width:${percent}%"></i></div><div class="request-detail-v3-line-stats"><span><small>RICHIESTI</small><b>${requested}</b><em>cartoni</em></span><span><small>PRELEVATI</small><b>${d.cartons}</b><em>cartoni</em></span><span><small>SCARICATI</small><b>${d.pieces}</b><em>pezzi</em></span><span class="${availabilityClass}"><small>DISPONIBILI</small><b>${available}</b><em>pezzi</em></span></div><div class="request-detail-v3-line-foot ${availabilityClass}">${phRegular(available>0?'package':'warning-circle')}<span>${available>0?`Disponibilità attuale: <b>${available} pezzi</b>${receiving?` · <strong>${receiving} in Area Ricevimento</strong>`:''}`:'Nessun pezzo disponibile in giacenza per questo articolo'}</span></div>${l.note?`<div class="request-detail-v3-note">${phRegular('note-pencil')}<span>${esc(l.note)}</span></div>`:''}${l.marker?`<div class="request-detail-v3-marker">${phRegular('asterisk')} Segnalazione presente sulla richiesta originale</div>`:''}</article>`
     }).join('');
-    return `<section class="request-detail-v3 ${statusClass}"><header class="request-detail-v3-hero"><div class="request-detail-v3-title"><span class="request-detail-v3-title-icon">${phRegular('clipboard-text')}</span><div><small>${esc(r.id)}</small><h1>${esc(r.destination||'Richiesta')}</h1><p>${fmtDateTime(r.requestedAt)} · ${esc(r.operator||'—')}${r.reference?` · Rif. ${esc(r.reference)}`:''}</p></div></div><em class="request-detail-v3-status">${phRegular(statusIcon)}<span>${esc(status)}</span></em></header><section class="request-detail-v3-overview"><div class="request-detail-v3-progress"><div class="request-detail-v3-progress-top"><div><small>AVANZAMENTO RICHIESTA</small><span>${s.delivered} di ${s.requested} cartoni prelevati</span></div><strong>${s.percent}<i>%</i></strong></div><div class="request-detail-v3-progress-bar"><i style="width:${s.percent}%"></i></div><div class="request-detail-v3-progress-foot"><span>${s.remaining} cartoni residui</span><span>${s.pieces} pezzi scaricati</span></div></div><div class="request-detail-v3-kpis"><span><small>RICHIESTI</small><b>${s.requested}</b><em>cartoni</em></span><span><small>PRELEVATI</small><b>${s.delivered}</b><em>cartoni</em></span><span><small>RESIDUI</small><b>${s.remaining}</b><em>cartoni</em></span></div></section>${inconsistent?`<section class="request-detail-v3-integrity">${phRegular('warning-circle')}<div><b>Dati storici da verificare</b><p>Lo stato salvato e l’avanzamento calcolato non coincidono.</p><div><span>STATO SALVATO <strong>${esc(status)}</strong></span><span>AVANZAMENTO CALCOLATO <strong>${esc(calculatedStatus)} · ${s.percent}%</strong></span></div></div></section>`:''}<div class="request-detail-v3-section-head"><div><small>DETTAGLIO ARTICOLI</small><h2>${(r.lines||[]).length} ${(r.lines||[]).length===1?'riga operativa':'righe operative'}</h2></div><span>${s.remaining} cartoni residui</span></div><div class="request-detail-v3-lines">${rows}</div>${prepare||remove?`<footer class="request-detail-v3-actions">${prepare}${remove}</footer>`:''}</section>`
+    return `<section class="request-detail-v3 ${statusClass}"><header class="request-detail-v3-hero"><div class="request-detail-v3-title"><span class="request-detail-v3-title-icon">${phRegular('clipboard-text')}</span><div><small>${esc(r.id)}</small><h1>${esc(r.destination||'Richiesta')}</h1><p>${fmtDateTime(r.requestedAt)} · ${esc(r.operator||'—')}${r.reference?` · Rif. ${esc(r.reference)}`:''}</p></div></div><em class="request-detail-v3-status">${phRegular(statusIcon)}<span>${esc(status)}</span></em></header>${docbar}<section class="request-detail-v3-overview"><div class="request-detail-v3-progress"><div class="request-detail-v3-progress-top"><div><small>AVANZAMENTO RICHIESTA</small><span>${s.delivered} di ${s.requested} cartoni prelevati</span></div><strong>${s.percent}<i>%</i></strong></div><div class="request-detail-v3-progress-bar"><i style="width:${s.percent}%"></i></div><div class="request-detail-v3-progress-foot"><span>${s.remaining} cartoni residui</span><span>${s.pieces} pezzi scaricati</span></div></div><div class="request-detail-v3-kpis"><span><small>RICHIESTI</small><b>${s.requested}</b><em>cartoni</em></span><span><small>PRELEVATI</small><b>${s.delivered}</b><em>cartoni</em></span><span><small>RESIDUI</small><b>${s.remaining}</b><em>cartoni</em></span></div></section>${inconsistent?`<section class="request-detail-v3-integrity">${phRegular('warning-circle')}<div><b>Dati storici da verificare</b><p>Lo stato salvato e l’avanzamento calcolato non coincidono.</p><div><span>STATO SALVATO <strong>${esc(status)}</strong></span><span>AVANZAMENTO CALCOLATO <strong>${esc(calculatedStatus)} · ${s.percent}%</strong></span></div></div></section>`:''}<div class="request-detail-v3-section-head"><div><small>DETTAGLIO ARTICOLI</small><h2>${(r.lines||[]).length} ${(r.lines||[]).length===1?'riga operativa':'righe operative'}</h2></div><span>${s.remaining} cartoni residui</span></div><div class="request-detail-v3-lines">${rows}</div>${prepare||remove?`<footer class="request-detail-v3-actions">${prepare}${remove}</footer>`:''}</section>`
   }
   requestPick(id){if(!this.require('REQUEST_PROCESS'))return'';if(!this.masterReady())return this.masterRequiredView({context:'preparare e scaricare una richiesta',backAction:'requests-process',backLabel:'TORNA AL COMPLETAMENTO'});const r=this.store.db.requests.find(x=>x.id===id);if(!r||r.deletedAt)return this.emptyPage('Richiesta non trovata o non più disponibile.');return `${this.sectionTitle('PRELIEVO',r.id)}<div class="request-pick-hero">${phIcon('package','request-pick-hero-icon')}<div><b>Preparazione richiesta</b><small>Cartoni = avanzamento · Pezzi = scarico reale dalla giacenza</small></div></div><div id="requestPickSources" data-request="${r.id}"></div><section class="form-card extra-pick request-extra"><h2>${phIcon('plus-circle','inline-icon')} Materiale non richiesto</h2><label>Giacenza${this.sourceSelect('extraPickSource')}</label><div class="two"><label>Cartoni<input id="extraPickCartons" type="number" min="0" value="0" class="field"></label><label>Pezzi<input id="extraPickPieces" type="number" min="0" value="0" class="field"></label></div></section><label>Note consegna<textarea id="requestPickNote" class="field textarea"></textarea></label><button class="success request-pick-confirm" data-action="request-pick-save" data-id="${r.id}">${phIcon('check-circle','inline-icon')} CONFERMA CARTONI E SCARICA PEZZI</button>`}
   renderRequestPickSources(){
@@ -16609,6 +16846,22 @@ class UI{
   }
   saveRequestPick(id){const picks=[...document.querySelectorAll('[data-pick-row]')].map(row=>({lineId:row.dataset.line,sourceKey:row.dataset.key,cartons:Number(row.querySelector('[data-pick-cartons]')?.value||0),pieces:Number(row.querySelector('[data-pick-pieces]')?.value||0)})).filter(p=>p.cartons>0||p.pieces>0),extraPieces=Number(document.getElementById('extraPickPieces')?.value||0),extraCartons=Number(document.getElementById('extraPickCartons')?.value||0);if(extraPieces>0)picks.push({lineId:'',sourceKey:document.getElementById('extraPickSource').value,cartons:extraCartons,pieces:extraPieces,extra:true});this.domain.requests.fulfill(id,picks,document.getElementById('requestPickNote').value);this.toast('Prelievo registrato.');this.router.go('request-detail',{id})}
 
+
+
+  requestDocumentDesktop(){return document.body.classList.contains('desktop-mode')&&(globalThis.innerWidth||document.documentElement.clientWidth||0)>980}
+  async exportRequestDocument(kind,id){
+    if(!this.requestDocumentDesktop())throw new Error('Stampa ed esportazione richieste sono disponibili nella versione desktop.');
+    const orientation=this.requestDocOrientation||'auto';
+    if(kind==='print'){const used=this.requestDocs.print(id,orientation);this.toast('Anteprima di stampa A4 '+(used==='landscape'?'orizzontale':'verticale')+' aperta.');return}
+    if(kind==='pdf'){const name=await this.requestDocs.pdf(id,orientation);this.toast(name+' esportato.');return}
+    if(kind==='excel'){const name=await this.requestDocs.excel(id,orientation);this.toast(name+' esportato.');return}
+    throw new Error('Formato documento non supportato.')
+  }
+  async exportRequestList(mode='PROGRESS'){
+    if(!this.requestDocumentDesktop())throw new Error('L’esportazione richieste è disponibile nella versione desktop.');
+    const rows=this.store.db.requests.filter(r=>this.domain.requests.visible(r)).filter(r=>mode!=='PROCESS'||r.status!=='COMPLETATA');
+    const label=mode==='PROCESS'?'RICHIESTE_DA_COMPLETARE':'RICHIESTE_OPERATIVE',name=await this.requestDocs.excelList(rows,label);this.toast(name+' esportato.')
+  }
 
   openRequestDelete(id){
     const r=this.store.db.requests.find(x=>x.id===id);if(!r||r.deletedAt)throw new Error('Richiesta non trovata o già eliminata.');if(!this.domain.requests.canDelete(r))throw new Error('Non hai il permesso per eliminare questa richiesta.');
@@ -16669,7 +16922,7 @@ class UI{
   openNotifications(){const d=document.getElementById('notificationDialog'),rows=this.domain.notifications.visibleTo(this.auth.user);d.querySelector('.dialog-body').innerHTML=rows.length?rows.map(n=>`<button class="notif-row ${n.readAt?'read':''}" data-action="notif-read" data-id="${n.id}" data-entity="${n.entityType}" data-entity-id="${n.entityId}"><b>${esc(n.title)}</b><span>${esc(n.body)}</span><small>${fmtDateTime(n.createdAt)}</small></button>`).join(''):'<div class="empty">Nessuna notifica.</div>';d.showModal()}
 
   input(el){if(el.dataset.masterRequestQty)this.updateMasterRequestQty(el,false);if(el.id==='loginPin'){const next=String(el.value||'').replace(/\D/g,'').slice(0,4);if(el.value!==next)el.value=next;if(next.length>this.lastPinLength)this.sounds?.pinKey?.();this.lastPinLength=next.length}if(el.id==='requestDeletePin'){const next=String(el.value||'').replace(/\D/g,'').slice(0,CONFIG.pinLength);if(el.value!==next)el.value=next;if(next.length>this.lastDeletePinLength)this.sounds?.pinKey?.();this.lastDeletePinLength=next.length;document.getElementById('requestDeleteError')?.classList.add('hidden')}if(el.dataset.countExtra)this.updateCountExtra(el.dataset.dom,el.dataset.countExtra,el.value);if(el.id?.startsWith('count-value-'))this.updateCountValue(el.id.replace('count-value-',''),el.value);if(el.id==='rectCounted')this.updateRectCount(el.value);const bind=el.dataset.bind;if(bind){this.bindDraft(bind,el.value);if(bind.startsWith('receipt:')||bind.startsWith('receiptgroup:'))this.updateReceiptNewSummary?.()}if(['stockQuery','stockLocation','stockPallet'].includes(el.id))this.scheduleStockRender();if(['rectSearch','rectFilterSize','rectFilterLocation','rectFilterPallet'].includes(el.id))this.renderRectResults();if(el.id==='registryQuery')this.renderRegistryResults();if(el.id==='masterQuery'){this.masterView.query=el.value;this.masterView.page=1;this.scheduleMasterRender()}if(el.id==='masterFilterArticle'){this.masterView.article=el.value;this.masterView.page=1;this.scheduleMasterRender()}if(el.id==='masterFilterLocation'){this.masterView.location=el.value;this.masterView.page=1;this.scheduleMasterRender()}if(el.id==='masterFilterPallet'){this.masterView.pallet=el.value;this.masterView.page=1;this.scheduleMasterRender()}if(el.id==='loginPin'){el.value=el.value.replace(/\D/g,'').slice(0,4);document.getElementById('loginError')?.classList.add('hidden')}}
-  change(el){if(el.dataset.masterRequestQty)this.updateMasterRequestQty(el,true);if(el.dataset.countExtra)this.updateCountExtra(el.dataset.dom,el.dataset.countExtra,el.value);if(el.id==='rectFilterState')this.renderRectResults();if(el.id==='rectReason'&&this.rectDraft)this.rectDraft.reason=norm(el.value);const bind=el.dataset.bind;if(bind){this.bindDraft(bind,el.value);if(bind.includes(':article')||bind.includes(':size')||bind.includes(':state')||bind.startsWith('receiptgroup:'))this.renderView()}if(el.id==='stockState')this.renderStockResults();if(['registryFrom','registryTo','registryType','registryState'].includes(el.id))this.renderRegistryResults();if(el.id==='masterFilterSize'){this.masterView.size=el.value;this.masterView.page=1;this.renderMasterViewerBody()}if(el.id==='masterSort'){this.masterView.sort=el.value;this.masterView.page=1;this.renderMasterViewerBody()}if(el.id?.startsWith('activityDate-')){this.activityDate=el.value||localDateInput();this.renderView()}}
+  change(el){if(el.dataset.masterRequestQty)this.updateMasterRequestQty(el,true);if(el.dataset.countExtra)this.updateCountExtra(el.dataset.dom,el.dataset.countExtra,el.value);if(el.id==='rectFilterState')this.renderRectResults();if(el.id==='rectReason'&&this.rectDraft)this.rectDraft.reason=norm(el.value);const bind=el.dataset.bind;if(bind){this.bindDraft(bind,el.value);if(bind.includes(':article')||bind.includes(':size')||bind.includes(':state')||bind.startsWith('receiptgroup:'))this.renderView()}if(el.id==='stockState')this.renderStockResults();if(['registryFrom','registryTo','registryType','registryState'].includes(el.id))this.renderRegistryResults();if(el.id==='masterFilterSize'){this.masterView.size=el.value;this.masterView.page=1;this.renderMasterViewerBody()}if(el.id==='masterSort'){this.masterView.sort=el.value;this.masterView.page=1;this.renderMasterViewerBody()}if(el.id==='requestDocOrientation')this.requestDocOrientation=['portrait','landscape'].includes(el.value)?el.value:'auto';if(el.id?.startsWith('activityDate-')){this.activityDate=el.value||localDateInput();this.renderView()}}
   bindDraft(bind,value){
     const [kind,id,key]=bind.split(':');
     if(kind==='receipt'&&this.receiptDraft){
@@ -16724,7 +16977,7 @@ class UI{
 
   action(action,el){
     const go=(name,params={})=>this.router.go(name,params);
-    const map={back:()=>this.router.back(),home:()=>this.router.home(),login:()=>{this.sounds?.click?.();this.openLogin()},'login-submit':()=>this.login(),logout:()=>{this.sounds?.click?.();this.logout()},'site-switch':()=>this.openSiteSwitcher(),'site-select':()=>this.selectSite(el.dataset.site),'site-choice-cancel':()=>this.cancelSiteChoice(),'toggle-pin':()=>{const p=document.getElementById('loginPin'),show=p.type==='password';p.type=show?'text':'password';const i=el.querySelector('i');if(i)i.className=`ph-duotone ph-${show?'eye-slash':'eye'}`;el.setAttribute('aria-label',show?'Nascondi PIN':'Mostra PIN');p.focus()},'view-desktop':()=>this.applyView('desktop'),'view-phone':()=>this.applyView('smartphone'),notifications:()=>this.openNotifications(),master:()=>go('master'),'master-view':()=>go('master'),'master-filter-reset':()=>this.resetMasterFilters(),'master-request-toggle':()=>this.toggleMasterRequestMode(),'master-request-item':()=>this.toggleMasterRequestItem(el.dataset.item),'master-request-locations':()=>this.toggleMasterRequestLocations(el.dataset.item,el),'master-request-review':()=>this.openMasterRequestReview(),'master-request-review-close':()=>document.getElementById('masterRequestDialog')?.close(),'master-request-remove':()=>this.removeMasterRequestItem(el.dataset.item),'master-request-qty-minus':()=>this.adjustMasterRequestQty(el.dataset.item,-1),'master-request-qty-plus':()=>this.adjustMasterRequestQty(el.dataset.item,1),'master-request-send':()=>this.sendMasterRequest(),'master-page-prev':()=>{this.masterView.page=Math.max(1,this.masterView.page-1);this.renderMasterViewerBody()},'master-page-next':()=>{this.masterView.page+=1;this.renderMasterViewerBody()},'master-edit-close':()=>this.closeMasterEdit(),'master-edit-save':()=>this.saveMasterEdit(),'master-remove-open':()=>this.openMasterRemove(),'master-remove-close':()=>this.closeMasterRemove(),'master-remove-confirm':()=>this.confirmMasterRemove(),'master-remove-toggle-pin':()=>this.toggleMasterRemovePin(),'master-import':()=>{if(!this.auth.can('MASTER_IMPORT'))throw new Error('Non hai il permesso per importare il Master.');document.getElementById('masterFile').click()},'master-export':async()=>{if(!this.auth.can('MASTER_EXPORT'))throw new Error('Non hai il permesso per esportare il Master.');const n=await this.excel.export();this.toast(`${n} esportato.`)},'legacy-migrate':()=>{if(!confirm('Migrare una COPIA dei dati REMOTO in NOVA? REMOTO non verrà modificato.'))return;this.excel.migrateLocalLegacy();this.toast('Copia REMOTO migrata in NOVA.');this.router.home()},receiving:()=>go('receiving'),'receipt-new':()=>this.openReceiptNew(),'receipts-pending':()=>go('receipts',{mode:'PENDING'}),'receipts-all':()=>go('receipts',{mode:'ALL'}),'receipt-line-add':()=>this.addReceiptLine(),'receipt-article-add':()=>this.addReceiptArticle(),'receipt-confirm':()=>this.confirmReceipt(),'ddt-camera':()=>document.getElementById('ddtCamera').click(),'ddt-file':()=>document.getElementById('ddtFile').click(),'ddt-analyze':()=>this.openAnalysis('DDT'),'request-camera':()=>document.getElementById('requestCamera').click(),'request-file':()=>document.getElementById('requestFile').click(),'request-analyze':()=>this.openAnalysis('REQUEST'),'analysis-share':()=>this.shareAnalysis(),'analysis-copy':()=>this.copyAnalysisPrompt(),'analysis-import':()=>this.importAnalysisJson(),stock:()=>{if(this.require('STOCK_VIEW'))go('stock')},'rectify-new':()=>{this.rectDraft=null;go('rectify',{key:''})},rectify:()=>{this.rectDraft=null;go('rectify',{key:''})},'rect-filter-toggle':()=>{this.rectFiltersOpen=!this.rectFiltersOpen;this.renderView()},'rect-change':()=>{this.rectDraft=null;this.renderView()},'rect-step-minus':()=>this.stepRect(-1),'rect-step-plus':()=>this.stepRect(1),'rect-cancel':()=>{this.rectDraft=null;this.router.back()},'rectify-save':()=>this.saveRectify(el),count:()=>{this.countDraft=this.countDraft||this.loadCountSession();go('count')},'count-load':()=>this.loadCount(),'count-finalize':()=>this.finalizeCount(),'count-apply':()=>this.applyCount(el),'count-abandon':()=>this.abandonCount(),issue:()=>go('issue'),'issue-confirm':()=>this.confirmIssue(),transfer:()=>go('transfer'),'transfer-confirm':()=>this.confirmTransfer(),requests:()=>go('requests-progress'),'request-new':()=>this.openRequestNew(),'request-line-add':()=>this.addRequestLine(),'request-save':()=>this.saveRequest(),'requests-progress':()=>go('requests-progress'),'requests-process':()=>go('requests-process'),registry:()=>go('registry'),'registry-movements':()=>{this.registryTab='MOVIMENTI';go('registry-list')},'registry-audit':()=>{this.registryTab='AUDIT';go('registry-list')},'registry-export':async()=>{const n=await this.excel.exportRegistry();this.toast(`${n} esportato.`)},admin:()=>go('admin'),'admin-operators':()=>go('admin-operators'),'admin-operator-new':()=>go('admin-operator',{id:''}),'admin-sites':()=>go('admin-sites'),'admin-site-new':()=>go('admin-site',{id:''}),'admin-roles':()=>go('admin-roles'),'admin-pin-generate':()=>this.generateAdminPin(),'admin-pin-dismiss':()=>{this.adminGeneratedPin='';this.renderView()},'activity-today':()=>{this.activityDate=localDateInput();this.renderView()},'activity-date-open':()=>{const input=document.getElementById(el.dataset.target);if(!input)return;try{input.focus({preventScroll:true})}catch{input.focus?.()}if(typeof input.showPicker==='function'){try{input.showPicker();return}catch{}}input.click?.()},'receipt-picker-open':()=>{const input=document.getElementById(el.dataset.target);if(!input)return;try{input.focus({preventScroll:true})}catch{input.focus?.()}if(typeof input.showPicker==='function'){try{input.showPicker();return}catch{}}input.click?.()},'registry-filter-toggle':()=>document.getElementById('registryFilters')?.classList.toggle('hidden')};
+    const map={back:()=>this.router.back(),home:()=>this.router.home(),login:()=>{this.sounds?.click?.();this.openLogin()},'login-submit':()=>this.login(),logout:()=>{this.sounds?.click?.();this.logout()},'site-switch':()=>this.openSiteSwitcher(),'site-select':()=>this.selectSite(el.dataset.site),'site-choice-cancel':()=>this.cancelSiteChoice(),'toggle-pin':()=>{const p=document.getElementById('loginPin'),show=p.type==='password';p.type=show?'text':'password';const i=el.querySelector('i');if(i)i.className=`ph-duotone ph-${show?'eye-slash':'eye'}`;el.setAttribute('aria-label',show?'Nascondi PIN':'Mostra PIN');p.focus()},'view-desktop':()=>this.applyView('desktop'),'view-phone':()=>this.applyView('smartphone'),notifications:()=>this.openNotifications(),master:()=>go('master'),'master-view':()=>go('master'),'master-filter-reset':()=>this.resetMasterFilters(),'master-request-toggle':()=>this.toggleMasterRequestMode(),'master-request-item':()=>this.toggleMasterRequestItem(el.dataset.item),'master-request-locations':()=>this.toggleMasterRequestLocations(el.dataset.item,el),'master-request-review':()=>this.openMasterRequestReview(),'master-request-review-close':()=>document.getElementById('masterRequestDialog')?.close(),'master-request-remove':()=>this.removeMasterRequestItem(el.dataset.item),'master-request-qty-minus':()=>this.adjustMasterRequestQty(el.dataset.item,-1),'master-request-qty-plus':()=>this.adjustMasterRequestQty(el.dataset.item,1),'master-request-send':()=>this.sendMasterRequest(),'master-page-prev':()=>{this.masterView.page=Math.max(1,this.masterView.page-1);this.renderMasterViewerBody()},'master-page-next':()=>{this.masterView.page+=1;this.renderMasterViewerBody()},'master-edit-close':()=>this.closeMasterEdit(),'master-edit-save':()=>this.saveMasterEdit(),'master-remove-open':()=>this.openMasterRemove(),'master-remove-close':()=>this.closeMasterRemove(),'master-remove-confirm':()=>this.confirmMasterRemove(),'master-remove-toggle-pin':()=>this.toggleMasterRemovePin(),'master-import':()=>{if(!this.auth.can('MASTER_IMPORT'))throw new Error('Non hai il permesso per importare il Master.');document.getElementById('masterFile').click()},'master-export':async()=>{if(!this.auth.can('MASTER_EXPORT'))throw new Error('Non hai il permesso per esportare il Master.');const n=await this.excel.export();this.toast(`${n} esportato.`)},'legacy-migrate':()=>{if(!confirm('Migrare una COPIA dei dati REMOTO in NOVA? REMOTO non verrà modificato.'))return;this.excel.migrateLocalLegacy();this.toast('Copia REMOTO migrata in NOVA.');this.router.home()},receiving:()=>go('receiving'),'receipt-new':()=>this.openReceiptNew(),'receipts-pending':()=>go('receipts',{mode:'PENDING'}),'receipts-all':()=>go('receipts',{mode:'ALL'}),'receipt-line-add':()=>this.addReceiptLine(),'receipt-article-add':()=>this.addReceiptArticle(),'receipt-confirm':()=>this.confirmReceipt(),'ddt-camera':()=>document.getElementById('ddtCamera').click(),'ddt-file':()=>document.getElementById('ddtFile').click(),'ddt-analyze':()=>this.openAnalysis('DDT'),'request-camera':()=>document.getElementById('requestCamera').click(),'request-file':()=>document.getElementById('requestFile').click(),'request-analyze':()=>this.openAnalysis('REQUEST'),'analysis-share':()=>this.shareAnalysis(),'analysis-copy':()=>this.copyAnalysisPrompt(),'analysis-import':()=>this.importAnalysisJson(),stock:()=>{if(this.require('STOCK_VIEW'))go('stock')},'rectify-new':()=>{this.rectDraft=null;go('rectify',{key:''})},rectify:()=>{this.rectDraft=null;go('rectify',{key:''})},'rect-filter-toggle':()=>{this.rectFiltersOpen=!this.rectFiltersOpen;this.renderView()},'rect-change':()=>{this.rectDraft=null;this.renderView()},'rect-step-minus':()=>this.stepRect(-1),'rect-step-plus':()=>this.stepRect(1),'rect-cancel':()=>{this.rectDraft=null;this.router.back()},'rectify-save':()=>this.saveRectify(el),count:()=>{this.countDraft=this.countDraft||this.loadCountSession();go('count')},'count-load':()=>this.loadCount(),'count-finalize':()=>this.finalizeCount(),'count-apply':()=>this.applyCount(el),'count-abandon':()=>this.abandonCount(),issue:()=>go('issue'),'issue-confirm':()=>this.confirmIssue(),transfer:()=>go('transfer'),'transfer-confirm':()=>this.confirmTransfer(),requests:()=>go('requests-progress'),'request-new':()=>this.openRequestNew(),'request-line-add':()=>this.addRequestLine(),'request-save':()=>this.saveRequest(),'requests-progress':()=>go('requests-progress'),'requests-process':()=>go('requests-process'),'request-print':()=>this.exportRequestDocument('print',el.dataset.id),'request-pdf':()=>this.exportRequestDocument('pdf',el.dataset.id),'request-excel':()=>this.exportRequestDocument('excel',el.dataset.id),'request-list-excel':()=>this.exportRequestList(el.dataset.mode||'PROGRESS'),registry:()=>go('registry'),'registry-movements':()=>{this.registryTab='MOVIMENTI';go('registry-list')},'registry-audit':()=>{this.registryTab='AUDIT';go('registry-list')},'registry-export':async()=>{const n=await this.excel.exportRegistry();this.toast(`${n} esportato.`)},admin:()=>go('admin'),'admin-operators':()=>go('admin-operators'),'admin-operator-new':()=>go('admin-operator',{id:''}),'admin-sites':()=>go('admin-sites'),'admin-site-new':()=>go('admin-site',{id:''}),'admin-roles':()=>go('admin-roles'),'admin-pin-generate':()=>this.generateAdminPin(),'admin-pin-dismiss':()=>{this.adminGeneratedPin='';this.renderView()},'activity-today':()=>{this.activityDate=localDateInput();this.renderView()},'activity-date-open':()=>{const input=document.getElementById(el.dataset.target);if(!input)return;try{input.focus({preventScroll:true})}catch{input.focus?.()}if(typeof input.showPicker==='function'){try{input.showPicker();return}catch{}}input.click?.()},'receipt-picker-open':()=>{const input=document.getElementById(el.dataset.target);if(!input)return;try{input.focus({preventScroll:true})}catch{input.focus?.()}if(typeof input.showPicker==='function'){try{input.showPicker();return}catch{}}input.click?.()},'registry-filter-toggle':()=>document.getElementById('registryFilters')?.classList.toggle('hidden')};
     if(map[action])return map[action]();
     if(action==='request-delete')return this.openRequestDelete(el.dataset.id);if(action==='request-delete-close')return this.closeRequestDelete();if(action==='request-delete-confirm')return this.confirmRequestDelete();if(action==='request-delete-toggle-pin')return this.toggleRequestDeletePin();
     if(action==='receipt-article-remove')return this.removeReceiptArticle(el.dataset.group);if(action==='receipt-variant-add')return this.addReceiptVariant(el.dataset.group);if(action==='receipt-variant-remove')return this.removeReceiptVariant(el.dataset.line);if(action==='master-edit-row')return this.openMasterEdit(el.dataset.key);if(action==='admin-operator-edit')return go('admin-operator',{id:el.dataset.id});if(action==='admin-operator-save')return this.saveAdminOperator(el.dataset.id||'');if(action==='admin-site-edit')return go('admin-site',{id:el.dataset.id});if(action==='admin-site-save')return this.saveAdminSite(el.dataset.id||'');if(action==='stock-suggest')return this.applyStockSuggestion(el);if(action==='receipt-line-remove')return this.removeReceiptLine(el.dataset.line);if(action==='partial-add')return this.addPartial(el.dataset.line);if(action==='partial-undo')return this.undoPartial(el.dataset.line);if(action==='partial-clear')return this.clearPartial(el.dataset.line);if(action==='receipt-open')return go('receipt-detail',{id:el.dataset.id});if(action==='putaway-open')return go('putaway',{receipt:el.dataset.receipt,line:el.dataset.line});if(action==='putaway-confirm')return this.confirmPutAway(el.dataset.receipt,el.dataset.line);if(action==='rectify-open'){this.rectDraft=null;return go('rectify',{key:el.dataset.key})}if(action==='rect-select')return this.selectRect(el.dataset.key);if(action==='count-confirm-row')return this.confirmCountRow(el.dataset.dom);if(action==='count-edit')return this.editCountRow(el.dataset.dom);if(action==='count-zero')return this.countZero(el.dataset.dom);if(action==='count-extra-add')return this.addCountExtra();if(action==='count-extra-remove')return this.removeCountExtra(el.dataset.dom);if(action==='request-line-remove')return this.removeRequestLine(el.dataset.line);if(action==='request-open')return go('request-detail',{id:el.dataset.id});if(action==='request-pick')return go('request-pick',{id:el.dataset.id});if(action==='request-pick-save')return this.saveRequestPick(el.dataset.id);if(action==='ledger-cancel')return this.cancelLedger(el.dataset.id);if(action==='notif-read'){this.domain.notifications.markRead(el.dataset.id);this.store.save('notification:read');document.getElementById('notificationDialog').close();if(el.dataset.entity==='RECEIPT')go('receipt-detail',{id:el.dataset.entityId});else if(el.dataset.entity==='REQUEST')go('request-detail',{id:el.dataset.entityId});return}
@@ -16740,15 +16993,16 @@ let ui=null;
 const router=new Router(()=>ui?.render(),sounds);
 const domain=createDomain(store,auth);
 const excel=new ExcelService(store,domain);
-ui=new UI({store,auth,router,domain,excel,sounds});
+const requestDocs=new RequestDocumentService({store,domain,auth});
+ui=new UI({store,auth,router,domain,excel,requestDocs,sounds});
 
 // NOVA usa esclusivamente NOVA_DB_V1. L'eventuale database REMOTO viene solo rilevato
 // per una migrazione esplicita e non viene mai modificato.
 try{globalThis.__NOVA_LEGACY_AVAILABLE=!!localStorage.getItem(CONFIG.legacyStorageKey)}catch{globalThis.__NOVA_LEGACY_AVAILABLE=false}
 
 const switchSite=async siteId=>{await ui.selectSite(siteId);return auth.site()};
-globalThis.NOVA=Object.freeze({version:CONFIG.appVersion,schema:CONFIG.version,identityVersion:CONFIG.identityVersion,store,auth,router,domain,excel,ui,sounds,sites:SITES,operators:OPERATORS,roles:ROLE_DEFS,saveIdentityRegistry,capabilities:Object.freeze({operational:ALL_CAPS,master:MASTER_CAPS,administration:ADMIN_CAPS,globalAdmin:GLOBAL_ADMIN_CAPS}),identityValidation:IDENTITY_VALIDATION,switchSite});
+globalThis.NOVA=Object.freeze({version:CONFIG.appVersion,schema:CONFIG.version,identityVersion:CONFIG.identityVersion,store,auth,router,domain,excel,requestDocs,ui,sounds,sites:SITES,operators:OPERATORS,roles:ROLE_DEFS,saveIdentityRegistry,capabilities:Object.freeze({operational:ALL_CAPS,master:MASTER_CAPS,administration:ADMIN_CAPS,globalAdmin:GLOBAL_ADMIN_CAPS}),identityValidation:IDENTITY_VALIDATION,switchSite});
 ui.render();</script>
-<!-- SOMA_BUILD:R31.38-20260925 -->
+<!-- SOMA_BUILD:R31.39-20260925 -->
 </body>
 </html>
