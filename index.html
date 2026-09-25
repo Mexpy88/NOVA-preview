@@ -1,13 +1,13 @@
 <!doctype html>
 <html lang="it">
 <head>
-<meta name="soma-build" content="R31.44-20260925">
+<meta name="soma-build" content="R31.45-20260925">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
 <script id="soma-build-freshness">
 (() => {
-  const CURRENT_BUILD='R31.44-20260925',CHECK_KEY='soma:last-build-refresh';
+  const CURRENT_BUILD='R31.45-20260925',CHECK_KEY='soma:last-build-refresh';
   globalThis.SOMA_BUILD=CURRENT_BUILD;
   const check=async()=>{
     try{
@@ -15675,6 +15675,231 @@ body.desktop-mode .app-view:has(.receipt-new-shell){width:100%!important;max-wid
   .issue-confirm-bar{grid-template-columns:1fr}
 }
 </style>
+
+<style id="soma-r31-45-stock-desktop-scale">
+/* R31.45 · GIACENZE · desktop-native readability matching 150% visual reference */
+@media(min-width:761px){
+  .stock-page-v4 .page-title{margin:14px 2px 28px!important}
+  .stock-page-v4 .page-title .eyebrow{
+    font-size:16px!important;
+    letter-spacing:.155em!important
+  }
+  .stock-page-v4 .page-title h1{
+    font-size:clamp(56px,4.9vw,72px)!important;
+    line-height:.98!important;
+    margin-top:10px!important;
+    letter-spacing:-.045em!important
+  }
+
+  .stock-page-v4 .stock-command-v3{
+    margin:0 0 22px!important;
+    padding:18px!important;
+    border-radius:26px!important;
+    box-shadow:0 12px 32px rgba(23,59,92,.06)!important
+  }
+  .stock-page-v4 .stock-command-search-icon{
+    left:22px!important;
+    font-size:28px!important
+  }
+  .stock-page-v4 .stock-command-v3 .field{
+    min-height:64px!important;
+    height:64px!important;
+    border-radius:18px!important;
+    font-size:18px!important;
+    font-weight:800!important
+  }
+  .stock-page-v4 .stock-command-search .field{
+    padding-left:62px!important;
+    font-size:20px!important
+  }
+  .stock-page-v4 .stock-command-v3 .field:focus{
+    box-shadow:0 0 0 4px rgba(108,94,234,.11)!important
+  }
+  .stock-page-v4 .stock-command-filters{
+    grid-template-columns:minmax(260px,.52fr) minmax(430px,1.1fr) minmax(310px,.72fr)!important;
+    gap:12px!important;
+    margin-top:13px!important
+  }
+  .stock-page-v4 .stock-command-filter>span{
+    margin:0 0 7px 4px!important;
+    font-size:11.5px!important;
+    letter-spacing:.105em!important
+  }
+  .stock-page-v4 .stock-suggestions-v3{margin-top:11px!important}
+
+  .stock-page-v4 .stock-result-bar-v3{
+    min-height:50px!important;
+    margin:8px 4px 12px!important;
+    gap:18px!important
+  }
+  .stock-page-v4 .stock-result-main-v3,
+  .stock-page-v4 .stock-result-tools-v3{gap:9px!important}
+  .stock-page-v4 .stock-result-main-v3 b{
+    font-size:19px!important
+  }
+  .stock-page-v4 .stock-result-main-v3 strong{
+    font-size:17px!important
+  }
+  .stock-page-v4 .stock-result-main-v3 span{
+    font-size:13.5px!important
+  }
+  .stock-page-v4 .stock-result-main-v3 i{
+    width:4px!important;height:4px!important
+  }
+  .stock-page-v4 .stock-result-tools-v3 small{
+    font-size:11.5px!important
+  }
+  .stock-page-v4 .stock-order-v3{
+    height:34px!important;
+    padding:0 12px!important;
+    font-size:11px!important;
+    gap:7px!important
+  }
+  .stock-page-v4 .stock-order-v3 .ph{font-size:15px!important}
+
+  .stock-page-v4 .stock-groups-v3{gap:13px!important}
+  .stock-page-v4 .stock-group-v3{
+    border-radius:21px!important;
+    box-shadow:0 7px 20px rgba(28,61,89,.05)!important
+  }
+  .stock-page-v4 .stock-group-head-v3{
+    min-height:76px!important;
+    padding:13px 18px 13px 21px!important;
+    gap:22px!important
+  }
+  .stock-page-v4 .stock-group-title-v3 small{
+    margin-bottom:4px!important;
+    font-size:10.5px!important;
+    letter-spacing:.13em!important
+  }
+  .stock-page-v4 .stock-group-title-v3 h3{
+    font-size:24px!important;
+    line-height:1.08!important
+  }
+  .stock-page-v4 .stock-group-summary-v3{gap:25px!important}
+  .stock-page-v4 .stock-group-summary-v3 small{
+    font-size:9.5px!important;
+    letter-spacing:.11em!important
+  }
+  .stock-page-v4 .stock-group-summary-v3 b{
+    font-size:17px!important
+  }
+  .stock-page-v4 .stock-group-summary-v3 strong{
+    font-size:29px!important
+  }
+
+  .stock-page-v4 .stock-grid-head-v3,
+  .stock-page-v4 .stock-row-v3{
+    grid-template-columns:112px 180px minmax(330px,1.65fr) minmax(210px,.85fr) 120px 145px!important
+  }
+  .stock-page-v4 .stock-grid-head-v3{
+    min-height:39px!important;
+    padding:0 14px!important
+  }
+  .stock-page-v4 .stock-grid-head-v3 span{
+    padding:0 12px!important;
+    font-size:10.5px!important;
+    letter-spacing:.09em!important
+  }
+  .stock-page-v4 .stock-row-v3{
+    min-height:68px!important;
+    padding:0 14px!important
+  }
+  .stock-page-v4 .stock-row-v3:before{
+    top:10px!important;
+    bottom:10px!important;
+    width:4px!important
+  }
+  .stock-page-v4 .stock-row-v3>div{
+    padding:10px 12px!important
+  }
+
+  .stock-page-v4 .stock-cell-size-v3 span{
+    min-width:54px!important;
+    height:38px!important;
+    padding:0 11px!important;
+    border-radius:10px!important;
+    font-size:16px!important
+  }
+  .stock-page-v4 .stock-row-v3 .stock-state-pill{
+    min-height:31px!important;
+    padding:5px 10px!important;
+    gap:7px!important;
+    font-size:12px!important
+  }
+  .stock-page-v4 .stock-row-v3 .stock-state-pill i{
+    width:6px!important;height:6px!important
+  }
+  .stock-page-v4 .stock-cell-location-v3,
+  .stock-page-v4 .stock-cell-pallet-v3{
+    gap:10px!important
+  }
+  .stock-page-v4 .stock-inline-icon-v3{
+    font-size:22px!important
+  }
+  .stock-page-v4 .stock-cell-location-v3 b,
+  .stock-page-v4 .stock-cell-pallet-v3 b{
+    font-size:15px!important;
+    line-height:1.2!important
+  }
+  .stock-page-v4 .stock-cell-location-v3 em{
+    padding:4px 8px!important;
+    font-size:9px!important
+  }
+  .stock-page-v4 .stock-cell-qty-v3 strong{
+    font-size:26px!important
+  }
+  .stock-page-v4 .stock-rectify-compact-v3{
+    min-height:42px!important;
+    padding:0 11px 0 12px!important;
+    border-radius:11px!important;
+    gap:7px!important;
+    font-size:12.5px!important
+  }
+  .stock-page-v4 .stock-rectify-compact-v3 .ph{
+    font-size:16px!important
+  }
+  .stock-page-v4 .stock-rectify-compact-v3 .ph:last-child{
+    font-size:12px!important
+  }
+
+  .stock-page-v4 .stock-infinite-v3{
+    min-height:76px!important;
+    margin:14px 0 6px!important;
+    border-radius:18px!important;
+    gap:12px!important
+  }
+  .stock-page-v4 .stock-infinite-v3>span{
+    width:39px!important;height:39px!important;
+    font-size:20px!important
+  }
+  .stock-page-v4 .stock-infinite-v3 b{
+    font-size:11px!important
+  }
+  .stock-page-v4 .stock-infinite-v3 small{
+    font-size:12px!important
+  }
+}
+
+@media(min-width:761px) and (max-width:1300px){
+  .stock-page-v4 .page-title h1{font-size:56px!important}
+  .stock-page-v4 .stock-command-filters{
+    grid-template-columns:minmax(210px,.55fr) minmax(330px,1fr) minmax(230px,.7fr)!important
+  }
+  .stock-page-v4 .stock-grid-head-v3,
+  .stock-page-v4 .stock-row-v3{
+    grid-template-columns:92px 150px minmax(250px,1.45fr) minmax(170px,.8fr) 100px 125px!important
+  }
+  .stock-page-v4 .stock-group-title-v3 h3{font-size:22px!important}
+  .stock-page-v4 .stock-cell-location-v3 b,
+  .stock-page-v4 .stock-cell-pallet-v3 b{font-size:13.5px!important}
+  .stock-page-v4 .stock-rectify-compact-v3{font-size:11.5px!important}
+}
+
+@media(max-width:760px){
+  .stock-page-v4 .page-title{margin-bottom:16px!important}
+}
+</style>
 </head>
 <body>
 <header id="topbar" class="topbar"></header>
@@ -17110,7 +17335,7 @@ class UI{
   putAway(receiptId,lineId){const r=this.store.db.receipts.find(x=>x.id===receiptId),l=r?.lines.find(x=>x.id===lineId);if(!l)return this.emptyPage('Riga non trovata.');const pending=this.domain.receiving.pendingForLine(lineId);return `${this.sectionTitle('UBICAZIONE',`${l.article}${l.size?` · ${l.size}`:''}`)}<section class="form-card"><div class="big-number">${pending}</div><p>pezzi ancora in Area Ricevimento</p><label>Quantità da ubicare<input id="putQty" type="number" min="1" max="${pending}" value="${pending}" class="field"></label><label>Fila/Scaffale<input id="putLocation" class="field" value="${esc(l.suggestedLocation)}"></label><label>Bancale/Carrello<input id="putPallet" class="field" value="${esc(l.suggestedPallet)}"></label><button class="success" data-action="putaway-confirm" data-receipt="${receiptId}" data-line="${lineId}">${phIcon('check-circle','inline-icon')} CONFERMA UBICAZIONE</button></section>`}
   confirmPutAway(receipt,line){this.domain.receiving.putAway(receipt,line,Number(document.getElementById('putQty').value),{location:document.getElementById('putLocation').value,pallet:document.getElementById('putPallet').value});this.toast('Merce ubicata.');this.router.go('receipt-detail',{id:receipt})}
 
-  stock(){if(!this.require('STOCK_VIEW'))return'';if(!this.masterReady())return this.masterRequiredView({context:'consultare le giacenze',backAction:'home',backLabel:'TORNA ALLA DASHBOARD'});return `${this.sectionTitle('GIACENZE','Cerca articoli e posizioni')}<section class="stock-command-v3"><div class="stock-command-search"><span class="stock-command-search-icon">${phIcon('magnifying-glass')}</span><input id="stockQuery" class="field" autocomplete="off" placeholder="Articolo e taglia · es. SZ242 42"></div><div id="stockSuggestions" class="stock-suggestions stock-suggestions-v3"></div><div class="stock-command-filters"><label class="stock-command-filter stock-command-state"><span>STATO</span><select id="stockState" class="field"><option value="">TUTTI GLI STATI</option>${CONFIG.states.map(s=>`<option>${s}</option>`).join('')}</select></label><label class="stock-command-filter stock-command-location"><span>POSIZIONE · FILA · SCAFFALE</span><input id="stockLocation" class="field" autocomplete="off" placeholder="Es. STANZONE CDS FERRI"></label><label class="stock-command-filter stock-command-pallet"><span>BANCALE</span><input id="stockPallet" class="field" autocomplete="off" placeholder="Es. DISMESSI 19"></label></div></section><div id="stockResults" class="stock-results-v3"></div>`}
+  stock(){if(!this.require('STOCK_VIEW'))return'';if(!this.masterReady())return this.masterRequiredView({context:'consultare le giacenze',backAction:'home',backLabel:'TORNA ALLA DASHBOARD'});return `<div class="stock-page-v4">${this.sectionTitle('GIACENZE','Cerca articoli e posizioni')}<section class="stock-command-v3"><div class="stock-command-search"><span class="stock-command-search-icon">${phIcon('magnifying-glass')}</span><input id="stockQuery" class="field" autocomplete="off" placeholder="Articolo e taglia · es. SZ242 42"></div><div id="stockSuggestions" class="stock-suggestions stock-suggestions-v3"></div><div class="stock-command-filters"><label class="stock-command-filter stock-command-state"><span>STATO</span><select id="stockState" class="field"><option value="">TUTTI GLI STATI</option>${CONFIG.states.map(s=>`<option>${s}</option>`).join('')}</select></label><label class="stock-command-filter stock-command-location"><span>POSIZIONE · FILA · SCAFFALE</span><input id="stockLocation" class="field" autocomplete="off" placeholder="Es. STANZONE CDS FERRI"></label><label class="stock-command-filter stock-command-pallet"><span>BANCALE</span><input id="stockPallet" class="field" autocomplete="off" placeholder="Es. DISMESSI 19"></label></div></section><div id="stockResults" class="stock-results-v3"></div></div>`}
   parseStockQuery(value){const raw=norm(value).replace(/[.·\-]+/g,' ').replace(/\s+/g,' ').trim();if(!raw)return{raw:'',article:'',size:'',hasSize:false};const parts=raw.split(' ').filter(Boolean);if(parts.length>=2){const size=norm(parts.pop()),article=normalizeArticle(parts.join(''));return{raw,article,size,hasSize:!!article&&!!size}}return{raw,article:normalizeArticle(raw),size:'',hasSize:false}}
   stockStateClass(state){return `state-${String(state||'NON_CHIARO').toLowerCase().replace(/[^a-z0-9]+/g,'-')}`}
   scheduleStockRender(delay=65){clearTimeout(this.stockSearchTimer);this.stockSearchTimer=setTimeout(()=>{this.stockSearchTimer=null;this.renderStockResults()},delay)}
@@ -17474,6 +17699,6 @@ try{globalThis.__NOVA_LEGACY_AVAILABLE=!!localStorage.getItem(CONFIG.legacyStora
 const switchSite=async siteId=>{await ui.selectSite(siteId);return auth.site()};
 globalThis.NOVA=Object.freeze({version:CONFIG.appVersion,schema:CONFIG.version,identityVersion:CONFIG.identityVersion,store,auth,router,domain,excel,requestDocs,ui,sounds,sites:SITES,operators:OPERATORS,roles:ROLE_DEFS,saveIdentityRegistry,capabilities:Object.freeze({operational:ALL_CAPS,master:MASTER_CAPS,administration:ADMIN_CAPS,globalAdmin:GLOBAL_ADMIN_CAPS}),identityValidation:IDENTITY_VALIDATION,switchSite});
 ui.render();</script>
-<!-- SOMA_BUILD:R31.44-20260925 -->
+<!-- SOMA_BUILD:R31.45-20260925 -->
 </body>
 </html>
