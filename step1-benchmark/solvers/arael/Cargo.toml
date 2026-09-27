@@ -1,0 +1,11 @@
+[package]
+name = "arael-step1-bench"
+version = "0.0.1"
+edition = "2024"
+publish = false
+
+[dependencies]
+arael = { git = "https://github.com/harakas/arael", rev = "dacb51110640ce429fbb4ea87ecad46a2f00600b", default-features = false }
+arael-sketch-solver = { git = "https://github.com/harakas/arael", rev = "dacb51110640ce429fbb4ea87ecad46a2f00600b" }
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
