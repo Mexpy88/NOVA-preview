@@ -1,0 +1,10 @@
+[package]
+name = "fiksi-step1-bench"
+version = "0.0.1"
+edition = "2024"
+publish = false
+
+[dependencies]
+fiksi = { git = "https://github.com/endoli/fiksi", rev = "ff4850546738fb82e95ff27c4db63e924d938473" }
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
