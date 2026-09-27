@@ -1,0 +1,13 @@
+{
+  "name": "step1-benchmark-js",
+  "private": true,
+  "type": "module",
+  "dependencies": {
+    "@playwright/test": "1.63.0",
+    "@tarikjabiri/dxf": "2.9.0",
+    "clipper2-ts": "2.0.1-18",
+    "dxf-parser": "1.1.2",
+    "manifold-3d": "3.5.4",
+    "pixi.js": "8.21.0"
+  }
+}
