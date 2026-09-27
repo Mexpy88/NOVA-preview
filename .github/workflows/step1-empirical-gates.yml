@@ -1,0 +1,190 @@
+name: STEP1 empirical gates
+
+on:
+  push:
+    branches:
+      - step1-benchmark-lab-20260927
+    paths:
+      - 'step1-benchmark/**'
+      - '.github/workflows/step1-empirical-gates.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  solver-ezpz:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+      - name: Run EZPZ common workload
+        id: bench
+        continue-on-error: true
+        working-directory: step1-benchmark/solvers/ezpz
+        run: |
+          mkdir -p results
+          set +e
+          cargo run --release > results/ezpz.json 2> results/ezpz.stderr.txt
+          code=$?
+          echo $code > results/exit-code.txt
+          exit $code
+      - name: Cargo metadata
+        if: always()
+        working-directory: step1-benchmark/solvers/ezpz
+        run: cargo metadata --format-version 1 > results/cargo-metadata.json || true
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: solver-ezpz
+          path: step1-benchmark/solvers/ezpz/results/
+          if-no-files-found: warn
+
+  solver-fiksi:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+      - name: Run Fiksi common workload
+        id: bench
+        continue-on-error: true
+        working-directory: step1-benchmark/solvers/fiksi
+        run: |
+          mkdir -p results
+          set +e
+          cargo run --release > results/fiksi.json 2> results/fiksi.stderr.txt
+          code=$?
+          echo $code > results/exit-code.txt
+          exit $code
+      - name: Cargo metadata
+        if: always()
+        working-directory: step1-benchmark/solvers/fiksi
+        run: cargo metadata --format-version 1 > results/cargo-metadata.json || true
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: solver-fiksi
+          path: step1-benchmark/solvers/fiksi/results/
+          if-no-files-found: warn
+
+  solver-arael:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+      - name: Run Arael common workload
+        id: bench
+        continue-on-error: true
+        working-directory: step1-benchmark/solvers/arael
+        run: |
+          mkdir -p results
+          set +e
+          cargo run --release > results/arael.json 2> results/arael.stderr.txt
+          code=$?
+          echo $code > results/exit-code.txt
+          exit $code
+      - name: Cargo metadata
+        if: always()
+        working-directory: step1-benchmark/solvers/arael
+        run: cargo metadata --format-version 1 > results/cargo-metadata.json || true
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: solver-arael
+          path: step1-benchmark/solvers/arael/results/
+          if-no-files-found: warn
+
+  js-kernels:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+          cache-dependency-path: step1-benchmark/js/package.json
+      - name: Install exact JS benchmark candidates
+        working-directory: step1-benchmark/js
+        run: npm install --no-audit --no-fund
+      - name: Record dependency tree
+        working-directory: step1-benchmark/js
+        run: |
+          mkdir -p results
+          npm ls --all --json > results/npm-tree.json || true
+          npm view clipper2-ts@2.0.1-18 license version repository --json > results/clipper-package.json
+          npm view manifold-3d@3.5.4 license version repository --json > results/manifold-package.json
+          npm view pixi.js@8.21.0 license version repository --json > results/pixi-package.json
+          npm view @tarikjabiri/dxf@2.9.0 license version repository --json > results/dxf-writer-package.json
+          npm view dxf-parser@1.1.2 license version repository --json > results/dxf-parser-package.json
+      - name: Run Clipper2 Manifold DXF
+        id: kernels
+        continue-on-error: true
+        working-directory: step1-benchmark/js
+        run: |
+          set +e
+          node --expose-gc kernel.mjs > results/kernel.stdout.txt 2> results/kernel.stderr.txt
+          code=$?
+          echo $code > results/kernel-exit-code.txt
+          exit $code
+      - name: Install Chromium
+        if: always()
+        working-directory: step1-benchmark/js
+        run: npx playwright install --with-deps chromium
+      - name: Run real Chromium renderer benchmark
+        id: renderer
+        continue-on-error: true
+        working-directory: step1-benchmark/js
+        run: |
+          set +e
+          node renderer.mjs > results/renderer.stdout.txt 2> results/renderer.stderr.txt
+          code=$?
+          echo $code > results/renderer-exit-code.txt
+          exit $code
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: js-gates
+          path: step1-benchmark/js/results/
+          if-no-files-found: warn
+
+  aggregate:
+    if: always()
+    needs: [solver-ezpz, solver-fiksi, solver-arael, js-kernels]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          path: artifacts
+      - name: Build evidence inventory
+        env:
+          EZPZ_JOB: ${{ needs.solver-ezpz.result }}
+          FIKSI_JOB: ${{ needs.solver-fiksi.result }}
+          ARAEL_JOB: ${{ needs.solver-arael.result }}
+          JS_JOB: ${{ needs.js-kernels.result }}
+        run: |
+          python - <<'PY'
+          import json, pathlib, os
+          root=pathlib.Path('artifacts')
+          files=[]
+          for p in sorted(root.rglob('*')):
+              if p.is_file():
+                  files.append({'path':str(p),'bytes':p.stat().st_size})
+          out={
+              'solver-ezpz-job':os.environ['EZPZ_JOB'],
+              'solver-fiksi-job':os.environ['FIKSI_JOB'],
+              'solver-arael-job':os.environ['ARAEL_JOB'],
+              'js-kernels-job':os.environ['JS_JOB'],
+              'files':files,
+          }
+          pathlib.Path('aggregate').mkdir()
+          pathlib.Path('aggregate/evidence-inventory.json').write_text(json.dumps(out,indent=2))
+          print(json.dumps(out,indent=2))
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: step1-evidence-inventory
+          path: aggregate/
