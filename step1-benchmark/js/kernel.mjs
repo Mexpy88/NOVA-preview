@@ -1,7 +1,7 @@
 import fs from 'node:fs';
 import { performance } from 'node:perf_hooks';
 import {
-  union, intersection, difference, inflatePaths,
+  union, intersect, difference, inflatePaths,
   FillRule, JoinType, EndType
 } from 'clipper2-ts';
 import Module from 'manifold-3d';
@@ -40,7 +40,7 @@ async function benchClipper(){
     const pa=[rect(A.x,A.y,A.w,A.h)], pb=[rect(B.x,B.y,B.w,B.h)];
     const t0=performance.now();
     const u=union(pa,pb,FillRule.NonZero);
-    const inter=intersection(pa,pb,FillRule.NonZero);
+    const inter=intersect(pa,pb,FillRule.NonZero);
     const d=difference(pa,pb,FillRule.NonZero);
     times.push(performance.now()-t0);
     const oi=overlapArea(A,B);
