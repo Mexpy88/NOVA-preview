@@ -34,6 +34,17 @@ jobs:
         if: always()
         working-directory: step1-benchmark/solvers/ezpz
         run: cargo metadata --format-version 1 > results/cargo-metadata.json || true
+      - name: WASM target compile check
+        if: always()
+        continue-on-error: true
+        working-directory: step1-benchmark/solvers/ezpz
+        run: |
+          rustup target add wasm32-unknown-unknown
+          set +e
+          cargo check --target wasm32-unknown-unknown > results/wasm-check.stdout.txt 2> results/wasm-check.stderr.txt
+          code=$?
+          echo $code > results/wasm-check-exit-code.txt
+          exit $code
       - uses: actions/upload-artifact@v4
         if: always()
         with:
@@ -62,6 +73,17 @@ jobs:
         if: always()
         working-directory: step1-benchmark/solvers/fiksi
         run: cargo metadata --format-version 1 > results/cargo-metadata.json || true
+      - name: WASM target compile check
+        if: always()
+        continue-on-error: true
+        working-directory: step1-benchmark/solvers/fiksi
+        run: |
+          rustup target add wasm32-unknown-unknown
+          set +e
+          cargo check --target wasm32-unknown-unknown > results/wasm-check.stdout.txt 2> results/wasm-check.stderr.txt
+          code=$?
+          echo $code > results/wasm-check-exit-code.txt
+          exit $code
       - uses: actions/upload-artifact@v4
         if: always()
         with:
@@ -90,6 +112,17 @@ jobs:
         if: always()
         working-directory: step1-benchmark/solvers/arael
         run: cargo metadata --format-version 1 > results/cargo-metadata.json || true
+      - name: WASM target compile check
+        if: always()
+        continue-on-error: true
+        working-directory: step1-benchmark/solvers/arael
+        run: |
+          rustup target add wasm32-unknown-unknown
+          set +e
+          cargo check --target wasm32-unknown-unknown > results/wasm-check.stdout.txt 2> results/wasm-check.stderr.txt
+          code=$?
+          echo $code > results/wasm-check-exit-code.txt
+          exit $code
       - uses: actions/upload-artifact@v4
         if: always()
         with:
@@ -110,6 +143,9 @@ jobs:
       - name: Install exact JS benchmark candidates
         working-directory: step1-benchmark/js
         run: npm install --no-audit --no-fund
+      - name: Scan JS dependency licenses
+        working-directory: step1-benchmark/js
+        run: node license-scan.mjs
       - name: Record dependency tree
         working-directory: step1-benchmark/js
         run: |
