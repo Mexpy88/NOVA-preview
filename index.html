@@ -1,13 +1,13 @@
 <!doctype html>
 <html lang="it">
 <head>
-<meta name="soma-build" content="R31.59-20260928">
+<meta name="soma-build" content="R31.60-20260928">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
 <script id="soma-build-freshness">
 (() => {
-  const CURRENT_BUILD='R31.59-20260928',CHECK_KEY='soma:last-build-refresh';
+  const CURRENT_BUILD='R31.60-20260928',CHECK_KEY='soma:last-build-refresh';
   globalThis.SOMA_BUILD=CURRENT_BUILD;
   const check=async()=>{
     try{
@@ -18103,8 +18103,8 @@ class ReceivingService{
   constructor(store,stock,ledger,audit,notifications,auth){Object.assign(this,{store,stock,ledger,audit,notifications,auth})}
   nextId(){this.store.db.counters.receipt=(this.store.db.counters.receipt||0)+1;return `EM-${new Date().getFullYear()}-${String(this.store.db.counters.receipt).padStart(5,'0')}`}
   findLineByPallet(pallet,item={}){const p=norm(pallet),i=cleanItem(item);for(const r of this.store.db.receipts)for(const l of r.lines||[])if(norm(l.receivingPallet)===p&&(!i.article||l.article===i.article)&&(!i.size||l.size===i.size)&&(!i.state||l.state===i.state))return{receipt:r,line:l};return null}
-  create(draft){if(!this.auth.can('RECEIVE'))throw new Error('Operazione non autorizzata.');const supplier=String(draft.supplier||'').trim();if(!supplier)throw new Error('Inserisci il fornitore.');const valid=(draft.lines||[]).filter(l=>normalizeArticle(l.article)&&number(l.checkedQuantity)>0);if(!valid.length)throw new Error('Inserisci almeno un articolo con quantità controllata maggiore di zero.');const id=this.nextId(),receipt={id,supplier,ddtNumber:String(draft.ddtNumber||'').trim(),ddtDate:draft.ddtDate||'',receivedAt:draft.receivedAt||nowIso(),note:String(draft.note||'').trim(),operator:this.auth.user,createdAt:nowIso(),attachments:clone(draft.attachments||[]),lines:[]};
-    valid.forEach((raw,index)=>{const item=cleanItem(raw),lineId=uid(),receivingPallet=`${id}-${norm(raw.pallet||'P01')||'P01'}-${String(index+1).padStart(2,'0')}`,suggest=this.stock.suggest(item.article,item.size,item.state),checked=number(raw.checkedQuantity),line={id:lineId,...item,ddtQuantity:number(raw.ddtQuantity),checkedQuantity:checked,remainingToPutAway:checked,pallet:norm(raw.pallet||'P01')||'P01',receivingPallet,note:String(raw.note||'').trim(),suggestedLocation:suggest?.location||'',suggestedPallet:suggest?.pallet||'',partials:clone(raw.partials||[])};receipt.lines.push(line);this.ledger.incoming(item,{location:CONFIG.receivingLocation,pallet:receivingPallet},checked,{kind:'RECEIPT',receiptId:id,lineId})});
+  create(draft){if(!this.auth.can('RECEIVE'))throw new Error('Operazione non autorizzata.');const supplier=String(draft.supplier||'').trim();if(!supplier)throw new Error('Inserisci il fornitore.');const valid=(draft.lines||[]).filter(l=>normalizeArticle(l.article)&&number(l.checkedQuantity)>0);if(!valid.length)throw new Error('Inserisci almeno un articolo con quantità controllata maggiore di zero.');const id=this.nextId(),receipt={id,supplier,ddtNumber:String(draft.ddtNumber||'').trim(),ddtDate:draft.ddtDate||'',receivedAt:draft.receivedAt||nowIso(),note:String(draft.note||'').trim(),operator:this.auth.user,createdAt:nowIso(),attachments:clone(draft.attachments||[]),lines:[]},receivingGroups=new Map();
+    valid.forEach(raw=>{const pallet=norm(raw.pallet||'P01')||'P01',groupKey=[String(raw.groupId||''),normalizeArticle(raw.article),pallet].join('|');if(!receivingGroups.has(groupKey))receivingGroups.set(groupKey,receivingGroups.size+1);const item=cleanItem(raw),lineId=uid(),receivingPallet=`${id}-${pallet}-${String(receivingGroups.get(groupKey)).padStart(2,'0')}`,suggest=this.stock.suggest(item.article,item.size,item.state),checked=number(raw.checkedQuantity),line={id:lineId,...item,ddtQuantity:number(raw.ddtQuantity),checkedQuantity:checked,remainingToPutAway:checked,pallet,receivingPallet,note:String(raw.note||'').trim(),suggestedLocation:suggest?.location||'',suggestedPallet:suggest?.pallet||'',partials:clone(raw.partials||[])};receipt.lines.push(line);this.ledger.incoming(item,{location:CONFIG.receivingLocation,pallet:receivingPallet},checked,{kind:'RECEIPT',receiptId:id,lineId})});
     this.store.db.receipts.unshift(receipt);const articleCount=new Set(receipt.lines.map(l=>normalizeArticle(l.article))).size;this.notifications.create({recipient:'Lina',title:`Merce arrivata · ${supplier}`,body:`${articleCount} ${articleCount===1?'articolo':'articoli'} · ${receipt.lines.length} ${receipt.lines.length===1?'taglia':'taglie'} · ${receipt.lines.reduce((n,l)=>n+l.checkedQuantity,0)} pezzi controllati`,type:'GOODS_ARRIVED',entityType:'RECEIPT',entityId:id});this.audit.record('RECEIPT_CONFIRMED','RECEIPT',id,null,receipt);this.store.save('receipt:create');return receipt}
   pendingForLine(lineId){for(const r of this.store.db.receipts){const l=(r.lines||[]).find(x=>x.id===lineId);if(l)return Math.max(0,number(l.remainingToPutAway))}return 0}
   lineStats(_receipt,line){const received=number(line.checkedQuantity),pending=Math.max(0,number(line.remainingToPutAway)),putAway=Math.max(0,number(line.putAwayQuantity)),direct=Math.max(0,received-pending-putAway);return{received,pending,putAway,direct}}
@@ -19714,6 +19714,6 @@ try{globalThis.__NOVA_LEGACY_AVAILABLE=!!localStorage.getItem(CONFIG.legacyStora
 const switchSite=async siteId=>{await ui.selectSite(siteId);return auth.site()};
 globalThis.NOVA=Object.freeze({version:CONFIG.appVersion,schema:CONFIG.version,identityVersion:CONFIG.identityVersion,store,auth,router,domain,excel,requestDocs,ui,sounds,sites:SITES,operators:OPERATORS,roles:ROLE_DEFS,saveIdentityRegistry,capabilities:Object.freeze({operational:ALL_CAPS,master:MASTER_CAPS,administration:ADMIN_CAPS,globalAdmin:GLOBAL_ADMIN_CAPS}),identityValidation:IDENTITY_VALIDATION,switchSite});
 ui.render();</script>
-<!-- SOMA_BUILD:R31.59-20260928 -->
+<!-- SOMA_BUILD:R31.60-20260928 -->
 </body>
 </html>
