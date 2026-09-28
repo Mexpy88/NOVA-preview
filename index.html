@@ -1,13 +1,13 @@
 <!doctype html>
 <html lang="it">
 <head>
-<meta name="soma-build" content="R31.48-20260928">
+<meta name="soma-build" content="R31.49-20260928">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
 <script id="soma-build-freshness">
 (() => {
-  const CURRENT_BUILD='R31.48-20260928',CHECK_KEY='soma:last-build-refresh';
+  const CURRENT_BUILD='R31.49-20260928',CHECK_KEY='soma:last-build-refresh';
   globalThis.SOMA_BUILD=CURRENT_BUILD;
   const check=async()=>{
     try{
@@ -16200,6 +16200,66 @@ body.desktop-mode .desktop-home-tools .global-search-trigger{min-height:66px!imp
   .gs-result-copy small{font-size:10.5px!important}
 }
 </style>
+
+<style id="soma-r31-49-global-search-scroll-uppercase">
+/* R31.49 · Global Search · bounded viewport + internal scroll + uppercase query */
+#globalSearchInput{
+  text-transform:uppercase!important;
+}
+#globalSearchInput::placeholder{
+  text-transform:none!important;
+}
+.global-search-dialog{
+  height:min(88dvh,860px)!important;
+  max-height:min(88dvh,860px)!important;
+  overflow:hidden!important;
+}
+.global-search-shell{
+  height:100%!important;
+  min-height:0!important;
+  max-height:100%!important;
+  overflow:hidden!important;
+  display:grid!important;
+  grid-template-rows:auto minmax(0,1fr) auto!important;
+}
+.global-search-results{
+  min-height:0!important;
+  height:auto!important;
+  max-height:none!important;
+  overflow-y:auto!important;
+  overflow-x:hidden!important;
+  overscroll-behavior:contain!important;
+  scrollbar-gutter:stable;
+}
+.global-search-results::-webkit-scrollbar{width:12px}
+.global-search-results::-webkit-scrollbar-track{background:#f3f5f8}
+.global-search-results::-webkit-scrollbar-thumb{
+  background:#c7ced8;border:3px solid #f3f5f8;border-radius:999px
+}
+.global-search-results::-webkit-scrollbar-thumb:hover{background:#aeb8c6}
+.global-search-head,.global-search-footer{
+  position:relative;z-index:2;flex:0 0 auto
+}
+@media(min-width:1500px){
+  .global-search-dialog{
+    height:min(86dvh,900px)!important;
+    max-height:min(86dvh,900px)!important;
+  }
+}
+@media(min-width:701px) and (max-height:760px){
+  .global-search-dialog{
+    height:calc(100dvh - 28px)!important;
+    max-height:calc(100dvh - 28px)!important;
+  }
+}
+@media(max-width:700px){
+  .global-search-dialog{
+    height:calc(var(--nova-visual-height,100dvh) - 14px)!important;
+    max-height:calc(var(--nova-visual-height,100dvh) - 14px)!important;
+  }
+  .global-search-results::-webkit-scrollbar{width:8px}
+}
+</style>
 </head>
 <body>
 <header id="topbar" class="topbar"></header>
@@ -18036,7 +18096,7 @@ class UI{
   logout(){this.persistCountSession();document.getElementById('requestDeleteDialog')?.close();document.getElementById('siteDialog')?.close();this.pendingRequestDeleteId='';this.siteChoiceRequired=false;this.siteChoiceSource='';this.auth.logout();this.store.useSite(CONFIG.defaultSiteId,{silent:true});this.receiptDraft=null;this.requestDraft=null;this.rectDraft=null;this.masterRequestMode=false;this.masterRequestItems=[];this.masterRequestOpenKey='';this.countDraft=null;this.ddtFiles=[];this.requestFiles=[];this.router.home();this.render()}
   openNotifications(){const d=document.getElementById('notificationDialog'),rows=this.domain.notifications.visibleTo(this.auth.user);d.querySelector('.dialog-body').innerHTML=rows.length?rows.map(n=>`<button class="notif-row ${n.readAt?'read':''}" data-action="notif-read" data-id="${n.id}" data-entity="${n.entityType}" data-entity-id="${n.entityId}"><b>${esc(n.title)}</b><span>${esc(n.body)}</span><small>${fmtDateTime(n.createdAt)}</small></button>`).join(''):'<div class="empty">Nessuna notifica.</div>';d.showModal()}
 
-  input(el){if(el.dataset.masterRequestQty)this.updateMasterRequestQty(el,false);if(el.id==='loginPin'){const next=String(el.value||'').replace(/\D/g,'').slice(0,4);if(el.value!==next)el.value=next;if(next.length>this.lastPinLength)this.sounds?.pinKey?.();this.lastPinLength=next.length}if(el.id==='requestDeletePin'){const next=String(el.value||'').replace(/\D/g,'').slice(0,CONFIG.pinLength);if(el.value!==next)el.value=next;if(next.length>this.lastDeletePinLength)this.sounds?.pinKey?.();this.lastDeletePinLength=next.length;document.getElementById('requestDeleteError')?.classList.add('hidden')}if(el.dataset.countExtra)this.updateCountExtra(el.dataset.dom,el.dataset.countExtra,el.value);if(el.id?.startsWith('count-value-'))this.updateCountValue(el.id.replace('count-value-',''),el.value);if(el.id==='rectCounted')this.updateRectCount(el.value);const bind=el.dataset.bind;if(bind){this.bindDraft(bind,el.value);if(bind.startsWith('receipt:')||bind.startsWith('receiptgroup:'))this.updateReceiptNewSummary?.()}if(['stockQuery','stockLocation','stockPallet'].includes(el.id))this.scheduleStockRender();if(el.id==='issueSourceSearch')this.renderIssueSources();if(el.id==='issueQty')this.updateIssueQtyState();if(el.id==='globalSearchInput')this.renderGlobalSearch(el.value);if(['rectSearch','rectFilterSize','rectFilterLocation','rectFilterPallet'].includes(el.id))this.renderRectResults();if(el.id==='registryQuery')this.renderRegistryResults();if(el.id==='masterQuery'){this.masterView.query=el.value;this.masterView.page=1;this.scheduleMasterRender()}if(el.id==='masterFilterArticle'){this.masterView.article=el.value;this.masterView.page=1;this.scheduleMasterRender()}if(el.id==='masterFilterLocation'){this.masterView.location=el.value;this.masterView.page=1;this.scheduleMasterRender()}if(el.id==='masterFilterPallet'){this.masterView.pallet=el.value;this.masterView.page=1;this.scheduleMasterRender()}if(el.id==='loginPin'){el.value=el.value.replace(/\D/g,'').slice(0,4);document.getElementById('loginError')?.classList.add('hidden')}}
+  input(el){if(el.dataset.masterRequestQty)this.updateMasterRequestQty(el,false);if(el.id==='loginPin'){const next=String(el.value||'').replace(/\D/g,'').slice(0,4);if(el.value!==next)el.value=next;if(next.length>this.lastPinLength)this.sounds?.pinKey?.();this.lastPinLength=next.length}if(el.id==='requestDeletePin'){const next=String(el.value||'').replace(/\D/g,'').slice(0,CONFIG.pinLength);if(el.value!==next)el.value=next;if(next.length>this.lastDeletePinLength)this.sounds?.pinKey?.();this.lastDeletePinLength=next.length;document.getElementById('requestDeleteError')?.classList.add('hidden')}if(el.dataset.countExtra)this.updateCountExtra(el.dataset.dom,el.dataset.countExtra,el.value);if(el.id?.startsWith('count-value-'))this.updateCountValue(el.id.replace('count-value-',''),el.value);if(el.id==='rectCounted')this.updateRectCount(el.value);const bind=el.dataset.bind;if(bind){this.bindDraft(bind,el.value);if(bind.startsWith('receipt:')||bind.startsWith('receiptgroup:'))this.updateReceiptNewSummary?.()}if(['stockQuery','stockLocation','stockPallet'].includes(el.id))this.scheduleStockRender();if(el.id==='issueSourceSearch')this.renderIssueSources();if(el.id==='issueQty')this.updateIssueQtyState();if(el.id==='globalSearchInput'){const upper=String(el.value||'').toUpperCase();if(el.value!==upper){const pos=el.selectionStart;el.value=upper;try{el.setSelectionRange(pos,pos)}catch{}}this.renderGlobalSearch(el.value);}if(['rectSearch','rectFilterSize','rectFilterLocation','rectFilterPallet'].includes(el.id))this.renderRectResults();if(el.id==='registryQuery')this.renderRegistryResults();if(el.id==='masterQuery'){this.masterView.query=el.value;this.masterView.page=1;this.scheduleMasterRender()}if(el.id==='masterFilterArticle'){this.masterView.article=el.value;this.masterView.page=1;this.scheduleMasterRender()}if(el.id==='masterFilterLocation'){this.masterView.location=el.value;this.masterView.page=1;this.scheduleMasterRender()}if(el.id==='masterFilterPallet'){this.masterView.pallet=el.value;this.masterView.page=1;this.scheduleMasterRender()}if(el.id==='loginPin'){el.value=el.value.replace(/\D/g,'').slice(0,4);document.getElementById('loginError')?.classList.add('hidden')}}
   change(el){if(el.dataset.masterRequestQty)this.updateMasterRequestQty(el,true);if(el.dataset.countExtra)this.updateCountExtra(el.dataset.dom,el.dataset.countExtra,el.value);if(el.id==='rectFilterState')this.renderRectResults();if(el.id==='rectReason'&&this.rectDraft)this.rectDraft.reason=norm(el.value);const bind=el.dataset.bind;if(bind){this.bindDraft(bind,el.value);if(bind.includes(':article')||bind.includes(':size')||bind.includes(':state')||bind.startsWith('receiptgroup:'))this.renderView()}if(el.id==='stockState')this.renderStockResults();if(el.id==='issueDestination')this.updateIssueQtyState();if(['registryFrom','registryTo','registryType','registryState'].includes(el.id))this.renderRegistryResults();if(el.id==='masterFilterSize'){this.masterView.size=el.value;this.masterView.page=1;this.renderMasterViewerBody()}if(el.id==='masterSort'){this.masterView.sort=el.value;this.masterView.page=1;this.renderMasterViewerBody()}if(el.id==='requestDocOrientation')this.requestDocOrientation=['portrait','landscape'].includes(el.value)?el.value:'auto';if(el.id?.startsWith('activityDate-')){this.activityDate=el.value||localDateInput();this.renderView()}}
   bindDraft(bind,value){
     const [kind,id,key]=bind.split(':');
@@ -18118,6 +18178,6 @@ try{globalThis.__NOVA_LEGACY_AVAILABLE=!!localStorage.getItem(CONFIG.legacyStora
 const switchSite=async siteId=>{await ui.selectSite(siteId);return auth.site()};
 globalThis.NOVA=Object.freeze({version:CONFIG.appVersion,schema:CONFIG.version,identityVersion:CONFIG.identityVersion,store,auth,router,domain,excel,requestDocs,ui,sounds,sites:SITES,operators:OPERATORS,roles:ROLE_DEFS,saveIdentityRegistry,capabilities:Object.freeze({operational:ALL_CAPS,master:MASTER_CAPS,administration:ADMIN_CAPS,globalAdmin:GLOBAL_ADMIN_CAPS}),identityValidation:IDENTITY_VALIDATION,switchSite});
 ui.render();</script>
-<!-- SOMA_BUILD:R31.48-20260928 -->
+<!-- SOMA_BUILD:R31.49-20260928 -->
 </body>
 </html>
