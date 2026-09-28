@@ -1,13 +1,13 @@
 <!doctype html>
 <html lang="it">
 <head>
-<meta name="soma-build" content="R31.60-20260928">
+<meta name="soma-build" content="R31.61-20260928">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
 <script id="soma-build-freshness">
 (() => {
-  const CURRENT_BUILD='R31.60-20260928',CHECK_KEY='soma:last-build-refresh';
+  const CURRENT_BUILD='R31.61-20260928',CHECK_KEY='soma:last-build-refresh';
   globalThis.SOMA_BUILD=CURRENT_BUILD;
   const check=async()=>{
     try{
@@ -15498,10 +15498,10 @@ body.desktop-mode .app-view:has(.receipt-new-shell){width:100%!important;max-wid
 .putaway-autocomplete-field{position:relative;display:block;isolation:isolate}
 .putaway-autocomplete-field>.field{position:relative;z-index:2}
 .putaway-autocomplete-menu{
-  position:absolute;z-index:80;left:0;right:0;top:calc(100% - 2px);
+  position:relative;z-index:1;width:100%;margin-top:6px;
   max-height:286px;overflow:auto;overscroll-behavior:contain;padding:7px;
-  border:1px solid #cfdde6;border-radius:0 0 16px 16px;
-  background:rgba(255,255,255,.985);box-shadow:0 18px 42px rgba(23,53,82,.16)
+  border:1px solid #cfdde6;border-radius:14px;
+  background:rgba(255,255,255,.985);box-shadow:0 12px 28px rgba(23,53,82,.10)
 }
 .putaway-autocomplete-menu:empty{display:none}
 .putaway-suggest-head{
@@ -15515,6 +15515,11 @@ body.desktop-mode .app-view:has(.receipt-new-shell){width:100%!important;max-wid
   background:#fff;color:#244865;text-align:left
 }
 .putaway-suggest-item+.putaway-suggest-item{margin-top:4px}
+.putaway-suggest-item.is-exact{
+  border-color:#9bd4d1;background:#eef9f8;
+  box-shadow:inset 0 0 0 1px rgba(41,159,155,.08)
+}
+.putaway-suggest-item.is-exact .putaway-suggest-copy>b{color:#167f7b}
 .putaway-suggest-item>.ph{
   width:34px;height:34px;display:grid;place-items:center;border-radius:10px;
   background:#eaf7f6;color:#208f8c;font-size:18px
@@ -15535,8 +15540,11 @@ body.desktop-mode .app-view:has(.receipt-new-shell){width:100%!important;max-wid
 }
 .putaway-suggest-empty>.ph{margin-top:1px;color:#8297a7;font-size:16px}
 .putaway-autocomplete-field.is-open>.field{
-  border-color:#45aaa7!important;border-radius:14px 14px 8px 8px!important;
+  border-color:#45aaa7!important;border-radius:14px!important;
   box-shadow:0 0 0 3px rgba(41,159,155,.10)!important
+}
+.putaway-autocomplete-field.is-open{
+  margin-bottom:8px!important
 }
 @media(hover:hover) and (pointer:fine){
   .putaway-suggest-item:hover,.putaway-suggest-item:focus-visible{
@@ -15544,7 +15552,7 @@ body.desktop-mode .app-view:has(.receipt-new-shell){width:100%!important;max-wid
   }
 }
 @media(max-width:980px){
-  .putaway-autocomplete-menu{max-height:min(42vh,270px);border-radius:0 0 15px 15px;padding:6px}
+  .putaway-autocomplete-menu{max-height:min(42vh,270px);border-radius:14px;padding:6px}
   .putaway-suggest-item{min-height:56px;grid-template-columns:38px minmax(0,1fr) auto;gap:10px;padding:9px 10px}
   .putaway-suggest-item>.ph{width:38px;height:38px;font-size:19px}
   .putaway-suggest-copy>b{font-size:14px}
@@ -18103,8 +18111,8 @@ class ReceivingService{
   constructor(store,stock,ledger,audit,notifications,auth){Object.assign(this,{store,stock,ledger,audit,notifications,auth})}
   nextId(){this.store.db.counters.receipt=(this.store.db.counters.receipt||0)+1;return `EM-${new Date().getFullYear()}-${String(this.store.db.counters.receipt).padStart(5,'0')}`}
   findLineByPallet(pallet,item={}){const p=norm(pallet),i=cleanItem(item);for(const r of this.store.db.receipts)for(const l of r.lines||[])if(norm(l.receivingPallet)===p&&(!i.article||l.article===i.article)&&(!i.size||l.size===i.size)&&(!i.state||l.state===i.state))return{receipt:r,line:l};return null}
-  create(draft){if(!this.auth.can('RECEIVE'))throw new Error('Operazione non autorizzata.');const supplier=String(draft.supplier||'').trim();if(!supplier)throw new Error('Inserisci il fornitore.');const valid=(draft.lines||[]).filter(l=>normalizeArticle(l.article)&&number(l.checkedQuantity)>0);if(!valid.length)throw new Error('Inserisci almeno un articolo con quantità controllata maggiore di zero.');const id=this.nextId(),receipt={id,supplier,ddtNumber:String(draft.ddtNumber||'').trim(),ddtDate:draft.ddtDate||'',receivedAt:draft.receivedAt||nowIso(),note:String(draft.note||'').trim(),operator:this.auth.user,createdAt:nowIso(),attachments:clone(draft.attachments||[]),lines:[]},receivingGroups=new Map();
-    valid.forEach(raw=>{const pallet=norm(raw.pallet||'P01')||'P01',groupKey=[String(raw.groupId||''),normalizeArticle(raw.article),pallet].join('|');if(!receivingGroups.has(groupKey))receivingGroups.set(groupKey,receivingGroups.size+1);const item=cleanItem(raw),lineId=uid(),receivingPallet=`${id}-${pallet}-${String(receivingGroups.get(groupKey)).padStart(2,'0')}`,suggest=this.stock.suggest(item.article,item.size,item.state),checked=number(raw.checkedQuantity),line={id:lineId,...item,ddtQuantity:number(raw.ddtQuantity),checkedQuantity:checked,remainingToPutAway:checked,pallet,receivingPallet,note:String(raw.note||'').trim(),suggestedLocation:suggest?.location||'',suggestedPallet:suggest?.pallet||'',partials:clone(raw.partials||[])};receipt.lines.push(line);this.ledger.incoming(item,{location:CONFIG.receivingLocation,pallet:receivingPallet},checked,{kind:'RECEIPT',receiptId:id,lineId})});
+  create(draft){if(!this.auth.can('RECEIVE'))throw new Error('Operazione non autorizzata.');const supplier=String(draft.supplier||'').trim();if(!supplier)throw new Error('Inserisci il fornitore.');const valid=(draft.lines||[]).filter(l=>normalizeArticle(l.article)&&number(l.checkedQuantity)>0);if(!valid.length)throw new Error('Inserisci almeno un articolo con quantità controllata maggiore di zero.');const id=this.nextId(),receipt={id,supplier,ddtNumber:String(draft.ddtNumber||'').trim(),ddtDate:draft.ddtDate||'',receivedAt:draft.receivedAt||nowIso(),note:String(draft.note||'').trim(),operator:this.auth.user,createdAt:nowIso(),attachments:clone(draft.attachments||[]),lines:[]};
+    valid.forEach(raw=>{const pallet=norm(raw.pallet||'P01')||'P01',item=cleanItem(raw),lineId=uid(),receivingPallet=`${id}-${pallet}`,suggest=this.stock.suggest(item.article,item.size,item.state),checked=number(raw.checkedQuantity),line={id:lineId,...item,ddtQuantity:number(raw.ddtQuantity),checkedQuantity:checked,remainingToPutAway:checked,pallet,receivingPallet,note:String(raw.note||'').trim(),suggestedLocation:suggest?.location||'',suggestedPallet:suggest?.pallet||'',partials:clone(raw.partials||[])};receipt.lines.push(line);this.ledger.incoming(item,{location:CONFIG.receivingLocation,pallet:receivingPallet},checked,{kind:'RECEIPT',receiptId:id,lineId})});
     this.store.db.receipts.unshift(receipt);const articleCount=new Set(receipt.lines.map(l=>normalizeArticle(l.article))).size;this.notifications.create({recipient:'Lina',title:`Merce arrivata · ${supplier}`,body:`${articleCount} ${articleCount===1?'articolo':'articoli'} · ${receipt.lines.length} ${receipt.lines.length===1?'taglia':'taglie'} · ${receipt.lines.reduce((n,l)=>n+l.checkedQuantity,0)} pezzi controllati`,type:'GOODS_ARRIVED',entityType:'RECEIPT',entityId:id});this.audit.record('RECEIPT_CONFIRMED','RECEIPT',id,null,receipt);this.store.save('receipt:create');return receipt}
   pendingForLine(lineId){for(const r of this.store.db.receipts){const l=(r.lines||[]).find(x=>x.id===lineId);if(l)return Math.max(0,number(l.remainingToPutAway))}return 0}
   lineStats(_receipt,line){const received=number(line.checkedQuantity),pending=Math.max(0,number(line.remainingToPutAway)),putAway=Math.max(0,number(line.putAwayQuantity)),direct=Math.max(0,received-pending-putAway);return{received,pending,putAway,direct}}
@@ -19285,7 +19293,8 @@ class UI{
         if(!grouped.has(r.location))grouped.set(r.location,new Set());
         if(r.pallet)grouped.get(r.location).add(r.pallet)
       }
-      return [...grouped].map(([value,pallets])=>({value,location:value,meta:pallets.size?`${pallets.size} ${pallets.size===1?'bancale/carrello collegato':'bancali/carrelli collegati'}`:'Posizione presente nel magazzino'})).sort((a,b)=>Number(!a.value.startsWith(q))-Number(!b.value.startsWith(q))||collator.compare(a.value,b.value)).slice(0,8)
+      const score=value=>{const v=norm(value),tokens=v.split(/[\s\/\\._-]+/).filter(Boolean);if(v===q)return 0;if(tokens.includes(q))return 1;if(v.startsWith(q))return 2;if(v.includes(q))return 3;return 9};
+      return [...grouped].map(([value,pallets])=>({value,location:value,meta:pallets.size?`${pallets.size} ${pallets.size===1?'bancale/carrello collegato':'bancali/carrelli collegati'}`:'Posizione presente nel magazzino'})).sort((a,b)=>score(a.value)-score(b.value)||collator.compare(a.value,b.value)).slice(0,12)
     }
     const locationInput=norm(document.getElementById('putLocation')?.value),exactLocation=rows.some(r=>r.location===locationInput),filtered=exactLocation?rows.filter(r=>r.location===locationInput):locationInput?rows.filter(r=>r.location.includes(locationInput)):rows;
     const seen=new Set(),items=[];
@@ -19302,7 +19311,7 @@ class UI{
     const q=norm(input.value);
     if(!q){host.innerHTML='';wrap.classList.remove('is-open');return}
     const rows=this.putAwaySuggestions(kind,q),icon=kind==='location'?'map-pin-line':'stack',title=kind==='location'?'POSIZIONI DAL MAGAZZINO':'BANCALI / CARRELLI DAL MAGAZZINO';
-    host.innerHTML=rows.length?`<div class="putaway-suggest-head">${phRegular('database')}<span>${title}</span></div>`+rows.map(x=>`<button type="button" class="putaway-suggest-item" role="option" data-action="putaway-suggest" data-kind="${kind}" data-value="${esc(x.value)}" data-location="${esc(x.location||'')}">${phRegular(icon)}<span class="putaway-suggest-copy"><b>${esc(x.value)}</b><small>${esc(x.meta)}</small></span>${phRegular('caret-right')}</button>`).join(''):`<div class="putaway-suggest-empty">${phRegular('info')}<span>Nessuna corrispondenza esistente. Se si tratta di una nuova ${kind==='location'?'posizione':'voce'}, puoi comunque inserirla manualmente.</span></div>`;
+    host.innerHTML=rows.length?`<div class="putaway-suggest-head">${phRegular('database')}<span>${title}</span></div>`+rows.map(x=>`<button type="button" class="putaway-suggest-item ${norm(x.value)===q?'is-exact':''}" role="option" data-action="putaway-suggest" data-kind="${kind}" data-value="${esc(x.value)}" data-location="${esc(x.location||'')}">${phRegular(icon)}<span class="putaway-suggest-copy"><b>${esc(x.value)}</b><small>${norm(x.value)===q?'CORRISPONDENZA ESATTA · ':''}${esc(x.meta)}</small></span>${phRegular('caret-right')}</button>`).join(''):`<div class="putaway-suggest-empty">${phRegular('info')}<span>Nessuna corrispondenza esistente. Se si tratta di una nuova ${kind==='location'?'posizione':'voce'}, puoi comunque inserirla manualmente.</span></div>`;
     wrap.classList.add('is-open')
   }
   closePutAwaySuggestions(except=''){
@@ -19714,6 +19723,6 @@ try{globalThis.__NOVA_LEGACY_AVAILABLE=!!localStorage.getItem(CONFIG.legacyStora
 const switchSite=async siteId=>{await ui.selectSite(siteId);return auth.site()};
 globalThis.NOVA=Object.freeze({version:CONFIG.appVersion,schema:CONFIG.version,identityVersion:CONFIG.identityVersion,store,auth,router,domain,excel,requestDocs,ui,sounds,sites:SITES,operators:OPERATORS,roles:ROLE_DEFS,saveIdentityRegistry,capabilities:Object.freeze({operational:ALL_CAPS,master:MASTER_CAPS,administration:ADMIN_CAPS,globalAdmin:GLOBAL_ADMIN_CAPS}),identityValidation:IDENTITY_VALIDATION,switchSite});
 ui.render();</script>
-<!-- SOMA_BUILD:R31.60-20260928 -->
+<!-- SOMA_BUILD:R31.61-20260928 -->
 </body>
 </html>
