@@ -1,13 +1,13 @@
 <!doctype html>
 <html lang="it">
 <head>
-<meta name="soma-build" content="R31.56-20260928">
+<meta name="soma-build" content="R31.57-20260928">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
 <script id="soma-build-freshness">
 (() => {
-  const CURRENT_BUILD='R31.56-20260928',CHECK_KEY='soma:last-build-refresh';
+  const CURRENT_BUILD='R31.57-20260928',CHECK_KEY='soma:last-build-refresh';
   globalThis.SOMA_BUILD=CURRENT_BUILD;
   const check=async()=>{
     try{
@@ -15350,6 +15350,149 @@ body.desktop-mode .app-view:has(.receipt-new-shell){width:100%!important;max-wid
 }
 </style>
 
+<style id="soma-r31-57-smartphone-request-documents">
+/* ===== R31.57 · SMARTPHONE REQUEST DOCUMENTS =====
+   Smartphone only. Desktop selectors and desktop layout remain unchanged. */
+@media(max-width:980px){
+  body:not(.desktop-mode) .request-doc-toolbar{
+    display:grid!important;
+    grid-template-columns:1fr!important;
+    gap:14px!important;
+    width:100%!important;
+    margin:0 0 16px!important;
+    padding:16px!important;
+    border:1px solid #ead9ad!important;
+    border-radius:20px!important;
+    background:linear-gradient(145deg,#fffaf0 0%,#fff 64%)!important;
+    box-shadow:0 8px 24px rgba(48,65,78,.055)!important;
+  }
+  body:not(.desktop-mode) .request-doc-toolbar-copy{
+    display:grid!important;
+    grid-template-columns:48px minmax(0,1fr)!important;
+    gap:12px!important;
+    align-items:center!important;
+    min-width:0!important;
+  }
+  body:not(.desktop-mode) .request-doc-toolbar-icon{
+    width:48px!important;
+    height:48px!important;
+    display:grid!important;
+    place-items:center!important;
+    border:1px solid #ecd8a7!important;
+    border-radius:15px!important;
+    background:#fff5df!important;
+    color:#b98522!important;
+    flex:0 0 auto!important;
+  }
+  body:not(.desktop-mode) .request-doc-toolbar-icon>.ph{font-size:24px!important}
+  body:not(.desktop-mode) .request-doc-toolbar-copy small{
+    display:block!important;
+    color:#a9791f!important;
+    font-size:9px!important;
+    line-height:1!important;
+    font-weight:950!important;
+    letter-spacing:.105em!important;
+  }
+  body:not(.desktop-mode) .request-doc-toolbar-copy b{
+    display:block!important;
+    margin-top:5px!important;
+    color:#294762!important;
+    font-size:16px!important;
+    line-height:1.15!important;
+  }
+  body:not(.desktop-mode) .request-doc-toolbar-copy div>span{
+    display:block!important;
+    margin-top:4px!important;
+    color:#788c9d!important;
+    font-size:11px!important;
+    line-height:1.35!important;
+    font-weight:700!important;
+  }
+  body:not(.desktop-mode) .request-doc-orientation{
+    display:grid!important;
+    gap:7px!important;
+    margin:0!important;
+  }
+  body:not(.desktop-mode) .request-doc-orientation>span{
+    color:#718698!important;
+    font-size:9px!important;
+    line-height:1!important;
+    font-weight:950!important;
+    letter-spacing:.095em!important;
+  }
+  body:not(.desktop-mode) .request-doc-orientation select{
+    width:100%!important;
+    min-width:0!important;
+    height:50px!important;
+    border:1px solid #d7e2e9!important;
+    border-radius:14px!important;
+    padding:0 40px 0 14px!important;
+    background:#fff!important;
+    color:#35546d!important;
+    font-size:13px!important;
+    font-weight:900!important;
+    outline:0!important;
+    box-shadow:none!important;
+  }
+  body:not(.desktop-mode) .request-doc-orientation select:focus{
+    border-color:#d4ae61!important;
+    box-shadow:0 0 0 3px rgba(185,133,34,.10)!important;
+  }
+  body:not(.desktop-mode) .request-doc-actions{
+    display:grid!important;
+    grid-template-columns:repeat(3,minmax(0,1fr))!important;
+    gap:8px!important;
+    width:100%!important;
+  }
+  body:not(.desktop-mode) .request-doc-actions button{
+    min-width:0!important;
+    min-height:54px!important;
+    display:flex!important;
+    flex-direction:column!important;
+    align-items:center!important;
+    justify-content:center!important;
+    gap:4px!important;
+    padding:7px 5px!important;
+    border:1px solid #e3d5b2!important;
+    border-radius:14px!important;
+    background:#fff!important;
+    color:#8b651b!important;
+    font-size:10px!important;
+    line-height:1!important;
+    font-weight:950!important;
+    letter-spacing:.02em!important;
+    white-space:nowrap!important;
+    touch-action:manipulation!important;
+  }
+  body:not(.desktop-mode) .request-doc-actions button>.ph{
+    font-size:21px!important;
+    line-height:1!important;
+  }
+  body:not(.desktop-mode) .request-doc-actions button[data-action="request-pdf"]{
+    color:#ae4b44!important;
+    border-color:#edd0cd!important;
+    background:#fff8f7!important;
+  }
+  body:not(.desktop-mode) .request-doc-actions button[data-action="request-excel"]{
+    color:#178552!important;
+    border-color:#cfe5d8!important;
+    background:#f7fcf9!important;
+  }
+  body:not(.desktop-mode) .request-doc-actions button:active{
+    transform:scale(.985)!important;
+  }
+}
+@media(max-width:390px){
+  body:not(.desktop-mode) .request-doc-toolbar{padding:14px!important;gap:12px!important}
+  body:not(.desktop-mode) .request-doc-toolbar-copy{grid-template-columns:44px minmax(0,1fr)!important;gap:10px!important}
+  body:not(.desktop-mode) .request-doc-toolbar-icon{width:44px!important;height:44px!important;border-radius:13px!important}
+  body:not(.desktop-mode) .request-doc-toolbar-copy b{font-size:15px!important}
+  body:not(.desktop-mode) .request-doc-toolbar-copy div>span{font-size:10.5px!important}
+  body:not(.desktop-mode) .request-doc-actions{gap:6px!important}
+  body:not(.desktop-mode) .request-doc-actions button{min-height:52px!important;font-size:9.5px!important}
+}
+</style>
+
 <style id="soma-r31-41-stock-command-view">
 /* R31.41 · GIACENZE · compact grouped command view */
 .stock-command-v3{
@@ -19273,7 +19416,7 @@ class UI{
   }
   requestDetail(id){
     const r=this.store.db.requests.find(x=>x.id===id);if(!r||r.deletedAt)return this.emptyPage('Richiesta non trovata o non più disponibile.');
-    const s=this.domain.requests.summary(r),status=r.status||'DA PREPARARE',statusClass=status==='COMPLETATA'?'done':status==='PARZIALE'?'partial':'pending',statusIcon=status==='COMPLETATA'?'check-circle':status==='PARZIALE'?'circle-half':'clock',canDelete=this.domain.requests.canDelete(r),calculatedStatus=s.remaining===0?'COMPLETATA':s.delivered>0?'PARZIALE':'DA PREPARARE',inconsistent=status!==calculatedStatus,desktop=document.body.classList.contains('desktop-mode')&&(globalThis.innerWidth||document.documentElement.clientWidth||0)>980,docbar=desktop?`<section class="request-doc-toolbar"><div class="request-doc-toolbar-copy"><span class="request-doc-toolbar-icon">${phRegular('file-arrow-down')}</span><div><small>DOCUMENTO A4</small><b>Stampa ed esportazione</b><span>Margini uniformi · colonne sempre entro pagina</span></div></div><label class="request-doc-orientation"><span>ORIENTAMENTO</span><select id="requestDocOrientation"><option value="auto" ${this.requestDocOrientation==='auto'?'selected':''}>AUTO</option><option value="portrait" ${this.requestDocOrientation==='portrait'?'selected':''}>A4 VERTICALE</option><option value="landscape" ${this.requestDocOrientation==='landscape'?'selected':''}>A4 ORIZZONTALE</option></select></label><div class="request-doc-actions"><button data-action="request-print" data-id="${esc(r.id)}">${phRegular('printer')}<span>STAMPA</span></button><button data-action="request-pdf" data-id="${esc(r.id)}">${phRegular('file-pdf')}<span>PDF</span></button><button data-action="request-excel" data-id="${esc(r.id)}">${phRegular('microsoft-excel-logo')}<span>EXCEL</span></button></div></section>`:'';
+    const s=this.domain.requests.summary(r),status=r.status||'DA PREPARARE',statusClass=status==='COMPLETATA'?'done':status==='PARZIALE'?'partial':'pending',statusIcon=status==='COMPLETATA'?'check-circle':status==='PARZIALE'?'circle-half':'clock',canDelete=this.domain.requests.canDelete(r),calculatedStatus=s.remaining===0?'COMPLETATA':s.delivered>0?'PARZIALE':'DA PREPARARE',inconsistent=status!==calculatedStatus,desktop=document.body.classList.contains('desktop-mode')&&(globalThis.innerWidth||document.documentElement.clientWidth||0)>980,docbar=`<section class="request-doc-toolbar"><div class="request-doc-toolbar-copy"><span class="request-doc-toolbar-icon">${phRegular('file-arrow-down')}</span><div><small>DOCUMENTO A4</small><b>Stampa ed esportazione</b><span>Margini uniformi · colonne sempre entro pagina</span></div></div><label class="request-doc-orientation"><span>ORIENTAMENTO</span><select id="requestDocOrientation"><option value="auto" ${this.requestDocOrientation==='auto'?'selected':''}>AUTO</option><option value="portrait" ${this.requestDocOrientation==='portrait'?'selected':''}>A4 VERTICALE</option><option value="landscape" ${this.requestDocOrientation==='landscape'?'selected':''}>A4 ORIZZONTALE</option></select></label><div class="request-doc-actions"><button data-action="request-print" data-id="${esc(r.id)}">${phRegular('printer')}<span>STAMPA</span></button><button data-action="request-pdf" data-id="${esc(r.id)}">${phRegular('file-pdf')}<span>PDF</span></button><button data-action="request-excel" data-id="${esc(r.id)}">${phRegular('microsoft-excel-logo')}<span>EXCEL</span></button></div></section>`;
     const prepare=this.auth.can('REQUEST_PROCESS')&&status!=='COMPLETATA'?`<button class="request-detail-v3-primary" data-action="request-pick" data-id="${esc(r.id)}"><span>${phRegular('package')} PREPARA RICHIESTA</span>${phRegular('arrow-right')}</button>`:'',remove=canDelete?`<button class="request-detail-v3-delete" data-action="request-delete" data-id="${esc(r.id)}">${phRegular('trash')}<span>ELIMINA RICHIESTA</span></button>`:'';
     const rows=(r.lines||[]).map((l,index)=>{
       const d=this.domain.requests.deliveredForLine(r,l.id),requested=integer(l.cartonsRequested),rem=Math.max(0,requested-d.cartons),percent=requested?Math.min(100,Math.round(d.cartons*100/requested)):0,available=this.domain.stock.total(l.article,l.size),receiving=this.domain.stock.receivingTotal(l.article,l.size),lineState=rem===0?'done':d.cartons>0?'partial':'pending',availabilityClass=available>0?'available':'unavailable';
@@ -19445,6 +19588,6 @@ try{globalThis.__NOVA_LEGACY_AVAILABLE=!!localStorage.getItem(CONFIG.legacyStora
 const switchSite=async siteId=>{await ui.selectSite(siteId);return auth.site()};
 globalThis.NOVA=Object.freeze({version:CONFIG.appVersion,schema:CONFIG.version,identityVersion:CONFIG.identityVersion,store,auth,router,domain,excel,requestDocs,ui,sounds,sites:SITES,operators:OPERATORS,roles:ROLE_DEFS,saveIdentityRegistry,capabilities:Object.freeze({operational:ALL_CAPS,master:MASTER_CAPS,administration:ADMIN_CAPS,globalAdmin:GLOBAL_ADMIN_CAPS}),identityValidation:IDENTITY_VALIDATION,switchSite});
 ui.render();</script>
-<!-- SOMA_BUILD:R31.56-20260928 -->
+<!-- SOMA_BUILD:R31.57-20260928 -->
 </body>
 </html>
