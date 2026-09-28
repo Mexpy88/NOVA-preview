@@ -1,13 +1,13 @@
 <!doctype html>
 <html lang="it">
 <head>
-<meta name="soma-build" content="R31.66-20260928">
+<meta name="soma-build" content="R31.67-20260928">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
 <script id="soma-build-freshness">
 (() => {
-  const CURRENT_BUILD='R31.66-20260928',CHECK_KEY='soma:last-build-refresh';
+  const CURRENT_BUILD='R31.67-20260928',CHECK_KEY='soma:last-build-refresh';
   globalThis.SOMA_BUILD=CURRENT_BUILD;
   const check=async()=>{
     try{
@@ -1479,136 +1479,6 @@ button[data-action] .inline-icon.ph-bridge{
   .receiving-empty{flex-direction:column;text-align:center}
 }
 
-
-/* ===== R31.66 · RECEIPT DETAIL DENSITY / HIERARCHY POLISH ===== */
-.receipt-detail-shell{display:flex;flex-direction:column;gap:16px}
-.receipt-detail-summary{gap:11px!important;margin:16px 0 3px!important}
-.receipt-detail-summary>div{
-  position:relative;overflow:hidden;min-height:94px;
-  display:flex;flex-direction:column;justify-content:center;
-  padding:17px 20px 16px 23px!important;border-radius:19px!important;
-  background:linear-gradient(180deg,#fff,#fbfdfe)!important;
-  border:1px solid #dce7ee!important;box-shadow:0 6px 18px rgba(23,53,82,.05)!important
-}
-.receipt-detail-summary>div::before{content:"";position:absolute;left:0;top:0;bottom:0;width:4px;background:#72899d}
-.receipt-detail-summary>div:nth-child(2)::before{background:#d49a20}
-.receipt-detail-summary>div:nth-child(3)::before{background:#23a874}
-.receipt-detail-summary>div:nth-child(4)::before{background:#4383c9}
-.receipt-detail-summary b{
-  font-size:34px!important;line-height:.95;letter-spacing:-.035em;
-  color:var(--nova-ink,var(--ink))!important
-}
-.receipt-detail-summary span{
-  margin-top:9px;font-size:12px!important;line-height:1;font-weight:900!important;
-  letter-spacing:.055em;text-transform:uppercase;color:var(--nova-muted,var(--muted))!important
-}
-.receipt-detail-list{display:flex;flex-direction:column;gap:14px}
-.receipt-detail-shell .receiving-detail-line{
-  position:relative;overflow:hidden;margin:0!important;padding:23px 25px 20px!important;
-  border-radius:21px!important;border:1px solid #d9e5ed!important;
-  background:linear-gradient(180deg,#fff 0%,#fcfefe 100%)!important;
-  box-shadow:0 8px 24px rgba(23,53,82,.06)!important
-}
-.receipt-detail-shell .receiving-detail-line::before{
-  content:"";position:absolute;left:0;top:18px;bottom:18px;width:3px;border-radius:0 3px 3px 0;
-  background:#36a88a;opacity:.7
-}
-.receipt-detail-shell .receiving-detail-head{align-items:flex-start;gap:22px}
-.receiving-detail-title{min-width:0;flex:1}
-.receipt-detail-shell .receiving-detail-title>b{
-  display:block;font-size:24px!important;line-height:1.12;letter-spacing:-.018em;
-  color:var(--nova-ink,var(--ink))
-}
-.receiving-detail-meta{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-top:12px}
-.receipt-detail-shell .receiving-detail-meta>span{
-  display:inline-flex!important;align-items:center;gap:6px;margin:0!important;
-  min-height:32px;padding:6px 10px;border-radius:10px;
-  background:#f1f6f9;border:1px solid #dfe8ee;color:#5f7588!important;
-  font-size:12px!important;font-weight:850;line-height:1
-}
-.receiving-detail-meta .ph{font-size:15px}
-.receipt-detail-shell .receiving-state-chip{
-  background:#edf8f2!important;border-color:#d1e9dd!important;color:#247651!important
-}
-.receiving-detail-qty{
-  min-width:124px;min-height:79px;padding:11px 14px;border-radius:16px;
-  display:flex;flex-direction:column;align-items:center;justify-content:center;
-  background:linear-gradient(145deg,#eef9f4,#e8f6f0);border:1px solid #cde7da
-}
-.receipt-detail-shell .receiving-detail-qty strong{
-  font-size:35px!important;line-height:.9;color:#168b5c!important;letter-spacing:-.04em
-}
-.receiving-detail-qty small{
-  margin-top:9px;font-size:9px;font-weight:950;letter-spacing:.085em;color:#557f6c
-}
-.receipt-detail-shell .receiving-suggested{
-  display:flex;align-items:center;gap:10px;margin-top:15px;padding:11px 13px!important;
-  border-radius:12px!important;font-size:12.5px
-}
-.receiving-suggested>.ph{font-size:19px;flex:0 0 auto}
-.receiving-suggested span{display:flex;align-items:baseline;gap:7px;flex-wrap:wrap}
-.receiving-detail-footer{
-  display:grid;grid-template-columns:minmax(0,1fr) minmax(220px,270px);
-  align-items:stretch;gap:14px;margin-top:16px;padding-top:16px;border-top:1px solid #e5edf2
-}
-.receipt-detail-shell .receiving-line-metrics{
-  display:grid!important;grid-template-columns:repeat(3,minmax(112px,1fr));
-  gap:9px!important;margin:0!important;min-width:0
-}
-.receipt-detail-shell .receiving-line-metrics span{
-  min-height:50px;display:flex!important;align-items:center;justify-content:space-between;gap:10px;
-  padding:10px 13px!important;border-radius:12px!important;
-  background:#f3f7fa!important;border:1px solid #e1eaf0;
-  color:#5c7285;font-size:12.5px;font-weight:800;white-space:nowrap
-}
-.receipt-detail-shell .receiving-line-metrics b{
-  font-size:18px;color:var(--nova-ink,var(--ink));letter-spacing:-.02em
-}
-.receipt-detail-shell .receiving-putaway-action{
-  width:100%!important;min-width:0;min-height:50px!important;margin:0!important;padding:0 18px!important;
-  border-radius:13px!important;display:inline-flex;align-items:center;justify-content:center;gap:8px;
-  background:#279c9a!important;box-shadow:0 5px 14px rgba(39,156,154,.16);
-  white-space:nowrap;font-size:13px;letter-spacing:.015em
-}
-.receipt-detail-shell .receiving-putaway-action .inline-icon{width:18px;height:18px}
-.receipt-detail-shell .receiving-putaway-action:hover{filter:brightness(.96)}
-.receipt-detail-shell .receiving-status-badge{
-  min-width:0;width:100%;min-height:50px;margin:0!important;padding:10px 14px!important;
-  display:flex;align-items:center;justify-content:center
-}
-@media(min-width:1250px){
-  .receipt-detail-shell .receiving-line-metrics span{font-size:13px;padding-left:15px!important;padding-right:15px!important}
-  .receipt-detail-shell .receiving-line-metrics b{font-size:19px}
-  .receipt-detail-shell .receiving-putaway-action{font-size:13.5px}
-}
-@media(max-width:900px){
-  .receipt-detail-footer{grid-template-columns:1fr}
-  .receipt-detail-shell .receiving-putaway-action{width:100%!important}
-}
-@media(max-width:700px){
-  .receipt-detail-shell{gap:10px}
-  .receipt-detail-summary{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:7px!important;margin-top:9px!important}
-  .receipt-detail-summary>div{min-height:72px;padding:12px 13px 11px 15px!important;border-radius:15px!important}
-  .receipt-detail-summary b{font-size:26px!important}.receipt-detail-summary span{font-size:9px!important;margin-top:6px}
-  .receipt-detail-shell .receiving-detail-line{padding:15px!important;border-radius:17px!important}
-  .receipt-detail-shell .receiving-detail-line::before{top:14px;bottom:14px}
-  .receipt-detail-shell .receiving-detail-head{gap:10px}
-  .receipt-detail-shell .receiving-detail-title>b{font-size:18px!important}
-  .receiving-detail-meta{gap:5px;margin-top:9px}
-  .receipt-detail-shell .receiving-detail-meta>span{min-height:26px;padding:4px 7px;font-size:9.5px!important}
-  .receiving-detail-qty{min-width:80px;min-height:66px;padding:8px 9px;border-radius:12px}
-  .receipt-detail-shell .receiving-detail-qty strong{font-size:27px!important}
-  .receiving-detail-qty small{font-size:7.5px;margin-top:6px}
-  .receiving-detail-footer{display:flex;align-items:stretch;flex-direction:column;gap:9px;margin-top:12px;padding-top:12px}
-  .receipt-detail-shell .receiving-line-metrics{grid-template-columns:repeat(3,minmax(0,1fr));gap:5px!important}
-  .receipt-detail-shell .receiving-line-metrics span{
-    min-height:43px;justify-content:center;flex-direction:column;gap:3px;padding:6px 5px!important;
-    font-size:9px;white-space:normal;text-align:center
-  }
-  .receipt-detail-shell .receiving-line-metrics b{font-size:14px}
-  .receipt-detail-shell .receiving-putaway-action{min-height:44px!important;font-size:12px}
-  .receipt-detail-shell .receiving-status-badge{min-height:44px}
-}
 
 /* ===== STEP 3 · MOVIMENTAZIONE PREMIUM SYSTEM ===== */
 :root{
@@ -18811,7 +18681,101 @@ class RequestDocumentService{
     return '<!doctype html><html lang="it"><head><meta charset="utf-8"><title>'+esc(r.id)+' · SOMA HUB</title><style>'+
       '@page{size:A4 '+o+';margin:10mm}*{box-sizing:border-box}html,body{margin:0;padding:0;font-family:Arial,Helvetica,sans-serif;color:#203f61;background:#fff;font-size:9pt}'+
       '.doc{width:100%}.head{display:flex;justify-content:space-between;gap:12mm;align-items:flex-start;padding-bottom:5mm;border-bottom:.45mm solid #dfe8ee}.brand{display:flex;align-items:flex-start;gap:5mm}.brand img{width:42mm;height:auto;max-height:14mm;object-fit:contain}.brandcopy small{display:block;font-size:7pt;font-weight:700;letter-spacing:.12em;color:#6f8798}.brandcopy h1{margin:1.4mm 0 0;font-size:17pt;line-height:1;color:#173b5c}.headid{text-align:right}.headid small{font-size:7pt;font-weight:700;color:#7790a1}.headid b{display:block;margin-top:1.2mm;font-size:13pt;color:#b98522}.meta{display:grid;grid-template-columns:1.15fr .8fr .8fr .8fr 1fr;gap:2.2mm;margin:4.5mm 0}.meta div{padding:2.4mm 2.7mm;border:.25mm solid #dfe7ed;border-radius:2mm;background:#f8fafb}.meta small,.summary small{display:block;font-size:6.4pt;font-weight:700;letter-spacing:.08em;color:#7b8f9f}.meta b{display:block;margin-top:1mm;font-size:8.4pt;color:#294c68;overflow-wrap:anywhere}.note{margin:0 0 4mm;padding:2.7mm 3mm;border-left:1.1mm solid #d99a1b;background:#fff9eb;color:#65512b;font-size:8pt}.note b{color:#4c3d20}table{width:100%;border-collapse:collapse;table-layout:fixed}thead{display:table-header-group}tr{break-inside:avoid;page-break-inside:avoid}th,td{border:.25mm solid #d9e3e9;padding:1.7mm 1.5mm;vertical-align:top;overflow-wrap:anywhere;word-break:normal}th{background:#edf7f2;color:#28654c;font-size:6.8pt;text-transform:uppercase;letter-spacing:.035em;text-align:left}td{font-size:'+(o==='portrait'?'6.45':'7.35')+'pt;line-height:1.25}td.num,th.num{text-align:center}.summary{display:grid;grid-template-columns:repeat(4,1fr);gap:2.2mm;margin-top:4mm}.summary div{padding:2.5mm;border:.25mm solid #dfe7ed;border-radius:2mm;background:#f8fafb}.summary b{display:block;margin-top:1mm;font-size:12pt;color:#173b5c}.sign{display:grid;grid-template-columns:1fr 1fr;gap:12mm;margin-top:8mm}.sign div{padding-top:7mm;border-top:.25mm solid #aebec9;color:#6f8392;font-size:7pt}.foot{display:flex;justify-content:space-between;gap:8mm;margin-top:5mm;padding-top:2.5mm;border-top:.25mm solid #e2e9ee;color:#7d8e9b;font-size:6.5pt}'+
-      '</style></head><body><main class="doc"><header class="head"><div class="brand"><img src="'+LOGO+'" alt="Servizi Ospedalieri"><div class="brandcopy"><small>SOMA HUB</small><h1>Richiesta di magazzino</h1></div></div><div class="headid"><small>ID RICHIESTA</small><b>'+esc(r.id)+'</b></div></header>'+
+      '
+/* ===== R31.67 · RECEIPT DETAIL STRUCTURAL REDESIGN ===== */
+.receipt-detail-v2{display:flex;flex-direction:column;gap:18px;margin-top:16px}
+.receipt-kpi-row{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
+.receipt-kpi{
+  position:relative;min-height:118px;padding:18px 20px 17px 23px;
+  border:1px solid #dbe6ed;border-radius:20px;background:linear-gradient(180deg,#fff,#fbfdfe);
+  box-shadow:0 7px 20px rgba(23,53,82,.055);overflow:hidden
+}
+.receipt-kpi::before{content:"";position:absolute;left:0;top:0;bottom:0;width:5px;background:#7890a5}
+.receipt-kpi.is-pending::before{background:#d49b20}.receipt-kpi.is-putaway::before{background:#25a874}.receipt-kpi.is-direct::before{background:#4483c9}
+.receipt-kpi span{display:block;font-size:12px;font-weight:950;letter-spacing:.065em;text-transform:uppercase;color:#667d91}
+.receipt-kpi b{display:block;margin-top:9px;font-size:36px;line-height:.9;letter-spacing:-.045em;color:#193b5d}
+.receipt-kpi small{display:block;margin-top:9px;font-size:12px;font-weight:700;color:#8a9aaa}
+.receipt-item-list{display:flex;flex-direction:column;gap:14px}
+.receipt-item-card{
+  display:grid;grid-template-columns:minmax(340px,1.25fr) minmax(360px,1fr) 250px;
+  gap:0;min-height:188px;background:#fff;border:1px solid #d8e4ec;border-radius:22px;
+  box-shadow:0 9px 26px rgba(23,53,82,.065);overflow:hidden
+}
+.receipt-item-main{padding:24px 26px;display:flex;flex-direction:column;justify-content:center;min-width:0}
+.receipt-item-eyebrow{font-size:10px;font-weight:950;letter-spacing:.12em;color:#7d91a3;margin-bottom:7px}
+.receipt-item-main h2{margin:0;font-size:27px;line-height:1.06;letter-spacing:-.025em;color:#193b5d}
+.receipt-item-main h2 span{font-weight:850;color:#355a7c}
+.receipt-item-tags{display:flex;flex-wrap:wrap;gap:7px;margin-top:15px}
+.receipt-item-tags>span{
+  min-height:31px;display:inline-flex;align-items:center;gap:6px;padding:6px 10px;
+  border-radius:10px;border:1px solid #dfe8ee;background:#f2f6f9;
+  color:#5d7488;font-size:11.5px;font-weight:850
+}
+.receipt-item-tags .is-state{background:#edf8f2;border-color:#cfe8dc;color:#267451}
+.receipt-item-tags .ph{font-size:15px}
+.receipt-location-tip{
+  display:flex;align-items:center;gap:10px;margin-top:14px;padding:10px 12px;
+  border:1px solid #cfe8dc;border-radius:12px;background:#eef9f4;color:#286d50
+}
+.receipt-location-tip>.ph{font-size:19px}.receipt-location-tip span{display:flex;flex-direction:column;gap:2px}
+.receipt-location-tip small{font-size:9px;font-weight:950;letter-spacing:.075em}.receipt-location-tip b{font-size:12.5px}
+.receipt-item-data{
+  display:grid;grid-template-columns:repeat(2,minmax(0,1fr));align-content:center;gap:10px;
+  padding:22px;border-left:1px solid #e5edf2;background:#fbfdfe
+}
+.receipt-data-cell{
+  min-height:65px;padding:12px 13px;border:1px solid #e1eaf0;border-radius:14px;
+  background:#fff;display:flex;flex-direction:column;justify-content:center
+}
+.receipt-data-cell span{font-size:10px;font-weight:900;letter-spacing:.055em;text-transform:uppercase;color:#74899b}
+.receipt-data-cell b{margin-top:5px;font-size:23px;line-height:1;color:#193b5d;letter-spacing:-.03em}
+.receipt-item-action{
+  padding:20px;display:flex;flex-direction:column;justify-content:center;gap:12px;
+  border-left:1px solid #dce9e5;background:linear-gradient(145deg,#f5fbf8,#edf8f3)
+}
+.receipt-pending-box{text-align:center;padding:13px 10px 12px;border:1px solid #cee7da;border-radius:16px;background:#fff}
+.receipt-pending-box small{display:block;font-size:9px;font-weight:950;letter-spacing:.085em;color:#5f816f}
+.receipt-pending-box strong{display:block;margin-top:5px;font-size:39px;line-height:.9;letter-spacing:-.05em;color:#168b5c}
+.receipt-pending-box span{display:block;margin-top:7px;font-size:11px;font-weight:800;color:#759182}
+.receipt-putaway-cta{
+  width:100%;min-height:52px;padding:0 14px;border-radius:14px;
+  display:grid;grid-template-columns:20px 1fr 18px;align-items:center;gap:7px;
+  background:#279c9a;color:#fff;font-size:12.5px;font-weight:900;letter-spacing:.01em;
+  box-shadow:0 7px 16px rgba(39,156,154,.18);transition:.16s ease
+}
+.receipt-putaway-cta:hover{transform:translateY(-1px);filter:brightness(.97)}
+.receipt-putaway-cta .inline-icon{width:18px;height:18px}.receipt-putaway-cta .ph{font-size:17px}
+.receipt-putaway-cta b{font-size:15px}
+.receipt-readonly-state{min-height:50px;border-radius:13px;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:950}
+.receipt-readonly-state.pending{background:#fff3d8;color:#8a610b}.receipt-readonly-state.done{background:#e5f6ed;color:#17744d}
+@media(max-width:1180px){
+  .receipt-item-card{grid-template-columns:minmax(320px,1.2fr) minmax(300px,.9fr) 220px}
+}
+@media(max-width:900px){
+  .receipt-kpi-row{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .receipt-item-card{grid-template-columns:1fr 230px}
+  .receipt-item-data{grid-column:1/2;border-left:0;border-top:1px solid #e5edf2}
+  .receipt-item-action{grid-column:2/3;grid-row:1/3}
+}
+@media(max-width:700px){
+  .receipt-detail-v2{gap:10px;margin-top:10px}
+  .receipt-kpi-row{gap:7px}
+  .receipt-kpi{min-height:78px;padding:12px 13px 11px 15px;border-radius:15px}
+  .receipt-kpi span{font-size:9px}.receipt-kpi b{font-size:27px;margin-top:6px}.receipt-kpi small{display:none}
+  .receipt-item-card{display:flex;flex-direction:column;min-height:0;border-radius:17px}
+  .receipt-item-main{padding:16px}
+  .receipt-item-eyebrow{font-size:8px;margin-bottom:5px}
+  .receipt-item-main h2{font-size:20px}
+  .receipt-item-tags{gap:5px;margin-top:10px}
+  .receipt-item-tags>span{min-height:26px;padding:4px 7px;font-size:9px;border-radius:8px}
+  .receipt-item-data{order:2;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px;padding:12px 14px;border-left:0;border-top:1px solid #e5edf2}
+  .receipt-data-cell{min-height:48px;padding:7px 5px;text-align:center;align-items:center}
+  .receipt-data-cell span{font-size:8px}.receipt-data-cell b{font-size:17px}
+  .receipt-item-action{order:3;padding:12px 14px;display:grid;grid-template-columns:90px 1fr;gap:8px;border-left:0;border-top:1px solid #dce9e5}
+  .receipt-pending-box{padding:9px 6px;border-radius:12px}.receipt-pending-box strong{font-size:28px}.receipt-pending-box span{font-size:9px;margin-top:4px}
+  .receipt-putaway-cta{min-height:48px}
+}
+</style></head><body><main class="doc"><header class="head"><div class="brand"><img src="'+LOGO+'" alt="Servizi Ospedalieri"><div class="brandcopy"><small>SOMA HUB</small><h1>Richiesta di magazzino</h1></div></div><div class="headid"><small>ID RICHIESTA</small><b>'+esc(r.id)+'</b></div></header>'+
       '<section class="meta"><div><small>DESTINAZIONE</small><b>'+esc(r.destination||'—')+'</b></div><div><small>RICHIEDENTE</small><b>'+esc(r.operator||'—')+'</b></div><div><small>DATA</small><b>'+esc(fmtDateTime(r.requestedAt))+'</b></div><div><small>STATO</small><b>'+esc(r.status||'DA PREPARARE')+'</b></div><div><small>SEDE / RIF.</small><b>'+esc(model.site.name)+(r.reference?' · '+esc(r.reference):'')+'</b></div></section>'+
       (r.note?'<div class="note"><b>Note richiesta:</b> '+esc(r.note)+'</div>':'')+
       '<table><colgroup><col style="width:3%"><col style="width:11%"><col style="width:6%"><col style="width:7%"><col style="width:7%"><col style="width:7%"><col style="width:10%"><col style="width:27%"><col style="width:22%"></colgroup><thead><tr><th>N.</th><th>Articolo</th><th>Taglia</th><th class="num">Rich.</th><th class="num">Prel.</th><th class="num">Pezzi</th><th>Stato</th><th>Posizione / Bancale</th><th>Note</th></tr></thead><tbody>'+rows+'</tbody></table>'+
@@ -19445,37 +19409,42 @@ class UI{
     const r=this.store.db.receipts.find(x=>x.id===id);if(!r)return this.emptyPage('Entrata merci non trovata.');
     const s=this.domain.receiving.stats(r),read=!this.auth.can('MOVE');
     return `${this.sectionTitle(r.id,r.supplier||'Entrata merci',`${r.ddtNumber?`DDT ${r.ddtNumber} · `:''}${fmtDateTime(r.receivedAt)}`)}
-      <section class="receipt-detail-shell">
-        <div class="summary-four receipt-detail-summary">
-          <div><b>${s.received}</b><span>Controllati</span></div>
-          <div><b>${s.pending}</b><span>Da ubicare</span></div>
-          <div><b>${s.putAway}</b><span>Ubicati</span></div>
-          <div><b>${s.direct}</b><span>Prelevati</span></div>
+      <section class="receipt-detail-v2">
+        <div class="receipt-kpi-row">
+          <div class="receipt-kpi is-checked"><span>Controllati</span><b>${s.received}</b><small>pezzi verificati</small></div>
+          <div class="receipt-kpi is-pending"><span>Da ubicare</span><b>${s.pending}</b><small>ancora in ricevimento</small></div>
+          <div class="receipt-kpi is-putaway"><span>Ubicati</span><b>${s.putAway}</b><small>già in magazzino</small></div>
+          <div class="receipt-kpi is-direct"><span>Prelevati</span><b>${s.direct}</b><small>usciti direttamente</small></div>
         </div>
-        <div class="receipt-detail-list">
+        <div class="receipt-item-list">
           ${r.lines.map(l=>{const x=this.domain.receiving.lineStats(r,l);return `
-            <article class="detail-line receiving-detail-line">
-              <div class="detail-line-top receiving-detail-head">
-                <div class="receiving-detail-title">
-                  <b>${esc(l.article)}${l.size?` · ${esc(l.size)}`:''}</b>
-                  <div class="receiving-detail-meta">
-                    <span class="receiving-state-chip">${esc(l.state)}</span>
-                    <span>${phRegular('map-pin-line')} AREA RICEVIMENTO</span>
-                    <span>${phRegular('stack')} ${esc(l.receivingPallet)}</span>
-                  </div>
+            <article class="receipt-item-card">
+              <section class="receipt-item-main">
+                <div class="receipt-item-eyebrow">ARTICOLO · TAGLIA</div>
+                <h2>${esc(l.article)}${l.size?` <span>· ${esc(l.size)}</span>`:''}</h2>
+                <div class="receipt-item-tags">
+                  <span class="is-state">${esc(l.state)}</span>
+                  <span>${phRegular('map-pin-line')} AREA RICEVIMENTO</span>
+                  <span>${phRegular('stack')} ${esc(l.receivingPallet)}</span>
                 </div>
-                <div class="receiving-detail-qty"><strong>${x.pending}</strong><small>DA UBICARE</small></div>
-              </div>
-              ${l.suggestedLocation?`<div class="compact-suggest receiving-suggested">${phRegular('map-pin-line')}<span>Posizione suggerita <b>${esc(l.suggestedLocation)}${l.suggestedPallet?` · ${esc(l.suggestedPallet)}`:''}</b></span></div>`:''}
-              <div class="receiving-detail-footer">
-                <div class="line-metrics receiving-line-metrics">
-                  <span>DDT <b>${l.ddtQuantity}</b></span>
-                  <span>Controllati <b>${x.received}</b></span>
-                  <span>Ubicati <b>${x.putAway}</b></span>
-                  ${x.direct?`<span>Prelevati <b>${x.direct}</b></span>`:''}
+                ${l.suggestedLocation?`<div class="receipt-location-tip">${phRegular('map-pin-line')}<span><small>POSIZIONE SUGGERITA</small><b>${esc(l.suggestedLocation)}${l.suggestedPallet?` · ${esc(l.suggestedPallet)}`:''}</b></span></div>`:''}
+              </section>
+
+              <section class="receipt-item-data">
+                <div class="receipt-data-cell"><span>DDT</span><b>${l.ddtQuantity}</b></div>
+                <div class="receipt-data-cell"><span>Controllati</span><b>${x.received}</b></div>
+                <div class="receipt-data-cell"><span>Ubicati</span><b>${x.putAway}</b></div>
+                ${x.direct?`<div class="receipt-data-cell"><span>Prelevati</span><b>${x.direct}</b></div>`:''}
+              </section>
+
+              <aside class="receipt-item-action">
+                <div class="receipt-pending-box">
+                  <small>DA UBICARE</small>
+                  <strong>${x.pending}</strong>
+                  <span>${x.pending===1?'pezzo':'pezzi'}</span>
                 </div>
-                ${x.pending&&!read?`<button class="success receiving-putaway-action" data-action="putaway-open" data-receipt="${r.id}" data-line="${l.id}">${phIcon('map-pin-line','inline-icon')} UBICA ${x.pending} PEZZI</button>`:x.pending?'<div class="available-badge receiving-status-badge">DISPONIBILE · DA UBICARE</div>':'<div class="done-badge receiving-status-badge">✓ GESTITA</div>'}
-              </div>
+                ${x.pending&&!read?`<button class="receipt-putaway-cta" data-action="putaway-open" data-receipt="${r.id}" data-line="${l.id}">${phIcon('map-pin-line','inline-icon')}<span>UBICA <b>${x.pending}</b> PEZZI</span>${phRegular('arrow-right')}</button>`:x.pending?'<div class="receipt-readonly-state pending">DA UBICARE</div>':'<div class="receipt-readonly-state done">✓ GESTITA</div>'}
+              </aside>
             </article>`}).join('')}
         </div>
       </section>`
@@ -19933,6 +19902,6 @@ try{globalThis.__NOVA_LEGACY_AVAILABLE=!!localStorage.getItem(CONFIG.legacyStora
 const switchSite=async siteId=>{await ui.selectSite(siteId);return auth.site()};
 globalThis.NOVA=Object.freeze({version:CONFIG.appVersion,schema:CONFIG.version,identityVersion:CONFIG.identityVersion,store,auth,router,domain,excel,requestDocs,ui,sounds,sites:SITES,operators:OPERATORS,roles:ROLE_DEFS,saveIdentityRegistry,capabilities:Object.freeze({operational:ALL_CAPS,master:MASTER_CAPS,administration:ADMIN_CAPS,globalAdmin:GLOBAL_ADMIN_CAPS}),identityValidation:IDENTITY_VALIDATION,switchSite});
 ui.render();</script>
-<!-- SOMA_BUILD:R31.66-20260928 -->
+<!-- SOMA_BUILD:R31.67-20260928 -->
 </body>
 </html>
