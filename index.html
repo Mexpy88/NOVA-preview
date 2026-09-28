@@ -1,13 +1,13 @@
 <!doctype html>
 <html lang="it">
 <head>
-<meta name="soma-build" content="R31.63-20260928">
+<meta name="soma-build" content="R31.64-20260928">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
 <script id="soma-build-freshness">
 (() => {
-  const CURRENT_BUILD='R31.63-20260928',CHECK_KEY='soma:last-build-refresh';
+  const CURRENT_BUILD='R31.64-20260928',CHECK_KEY='soma:last-build-refresh';
   globalThis.SOMA_BUILD=CURRENT_BUILD;
   const check=async()=>{
     try{
@@ -18367,25 +18367,25 @@ class ExcelService{
     const rg=XLSX.utils.decode_range(ws['!ref']||'A1:H1'),dataStart=rg.s.r+1,oldEnd=rg.e.r,template=snapshotRow(ws,Math.min(dataStart,oldEnd),7),rows=[];
     const fullKey=x=>[normalizeArticle(x.article),norm(x.size),norm(x.location),norm(x.pallet),norm(x.state)].join('|'),physicalKey=x=>[normalizeArticle(x.article),norm(x.size),norm(x.location),norm(x.pallet)].join('|');
     for(let r=dataStart;r<=oldEnd;r++){
-      const read=c=>ws[XLSX.utils.encode_cell({r,c})]?.v??'',article=normalizeArticle(read(2)),quantity=Number(read(5)||0)||0;
-      if(!article||quantity<=0)continue;
+      const read=c=>ws[XLSX.utils.encode_cell({r,c})]?.v??'',article=normalizeArticle(read(2)),quantity=Math.max(0,Number(read(5)||0)||0);
+      if(!article)continue;
       rows.push({location:norm(read(0)),pallet:norm(read(1)),article,size:norm(read(3)),state:norm(read(4))||'NUOVO',quantity,note:String(read(6)||''),snapshot:snapshotRow(ws,r,7),sourceOrder:r})
     }
     const baselineRows=rows.length,changes=this.#activeSearchChanges();let unmatchedNegative=0,newRows=0,changedRows=0;
     for(const change of changes){
       const target={article:change.item.article,size:change.item.size,state:change.item.state,location:change.bucket.location,pallet:change.bucket.pallet},d=Number(change.delta)||0;if(!d)continue;
-      const exact=rows.find(r=>r.quantity>1e-9&&fullKey(r)===fullKey(target)),physical=rows.filter(r=>r.quantity>1e-9&&physicalKey(r)===physicalKey(target)).sort((a,b)=>(a.sourceOrder??1e12)-(b.sourceOrder??1e12));
+      const exact=rows.find(r=>fullKey(r)===fullKey(target)),physical=rows.filter(r=>physicalKey(r)===physicalKey(target)).sort((a,b)=>(a.sourceOrder??1e12)-(b.sourceOrder??1e12));
       if(d>0){
         const row=exact||(physical.length===1?physical[0]:null);
         if(row){row.quantity+=d;changedRows++}
         else{rows.push({...target,quantity:d,note:'',snapshot:null,sourceOrder:1e12+rows.length});newRows++}
         continue
       }
-      let remaining=Math.abs(d),candidates=exact?[exact,...physical.filter(r=>r!==exact)]:physical;
-      for(const row of candidates){if(remaining<=1e-9)break;const take=Math.min(row.quantity,remaining);if(take>0){row.quantity-=take;remaining-=take;changedRows++}}
+      let remaining=Math.abs(d),candidates=[...(exact&&exact.quantity>1e-9?[exact]:[]),...physical.filter(r=>r!==exact&&r.quantity>1e-9)];
+      for(const row of candidates){if(remaining<=1e-9)break;const take=Math.min(row.quantity,remaining);if(take>0){row.quantity=Math.max(0,row.quantity-take);remaining-=take;changedRows++}}
       if(remaining>1e-9)unmatchedNegative+=remaining
     }
-    const live=rows.filter(r=>r.quantity>1e-9),occurrences=new Map();
+    const live=rows.filter(r=>r.quantity>=0),occurrences=new Map();
     for(const row of live){const k=[normalizeArticle(row.article),norm(row.size)].join('|'),n=(occurrences.get(k)||0)+1;occurrences.set(k,n);row.searchKey=`${normalizeArticle(row.article)}|${norm(row.size)}|${n}`}
     const newEnd=Math.max(rg.s.r,dataStart+live.length-1),clearEnd=Math.max(oldEnd,newEnd);
     for(let r=dataStart;r<=clearEnd;r++)for(let c=0;c<=7;c++)delete ws[XLSX.utils.encode_cell({r,c})];
@@ -18395,7 +18395,7 @@ class ExcelService{
     const lastExcelRow=newEnd+1,search=wb.Sheets[searchName],rangeRe=/GIACENZE_RICERCA_DATI!\$([A-H])\$2:\$\1\$(\d+)/g;let formulaCells=0,formulaRanges=0,formulasUpdated=0,staleRefs=0;
     if(search)for(const addr of Object.keys(search)){if(addr[0]==='!')continue;const cell=search[addr];if(typeof cell?.f!=='string'||!cell.f.includes('GIACENZE_RICERCA_DATI!'))continue;formulaCells++;const before=cell.f;cell.f=before.replace(rangeRe,(m,col)=>'GIACENZE_RICERCA_DATI!$'+col+'$2:$'+col+'$'+lastExcelRow);if(cell.f!==before){formulasUpdated++;delete cell.w}let rangesInCell=0;for(const m of cell.f.matchAll(rangeRe)){formulaRanges++;rangesInCell++;if(Number(m[2])!==lastExcelRow)staleRefs++}if(!rangesInCell)staleRefs++}
     if(staleRefs)throw new Error(`Export Excel: ${staleRefs} riferimenti CERCA_GIACENZE non sincronizzati.`);
-    this.searchDataReport={ok:true,baselineRows,rows:live.length,netRows:live.length-baselineRows,rowsCreatedDuringSync:newRows,rowsChanged:changedRows,lastRow:lastExcelRow,formulaCells,formulaRanges,formulasUpdated,unmatchedNegative}
+    this.searchDataReport={ok:true,baselineRows,rows:live.length,zeroRows:live.filter(r=>r.quantity===0).length,netRows:live.length-baselineRows,rowsCreatedDuringSync:newRows,rowsChanged:changedRows,lastRow:lastExcelRow,formulaCells,formulaRanges,formulasUpdated,unmatchedNegative}
   }
 
   #dropSheetFilterNames(wb){
@@ -19765,6 +19765,6 @@ try{globalThis.__NOVA_LEGACY_AVAILABLE=!!localStorage.getItem(CONFIG.legacyStora
 const switchSite=async siteId=>{await ui.selectSite(siteId);return auth.site()};
 globalThis.NOVA=Object.freeze({version:CONFIG.appVersion,schema:CONFIG.version,identityVersion:CONFIG.identityVersion,store,auth,router,domain,excel,requestDocs,ui,sounds,sites:SITES,operators:OPERATORS,roles:ROLE_DEFS,saveIdentityRegistry,capabilities:Object.freeze({operational:ALL_CAPS,master:MASTER_CAPS,administration:ADMIN_CAPS,globalAdmin:GLOBAL_ADMIN_CAPS}),identityValidation:IDENTITY_VALIDATION,switchSite});
 ui.render();</script>
-<!-- SOMA_BUILD:R31.63-20260928 -->
+<!-- SOMA_BUILD:R31.64-20260928 -->
 </body>
 </html>
