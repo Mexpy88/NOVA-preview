@@ -1,13 +1,13 @@
 <!doctype html>
 <html lang="it">
 <head>
-<meta name="soma-build" content="R31.45-20260925">
+<meta name="soma-build" content="R31.46-20260925">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
 <script id="soma-build-freshness">
 (() => {
-  const CURRENT_BUILD='R31.45-20260925',CHECK_KEY='soma:last-build-refresh';
+  const CURRENT_BUILD='R31.46-20260925',CHECK_KEY='soma:last-build-refresh';
   globalThis.SOMA_BUILD=CURRENT_BUILD;
   const check=async()=>{
     try{
@@ -15900,6 +15900,92 @@ body.desktop-mode .app-view:has(.receipt-new-shell){width:100%!important;max-wid
   .stock-page-v4 .page-title{margin-bottom:16px!important}
 }
 </style>
+
+<style id="soma-r31-46-issue-final-polish">
+/* R31.46 · Scarica · final operational polish */
+.issue-selected-card{
+  grid-template-columns:minmax(260px,.9fr) minmax(430px,1.35fr) 105px minmax(190px,auto);
+  column-gap:12px
+}
+.issue-selected-qty strong{font-size:38px}
+.issue-selected-actions{gap:7px}
+
+.issue-qty-label{justify-content:space-between!important}
+.issue-max-badge{
+  margin-left:auto;padding:4px 8px;border-radius:999px;
+  background:#fff0ee;color:#c44742;border:1px solid #f2cfcb;
+  font-size:9px;font-weight:950;letter-spacing:.055em;line-height:1
+}
+.issue-qty-input .field::placeholder{color:#9aa7b2;opacity:1;font-weight:750}
+.issue-qty-input .field:focus::placeholder{opacity:.55}
+
+.issue-note-control .field{
+  background:#fbfcfd!important;
+  border-color:#dde6ec!important
+}
+
+.issue-confirm-bar{
+  grid-template-columns:minmax(0,1fr) minmax(360px,.46fr);
+  min-height:78px;
+  transition:background .16s ease,border-color .16s ease,box-shadow .16s ease
+}
+.issue-review{display:flex;align-items:center;gap:12px;min-width:0}
+.issue-review>.ph{font-size:29px;flex:0 0 auto}
+.issue-review>span{display:grid;gap:2px;min-width:0}
+.issue-review-kicker{
+  font-size:8.5px!important;font-weight:950!important;letter-spacing:.1em!important;
+  color:#a2706c!important
+}
+.issue-review b{
+  font-size:14.5px!important;line-height:1.25!important;color:#653f3d!important;
+  overflow-wrap:anywhere
+}
+.issue-review small:last-child{
+  font-size:11.5px!important;line-height:1.35!important;color:#8a7775!important
+}
+.issue-confirm-bar.is-ready{
+  background:linear-gradient(180deg,#fff7f6,#fff1ef);
+  border-color:#eeb7b2;
+  box-shadow:0 8px 22px rgba(185,74,67,.07)
+}
+.issue-confirm-bar.is-ready .issue-review>.ph{color:#d9534f}
+.issue-confirm-bar.is-ready .issue-review-kicker{color:#c44742!important}
+.issue-confirm-bar.is-ready .issue-review b{color:#713b37!important}
+.issue-confirm-bar.is-error{
+  background:#fff7f5;border-color:#efc0bc
+}
+.issue-confirm-bar.is-error .issue-review>.ph{color:#c44742}
+.issue-confirm-bar.is-error .issue-review b{color:#a63f3a!important}
+
+.issue-confirm-btn:not(:disabled){
+  background:linear-gradient(180deg,#e35b55,#cf4944)!important;
+  border-color:#c9443f!important;color:#fff!important;
+  box-shadow:0 8px 18px rgba(196,71,66,.20)!important;
+  opacity:1!important
+}
+.issue-confirm-btn:not(:disabled):hover{
+  background:linear-gradient(180deg,#dc514b,#c7433e)!important;
+  transform:translateY(-1px)
+}
+.issue-confirm-btn:not(:disabled):active{transform:translateY(0) scale(.992)}
+.issue-confirm-btn:disabled{
+  background:#d8b5b2!important;border-color:#d8b5b2!important;color:#fff!important;
+  opacity:.72!important
+}
+
+@media(max-width:1180px){
+  .issue-selected-card{grid-template-columns:minmax(220px,.85fr) minmax(320px,1.2fr) 100px minmax(160px,auto)}
+  .issue-confirm-bar{grid-template-columns:minmax(0,1fr) minmax(300px,.44fr)}
+}
+@media(max-width:980px){
+  .issue-confirm-bar{grid-template-columns:minmax(0,1fr) minmax(260px,.42fr)}
+}
+@media(max-width:700px){
+  .issue-confirm-bar{grid-template-columns:1fr;min-height:0}
+  .issue-review b{font-size:13.5px!important}
+  .issue-review small:last-child{font-size:10.5px!important}
+}
+</style>
 </head>
 <body>
 <header id="topbar" class="topbar"></header>
@@ -17456,7 +17542,7 @@ class UI{
   issue(){
     if(!this.require('MOVE'))return'';if(!this.masterReady())return this.masterRequiredView({context:'scaricare merce dalla giacenza',backAction:'home',backLabel:'TORNA ALLA DASHBOARD'});
     const selected=this.issueSelected(),pickerOpen=!selected||!!this.issuePickerOpen,sourceKey=selected?bucketKey(selected):'';
-    return `${this.sectionTitle('MOVIMENTAZIONE','Scarica')}<section class="form-card movement-form movement-issue movement-issue-v2"><div class="movement-form-head issue-form-head-v2"><span class="movement-form-icon">${phIcon('arrow-down')}</span><div><b>Scarico merce</b><small>Seleziona la giacenza, indica i pezzi da prelevare e conferma l'uscita.</small></div></div><div class="issue-step issue-source-step"><div class="issue-step-head"><span>1</span><div><b>Giacenza da prelevare</b><small>Verifica articolo, taglia, posizione e quantità disponibile.</small></div></div><input id="issueSource" type="hidden" value="${esc(sourceKey)}"><div id="issueSelectedHost">${this.issueSelectedHtml(selected)}</div><div id="issuePicker" class="issue-picker ${pickerOpen?'':'hidden'}"><div class="issue-picker-search"><span>${phIcon('magnifying-glass')}</span><input id="issueSourceSearch" class="field" autocomplete="off" placeholder="Cerca articolo, taglia, posizione o bancale…"></div><div id="issueSourceResults" class="issue-source-results"></div></div></div><div class="issue-step issue-details-step"><div class="issue-step-head"><span>2</span><div><b>Dati dello scarico</b><small>Inserisci la quantità e la destinazione della merce.</small></div></div><div class="issue-details-grid"><label class="issue-qty-control"><span class="issue-field-label">QUANTITÀ IN PEZZI</span><div class="issue-qty-input"><input id="issueQty" type="number" min="1" ${selected?`max="${Number(selected.quantity||0)}"`:''} class="field" inputmode="numeric" placeholder="0"><span>pz</span></div><small id="issueQtyHint" class="issue-qty-hint">${selected?`Disponibili: ${Number(selected.quantity||0)} pezzi`:'Nessuna giacenza selezionata'}</small></label><label><span class="issue-field-label">DESTINAZIONE</span><select id="issueDestination" class="field">${CONFIG.destinations.map(d=>`<option>${d}</option>`).join('')}</select></label></div><label class="issue-note-control"><span class="issue-field-label">NOTE <em>OPZIONALE</em></span><input id="issueNote" class="field" placeholder="Aggiungi una nota allo scarico…"></label></div><div class="issue-confirm-bar"><div>${phIcon('shield-check')}<span><b>Controllo finale</b><small>Lo scarico aggiornerà immediatamente la giacenza selezionata.</small></span></div><button class="danger movement-cta issue-confirm-btn" data-action="issue-confirm" disabled>${phIcon('arrow-down','inline-icon')} <span>CONFERMA SCARICO</span></button></div></section>`
+    return `${this.sectionTitle('MOVIMENTAZIONE','Scarica')}<section class="form-card movement-form movement-issue movement-issue-v2"><div class="movement-form-head issue-form-head-v2"><span class="movement-form-icon">${phIcon('arrow-down')}</span><div><b>Scarico merce</b><small>Seleziona la giacenza, indica i pezzi da prelevare e conferma l'uscita.</small></div></div><div class="issue-step issue-source-step"><div class="issue-step-head"><span>1</span><div><b>Giacenza da prelevare</b><small>Verifica articolo, taglia, posizione e quantità disponibile.</small></div></div><input id="issueSource" type="hidden" value="${esc(sourceKey)}"><div id="issueSelectedHost">${this.issueSelectedHtml(selected)}</div><div id="issuePicker" class="issue-picker ${pickerOpen?'':'hidden'}"><div class="issue-picker-search"><span>${phIcon('magnifying-glass')}</span><input id="issueSourceSearch" class="field" autocomplete="off" placeholder="Cerca articolo, taglia, posizione o bancale…"></div><div id="issueSourceResults" class="issue-source-results"></div></div></div><div class="issue-step issue-details-step"><div class="issue-step-head"><span>2</span><div><b>Dati dello scarico</b><small>Inserisci la quantità e la destinazione della merce.</small></div></div><div class="issue-details-grid"><label class="issue-qty-control"><span class="issue-field-label issue-qty-label">QUANTITÀ IN PEZZI <strong id="issueQtyMaxBadge" class="issue-max-badge">${selected?`MAX ${Number(selected.quantity||0)}`:'MAX —'}</strong></span><div class="issue-qty-input"><input id="issueQty" type="number" min="1" ${selected?`max="${Number(selected.quantity||0)}"`:''} class="field" inputmode="numeric" placeholder="Inserisci quantità"><span>pz</span></div><small id="issueQtyHint" class="issue-qty-hint">${selected?`Disponibili: ${Number(selected.quantity||0)} pezzi`:'Nessuna giacenza selezionata'}</small></label><label><span class="issue-field-label">DESTINAZIONE</span><select id="issueDestination" class="field">${CONFIG.destinations.map(d=>`<option>${d}</option>`).join('')}</select></label></div><label class="issue-note-control"><span class="issue-field-label">NOTE <em>OPZIONALE</em></span><input id="issueNote" class="field" placeholder="Aggiungi una nota allo scarico…"></label></div><div id="issueConfirmBar" class="issue-confirm-bar is-idle"><div class="issue-review">${phIcon('shield-check')}<span><small class="issue-review-kicker">CONTROLLO FINALE</small><b id="issueReviewTitle">Inserisci la quantità da scaricare</b><small id="issueReviewDetail">${selected?`Disponibili ${Number(selected.quantity||0)} pezzi · seleziona la quantità da prelevare`:'Seleziona prima una giacenza da prelevare'}</small></span></div><button class="danger movement-cta issue-confirm-btn" data-action="issue-confirm" disabled>${phIcon('arrow-down','inline-icon')} <span>CONFERMA SCARICO</span></button></div></section>`
   }
   renderIssueSources(){
     const host=document.getElementById('issueSourceResults');if(!host)return;
@@ -17491,16 +17577,34 @@ class UI{
     requestAnimationFrame(()=>document.getElementById('issueSourceSearch')?.focus())
   }
   updateIssueQtyState(){
-    const sourceKey=document.getElementById('issueSource')?.value||'',row=sourceKey?this.domain.stock.findByKey(sourceKey):null,qty=document.getElementById('issueQty'),hint=document.getElementById('issueQtyHint'),button=document.querySelector('.issue-confirm-btn');
+    const sourceKey=document.getElementById('issueSource')?.value||'',row=sourceKey?this.domain.stock.findByKey(sourceKey):null,qty=document.getElementById('issueQty'),hint=document.getElementById('issueQtyHint'),button=document.querySelector('.issue-confirm-btn'),maxBadge=document.getElementById('issueQtyMaxBadge'),bar=document.getElementById('issueConfirmBar'),reviewTitle=document.getElementById('issueReviewTitle'),reviewDetail=document.getElementById('issueReviewDetail'),destination=document.getElementById('issueDestination')?.value||'—';
     if(!qty||!hint||!button)return;
-    const available=Math.max(0,Number(row?.quantity||0)),raw=String(qty.value||'').trim(),value=Number(raw),valid=!!row&&raw!==''&&Number.isFinite(value)&&value>=1&&value<=available;
+    const available=Math.max(0,Number(row?.quantity||0)),raw=String(qty.value||'').trim(),value=Number(raw),valid=!!row&&raw!==''&&Number.isFinite(value)&&value>=1&&value<=available,article=row?.article||'',size=row?.size||'',remaining=valid?available-value:available;
     qty.max=available?String(available):'';
+    if(maxBadge)maxBadge.textContent=row?`MAX ${available}`:'MAX —';
     hint.classList.remove('is-error','is-ok');
-    if(!row){hint.textContent='Seleziona prima una giacenza.';hint.classList.add('is-error')}
-    else if(raw===''||!Number.isFinite(value)){hint.textContent=`Disponibili: ${available} pezzi`}
-    else if(value<1){hint.textContent='Inserisci almeno 1 pezzo.';hint.classList.add('is-error')}
-    else if(value>available){hint.textContent=`Quantità non disponibile · massimo ${available} pezzi`;hint.classList.add('is-error')}
-    else{hint.textContent=`Disponibili ${available} · dopo lo scarico resteranno ${available-value}`;hint.classList.add('is-ok')}
+    bar?.classList.remove('is-idle','is-ready','is-error');
+    if(!row){
+      hint.textContent='Seleziona prima una giacenza.';hint.classList.add('is-error');bar?.classList.add('is-idle');
+      if(reviewTitle)reviewTitle.textContent='Seleziona una giacenza da prelevare';
+      if(reviewDetail)reviewDetail.textContent='Scegli articolo, taglia, posizione e bancale prima di continuare.'
+    }else if(raw===''||!Number.isFinite(value)){
+      hint.textContent=`Disponibili: ${available} pezzi`;bar?.classList.add('is-idle');
+      if(reviewTitle)reviewTitle.textContent='Inserisci la quantità da scaricare';
+      if(reviewDetail)reviewDetail.textContent=`${article}${size?` · ${size}`:''} · disponibili ${available} pezzi`
+    }else if(value<1){
+      hint.textContent='Inserisci almeno 1 pezzo.';hint.classList.add('is-error');bar?.classList.add('is-error');
+      if(reviewTitle)reviewTitle.textContent='Quantità non valida';
+      if(reviewDetail)reviewDetail.textContent='Inserisci almeno 1 pezzo per poter confermare lo scarico.'
+    }else if(value>available){
+      hint.textContent=`Quantità non disponibile · massimo ${available} pezzi`;hint.classList.add('is-error');bar?.classList.add('is-error');
+      if(reviewTitle)reviewTitle.textContent='Quantità superiore alla disponibilità';
+      if(reviewDetail)reviewDetail.textContent=`Hai richiesto ${value} pezzi · massimo disponibile ${available}.`
+    }else{
+      hint.textContent=`Disponibili ${available} · dopo lo scarico resteranno ${remaining}`;hint.classList.add('is-ok');bar?.classList.add('is-ready');
+      if(reviewTitle)reviewTitle.textContent=`Scaricherai ${value} ${value===1?'pezzo':'pezzi'} di ${article}${size?` · ${size}`:''}`;
+      if(reviewDetail)reviewDetail.textContent=`Destinazione: ${destination} · resteranno ${remaining} ${remaining===1?'pezzo':'pezzi'} in giacenza.`
+    }
     button.disabled=!valid
   }
   confirmIssue(){
@@ -17618,7 +17722,7 @@ class UI{
   openNotifications(){const d=document.getElementById('notificationDialog'),rows=this.domain.notifications.visibleTo(this.auth.user);d.querySelector('.dialog-body').innerHTML=rows.length?rows.map(n=>`<button class="notif-row ${n.readAt?'read':''}" data-action="notif-read" data-id="${n.id}" data-entity="${n.entityType}" data-entity-id="${n.entityId}"><b>${esc(n.title)}</b><span>${esc(n.body)}</span><small>${fmtDateTime(n.createdAt)}</small></button>`).join(''):'<div class="empty">Nessuna notifica.</div>';d.showModal()}
 
   input(el){if(el.dataset.masterRequestQty)this.updateMasterRequestQty(el,false);if(el.id==='loginPin'){const next=String(el.value||'').replace(/\D/g,'').slice(0,4);if(el.value!==next)el.value=next;if(next.length>this.lastPinLength)this.sounds?.pinKey?.();this.lastPinLength=next.length}if(el.id==='requestDeletePin'){const next=String(el.value||'').replace(/\D/g,'').slice(0,CONFIG.pinLength);if(el.value!==next)el.value=next;if(next.length>this.lastDeletePinLength)this.sounds?.pinKey?.();this.lastDeletePinLength=next.length;document.getElementById('requestDeleteError')?.classList.add('hidden')}if(el.dataset.countExtra)this.updateCountExtra(el.dataset.dom,el.dataset.countExtra,el.value);if(el.id?.startsWith('count-value-'))this.updateCountValue(el.id.replace('count-value-',''),el.value);if(el.id==='rectCounted')this.updateRectCount(el.value);const bind=el.dataset.bind;if(bind){this.bindDraft(bind,el.value);if(bind.startsWith('receipt:')||bind.startsWith('receiptgroup:'))this.updateReceiptNewSummary?.()}if(['stockQuery','stockLocation','stockPallet'].includes(el.id))this.scheduleStockRender();if(el.id==='issueSourceSearch')this.renderIssueSources();if(el.id==='issueQty')this.updateIssueQtyState();if(['rectSearch','rectFilterSize','rectFilterLocation','rectFilterPallet'].includes(el.id))this.renderRectResults();if(el.id==='registryQuery')this.renderRegistryResults();if(el.id==='masterQuery'){this.masterView.query=el.value;this.masterView.page=1;this.scheduleMasterRender()}if(el.id==='masterFilterArticle'){this.masterView.article=el.value;this.masterView.page=1;this.scheduleMasterRender()}if(el.id==='masterFilterLocation'){this.masterView.location=el.value;this.masterView.page=1;this.scheduleMasterRender()}if(el.id==='masterFilterPallet'){this.masterView.pallet=el.value;this.masterView.page=1;this.scheduleMasterRender()}if(el.id==='loginPin'){el.value=el.value.replace(/\D/g,'').slice(0,4);document.getElementById('loginError')?.classList.add('hidden')}}
-  change(el){if(el.dataset.masterRequestQty)this.updateMasterRequestQty(el,true);if(el.dataset.countExtra)this.updateCountExtra(el.dataset.dom,el.dataset.countExtra,el.value);if(el.id==='rectFilterState')this.renderRectResults();if(el.id==='rectReason'&&this.rectDraft)this.rectDraft.reason=norm(el.value);const bind=el.dataset.bind;if(bind){this.bindDraft(bind,el.value);if(bind.includes(':article')||bind.includes(':size')||bind.includes(':state')||bind.startsWith('receiptgroup:'))this.renderView()}if(el.id==='stockState')this.renderStockResults();if(['registryFrom','registryTo','registryType','registryState'].includes(el.id))this.renderRegistryResults();if(el.id==='masterFilterSize'){this.masterView.size=el.value;this.masterView.page=1;this.renderMasterViewerBody()}if(el.id==='masterSort'){this.masterView.sort=el.value;this.masterView.page=1;this.renderMasterViewerBody()}if(el.id==='requestDocOrientation')this.requestDocOrientation=['portrait','landscape'].includes(el.value)?el.value:'auto';if(el.id?.startsWith('activityDate-')){this.activityDate=el.value||localDateInput();this.renderView()}}
+  change(el){if(el.dataset.masterRequestQty)this.updateMasterRequestQty(el,true);if(el.dataset.countExtra)this.updateCountExtra(el.dataset.dom,el.dataset.countExtra,el.value);if(el.id==='rectFilterState')this.renderRectResults();if(el.id==='rectReason'&&this.rectDraft)this.rectDraft.reason=norm(el.value);const bind=el.dataset.bind;if(bind){this.bindDraft(bind,el.value);if(bind.includes(':article')||bind.includes(':size')||bind.includes(':state')||bind.startsWith('receiptgroup:'))this.renderView()}if(el.id==='stockState')this.renderStockResults();if(el.id==='issueDestination')this.updateIssueQtyState();if(['registryFrom','registryTo','registryType','registryState'].includes(el.id))this.renderRegistryResults();if(el.id==='masterFilterSize'){this.masterView.size=el.value;this.masterView.page=1;this.renderMasterViewerBody()}if(el.id==='masterSort'){this.masterView.sort=el.value;this.masterView.page=1;this.renderMasterViewerBody()}if(el.id==='requestDocOrientation')this.requestDocOrientation=['portrait','landscape'].includes(el.value)?el.value:'auto';if(el.id?.startsWith('activityDate-')){this.activityDate=el.value||localDateInput();this.renderView()}}
   bindDraft(bind,value){
     const [kind,id,key]=bind.split(':');
     if(kind==='receipt'&&this.receiptDraft){
@@ -17699,6 +17803,6 @@ try{globalThis.__NOVA_LEGACY_AVAILABLE=!!localStorage.getItem(CONFIG.legacyStora
 const switchSite=async siteId=>{await ui.selectSite(siteId);return auth.site()};
 globalThis.NOVA=Object.freeze({version:CONFIG.appVersion,schema:CONFIG.version,identityVersion:CONFIG.identityVersion,store,auth,router,domain,excel,requestDocs,ui,sounds,sites:SITES,operators:OPERATORS,roles:ROLE_DEFS,saveIdentityRegistry,capabilities:Object.freeze({operational:ALL_CAPS,master:MASTER_CAPS,administration:ADMIN_CAPS,globalAdmin:GLOBAL_ADMIN_CAPS}),identityValidation:IDENTITY_VALIDATION,switchSite});
 ui.render();</script>
-<!-- SOMA_BUILD:R31.45-20260925 -->
+<!-- SOMA_BUILD:R31.46-20260925 -->
 </body>
 </html>
