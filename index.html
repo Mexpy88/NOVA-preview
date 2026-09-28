@@ -1,13 +1,13 @@
 <!doctype html>
 <html lang="it">
 <head>
-<meta name="soma-build" content="R31.64-20260928">
+<meta name="soma-build" content="R31.65-20260928">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
 <script id="soma-build-freshness">
 (() => {
-  const CURRENT_BUILD='R31.64-20260928',CHECK_KEY='soma:last-build-refresh';
+  const CURRENT_BUILD='R31.65-20260928',CHECK_KEY='soma:last-build-refresh';
   globalThis.SOMA_BUILD=CURRENT_BUILD;
   const check=async()=>{
     try{
@@ -1479,6 +1479,86 @@ button[data-action] .inline-icon.ph-bridge{
   .receiving-empty{flex-direction:column;text-align:center}
 }
 
+
+/* ===== R31.65 · RECEIPT DETAIL UX/UI UNIFICATION ===== */
+.receipt-detail-shell{display:flex;flex-direction:column;gap:14px}
+.receipt-detail-summary{gap:10px!important;margin:14px 0 2px!important}
+.receipt-detail-summary>div{
+  position:relative;overflow:hidden;min-height:84px;
+  display:flex;flex-direction:column;justify-content:center;
+  padding:15px 18px 14px 20px!important;border-radius:18px!important;
+  background:#fff!important;border:1px solid #dfe9f0!important;box-shadow:0 5px 16px rgba(23,53,82,.045)!important
+}
+.receipt-detail-summary>div::before{content:"";position:absolute;left:0;top:0;bottom:0;width:4px;background:#6f879b}
+.receipt-detail-summary>div:nth-child(2)::before{background:#d29a27}
+.receipt-detail-summary>div:nth-child(3)::before{background:#20a773}
+.receipt-detail-summary>div:nth-child(4)::before{background:#3d7fc6}
+.receipt-detail-summary b{font-size:30px!important;line-height:1;color:var(--nova-ink,var(--ink))!important;letter-spacing:-.025em}
+.receipt-detail-summary span{margin-top:7px;font-size:11px!important;line-height:1;font-weight:900!important;letter-spacing:.055em;text-transform:uppercase;color:var(--nova-muted,var(--muted))!important}
+.receipt-detail-list{display:flex;flex-direction:column;gap:12px}
+.receipt-detail-shell .receiving-detail-line{
+  margin:0!important;padding:19px 21px!important;border-radius:20px!important;
+  border:1px solid #dce7ee!important;background:linear-gradient(180deg,#fff 0%,#fcfefe 100%)!important;
+  box-shadow:0 7px 22px rgba(23,53,82,.055)!important
+}
+.receipt-detail-shell .receiving-detail-head{align-items:flex-start;gap:18px}
+.receiving-detail-title{min-width:0;flex:1}
+.receipt-detail-shell .receiving-detail-title>b{display:block;font-size:21px!important;line-height:1.15;letter-spacing:-.012em;color:var(--nova-ink,var(--ink))}
+.receiving-detail-meta{display:flex;align-items:center;gap:7px;flex-wrap:wrap;margin-top:10px}
+.receipt-detail-shell .receiving-detail-meta>span{
+  display:inline-flex!important;align-items:center;gap:5px;margin:0!important;
+  min-height:28px;padding:5px 9px;border-radius:9px;
+  background:#f1f6f9;border:1px solid #e0e9ef;color:#61778a!important;
+  font-size:11px!important;font-weight:800;line-height:1
+}
+.receiving-detail-meta .ph{font-size:14px}
+.receipt-detail-shell .receiving-state-chip{background:#edf8f2!important;border-color:#d3eadf!important;color:#267451!important}
+.receiving-detail-qty{
+  min-width:104px;padding:9px 12px;border-radius:15px;
+  display:flex;flex-direction:column;align-items:flex-end;justify-content:center;
+  background:#edf9f4;border:1px solid #d2ebdf
+}
+.receipt-detail-shell .receiving-detail-qty strong{font-size:31px!important;line-height:.95;color:#168c5d!important;letter-spacing:-.03em}
+.receiving-detail-qty small{margin-top:6px;font-size:9px;font-weight:950;letter-spacing:.07em;color:#56816e}
+.receipt-detail-shell .receiving-suggested{
+  display:flex;align-items:center;gap:9px;margin-top:13px;padding:10px 12px!important;
+  border-radius:12px!important;font-size:12px
+}
+.receiving-suggested>.ph{font-size:18px;flex:0 0 auto}
+.receiving-suggested span{display:flex;align-items:baseline;gap:6px;flex-wrap:wrap}
+.receiving-detail-footer{display:flex;align-items:center;justify-content:space-between;gap:14px;margin-top:13px;padding-top:13px;border-top:1px solid #e8eef2}
+.receipt-detail-shell .receiving-line-metrics{flex:1;gap:7px;margin:0!important}
+.receipt-detail-shell .receiving-line-metrics span{
+  display:inline-flex;align-items:baseline;gap:5px;padding:6px 9px!important;
+  border-radius:9px!important;background:#f3f7fa!important;border:1px solid #e5edf2;
+  color:#587085;font-size:12px;font-weight:700
+}
+.receipt-detail-shell .receiving-line-metrics b{font-size:13px;color:var(--nova-ink,var(--ink))}
+.receipt-detail-shell .receiving-putaway-action{
+  width:auto!important;min-width:218px;min-height:46px!important;margin:0!important;padding:0 17px!important;
+  border-radius:13px!important;display:inline-flex;align-items:center;justify-content:center;gap:7px;
+  background:#239c99!important;box-shadow:0 5px 14px rgba(35,156,153,.16);white-space:nowrap;font-size:13px
+}
+.receipt-detail-shell .receiving-putaway-action:hover{filter:brightness(.96)}
+.receipt-detail-shell .receiving-status-badge{min-width:190px;margin:0!important;padding:10px 14px!important}
+@media(max-width:700px){
+  .receipt-detail-shell{gap:10px}
+  .receipt-detail-summary{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:7px!important;margin-top:9px!important}
+  .receipt-detail-summary>div{min-height:70px;padding:12px 13px 11px 15px!important;border-radius:15px!important}
+  .receipt-detail-summary b{font-size:25px!important}.receipt-detail-summary span{font-size:9px!important;margin-top:5px}
+  .receipt-detail-shell .receiving-detail-line{padding:14px!important;border-radius:17px!important}
+  .receipt-detail-shell .receiving-detail-head{gap:10px}
+  .receipt-detail-shell .receiving-detail-title>b{font-size:17px!important}
+  .receiving-detail-meta{gap:5px;margin-top:8px}
+  .receipt-detail-shell .receiving-detail-meta>span{min-height:25px;padding:4px 7px;font-size:9px!important}
+  .receiving-detail-qty{min-width:78px;padding:8px 9px;border-radius:12px}
+  .receipt-detail-shell .receiving-detail-qty strong{font-size:25px!important}.receiving-detail-qty small{font-size:8px;margin-top:4px}
+  .receiving-detail-footer{align-items:stretch;flex-direction:column;gap:10px;margin-top:11px;padding-top:11px}
+  .receipt-detail-shell .receiving-line-metrics{gap:5px}
+  .receipt-detail-shell .receiving-line-metrics span{padding:5px 7px!important;font-size:10px}.receipt-detail-shell .receiving-line-metrics b{font-size:11px}
+  .receipt-detail-shell .receiving-putaway-action{width:100%!important;min-width:0;min-height:44px!important;font-size:12px}
+  .receipt-detail-shell .receiving-status-badge{width:100%;min-width:0}
+}
 
 /* ===== STEP 3 · MOVIMENTAZIONE PREMIUM SYSTEM ===== */
 :root{
@@ -19311,7 +19391,45 @@ class UI{
   confirmReceipt(){const valid=this.receiptDraft.lines.filter(l=>normalizeArticle(l.article)&&Number(l.checkedQuantity)>0);if(!this.receiptDraft.supplier.trim())throw new Error('Inserisci il fornitore.');if(!valid.length)throw new Error('Inserisci almeno un articolo controllato.');const mismatches=valid.filter(l=>Number(l.checkedQuantity)!==Number(l.ddtQuantity));if(mismatches.length&&!confirm(`${mismatches.length} ${mismatches.length===1?'riga ha':'righe hanno'} quantità controllata diversa dal DDT. Confermare comunque?`))return;this.receiptDraft.attachments=this.ddtFiles.map(f=>({name:f.name,type:f.type,size:f.size}));const r=this.domain.receiving.create({...this.receiptDraft,receivedAt:isoFromLocalInput(this.receiptDraft.receivedAt)});this.receiptDraft=null;this.ddtFiles=[];this.toast(`Entrata ${r.id} confermata.`);this.router.go('receipt-detail',{id:r.id})}
   receipts(mode='ALL'){const rows=this.store.db.receipts.filter(r=>mode!=='PENDING'||this.domain.receiving.stats(r).pending>0),pendingMode=mode==='PENDING',emptyState=pendingMode?`<div class="empty receiving-empty receiving-empty-pending">${phRegular('map-pin-line','empty-icon')}<div><b>Nessuna merce da ubicare</b><small>Tutte le entrate risultano già posizionate.</small></div></div>`:`<div class="empty receiving-empty receiving-empty-history">${phRegular('clock-counter-clockwise','empty-icon')}<div><b>Nessuna entrata registrata</b><small>Lo storico delle consegne comparirà qui.</small></div></div>`;return `${this.sectionTitle(pendingMode?'RICEVIMENTO':'STORICO',pendingMode?'Da ubicare':this.auth.isLina()?'Merce arrivata':'Entrate merci')}<div class="receipt-list receiving-receipt-list">${rows.length?rows.map(r=>this.receiptCard(r)).join(''):emptyState}</div>`}
   receiptCard(r){const s=this.domain.receiving.stats(r),status=this.domain.receiving.status(r),articles=new Set((r.lines||[]).map(l=>normalizeArticle(l.article))).size;return `<article class="receipt-card receiving-card"><div class="receipt-card-head"><div><span>${esc(r.id)}</span><h2>${esc(r.supplier||'Fornitore non indicato')}</h2><p>${r.ddtNumber?`DDT ${esc(r.ddtNumber)} · `:''}${fmtDateTime(r.receivedAt)}</p></div><em class="status-pill ${status==='COMPLETATA'?'done':status==='PARZIALMENTE GESTITA'?'partial':'to-locate'}">${status}</em></div><div class="metrics receiving-metrics"><div><b>${articles}</b><span>Articoli</span></div><div><b>${r.lines.length}</b><span>Taglie</span></div><div><b>${s.received}</b><span>Ricevuti</span></div><div><b>${s.pending}</b><span>Da ubicare</span></div></div><button class="soft receiving-soft" data-action="receipt-open" data-id="${r.id}">${phIcon('folder-open','inline-icon')} APRI DETTAGLIO</button></article>`}
-  receiptDetail(id){const r=this.store.db.receipts.find(x=>x.id===id);if(!r)return this.emptyPage('Entrata merci non trovata.');const s=this.domain.receiving.stats(r),read=!this.auth.can('MOVE');return `${this.sectionTitle(r.id,r.supplier||'Entrata merci',`${r.ddtNumber?`DDT ${r.ddtNumber} · `:''}${fmtDateTime(r.receivedAt)}`)}<div class="summary-four"><div><b>${s.received}</b><span>Controllati</span></div><div><b>${s.pending}</b><span>Da ubicare</span></div><div><b>${s.putAway}</b><span>Ubicati</span></div><div><b>${s.direct}</b><span>Prelevati</span></div></div>${r.lines.map(l=>{const x=this.domain.receiving.lineStats(r,l);return `<article class="detail-line"><div class="detail-line-top"><div><b>${esc(l.article)}${l.size?` · ${esc(l.size)}`:''}</b><span>${esc(l.state)} · AREA RICEVIMENTO · ${esc(l.receivingPallet)}</span></div><strong>${x.pending}</strong></div><div class="line-metrics"><span>DDT <b>${l.ddtQuantity}</b></span><span>Controllati <b>${x.received}</b></span><span>Ubicati <b>${x.putAway}</b></span>${x.direct?`<span>Prelevati <b>${x.direct}</b></span>`:''}</div>${l.suggestedLocation?`<div class="compact-suggest">Posizione suggerita: <b>${esc(l.suggestedLocation)}${l.suggestedPallet?` · ${esc(l.suggestedPallet)}`:''}</b></div>`:''}${x.pending&&!read?`<button class="success" data-action="putaway-open" data-receipt="${r.id}" data-line="${l.id}">${phIcon('map-pin-line','inline-icon')} UBICA ${x.pending} PEZZI</button>`:x.pending?'<div class="available-badge">DISPONIBILE · DA UBICARE</div>':'<div class="done-badge">✓ GESTITA</div>'}</article>`}).join('')}`}
+  receiptDetail(id){
+    const r=this.store.db.receipts.find(x=>x.id===id);if(!r)return this.emptyPage('Entrata merci non trovata.');
+    const s=this.domain.receiving.stats(r),read=!this.auth.can('MOVE');
+    return `${this.sectionTitle(r.id,r.supplier||'Entrata merci',`${r.ddtNumber?`DDT ${r.ddtNumber} · `:''}${fmtDateTime(r.receivedAt)}`)}
+      <section class="receipt-detail-shell">
+        <div class="summary-four receipt-detail-summary">
+          <div><b>${s.received}</b><span>Controllati</span></div>
+          <div><b>${s.pending}</b><span>Da ubicare</span></div>
+          <div><b>${s.putAway}</b><span>Ubicati</span></div>
+          <div><b>${s.direct}</b><span>Prelevati</span></div>
+        </div>
+        <div class="receipt-detail-list">
+          ${r.lines.map(l=>{const x=this.domain.receiving.lineStats(r,l);return `
+            <article class="detail-line receiving-detail-line">
+              <div class="detail-line-top receiving-detail-head">
+                <div class="receiving-detail-title">
+                  <b>${esc(l.article)}${l.size?` · ${esc(l.size)}`:''}</b>
+                  <div class="receiving-detail-meta">
+                    <span class="receiving-state-chip">${esc(l.state)}</span>
+                    <span>${phRegular('map-pin-line')} AREA RICEVIMENTO</span>
+                    <span>${phRegular('stack')} ${esc(l.receivingPallet)}</span>
+                  </div>
+                </div>
+                <div class="receiving-detail-qty"><strong>${x.pending}</strong><small>DA UBICARE</small></div>
+              </div>
+              ${l.suggestedLocation?`<div class="compact-suggest receiving-suggested">${phRegular('map-pin-line')}<span>Posizione suggerita <b>${esc(l.suggestedLocation)}${l.suggestedPallet?` · ${esc(l.suggestedPallet)}`:''}</b></span></div>`:''}
+              <div class="receiving-detail-footer">
+                <div class="line-metrics receiving-line-metrics">
+                  <span>DDT <b>${l.ddtQuantity}</b></span>
+                  <span>Controllati <b>${x.received}</b></span>
+                  <span>Ubicati <b>${x.putAway}</b></span>
+                  ${x.direct?`<span>Prelevati <b>${x.direct}</b></span>`:''}
+                </div>
+                ${x.pending&&!read?`<button class="success receiving-putaway-action" data-action="putaway-open" data-receipt="${r.id}" data-line="${l.id}">${phIcon('map-pin-line','inline-icon')} UBICA ${x.pending} PEZZI</button>`:x.pending?'<div class="available-badge receiving-status-badge">DISPONIBILE · DA UBICARE</div>':'<div class="done-badge receiving-status-badge">✓ GESTITA</div>'}
+              </div>
+            </article>`}).join('')}
+        </div>
+      </section>`
+  }
   putAway(receiptId,lineId){const r=this.store.db.receipts.find(x=>x.id===receiptId),l=r?.lines.find(x=>x.id===lineId);if(!l)return this.emptyPage('Riga non trovata.');const pending=this.domain.receiving.pendingForLine(lineId);return `${this.sectionTitle('UBICAZIONE',`${l.article}${l.size?` · ${l.size}`:''}`)}<section class="form-card"><div class="big-number">${pending}</div><p>pezzi ancora in Area Ricevimento</p><label>Quantità da ubicare<input id="putQty" type="number" min="1" max="${pending}" value="${pending}" class="field"></label><label class="putaway-autocomplete-field" data-putaway-field="location">Fila/Scaffale<input id="putLocation" class="field" autocomplete="off" spellcheck="false" value="${esc(l.suggestedLocation)}" placeholder="Digita per cercare nel magazzino"><div id="putLocationSuggestions" class="putaway-autocomplete-menu" role="listbox" aria-label="Suggerimenti Fila e Scaffale"></div></label><label class="putaway-autocomplete-field" data-putaway-field="pallet">Bancale/Carrello<input id="putPallet" class="field" autocomplete="off" spellcheck="false" value="${esc(l.suggestedPallet)}" placeholder="Digita per cercare bancali e carrelli"><div id="putPalletSuggestions" class="putaway-autocomplete-menu" role="listbox" aria-label="Suggerimenti Bancale e Carrello"></div></label><button class="success" data-action="putaway-confirm" data-receipt="${receiptId}" data-line="${lineId}">${phIcon('check-circle','inline-icon')} CONFERMA UBICAZIONE</button></section>`}
 
   putAwayReferenceRows(){
@@ -19765,6 +19883,6 @@ try{globalThis.__NOVA_LEGACY_AVAILABLE=!!localStorage.getItem(CONFIG.legacyStora
 const switchSite=async siteId=>{await ui.selectSite(siteId);return auth.site()};
 globalThis.NOVA=Object.freeze({version:CONFIG.appVersion,schema:CONFIG.version,identityVersion:CONFIG.identityVersion,store,auth,router,domain,excel,requestDocs,ui,sounds,sites:SITES,operators:OPERATORS,roles:ROLE_DEFS,saveIdentityRegistry,capabilities:Object.freeze({operational:ALL_CAPS,master:MASTER_CAPS,administration:ADMIN_CAPS,globalAdmin:GLOBAL_ADMIN_CAPS}),identityValidation:IDENTITY_VALIDATION,switchSite});
 ui.render();</script>
-<!-- SOMA_BUILD:R31.64-20260928 -->
+<!-- SOMA_BUILD:R31.65-20260928 -->
 </body>
 </html>
