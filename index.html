@@ -1,13 +1,13 @@
 <!doctype html>
 <html lang="it">
 <head>
-<meta name="soma-build" content="R31.57-20260928">
+<meta name="soma-build" content="R31.58-20260928">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
 <script id="soma-build-freshness">
 (() => {
-  const CURRENT_BUILD='R31.57-20260928',CHECK_KEY='soma:last-build-refresh';
+  const CURRENT_BUILD='R31.58-20260928',CHECK_KEY='soma:last-build-refresh';
   globalThis.SOMA_BUILD=CURRENT_BUILD;
   const check=async()=>{
     try{
@@ -19435,7 +19435,6 @@ class UI{
 
   requestDocumentDesktop(){return document.body.classList.contains('desktop-mode')&&(globalThis.innerWidth||document.documentElement.clientWidth||0)>980}
   async exportRequestDocument(kind,id){
-    if(!this.requestDocumentDesktop())throw new Error('Stampa ed esportazione richieste sono disponibili nella versione desktop.');
     const orientation=this.requestDocOrientation||'auto';
     if(kind==='print'){const used=this.requestDocs.print(id,orientation);this.toast('Anteprima di stampa A4 '+(used==='landscape'?'orizzontale':'verticale')+' aperta.');return}
     if(kind==='pdf'){const name=await this.requestDocs.pdf(id,orientation);this.toast(name+' esportato.');return}
@@ -19588,6 +19587,6 @@ try{globalThis.__NOVA_LEGACY_AVAILABLE=!!localStorage.getItem(CONFIG.legacyStora
 const switchSite=async siteId=>{await ui.selectSite(siteId);return auth.site()};
 globalThis.NOVA=Object.freeze({version:CONFIG.appVersion,schema:CONFIG.version,identityVersion:CONFIG.identityVersion,store,auth,router,domain,excel,requestDocs,ui,sounds,sites:SITES,operators:OPERATORS,roles:ROLE_DEFS,saveIdentityRegistry,capabilities:Object.freeze({operational:ALL_CAPS,master:MASTER_CAPS,administration:ADMIN_CAPS,globalAdmin:GLOBAL_ADMIN_CAPS}),identityValidation:IDENTITY_VALIDATION,switchSite});
 ui.render();</script>
-<!-- SOMA_BUILD:R31.57-20260928 -->
+<!-- SOMA_BUILD:R31.58-20260928 -->
 </body>
 </html>
