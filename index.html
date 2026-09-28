@@ -1,13 +1,13 @@
 <!doctype html>
 <html lang="it">
 <head>
-<meta name="soma-build" content="R31.61-20260928">
+<meta name="soma-build" content="R31.62-20260928">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
 <script id="soma-build-freshness">
 (() => {
-  const CURRENT_BUILD='R31.61-20260928',CHECK_KEY='soma:last-build-refresh';
+  const CURRENT_BUILD='R31.62-20260928',CHECK_KEY='soma:last-build-refresh';
   globalThis.SOMA_BUILD=CURRENT_BUILD;
   const check=async()=>{
     try{
@@ -18276,7 +18276,7 @@ function appendDeltaToSnapshotCell(row,c,delta,templateCell){delta=Number(delta)
 function rowIdentityFromSnapshot(row,cols){const get=c=>Number.isInteger(c)&&c>=0?snapshotValue(row,c):'';const article=normalizeArticle(get(cols.article));if(!article)return null;const size=cols.size>=0?norm(get(cols.size)):'',pallet=cols.pallet>=0?norm(get(cols.pallet)):'';let location='';if(cols.location>=0)location=norm(get(cols.location));else location=[cols.fila>=0?norm(get(cols.fila)):'',cols.scaffale>=0?norm(get(cols.scaffale)):''].filter(Boolean).join('/');return{article,size,location,pallet,key:identity({article,size,location,pallet})}}
 
 class ExcelService{
-  constructor(store,domain){this.store=store;this.domain=domain;this.exportTableRanges=new Map();this.exportTableHeaders=new Map();this.tableBlueprints=[];this.lastValidation=null}
+  constructor(store,domain){this.store=store;this.domain=domain;this.exportTableRanges=new Map();this.exportTableHeaders=new Map();this.tableBlueprints=[];this.lastValidation=null;this.searchDataReport=null}
   masterKey(){return masterFileKey(this.store.siteId)}
   async originalBytes(){
     let bytes=await idbGet(this.masterKey()).catch(()=>null);
@@ -18345,7 +18345,7 @@ class ExcelService{
     await ensureXlsx();await ensureJsZip();this.exportTableRanges=new Map();this.exportTableHeaders=new Map();
     const bytes=await this.originalBytes();this.tableBlueprints=bytes?await this.#captureTableBlueprints(bytes):[];
     const wb=bytes?X().read(bytes,{type:'array',cellDates:true,cellStyles:true,bookVBA:true}):X().utils.book_new();
-    this.updateMagazine(wb);this.replaceSheet(wb,'REGISTRO_MOVIMENTI',this.movementSheet());this.replaceSheet(wb,'ENTRATE_MERCI',this.receiptSheet());this.replaceSheet(wb,'RICHIESTE',this.requestSheet());this.replaceSheet(wb,'SCARICHI',this.issueSheet());this.replaceSheet(wb,'AUDIT',this.auditSheet());this.buildDataSheet(wb);
+    this.updateMagazine(wb);this.updateSearchData(wb);this.replaceSheet(wb,'REGISTRO_MOVIMENTI',this.movementSheet());this.replaceSheet(wb,'ENTRATE_MERCI',this.receiptSheet());this.replaceSheet(wb,'RICHIESTE',this.requestSheet());this.replaceSheet(wb,'SCARICHI',this.issueSheet());this.replaceSheet(wb,'AUDIT',this.auditSheet());this.buildDataSheet(wb);
     this.#dropSheetFilterNames(wb);
     const raw=X().write(wb,{type:'array',bookType:'xlsx',compression:true,cellStyles:true,bookSST:false});
     return await this.#normalizeAndValidatePackage(raw)
@@ -18356,6 +18356,48 @@ class ExcelService{
     this.#download(out,name);
     const exportedAudit=this.domain.audit.record('MASTER_EXPORTED','MASTER',name,null,{name,validation:this.lastValidation});this.store.db.settings.lastExportAt=exportedAudit.at;this.store.db.settings.lastExportName=name;this.store.save('master:export:baseline');return name
   }
+  #activeSearchChanges(){
+    const out=[],push=(item,bucket,delta,event)=>{const d=Number(delta)||0;if(!d)return;out.push({item:cleanItem(item),bucket:cleanBucket(bucket),delta:d,eventId:event?.id||'',at:event?.at||'',kind:event?.source?.kind||event?.type||''})};
+    for(const e of this.store.db.ledger||[]){if(e?.cancelledAt||e?.affectsStock===false)continue;const q=number(e.quantity);if(e.type==='IN')push(e.item,e.to,q,e);else if(e.type==='OUT')push(e.item,e.from,-q,e);else if(e.type==='TRANSFER'){push(e.item,e.from,-q,e);push(e.item,e.to,q,e)}else if(e.type==='ADJUST')push(e.item,e.atBucket,number(e.delta),e)}
+    return out
+  }
+  updateSearchData(wb){
+    const XLSX=X(),dataName='GIACENZE_RICERCA_DATI',searchName='CERCA_GIACENZE',ws=wb.Sheets[dataName];
+    if(!ws){this.searchDataReport={ok:true,skipped:true,reason:'Foglio GIACENZE_RICERCA_DATI non presente'};return}
+    const rg=XLSX.utils.decode_range(ws['!ref']||'A1:H1'),dataStart=rg.s.r+1,oldEnd=rg.e.r,template=snapshotRow(ws,Math.min(dataStart,oldEnd),7),rows=[];
+    const fullKey=x=>[normalizeArticle(x.article),norm(x.size),norm(x.location),norm(x.pallet),norm(x.state)].join('|'),physicalKey=x=>[normalizeArticle(x.article),norm(x.size),norm(x.location),norm(x.pallet)].join('|');
+    for(let r=dataStart;r<=oldEnd;r++){
+      const read=c=>ws[XLSX.utils.encode_cell({r,c})]?.v??'',article=normalizeArticle(read(2)),quantity=Number(read(5)||0)||0;
+      if(!article||quantity<=0)continue;
+      rows.push({location:norm(read(0)),pallet:norm(read(1)),article,size:norm(read(3)),state:norm(read(4))||'NUOVO',quantity,note:String(read(6)||''),snapshot:snapshotRow(ws,r,7),sourceOrder:r})
+    }
+    const baselineRows=rows.length,changes=this.#activeSearchChanges();let unmatchedNegative=0,newRows=0,changedRows=0;
+    for(const change of changes){
+      const target={article:change.item.article,size:change.item.size,state:change.item.state,location:change.bucket.location,pallet:change.bucket.pallet},d=Number(change.delta)||0;if(!d)continue;
+      const exact=rows.find(r=>r.quantity>1e-9&&fullKey(r)===fullKey(target)),physical=rows.filter(r=>r.quantity>1e-9&&physicalKey(r)===physicalKey(target)).sort((a,b)=>(a.sourceOrder??1e12)-(b.sourceOrder??1e12));
+      if(d>0){
+        const row=exact||(physical.length===1?physical[0]:null);
+        if(row){row.quantity+=d;changedRows++}
+        else{rows.push({...target,quantity:d,note:'',snapshot:null,sourceOrder:1e12+rows.length});newRows++}
+        continue
+      }
+      let remaining=Math.abs(d),candidates=exact?[exact,...physical.filter(r=>r!==exact)]:physical;
+      for(const row of candidates){if(remaining<=1e-9)break;const take=Math.min(row.quantity,remaining);if(take>0){row.quantity-=take;remaining-=take;changedRows++}}
+      if(remaining>1e-9)unmatchedNegative+=remaining
+    }
+    const live=rows.filter(r=>r.quantity>1e-9),occurrences=new Map();
+    for(const row of live){const k=[normalizeArticle(row.article),norm(row.size)].join('|'),n=(occurrences.get(k)||0)+1;occurrences.set(k,n);row.searchKey=`${normalizeArticle(row.article)}|${norm(row.size)}|${n}`}
+    const newEnd=Math.max(rg.s.r,dataStart+live.length-1),clearEnd=Math.max(oldEnd,newEnd);
+    for(let r=dataStart;r<=clearEnd;r++)for(let c=0;c<=7;c++)delete ws[XLSX.utils.encode_cell({r,c})];
+    ws['!rows']=ws['!rows']||[];
+    live.forEach((row,i)=>{const rr=dataStart+i,snap=row.snapshot||template,values=[row.location,row.pallet,row.article,row.size,row.state,Number(row.quantity),row.note,row.searchKey];for(let c=0;c<=7;c++)setCell(ws,rr,c,values[c],snap?.cells?.[c]||template?.cells?.[c]);if(snap?.rowMeta)ws['!rows'][rr]=clone(snap.rowMeta)});
+    ws['!ref']=XLSX.utils.encode_range({s:rg.s,e:{r:newEnd,c:Math.max(7,rg.e.c)}});
+    const lastExcelRow=newEnd+1,search=wb.Sheets[searchName],rangeRe=/GIACENZE_RICERCA_DATI!\$([A-H])\$2:\$\1\$(\d+)/g;let formulaCells=0,formulaRanges=0,formulasUpdated=0,staleRefs=0;
+    if(search)for(const addr of Object.keys(search)){if(addr[0]==='!')continue;const cell=search[addr];if(typeof cell?.f!=='string'||!cell.f.includes('GIACENZE_RICERCA_DATI!'))continue;formulaCells++;const before=cell.f;cell.f=before.replace(rangeRe,(m,col)=>`GIACENZE_RICERCA_DATI!${col}$2:${col}${lastExcelRow}`);if(cell.f!==before){formulasUpdated++;delete cell.w}for(const m of cell.f.matchAll(rangeRe)){formulaRanges++;if(Number(m[2])!==lastExcelRow)staleRefs++}}
+    if(staleRefs)throw new Error(`Export Excel: ${staleRefs} riferimenti CERCA_GIACENZE non sincronizzati.`);
+    this.searchDataReport={ok:true,baselineRows,rows:live.length,netRows:live.length-baselineRows,rowsCreatedDuringSync:newRows,rowsChanged:changedRows,lastRow:lastExcelRow,formulaCells,formulaRanges,formulasUpdated,unmatchedNegative}
+  }
+
   #dropSheetFilterNames(wb){
     const names=wb.Workbook?.Names;if(!Array.isArray(names))return;const tableSheets=new Set(this.tableBlueprints.map(x=>x.sheetName));for(const k of this.exportTableRanges.keys())tableSheets.add(k);wb.Workbook.Names=names.filter(n=>!(n?.Name==='_xlnm._FilterDatabase'&&tableSheets.has(wb.SheetNames?.[Number(n.Sheet)])))
   }
@@ -18412,7 +18454,7 @@ class ExcelService{
     // Validator: relationships, table refs, column counts, no duplicate worksheet filters, no #REF!.
     const validated=[];for(const bp of this.tableBlueprints){const info=pkg.sheets.get(bp.sheetName);if(!info)continue;const sf=zip.file(info.path);if(!sf){errors.push(`${bp.sheetName}: foglio mancante`);continue}const sdoc=this.#parseXml(await sf.async('string'),info.path,errors),root=sdoc.documentElement;if([...root.children].some(n=>n.localName==='autoFilter'))errors.push(`${bp.sheetName}: AutoFilter foglio ridondante ancora presente`);const parts=[...root.getElementsByTagNameNS('*','tablePart')];if(!parts.length){errors.push(`${bp.sheetName}: tableParts assente`);continue}const rp=this.#relsPath(info.path),rf=zip.file(rp);if(!rf){errors.push(`${bp.sheetName}: relazioni foglio assenti`);continue}const rdoc=this.#parseXml(await rf.async('string'),rp,errors),rels=new Map([...rdoc.getElementsByTagNameNS('*','Relationship')].map(r=>[r.getAttribute('Id'),r.getAttribute('Target')]));for(const part of parts){const rid=part.getAttributeNS('http://schemas.openxmlformats.org/officeDocument/2006/relationships','id')||part.getAttribute('r:id'),target=rels.get(rid);if(!target){errors.push(`${bp.sheetName}: relazione ${rid||'?'} non risolta`);continue}const tablePath=this.#xmlPath(info.path,target),tf=zip.file(tablePath);if(!tf){errors.push(`${bp.sheetName}: ${tablePath} mancante`);continue}const tdoc=this.#parseXml(await tf.async('string'),tablePath,errors),table=tdoc.documentElement,ref=table.getAttribute('ref')||'',af=[...table.children].find(n=>n.localName==='autoFilter'),cols=[...tdoc.getElementsByTagNameNS('*','tableColumn')],expected=this.exportTableRanges.get(bp.sheetName)||bp.ref;if(ref!==expected)errors.push(`${bp.sheetName}: range tabella ${ref} ≠ ${expected}`);if(!af||af.getAttribute('ref')!==ref)errors.push(`${bp.sheetName}: AutoFilter tabella non sincronizzato`);const m=ref.match(/^([A-Z]+)(\d+):([A-Z]+)(\d+)$/);if(!m)errors.push(`${bp.sheetName}: range tabella non valido (${ref})`);else{const col=n=>{let v=0;for(const ch of n)v=v*26+ch.charCodeAt(0)-64;return v};const width=col(m[3])-col(m[1])+1;if(cols.length!==width)errors.push(`${bp.sheetName}: ${cols.length} colonne tabella per range largo ${width}`)}validated.push(bp.sheetName)}}
     const badRefs=[];for(const path of Object.keys(zip.files).filter(p=>/^xl\/worksheets\/sheet\d+\.xml$/.test(p))){const f=zip.file(path);if(f&&(await f.async('string')).includes('#REF!'))badRefs.push(path)}if(badRefs.length)errors.push(`Riferimenti #REF! trovati in ${badRefs.join(', ')}`);
-    this.lastValidation={ok:errors.length===0,appVersion:CONFIG.appVersion,checkedAt:nowIso(),tableSheets:[...new Set(validated)],fixes:[...new Set(fixes)],integrity:this.lastIntegrity||null,errors};if(errors.length)throw new Error(`Export Excel bloccato dal validatore V28: ${errors.slice(0,4).join(' · ')}`);return await zip.generateAsync({type:'uint8array',compression:'DEFLATE',compressionOptions:{level:6}})
+    this.lastValidation={ok:errors.length===0,appVersion:CONFIG.appVersion,checkedAt:nowIso(),tableSheets:[...new Set(validated)],fixes:[...new Set(fixes)],integrity:this.lastIntegrity||null,searchData:this.searchDataReport||null,errors};if(errors.length)throw new Error(`Export Excel bloccato dal validatore V28: ${errors.slice(0,4).join(' · ')}`);return await zip.generateAsync({type:'uint8array',compression:'DEFLATE',compressionOptions:{level:6}})
   }
   async exportRegistry(){await ensureXlsx();const wb=X().utils.book_new();X().utils.book_append_sheet(wb,this.movementSheet(),'MOVIMENTI');X().utils.book_append_sheet(wb,this.auditSheet(),'AUDIT');const name=`REGISTRO_NOVA_${new Date().toISOString().slice(0,10)}.xlsx`,out=X().write(wb,{type:'array',bookType:'xlsx',compression:true});this.#download(out,name);return name}
   #download(out,name){const blob=new Blob([out],{type:'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download=name;a.style.display='none';document.body.appendChild(a);a.click();setTimeout(()=>{URL.revokeObjectURL(url);a.remove()},1500)}
@@ -19723,6 +19765,6 @@ try{globalThis.__NOVA_LEGACY_AVAILABLE=!!localStorage.getItem(CONFIG.legacyStora
 const switchSite=async siteId=>{await ui.selectSite(siteId);return auth.site()};
 globalThis.NOVA=Object.freeze({version:CONFIG.appVersion,schema:CONFIG.version,identityVersion:CONFIG.identityVersion,store,auth,router,domain,excel,requestDocs,ui,sounds,sites:SITES,operators:OPERATORS,roles:ROLE_DEFS,saveIdentityRegistry,capabilities:Object.freeze({operational:ALL_CAPS,master:MASTER_CAPS,administration:ADMIN_CAPS,globalAdmin:GLOBAL_ADMIN_CAPS}),identityValidation:IDENTITY_VALIDATION,switchSite});
 ui.render();</script>
-<!-- SOMA_BUILD:R31.61-20260928 -->
+<!-- SOMA_BUILD:R31.62-20260928 -->
 </body>
 </html>
