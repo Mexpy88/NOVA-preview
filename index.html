@@ -1,13 +1,13 @@
 <!doctype html>
 <html lang="it">
 <head>
-<meta name="soma-build" content="R31.62-20260928">
+<meta name="soma-build" content="R31.63-20260928">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
 <script id="soma-build-freshness">
 (() => {
-  const CURRENT_BUILD='R31.62-20260928',CHECK_KEY='soma:last-build-refresh';
+  const CURRENT_BUILD='R31.63-20260928',CHECK_KEY='soma:last-build-refresh';
   globalThis.SOMA_BUILD=CURRENT_BUILD;
   const check=async()=>{
     try{
@@ -18393,7 +18393,7 @@ class ExcelService{
     live.forEach((row,i)=>{const rr=dataStart+i,snap=row.snapshot||template,values=[row.location,row.pallet,row.article,row.size,row.state,Number(row.quantity),row.note,row.searchKey];for(let c=0;c<=7;c++)setCell(ws,rr,c,values[c],snap?.cells?.[c]||template?.cells?.[c]);if(snap?.rowMeta)ws['!rows'][rr]=clone(snap.rowMeta)});
     ws['!ref']=XLSX.utils.encode_range({s:rg.s,e:{r:newEnd,c:Math.max(7,rg.e.c)}});
     const lastExcelRow=newEnd+1,search=wb.Sheets[searchName],rangeRe=/GIACENZE_RICERCA_DATI!\$([A-H])\$2:\$\1\$(\d+)/g;let formulaCells=0,formulaRanges=0,formulasUpdated=0,staleRefs=0;
-    if(search)for(const addr of Object.keys(search)){if(addr[0]==='!')continue;const cell=search[addr];if(typeof cell?.f!=='string'||!cell.f.includes('GIACENZE_RICERCA_DATI!'))continue;formulaCells++;const before=cell.f;cell.f=before.replace(rangeRe,(m,col)=>`GIACENZE_RICERCA_DATI!${col}$2:${col}${lastExcelRow}`);if(cell.f!==before){formulasUpdated++;delete cell.w}for(const m of cell.f.matchAll(rangeRe)){formulaRanges++;if(Number(m[2])!==lastExcelRow)staleRefs++}}
+    if(search)for(const addr of Object.keys(search)){if(addr[0]==='!')continue;const cell=search[addr];if(typeof cell?.f!=='string'||!cell.f.includes('GIACENZE_RICERCA_DATI!'))continue;formulaCells++;const before=cell.f;cell.f=before.replace(rangeRe,(m,col)=>'GIACENZE_RICERCA_DATI!$'+col+'$2:$'+col+'$'+lastExcelRow);if(cell.f!==before){formulasUpdated++;delete cell.w}let rangesInCell=0;for(const m of cell.f.matchAll(rangeRe)){formulaRanges++;rangesInCell++;if(Number(m[2])!==lastExcelRow)staleRefs++}if(!rangesInCell)staleRefs++}
     if(staleRefs)throw new Error(`Export Excel: ${staleRefs} riferimenti CERCA_GIACENZE non sincronizzati.`);
     this.searchDataReport={ok:true,baselineRows,rows:live.length,netRows:live.length-baselineRows,rowsCreatedDuringSync:newRows,rowsChanged:changedRows,lastRow:lastExcelRow,formulaCells,formulaRanges,formulasUpdated,unmatchedNegative}
   }
@@ -19765,6 +19765,6 @@ try{globalThis.__NOVA_LEGACY_AVAILABLE=!!localStorage.getItem(CONFIG.legacyStora
 const switchSite=async siteId=>{await ui.selectSite(siteId);return auth.site()};
 globalThis.NOVA=Object.freeze({version:CONFIG.appVersion,schema:CONFIG.version,identityVersion:CONFIG.identityVersion,store,auth,router,domain,excel,requestDocs,ui,sounds,sites:SITES,operators:OPERATORS,roles:ROLE_DEFS,saveIdentityRegistry,capabilities:Object.freeze({operational:ALL_CAPS,master:MASTER_CAPS,administration:ADMIN_CAPS,globalAdmin:GLOBAL_ADMIN_CAPS}),identityValidation:IDENTITY_VALIDATION,switchSite});
 ui.render();</script>
-<!-- SOMA_BUILD:R31.62-20260928 -->
+<!-- SOMA_BUILD:R31.63-20260928 -->
 </body>
 </html>
