@@ -1,13 +1,13 @@
 <!doctype html>
 <html lang="it">
 <head>
-<meta name="soma-build" content="R31.53-20260928">
+<meta name="soma-build" content="R31.54-20260928">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
 <script id="soma-build-freshness">
 (() => {
-  const CURRENT_BUILD='R31.53-20260928',CHECK_KEY='soma:last-build-refresh';
+  const CURRENT_BUILD='R31.54-20260928',CHECK_KEY='soma:last-build-refresh';
   globalThis.SOMA_BUILD=CURRENT_BUILD;
   const check=async()=>{
     try{
@@ -16889,6 +16889,172 @@ body.desktop-mode .desktop-home-tools .global-search-trigger-copy em{
   }
 }
 </style>
+
+<style id="soma-r31-54-smartphone-header-search-polish">
+/* R31.54 · SMARTPHONE COMPOSITION ONLY
+   Compact Global Search trigger + clean site selector.
+   Desktop composition intentionally untouched. */
+
+/* ===== GLOBAL SEARCH TRIGGER · smartphone composition ===== */
+.home-layout-mobile .global-search-trigger{
+  min-height:64px!important;
+  height:64px!important;
+  margin:0 0 12px!important;
+  padding:8px 10px 8px 11px!important;
+  grid-template-columns:44px minmax(0,1fr) 30px!important;
+  gap:10px!important;
+  border-radius:18px!important;
+  border:1px solid #cec5f8!important;
+  background:linear-gradient(135deg,#fcfbff 0%,#f6f3ff 100%)!important;
+  box-shadow:0 6px 18px rgba(87,65,177,.075)!important;
+}
+.home-layout-mobile .global-search-trigger::before{
+  width:3px!important;
+}
+.home-layout-mobile .global-search-trigger-icon{
+  width:44px!important;
+  height:44px!important;
+  border-radius:14px!important;
+  background:#fff!important;
+  border:1px solid #d9d1fa!important;
+  box-shadow:0 3px 9px rgba(91,69,188,.07)!important;
+}
+.home-layout-mobile .global-search-trigger-icon>.ph,
+.home-layout-mobile .global-search-trigger-icon>.ph-duotone{
+  font-size:23px!important;
+}
+.home-layout-mobile .global-search-trigger-copy{
+  display:grid!important;
+  grid-template-rows:auto auto!important;
+  align-content:center!important;
+  gap:2px!important;
+  min-width:0!important;
+}
+.home-layout-mobile .global-search-trigger-copy small{
+  display:block!important;
+  font-size:8px!important;
+  line-height:1!important;
+  letter-spacing:.12em!important;
+  font-weight:950!important;
+  color:#7159cf!important;
+}
+.home-layout-mobile .global-search-trigger-copy b{
+  display:block!important;
+  font-size:16px!important;
+  line-height:1.08!important;
+  font-weight:900!important;
+  letter-spacing:-.015em!important;
+  color:#243e57!important;
+  white-space:nowrap!important;
+  overflow:hidden!important;
+  text-overflow:ellipsis!important;
+}
+.home-layout-mobile .global-search-trigger-copy em{
+  display:none!important;
+}
+.home-layout-mobile .global-search-trigger>kbd{
+  display:none!important;
+}
+.home-layout-mobile .global-search-trigger .command-go{
+  width:30px!important;
+  height:30px!important;
+  border-radius:10px!important;
+  display:grid!important;
+  place-items:center!important;
+  background:#fff!important;
+  border:1px solid #ddd6f8!important;
+  color:#7258dc!important;
+}
+.home-layout-mobile .global-search-trigger .command-go>.ph,
+.home-layout-mobile .global-search-trigger .command-go>.ph-duotone{
+  font-size:17px!important;
+}
+.home-layout-mobile .global-search-trigger:active{
+  transform:scale(.995)!important;
+}
+
+/* ===== SITE SELECTOR · smartphone UI only =====
+   Keep just the warehouse/building icon: no label, code or caret. */
+body:not(.desktop-mode) .site-pill,
+@media(max-width:980px){
+  .site-pill{
+    width:44px!important;
+    min-width:44px!important;
+    max-width:44px!important;
+    height:44px!important;
+    padding:0!important;
+    gap:0!important;
+    border-radius:14px!important;
+    display:inline-grid!important;
+    place-items:center!important;
+    overflow:hidden!important;
+  }
+  .site-pill .site-pill-label,
+  .site-pill .site-code,
+  .site-pill .site-name,
+  .site-pill .site-pill-caret{
+    display:none!important;
+  }
+  .site-pill .site-pill-icon{
+    display:grid!important;
+    place-items:center!important;
+    margin:0!important;
+    font-size:24px!important;
+    line-height:1!important;
+    color:#2e78ad!important;
+  }
+}
+body:not(.desktop-mode) .site-pill{
+  width:44px!important;
+  min-width:44px!important;
+  max-width:44px!important;
+  height:44px!important;
+  padding:0!important;
+  gap:0!important;
+  border-radius:14px!important;
+  display:inline-grid!important;
+  place-items:center!important;
+  overflow:hidden!important;
+}
+body:not(.desktop-mode) .site-pill .site-pill-label,
+body:not(.desktop-mode) .site-pill .site-code,
+body:not(.desktop-mode) .site-pill .site-name,
+body:not(.desktop-mode) .site-pill .site-pill-caret{
+  display:none!important;
+}
+body:not(.desktop-mode) .site-pill .site-pill-icon{
+  display:grid!important;
+  place-items:center!important;
+  margin:0!important;
+  font-size:24px!important;
+  line-height:1!important;
+}
+
+/* Small phones: preserve breathing room without shrinking text excessively. */
+@media(max-width:380px){
+  .home-layout-mobile .global-search-trigger{
+    min-height:60px!important;
+    height:60px!important;
+    grid-template-columns:40px minmax(0,1fr) 28px!important;
+    gap:8px!important;
+    padding:7px 9px!important;
+  }
+  .home-layout-mobile .global-search-trigger-icon{
+    width:40px!important;
+    height:40px!important;
+  }
+  .home-layout-mobile .global-search-trigger-copy small{
+    font-size:7.5px!important;
+  }
+  .home-layout-mobile .global-search-trigger-copy b{
+    font-size:15px!important;
+  }
+  .home-layout-mobile .global-search-trigger .command-go{
+    width:28px!important;
+    height:28px!important;
+  }
+}
+</style>
 </head>
 <body>
 <header id="topbar" class="topbar"></header>
@@ -18807,6 +18973,6 @@ try{globalThis.__NOVA_LEGACY_AVAILABLE=!!localStorage.getItem(CONFIG.legacyStora
 const switchSite=async siteId=>{await ui.selectSite(siteId);return auth.site()};
 globalThis.NOVA=Object.freeze({version:CONFIG.appVersion,schema:CONFIG.version,identityVersion:CONFIG.identityVersion,store,auth,router,domain,excel,requestDocs,ui,sounds,sites:SITES,operators:OPERATORS,roles:ROLE_DEFS,saveIdentityRegistry,capabilities:Object.freeze({operational:ALL_CAPS,master:MASTER_CAPS,administration:ADMIN_CAPS,globalAdmin:GLOBAL_ADMIN_CAPS}),identityValidation:IDENTITY_VALIDATION,switchSite});
 ui.render();</script>
-<!-- SOMA_BUILD:R31.53-20260928 -->
+<!-- SOMA_BUILD:R31.54-20260928 -->
 </body>
 </html>
