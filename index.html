@@ -1,13 +1,13 @@
 <!doctype html>
 <html lang="it">
 <head>
-<meta name="soma-build" content="R31.84-20260929">
+<meta name="soma-build" content="R31.85-20260929">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
 <script id="soma-build-freshness">
 (() => {
-  const CURRENT_BUILD='R31.84-20260929',CHECK_KEY='soma:last-build-refresh';
+  const CURRENT_BUILD='R31.85-20260929',CHECK_KEY='soma:last-build-refresh';
   globalThis.SOMA_BUILD=CURRENT_BUILD;
   const check=async()=>{
     try{
@@ -2925,6 +2925,187 @@ body:not(.session-active) .app-view{width:100%;max-width:none;margin:0;padding:0
 @media(max-width:1050px){.count-mode-actions,.voice-inventory-controls{grid-template-columns:1fr}.voice-review-row{grid-template-columns:34px 1fr 90px 100px}.voice-review-row .state{grid-column:2/4}.voice-review-status{grid-column:2/4;justify-self:start}.voice-review-remove{grid-column:4;grid-row:2}}
 @media(max-width:650px){.voice-inventory-head{grid-template-columns:46px 1fr}.voice-inventory-logo{width:46px;height:46px}.voice-engine-badge{grid-column:1/-1;width:max-content}.voice-inventory-controls{padding:12px}.voice-model-status,.voice-transcript-label{margin-left:12px!important;margin-right:12px!important}.voice-transcript-actions,.voice-review-head,.voice-review-list,.voice-inventory-footer{padding-left:12px;padding-right:12px}.voice-review-row{grid-template-columns:32px 1fr 78px}.voice-review-row .size{grid-column:2}.voice-review-row .qty{grid-column:3}.voice-review-row .state{grid-column:2/4}.voice-review-status{grid-column:2/4}.voice-review-remove{grid-column:1;grid-row:3}.voice-inventory-footer{align-items:stretch;flex-direction:column}.voice-confirm{width:100%;justify-content:center}}
 
+
+/* ===== R31.85 · COUNTING COMMAND CENTER — PREMIUM UX/UI ===== */
+.count-page-hero{
+  position:relative;overflow:hidden;display:flex;align-items:center;gap:20px;
+  margin:4px 0 22px;padding:8px 4px 10px;
+}
+.count-page-hero::after{
+  content:"";position:absolute;right:0;top:-52px;width:480px;height:170px;pointer-events:none;
+  background:radial-gradient(ellipse at 60% 50%,rgba(91,108,220,.16),transparent 67%);
+  filter:blur(10px);
+}
+.count-page-hero-icon{
+  position:relative;z-index:1;width:72px;height:72px;flex:0 0 72px;border-radius:22px;
+  display:grid;place-items:center;font-size:36px;color:#3955dc;
+  background:linear-gradient(145deg,#fff,#edf1ff);
+  border:1px solid rgba(105,124,232,.23);
+  box-shadow:0 12px 32px rgba(57,78,183,.12),inset 0 1px 0 #fff;
+}
+.count-page-hero-icon .ph{filter:drop-shadow(0 4px 8px rgba(56,78,205,.16))}
+.count-page-hero-copy{position:relative;z-index:1;min-width:0}
+.count-page-hero-copy small{
+  display:block;margin-bottom:5px;color:#6574ca;font-size:10px;font-weight:950;letter-spacing:.13em
+}
+.count-page-hero-copy h1{
+  margin:0;color:#173b61;font-size:clamp(34px,4.6vw,58px);line-height:.98;letter-spacing:-.045em
+}
+.count-page-hero-copy p{
+  margin:9px 0 0;color:#6c8195;font-size:15px;font-weight:680
+}
+
+.count-step4.count-command-card{
+  position:relative;overflow:hidden;margin:0 0 18px!important;padding:0!important;
+  border:1px solid rgba(113,132,226,.25)!important;border-radius:28px!important;
+  background:linear-gradient(145deg,rgba(255,255,255,.98),rgba(249,250,255,.96))!important;
+  box-shadow:0 18px 48px rgba(45,61,125,.09),0 2px 8px rgba(45,61,125,.03)!important;
+}
+.count-step4.count-command-card::before{
+  content:"";position:absolute;left:0;right:0;top:0;height:3px;
+  background:linear-gradient(90deg,#4f7cff,#6365e9 50%,#9659ef);
+}
+.count-command-head{
+  display:flex;align-items:center;gap:15px;padding:20px 22px 17px;margin:0 22px;
+  border-bottom:1px solid #e8ebf6;
+}
+.count-command-icon{
+  width:54px;height:54px;flex:0 0 54px;border-radius:17px;display:grid;place-items:center;
+  color:#4c61df;font-size:29px;background:linear-gradient(145deg,#eef1ff,#f8f5ff);
+  border:1px solid #e1e4fb;box-shadow:0 8px 20px rgba(76,97,223,.08);
+}
+.count-command-copy{min-width:0}
+.count-command-copy b{display:block;color:#173b61;font-size:19px;letter-spacing:-.018em}
+.count-command-copy small{display:block;margin-top:3px;color:#70859a;font-size:11.5px;font-weight:720}
+.count-command-badge{
+  margin-left:auto;display:flex;align-items:center;gap:6px;min-height:30px;padding:0 11px;border-radius:999px;
+  background:#f0f3ff;color:#5969cc;border:1px solid #dce2ff;font-size:8px;font-weight:950;letter-spacing:.08em;
+  white-space:nowrap
+}
+.count-command-badge .ph{font-size:14px}
+
+.count-step4 .count-session-banner{
+  margin:14px 22px 0!important;border-radius:15px!important;padding:11px 13px!important;
+  box-shadow:none!important
+}
+.count-position-grid{
+  display:grid;grid-template-columns:1fr 1fr;gap:16px;padding:18px 22px 8px
+}
+.count-field-modern{margin:0!important}
+.count-field-modern>span{
+  display:block;margin:0 0 7px;color:#244561;font-size:11.5px;font-weight:900
+}
+.count-input-shell{
+  min-height:58px;display:grid;grid-template-columns:48px minmax(0,1fr) 40px;align-items:center;
+  border:1.5px solid #ccd7ec;border-radius:17px;background:rgba(255,255,255,.96);
+  transition:border-color .18s ease,box-shadow .18s ease,transform .18s ease;
+  box-shadow:inset 0 1px 0 #fff;
+}
+.count-input-shell:focus-within{
+  border-color:#7690ff;box-shadow:0 0 0 4px rgba(92,110,220,.09),0 10px 22px rgba(69,89,191,.06)
+}
+.count-input-icon{
+  height:34px;border-right:1px solid #e6ebf5;display:grid;place-items:center;color:#7187b2;font-size:22px
+}
+.count-input-shell .field{
+  min-height:54px!important;border:0!important;border-radius:0!important;background:transparent!important;
+  padding:8px 12px!important;box-shadow:none!important;font-size:15px!important;font-weight:850!important;color:#173b61
+}
+.count-input-shell .field::placeholder{color:#9aacc0;font-weight:650}
+.count-field-clear{
+  width:30px;height:30px;border-radius:50%;display:grid;place-items:center;margin-right:8px;
+  background:#f0f3f9;color:#90a2b5;font-size:16px;opacity:.78;
+  transition:.16s ease
+}
+.count-field-clear:hover{background:#e7ecf6;color:#536b82;opacity:1;transform:scale(1.04)}
+
+.count-mode-actions{
+  display:grid!important;grid-template-columns:minmax(0,1.35fr) minmax(340px,.92fr)!important;
+  gap:14px!important;align-items:stretch!important;margin:0!important;padding:12px 22px 22px!important
+}
+.count-mode-actions .count-load-cta{
+  position:relative;overflow:hidden;min-height:72px!important;margin:0!important;padding:0 18px!important;
+  border:1px solid rgba(255,255,255,.18)!important;border-radius:20px!important;
+  display:grid!important;grid-template-columns:54px minmax(0,1fr) 48px;align-items:center;gap:14px;
+  text-align:left!important;color:#fff!important;
+  background:linear-gradient(112deg,#226cf2 0%,#3f56ec 55%,#5f43df 100%)!important;
+  box-shadow:0 14px 28px rgba(58,80,220,.22),inset 0 1px 0 rgba(255,255,255,.22)!important;
+  transition:transform .18s ease,box-shadow .18s ease,filter .18s ease
+}
+.count-mode-actions .count-load-cta::before{
+  content:"";position:absolute;inset:0;pointer-events:none;
+  background:
+    radial-gradient(circle at 18% 115%,rgba(75,205,255,.34),transparent 30%),
+    radial-gradient(circle at 82% -20%,rgba(185,105,255,.24),transparent 36%);
+}
+.count-mode-actions .count-load-cta:hover{transform:translateY(-1px);filter:saturate(1.07);box-shadow:0 18px 34px rgba(58,80,220,.27)!important}
+.count-load-icon,.count-load-copy,.count-load-arrow{position:relative;z-index:1}
+.count-load-icon{
+  width:48px;height:48px;border-radius:15px;display:grid;place-items:center;font-size:27px;
+  background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.2)
+}
+.count-load-copy b{display:block;font-size:15px;letter-spacing:.015em}
+.count-load-copy small{display:block;margin-top:3px;font-size:9.5px;font-weight:650;opacity:.78}
+.count-load-arrow{
+  width:44px;height:44px;border-radius:50%;display:grid;place-items:center;font-size:22px;
+  background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.16)
+}
+
+.voice-count-cta{
+  position:relative;overflow:hidden;min-height:72px!important;padding:10px 14px!important;
+  border:1px solid #d8ccff!important;border-radius:20px!important;
+  background:linear-gradient(135deg,#faf9ff,#f3efff 55%,#fff)!important;color:#5b47b8!important;
+  display:grid!important;grid-template-columns:50px minmax(0,1fr) 38px!important;gap:12px!important;
+  align-items:center!important;text-align:left!important;
+  box-shadow:0 10px 24px rgba(93,69,170,.07),inset 0 1px 0 #fff;
+  transition:transform .18s ease,box-shadow .18s ease,border-color .18s ease
+}
+.voice-count-cta::after{
+  content:"";position:absolute;right:-28px;top:-42px;width:130px;height:130px;border-radius:50%;
+  background:radial-gradient(circle,rgba(134,86,226,.11),transparent 68%);pointer-events:none
+}
+.voice-count-cta:hover{transform:translateY(-1px);border-color:#c6b4fb!important;box-shadow:0 14px 28px rgba(93,69,170,.11)}
+.voice-count-cta.active{background:linear-gradient(135deg,#f2ecff,#fbf9ff)!important;border-color:#ad98ed!important}
+.voice-count-icon{
+  position:relative;z-index:1;width:48px;height:48px;border-radius:16px;display:grid;place-items:center;font-size:26px;
+  background:linear-gradient(145deg,#eee8ff,#f9f6ff);border:1px solid #ded3ff;
+  box-shadow:inset 0 1px 0 #fff
+}
+.voice-count-copy{position:relative;z-index:1;min-width:0}
+.voice-count-copy b{display:block;font-size:12px;letter-spacing:.025em}
+.voice-count-copy small{display:block;margin-top:3px;font-size:8.5px;color:#8478ad;font-weight:720}
+.voice-count-chevron{
+  position:relative;z-index:1;width:34px;height:34px;border-radius:50%;display:grid;place-items:center;
+  color:#684fd1;background:rgba(255,255,255,.65);font-size:17px
+}
+
+@media(max-width:1050px){
+  .count-mode-actions{grid-template-columns:1fr!important}
+}
+@media(max-width:700px){
+  .count-page-hero{gap:13px;margin-bottom:14px;padding:2px 0 5px}
+  .count-page-hero-icon{width:52px;height:52px;flex-basis:52px;border-radius:16px;font-size:27px}
+  .count-page-hero-copy small{font-size:8px}.count-page-hero-copy h1{font-size:31px}.count-page-hero-copy p{font-size:11.5px;margin-top:6px}
+  .count-step4.count-command-card{border-radius:21px!important}
+  .count-command-head{gap:11px;margin:0 14px;padding:15px 2px 13px}
+  .count-command-icon{width:44px;height:44px;flex-basis:44px;border-radius:14px;font-size:24px}
+  .count-command-copy b{font-size:16px}.count-command-copy small{font-size:9.5px}
+  .count-command-badge{display:none}
+  .count-step4 .count-session-banner{margin:12px 14px 0!important}
+  .count-position-grid{grid-template-columns:1fr;padding:14px 14px 5px;gap:12px}
+  .count-field-modern>span{font-size:10.5px}
+  .count-input-shell{min-height:54px;grid-template-columns:43px minmax(0,1fr) 38px;border-radius:15px}
+  .count-input-shell .field{min-height:50px!important;font-size:14px!important}
+  .count-input-icon{font-size:20px}
+  .count-mode-actions{padding:10px 14px 16px!important;gap:10px!important}
+  .count-mode-actions .count-load-cta,.voice-count-cta{min-height:64px!important;border-radius:17px!important}
+  .count-mode-actions .count-load-cta{grid-template-columns:44px 1fr 38px;gap:10px}
+  .count-load-icon{width:42px;height:42px;border-radius:13px;font-size:23px}
+  .count-load-arrow{width:36px;height:36px;font-size:18px}
+  .count-load-copy b{font-size:13px}.count-load-copy small{font-size:8.5px}
+  .voice-count-cta{grid-template-columns:43px 1fr 34px!important;gap:10px!important}
+  .voice-count-icon{width:42px;height:42px;border-radius:14px;font-size:23px}
+}
 /* ===== R31.74 · REQUEST PROFESSIONAL UX/UI ===== */
 .request-pro{display:flex;flex-direction:column;gap:14px;margin-top:14px}
 .request-pro-hero{display:flex;justify-content:space-between;align-items:center;gap:26px;padding:22px 24px;border:1px solid #efcf88;border-radius:22px;background:linear-gradient(118deg,#fff4d3,#fff9ea 48%,#fff);box-shadow:0 8px 24px rgba(123,86,17,.06)}
@@ -19849,7 +20030,8 @@ class UI{
   persistCountSession(){if(!this.countDraft)return;this.countDraft.updatedAt=nowIso();this.countDraft.masterFingerprint=this.countFingerprint();try{localStorage.setItem(siteCountSessionKey(this.auth.siteId),JSON.stringify(this.countDraft))}catch{}}
   clearCountSession(){this.countDraft=null;try{localStorage.removeItem(siteCountSessionKey(this.auth.siteId))}catch{}}
   nextCountId(){const day=localDateInput();if(this.store.db.counters.countDate!==day){this.store.db.counters.countDate=day;this.store.db.counters.count=0}this.store.db.counters.count=(this.store.db.counters.count||0)+1;this.store.save('count:id');return `CNT-${day}-${String(this.store.db.counters.count).padStart(3,'0')}`}
-  count(){if(!this.require('COUNT'))return'';if(!this.masterReady())return this.masterRequiredView({context:'avviare un conteggio assistito',backAction:'home',backLabel:'TORNA ALLA DASHBOARD'});const d=this.countDraft;return `${this.sectionTitle('GIACENZE','Conteggio assistito','Il conteggio resta salvato sul dispositivo finché non lo concludi o lo annulli.')}<section class="form-card count-step4"><div class="stock-flow-head count-flow-head"><span>${phIcon('list-checks')}</span><div><b>Conteggio assistito</b><small>Verifica fisicamente una posizione senza modificare subito le giacenze</small></div></div>${d?`<div class="count-session-banner"><div><b>${esc(d.id)}</b><span>Sessione in corso · ${esc(d.location)} / ${esc(d.pallet||'tutti i bancali')}</span></div><span>Salvataggio automatico</span></div>`:''}<div class="two"><label>Fila/Scaffale<input id="countLocation" class="field" value="${esc(d?.location||this.voiceInventoryDraft?.location||'')}"></label><label>Bancale<input id="countPallet" class="field" value="${esc(d?.pallet||this.voiceInventoryDraft?.pallet||'')}"></label></div><div class="count-mode-actions"><button class="primary count-load-cta" data-action="count-load">${phIcon('map-pin-line','inline-icon')} ${d?'RICARICA POSIZIONE':'CARICA POSIZIONE'}</button><button class="voice-count-cta ${this.voiceInventoryOpen?'active':''}" data-action="voice-inventory-toggle">${phRegular(this.voiceInventoryOpen?'microphone-slash':'microphone')}<span><b>INVENTARIO VOCALE</b><small>Whisper locale · nessuna API a pagamento</small></span>${phRegular(this.voiceInventoryOpen?'caret-up':'caret-down')}</button></div></section>${this.voiceInventoryOpen?this.voiceInventoryPanel():''}<div id="countBody"></div>`}
+  count(){if(!this.require('COUNT'))return'';if(!this.masterReady())return this.masterRequiredView({context:'avviare un conteggio assistito',backAction:'home',backLabel:'TORNA ALLA DASHBOARD'});const d=this.countDraft,location=d?.location||this.voiceInventoryDraft?.location||'',pallet=d?.pallet||this.voiceInventoryDraft?.pallet||'';return `<section class="count-page-hero"><span class="count-page-hero-icon">${phRegular('list-checks')}</span><div class="count-page-hero-copy"><small>GIACENZE · CONTROLLO FISICO</small><h1>Conteggio assistito</h1><p>Verifica una posizione in modo guidato senza modificare subito le giacenze.</p></div></section><section class="form-card count-step4 count-command-card"><header class="count-command-head"><span class="count-command-icon">${phRegular('list-checks')}</span><div class="count-command-copy"><b>Prepara il conteggio</b><small>Indica la posizione da controllare oppure passa direttamente all’inventario vocale.</small></div><span class="count-command-badge">${phRegular('shield-check')} MODALITÀ SICURA</span></header>${d?`<div class="count-session-banner"><div><b>${esc(d.id)}</b><span>Sessione in corso · ${esc(d.location)} / ${esc(d.pallet||'tutti i bancali')}</span></div><span>Salvataggio automatico</span></div>`:''}<div class="count-position-grid"><label class="count-field-modern"><span>Fila / Scaffale</span><div class="count-input-shell"><i class="count-input-icon">${phRegular('rows')}</i><input id="countLocation" class="field" value="${esc(location)}" placeholder="Es. 18"><button type="button" class="count-field-clear" data-action="count-field-clear" data-field="location" aria-label="Svuota Fila/Scaffale">${phRegular('x')}</button></div></label><label class="count-field-modern"><span>Bancale</span><div class="count-input-shell"><i class="count-input-icon">${phRegular('stack')}</i><input id="countPallet" class="field" value="${esc(pallet)}" placeholder="Inserisci bancale"><button type="button" class="count-field-clear" data-action="count-field-clear" data-field="pallet" aria-label="Svuota Bancale">${phRegular('x')}</button></div></label></div><div class="count-mode-actions"><button class="primary count-load-cta" data-action="count-load"><span class="count-load-icon">${phRegular('map-pin-line')}</span><span class="count-load-copy"><b>${d?'RICARICA POSIZIONE':'CARICA POSIZIONE'}</b><small>${d?'Aggiorna la posizione della sessione corrente':'Carica gli articoli presenti nella posizione indicata'}</small></span><span class="count-load-arrow">${phRegular('arrow-right')}</span></button><button class="voice-count-cta ${this.voiceInventoryOpen?'active':''}" data-action="voice-inventory-toggle"><span class="voice-count-icon">${phRegular(this.voiceInventoryOpen?'microphone-slash':'microphone')}</span><span class="voice-count-copy"><b>INVENTARIO VOCALE</b><small>Whisper locale · nessuna API a pagamento</small></span><span class="voice-count-chevron">${phRegular(this.voiceInventoryOpen?'caret-up':'caret-down')}</span></button></div></section>${this.voiceInventoryOpen?this.voiceInventoryPanel():''}<div id="countBody"></div>`}
+
   loadVoiceInventoryDraft(){try{const raw=localStorage.getItem(siteVoiceInventoryKey(this.auth.siteId));if(!raw)return{schema:1,id:'',location:'',pallet:'',transcript:'',rows:[],updatedAt:''};const d=JSON.parse(raw);return d?.schema===1?d:{schema:1,id:'',location:'',pallet:'',transcript:'',rows:[],updatedAt:''}}catch{return{schema:1,id:'',location:'',pallet:'',transcript:'',rows:[],updatedAt:''}}}
   persistVoiceInventoryDraft(){if(!this.voiceInventoryDraft)return;this.voiceInventoryDraft.updatedAt=nowIso();try{localStorage.setItem(siteVoiceInventoryKey(this.auth.siteId),JSON.stringify(this.voiceInventoryDraft))}catch{}}
   clearVoiceInventoryDraft(){this.voiceInventoryDraft={schema:1,id:'',location:'',pallet:'',transcript:'',rows:[],updatedAt:''};try{localStorage.removeItem(siteVoiceInventoryKey(this.auth.siteId))}catch{}}
@@ -19943,6 +20125,10 @@ class UI{
   updateVoiceInventoryField(el){const rowEl=el.closest('[data-voice-row]');if(!rowEl)return;const i=Number(rowEl.dataset.voiceRow),r=this.voiceInventoryDraft?.rows?.[i],field=el.dataset.voiceField;if(!r||!field)return;r[field]=field==='counted'?Math.max(0,Math.floor(Number(el.value)||0)):field==='article'?normalizeArticle(el.value):norm(el.value);this.persistVoiceInventoryDraft()}
   confirmVoiceInventory(){
     const location=norm(document.getElementById('countLocation')?.value||this.voiceInventoryDraft?.location),pallet=norm(document.getElementById('countPallet')?.value||this.voiceInventoryDraft?.pallet),rows=this.voiceInventoryDraft?.rows||[];if(!location)throw new Error('Inserisci Fila/Scaffale.');if(!rows.length)throw new Error('Nessuna riga da confermare.');const bad=rows.filter(r=>this.voiceInventoryRowState(r).kind!=='ok');if(bad.length)throw new Error(`${bad.length} ${bad.length===1?'riga deve':'righe devono'} essere verificata prima della conferma.`);if(!confirm(`Aggiornare ${rows.length} righe nella posizione ${location}${pallet?' · Bancale '+pallet:''}? Le modifiche saranno registrate nell’Audit.`))return;const sessionId=this.voiceInventoryDraft.id||('VC-'+Date.now());for(const r of rows){const item={article:normalizeArticle(r.article),size:norm(r.size),state:norm(r.state)},bucket={location,pallet},key=bucketKey({...item,...bucket}),existing=this.domain.stock.findByKey(key);this.domain.rectifications.setQuantity({currentKey:existing?key:'',article:item.article,size:item.size,state:item.state,location,pallet,counted:Number(r.counted),reason:'INVENTARIO VOCALE',note:'Confermato da Inventario vocale SOMA HUB',sourceKind:'COUNT_ASSISTED',sessionId})}this.domain.audit.record('VOICE_INVENTORY_CONFIRMED','COUNT',sessionId,null,{rows:rows.length,location,pallet},{engine:'Whisper / Transformers.js',operator:this.auth.user});this.store.save('voice:inventory');this.clearVoiceInventoryDraft();this.voiceInventoryOpen=false;this.toast(`${rows.length} righe aggiornate nelle giacenze.`);this.router.go('stock')
+  }
+
+  clearCountPositionField(field){
+    const id=field==='pallet'?'countPallet':'countLocation',input=document.getElementById(id);if(!input)return;input.value='';input.dispatchEvent(new Event('input',{bubbles:true}));input.focus()
   }
 
   loadCount(){const location=norm(document.getElementById('countLocation').value),pallet=norm(document.getElementById('countPallet').value);if(!location)throw new Error('Inserisci Fila/Scaffale.');if(this.countDraft&&(this.countDraft.location!==location||this.countDraft.pallet!==pallet)){const done=this.countDraft.rows.filter(r=>r.verified).length;if(done&&!confirm(`Il conteggio ${this.countDraft.id} ha ${done} righe confermate. Avviare una nuova sessione e scartare quella attuale?`))return;this.clearCountSession()}const rows=this.domain.stock.positive().filter(r=>r.location===location&&(!pallet||r.pallet===pallet));if(!rows.length&&!confirm('Nessuna giacenza prevista in questa posizione. Vuoi comunque aprire il conteggio per registrare materiale trovato?'))return;this.countDraft={schema:1,id:this.nextCountId(),operator:this.auth.user,startedAt:nowIso(),updatedAt:nowIso(),masterFingerprint:this.countFingerprint(),location,pallet,rows:rows.map((r,i)=>({domId:`c${i}`,key:bucketKey(r),source:clone(r),counted:null,verified:false})),extras:[]};this.persistCountSession();this.renderCountBody()}
@@ -20298,7 +20484,7 @@ class UI{
 
   action(action,el){
     const go=(name,params={})=>this.router.go(name,params);
-    const map={back:()=>this.router.back(),home:()=>this.router.home(),login:()=>{this.sounds?.click?.();this.openLogin()},'login-submit':()=>this.login(),logout:()=>{this.sounds?.click?.();this.logout()},'site-switch':()=>this.openSiteSwitcher(),'site-select':()=>this.selectSite(el.dataset.site),'site-choice-cancel':()=>this.cancelSiteChoice(),'toggle-pin':()=>{const p=document.getElementById('loginPin'),show=p.type==='password';p.type=show?'text':'password';const i=el.querySelector('i');if(i)i.className=`ph-duotone ph-${show?'eye-slash':'eye'}`;el.setAttribute('aria-label',show?'Nascondi PIN':'Mostra PIN');p.focus()},'view-desktop':()=>this.applyView('desktop'),'view-phone':()=>this.applyView('smartphone'),notifications:()=>this.openNotifications(),master:()=>go('master'),'master-view':()=>go('master'),'master-filter-reset':()=>this.resetMasterFilters(),'master-request-toggle':()=>this.toggleMasterRequestMode(),'master-request-item':()=>this.toggleMasterRequestItem(el.dataset.item),'master-request-locations':()=>this.toggleMasterRequestLocations(el.dataset.item,el),'master-request-review':()=>this.openMasterRequestReview(),'master-request-review-close':()=>document.getElementById('masterRequestDialog')?.close(),'master-request-remove':()=>this.removeMasterRequestItem(el.dataset.item),'master-request-qty-minus':()=>this.adjustMasterRequestQty(el.dataset.item,-1),'master-request-qty-plus':()=>this.adjustMasterRequestQty(el.dataset.item,1),'master-request-send':()=>this.sendMasterRequest(),'master-page-prev':()=>{this.masterView.page=Math.max(1,this.masterView.page-1);this.renderMasterViewerBody()},'master-page-next':()=>{this.masterView.page+=1;this.renderMasterViewerBody()},'master-edit-close':()=>this.closeMasterEdit(),'master-edit-save':()=>this.saveMasterEdit(),'master-remove-open':()=>this.openMasterRemove(),'master-remove-close':()=>this.closeMasterRemove(),'master-remove-confirm':()=>this.confirmMasterRemove(),'master-remove-toggle-pin':()=>this.toggleMasterRemovePin(),'master-import':()=>{if(!this.auth.can('MASTER_IMPORT'))throw new Error('Non hai il permesso per importare il Master.');document.getElementById('masterFile').click()},'master-export':async()=>{if(!this.auth.can('MASTER_EXPORT'))throw new Error('Non hai il permesso per esportare il Master.');const n=await this.excel.export();this.toast(`${n} esportato.`)},'legacy-migrate':()=>{if(!confirm('Migrare una COPIA dei dati REMOTO in NOVA? REMOTO non verrà modificato.'))return;this.excel.migrateLocalLegacy();this.toast('Copia REMOTO migrata in NOVA.');this.router.home()},'global-search-open':()=>this.openGlobalSearch(),'global-search-close':()=>this.closeGlobalSearch(),'global-search-command':()=>this.openGlobalSearchCommand(el.dataset.target),receiving:()=>go('receiving'),'receipt-new':()=>this.openReceiptNew(),'receipts-pending':()=>go('receipts',{mode:'PENDING'}),'receipts-all':()=>go('receipts',{mode:'ALL'}),'receipt-line-add':()=>this.addReceiptLine(),'receipt-article-add':()=>this.addReceiptArticle(),'receipt-confirm':()=>this.confirmReceipt(),'ddt-camera':()=>document.getElementById('ddtCamera').click(),'ddt-file':()=>document.getElementById('ddtFile').click(),'ddt-analyze':()=>this.openAnalysis('DDT'),'request-camera':()=>document.getElementById('requestCamera').click(),'request-file':()=>document.getElementById('requestFile').click(),'request-file-remove':()=>this.removeRequestFile(el.dataset.fileIndex),'request-analyze':()=>this.openAnalysis('REQUEST'),'analysis-share':()=>this.shareAnalysis(),'analysis-copy':()=>this.copyAnalysisPrompt(),'analysis-import':()=>this.importAnalysisJson(),stock:()=>{if(this.require('STOCK_VIEW'))go('stock')},'rectify-new':()=>{this.rectDraft=null;go('rectify',{key:''})},rectify:()=>{this.rectDraft=null;go('rectify',{key:''})},'rect-filter-toggle':()=>{this.rectFiltersOpen=!this.rectFiltersOpen;this.renderView()},'rect-change':()=>{this.rectDraft=null;this.renderView()},'rect-step-minus':()=>this.stepRect(-1),'rect-step-plus':()=>this.stepRect(1),'rect-cancel':()=>{this.rectDraft=null;this.router.back()},'rectify-save':()=>this.saveRectify(el),count:()=>{this.countDraft=this.countDraft||this.loadCountSession();go('count')},'count-load':()=>this.loadCount(),'voice-inventory-toggle':()=>this.voiceInventoryToggle(),'voice-inventory-start':()=>this.startVoiceInventory(),'voice-inventory-pause':()=>this.pauseVoiceInventory(),'voice-inventory-resume':()=>this.resumeVoiceInventory(),'voice-inventory-stop':()=>this.stopVoiceInventory(),'voice-inventory-parse':()=>this.voiceInventoryParse(),'voice-inventory-clear':()=>this.voiceInventoryClear(),'voice-inventory-confirm':()=>this.confirmVoiceInventory(),'count-finalize':()=>this.finalizeCount(),'count-apply':()=>this.applyCount(el),'count-abandon':()=>this.abandonCount(),issue:()=>go('issue'),'issue-picker-toggle':()=>this.toggleIssuePicker(),'issue-source-select':()=>this.selectIssueSource(el.dataset.key),'issue-source-clear':()=>this.clearIssueSource(),'issue-confirm':()=>this.confirmIssue(),transfer:()=>go('transfer'),'transfer-confirm':()=>this.confirmTransfer(),requests:()=>go('requests-progress'),'request-new':()=>this.openRequestNew(),'request-line-add':()=>this.addRequestLine(),'request-save':()=>this.saveRequest(),'requests-progress':()=>go('requests-progress'),'requests-process':()=>go('requests-process'),'request-print':()=>this.exportRequestDocument('print',el.dataset.id),'request-pdf':()=>this.exportRequestDocument('pdf',el.dataset.id),'request-excel':()=>this.exportRequestDocument('excel',el.dataset.id),'request-list-excel':()=>this.exportRequestList(el.dataset.mode||'PROGRESS'),registry:()=>go('registry'),'registry-movements':()=>{this.registryTab='MOVIMENTI';go('registry-list')},'registry-audit':()=>{this.registryTab='AUDIT';go('registry-list')},'registry-export':async()=>{const n=await this.excel.exportRegistry();this.toast(`${n} esportato.`)},admin:()=>go('admin'),'admin-operators':()=>go('admin-operators'),'admin-operator-new':()=>go('admin-operator',{id:''}),'admin-sites':()=>go('admin-sites'),'admin-site-new':()=>go('admin-site',{id:''}),'admin-roles':()=>go('admin-roles'),'admin-pin-generate':()=>this.generateAdminPin(),'admin-pin-dismiss':()=>{this.adminGeneratedPin='';this.renderView()},'activity-today':()=>{this.activityDate=localDateInput();this.renderView()},'activity-date-open':()=>{const input=document.getElementById(el.dataset.target);if(!input)return;try{input.focus({preventScroll:true})}catch{input.focus?.()}if(typeof input.showPicker==='function'){try{input.showPicker();return}catch{}}input.click?.()},'receipt-picker-open':()=>{const input=document.getElementById(el.dataset.target);if(!input)return;try{input.focus({preventScroll:true})}catch{input.focus?.()}if(typeof input.showPicker==='function'){try{input.showPicker();return}catch{}}input.click?.()},'registry-filter-toggle':()=>document.getElementById('registryFilters')?.classList.toggle('hidden')};
+    const map={back:()=>this.router.back(),home:()=>this.router.home(),login:()=>{this.sounds?.click?.();this.openLogin()},'login-submit':()=>this.login(),logout:()=>{this.sounds?.click?.();this.logout()},'site-switch':()=>this.openSiteSwitcher(),'site-select':()=>this.selectSite(el.dataset.site),'site-choice-cancel':()=>this.cancelSiteChoice(),'toggle-pin':()=>{const p=document.getElementById('loginPin'),show=p.type==='password';p.type=show?'text':'password';const i=el.querySelector('i');if(i)i.className=`ph-duotone ph-${show?'eye-slash':'eye'}`;el.setAttribute('aria-label',show?'Nascondi PIN':'Mostra PIN');p.focus()},'view-desktop':()=>this.applyView('desktop'),'view-phone':()=>this.applyView('smartphone'),notifications:()=>this.openNotifications(),master:()=>go('master'),'master-view':()=>go('master'),'master-filter-reset':()=>this.resetMasterFilters(),'master-request-toggle':()=>this.toggleMasterRequestMode(),'master-request-item':()=>this.toggleMasterRequestItem(el.dataset.item),'master-request-locations':()=>this.toggleMasterRequestLocations(el.dataset.item,el),'master-request-review':()=>this.openMasterRequestReview(),'master-request-review-close':()=>document.getElementById('masterRequestDialog')?.close(),'master-request-remove':()=>this.removeMasterRequestItem(el.dataset.item),'master-request-qty-minus':()=>this.adjustMasterRequestQty(el.dataset.item,-1),'master-request-qty-plus':()=>this.adjustMasterRequestQty(el.dataset.item,1),'master-request-send':()=>this.sendMasterRequest(),'master-page-prev':()=>{this.masterView.page=Math.max(1,this.masterView.page-1);this.renderMasterViewerBody()},'master-page-next':()=>{this.masterView.page+=1;this.renderMasterViewerBody()},'master-edit-close':()=>this.closeMasterEdit(),'master-edit-save':()=>this.saveMasterEdit(),'master-remove-open':()=>this.openMasterRemove(),'master-remove-close':()=>this.closeMasterRemove(),'master-remove-confirm':()=>this.confirmMasterRemove(),'master-remove-toggle-pin':()=>this.toggleMasterRemovePin(),'master-import':()=>{if(!this.auth.can('MASTER_IMPORT'))throw new Error('Non hai il permesso per importare il Master.');document.getElementById('masterFile').click()},'master-export':async()=>{if(!this.auth.can('MASTER_EXPORT'))throw new Error('Non hai il permesso per esportare il Master.');const n=await this.excel.export();this.toast(`${n} esportato.`)},'legacy-migrate':()=>{if(!confirm('Migrare una COPIA dei dati REMOTO in NOVA? REMOTO non verrà modificato.'))return;this.excel.migrateLocalLegacy();this.toast('Copia REMOTO migrata in NOVA.');this.router.home()},'global-search-open':()=>this.openGlobalSearch(),'global-search-close':()=>this.closeGlobalSearch(),'global-search-command':()=>this.openGlobalSearchCommand(el.dataset.target),receiving:()=>go('receiving'),'receipt-new':()=>this.openReceiptNew(),'receipts-pending':()=>go('receipts',{mode:'PENDING'}),'receipts-all':()=>go('receipts',{mode:'ALL'}),'receipt-line-add':()=>this.addReceiptLine(),'receipt-article-add':()=>this.addReceiptArticle(),'receipt-confirm':()=>this.confirmReceipt(),'ddt-camera':()=>document.getElementById('ddtCamera').click(),'ddt-file':()=>document.getElementById('ddtFile').click(),'ddt-analyze':()=>this.openAnalysis('DDT'),'request-camera':()=>document.getElementById('requestCamera').click(),'request-file':()=>document.getElementById('requestFile').click(),'request-file-remove':()=>this.removeRequestFile(el.dataset.fileIndex),'request-analyze':()=>this.openAnalysis('REQUEST'),'analysis-share':()=>this.shareAnalysis(),'analysis-copy':()=>this.copyAnalysisPrompt(),'analysis-import':()=>this.importAnalysisJson(),stock:()=>{if(this.require('STOCK_VIEW'))go('stock')},'rectify-new':()=>{this.rectDraft=null;go('rectify',{key:''})},rectify:()=>{this.rectDraft=null;go('rectify',{key:''})},'rect-filter-toggle':()=>{this.rectFiltersOpen=!this.rectFiltersOpen;this.renderView()},'rect-change':()=>{this.rectDraft=null;this.renderView()},'rect-step-minus':()=>this.stepRect(-1),'rect-step-plus':()=>this.stepRect(1),'rect-cancel':()=>{this.rectDraft=null;this.router.back()},'rectify-save':()=>this.saveRectify(el),count:()=>{this.countDraft=this.countDraft||this.loadCountSession();go('count')},'count-load':()=>this.loadCount(),'count-field-clear':()=>this.clearCountPositionField(el.dataset.field),'voice-inventory-toggle':()=>this.voiceInventoryToggle(),'voice-inventory-start':()=>this.startVoiceInventory(),'voice-inventory-pause':()=>this.pauseVoiceInventory(),'voice-inventory-resume':()=>this.resumeVoiceInventory(),'voice-inventory-stop':()=>this.stopVoiceInventory(),'voice-inventory-parse':()=>this.voiceInventoryParse(),'voice-inventory-clear':()=>this.voiceInventoryClear(),'voice-inventory-confirm':()=>this.confirmVoiceInventory(),'count-finalize':()=>this.finalizeCount(),'count-apply':()=>this.applyCount(el),'count-abandon':()=>this.abandonCount(),issue:()=>go('issue'),'issue-picker-toggle':()=>this.toggleIssuePicker(),'issue-source-select':()=>this.selectIssueSource(el.dataset.key),'issue-source-clear':()=>this.clearIssueSource(),'issue-confirm':()=>this.confirmIssue(),transfer:()=>go('transfer'),'transfer-confirm':()=>this.confirmTransfer(),requests:()=>go('requests-progress'),'request-new':()=>this.openRequestNew(),'request-line-add':()=>this.addRequestLine(),'request-save':()=>this.saveRequest(),'requests-progress':()=>go('requests-progress'),'requests-process':()=>go('requests-process'),'request-print':()=>this.exportRequestDocument('print',el.dataset.id),'request-pdf':()=>this.exportRequestDocument('pdf',el.dataset.id),'request-excel':()=>this.exportRequestDocument('excel',el.dataset.id),'request-list-excel':()=>this.exportRequestList(el.dataset.mode||'PROGRESS'),registry:()=>go('registry'),'registry-movements':()=>{this.registryTab='MOVIMENTI';go('registry-list')},'registry-audit':()=>{this.registryTab='AUDIT';go('registry-list')},'registry-export':async()=>{const n=await this.excel.exportRegistry();this.toast(`${n} esportato.`)},admin:()=>go('admin'),'admin-operators':()=>go('admin-operators'),'admin-operator-new':()=>go('admin-operator',{id:''}),'admin-sites':()=>go('admin-sites'),'admin-site-new':()=>go('admin-site',{id:''}),'admin-roles':()=>go('admin-roles'),'admin-pin-generate':()=>this.generateAdminPin(),'admin-pin-dismiss':()=>{this.adminGeneratedPin='';this.renderView()},'activity-today':()=>{this.activityDate=localDateInput();this.renderView()},'activity-date-open':()=>{const input=document.getElementById(el.dataset.target);if(!input)return;try{input.focus({preventScroll:true})}catch{input.focus?.()}if(typeof input.showPicker==='function'){try{input.showPicker();return}catch{}}input.click?.()},'receipt-picker-open':()=>{const input=document.getElementById(el.dataset.target);if(!input)return;try{input.focus({preventScroll:true})}catch{input.focus?.()}if(typeof input.showPicker==='function'){try{input.showPicker();return}catch{}}input.click?.()},'registry-filter-toggle':()=>document.getElementById('registryFilters')?.classList.toggle('hidden')};
     if(map[action])return map[action]();
     if(action==='putaway-suggest')return this.applyPutAwaySuggestion(el);
     if(action==='global-search-result')return this.openGlobalSearchResult(el);if(action==='global-search-quick')return this.openGlobalSearchQuick(el);if(action==='request-delete')return this.openRequestDelete(el.dataset.id);if(action==='request-delete-close')return this.closeRequestDelete();if(action==='request-delete-confirm')return this.confirmRequestDelete();if(action==='request-delete-toggle-pin')return this.toggleRequestDeletePin();
@@ -20325,6 +20511,6 @@ try{globalThis.__NOVA_LEGACY_AVAILABLE=!!localStorage.getItem(CONFIG.legacyStora
 const switchSite=async siteId=>{await ui.selectSite(siteId);return auth.site()};
 globalThis.NOVA=Object.freeze({version:CONFIG.appVersion,schema:CONFIG.version,identityVersion:CONFIG.identityVersion,store,auth,router,domain,excel,requestDocs,ui,sounds,sites:SITES,operators:OPERATORS,roles:ROLE_DEFS,saveIdentityRegistry,capabilities:Object.freeze({operational:ALL_CAPS,master:MASTER_CAPS,administration:ADMIN_CAPS,globalAdmin:GLOBAL_ADMIN_CAPS}),identityValidation:IDENTITY_VALIDATION,switchSite});
 ui.render();</script>
-<!-- SOMA_BUILD:R31.84-20260929 -->
+<!-- SOMA_BUILD:R31.85-20260929 -->
 </body>
 </html>
