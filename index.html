@@ -1,13 +1,13 @@
 <!doctype html>
 <html lang="it">
 <head>
-<meta name="soma-build" content="R31.89-20260929">
+<meta name="soma-build" content="R31.90-20260929">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
 <script id="soma-build-freshness">
 (() => {
-  const CURRENT_BUILD='R31.89-20260929',CHECK_KEY='soma:last-build-refresh';
+  const CURRENT_BUILD='R31.90-20260929',CHECK_KEY='soma:last-build-refresh';
   globalThis.SOMA_BUILD=CURRENT_BUILD;
   const check=async()=>{
     try{
@@ -3106,6 +3106,10 @@ body:not(.session-active) .app-view{width:100%;max-width:none;margin:0;padding:0
   .voice-count-cta{grid-template-columns:43px 1fr 34px!important;gap:10px!important}
   .voice-count-icon{width:42px;height:42px;border-radius:14px;font-size:23px}
 }
+/* ===== R31.90 · AZURE SPEECH PRIMARY ENGINE ===== */
+.voice-engine-badge{font-size:8px!important;font-weight:950!important}
+.voice-engine-badge:has(*){white-space:nowrap}
+.voice-inventory-shell[data-engine="azure"] .voice-inventory-logo{background:linear-gradient(145deg,#1379d6,#6556d9)}
 /* ===== R31.86 · LIVE VOICE RECOGNITION ===== */
 .voice-engine-badge{box-shadow:0 4px 14px rgba(104,85,160,.08)}
 .voice-model-status:has(b:first-of-type){transition:.18s ease}
@@ -19314,7 +19318,7 @@ class RequestDocumentService{
 class UI{
   constructor({store,auth,router,domain,excel,requestDocs,sounds}){
     Object.assign(this,{store,auth,router,domain,excel,requestDocs,sounds});
-    this.activityDate=localDateInput();this.receiptDraft=null;this.requestDraft=null;this.rectDraft=null;this.rectFiltersOpen=false;this.countDraft=this.loadCountSession();this.voiceInventoryOpen=false;this.voiceInventoryDraft=this.loadVoiceInventoryDraft();this.voiceRecorder=null;this.voiceRecorderStream=null;this.voiceChunks=[];this.voiceTranscriber=null;this.voiceBusy=false;this.voiceEngine=(globalThis.SpeechRecognition||globalThis.webkitSpeechRecognition)?'LIVE':'LOCAL';this.voiceWakeLock=null;this.voiceMicIssue='';this.voiceRecognition=null;this.voiceListeningWanted=false;this.voicePaused=false;this.voiceLiveBaseText='';this.voiceLiveSessionFinal='';this.voiceRestartTimer=null;this.registryTab='MOVIMENTI';this.ddtFiles=[];this.requestFiles=[];this.analysisKind='';this.stockSearchTimer=null;this.masterSearchTimer=null;this.masterView={query:'',article:'',size:'',location:'',pallet:'',sort:'article',page:1,pageSize:100};this.masterEditKey='';this.masterRequestMode=false;this.masterRequestItems=[];this.masterRequestOpenKey='';this.adminGeneratedPin='';this.siteChoiceRequired=false;this.siteChoiceSource='';this.lastPinLength=0;this.lastDeletePinLength=0;this.pendingRequestDeleteId='';this.requestDocOrientation='auto';this.globalSearchIndex=0;this.globalStockQuery='';
+    this.activityDate=localDateInput();this.receiptDraft=null;this.requestDraft=null;this.rectDraft=null;this.rectFiltersOpen=false;this.countDraft=this.loadCountSession();this.voiceInventoryOpen=false;this.voiceInventoryDraft=this.loadVoiceInventoryDraft();this.voiceRecorder=null;this.voiceRecorderStream=null;this.voiceChunks=[];this.voiceTranscriber=null;this.voiceBusy=false;this.voiceEngine=(globalThis.SpeechRecognition||globalThis.webkitSpeechRecognition)?'LIVE':'LOCAL';this.voiceWakeLock=null;this.voiceMicIssue='';this.voiceRecognition=null;this.voiceListeningWanted=false;this.voicePaused=false;this.voiceLiveBaseText='';this.voiceLiveSessionFinal='';this.voiceRestartTimer=null;this.voiceAzureRecognizer=null;this.voiceAzureTokenTimer=null;this.voiceAzureTokenCache=null;this.voiceAzureStarting=false;this.registryTab='MOVIMENTI';this.ddtFiles=[];this.requestFiles=[];this.analysisKind='';this.stockSearchTimer=null;this.masterSearchTimer=null;this.masterView={query:'',article:'',size:'',location:'',pallet:'',sort:'article',page:1,pageSize:100};this.masterEditKey='';this.masterRequestMode=false;this.masterRequestItems=[];this.masterRequestOpenKey='';this.adminGeneratedPin='';this.siteChoiceRequired=false;this.siteChoiceSource='';this.lastPinLength=0;this.lastDeletePinLength=0;this.pendingRequestDeleteId='';this.requestDocOrientation='auto';this.globalSearchIndex=0;this.globalStockQuery='';
     this.bind();this.setupVisualViewport();this.applyView(globalThis.localStorage?.getItem(CONFIG.viewKey)||'smartphone');
     if(this.auth.user&&this.auth.needsSiteChoice())setTimeout(()=>this.openSiteChoice({required:true,source:'restore'}),0);
   }
@@ -20044,14 +20048,14 @@ class UI{
   voiceInventoryToggle(){this.voiceInventoryOpen=!this.voiceInventoryOpen;this.renderView()}
   voiceInventoryPanel(){
     const d=this.voiceInventoryDraft||{transcript:'',rows:[]},rows=d.rows||[],valid=rows.filter(r=>this.voiceInventoryRowState(r).kind==='ok').length,warn=rows.length-valid;
-    const fallbackState=this.voiceRecorder?.state||'inactive',liveActive=!!this.voiceListeningWanted&&!this.voicePaused,livePaused=!!this.voicePaused,recording=liveActive||fallbackState==='recording',paused=livePaused||fallbackState==='paused',active=recording||paused,liveCapable=!!(globalThis.SpeechRecognition||globalThis.webkitSpeechRecognition);
+    const fallbackState=this.voiceRecorder?.state||'inactive',liveActive=!!this.voiceListeningWanted&&!this.voicePaused,livePaused=!!this.voicePaused,recording=liveActive||fallbackState==='recording',paused=livePaused||fallbackState==='paused',active=recording||paused,azureReady=this.azureSpeechReady(),browserLive=!!(globalThis.SpeechRecognition||globalThis.webkitSpeechRecognition),liveCapable=azureReady||browserLive;
     const recordControls=!active
-      ?`<button class="voice-record" data-action="voice-inventory-start">${phRegular('microphone')}<span><b>AVVIA DETTATURA LIVE</b><small>${liveCapable?'Il testo appare mentre parli':'Fallback locale disponibile su questo browser'}</small></span></button>`
+      ?`<button class="voice-record" data-action="voice-inventory-start">${phRegular('microphone')}<span><b>AVVIA DETTATURA LIVE</b><small>${azureReady?'Azure Speech AI · streaming professionale':browserLive?'Il testo appare mentre parli':'Fallback locale disponibile su questo browser'}</small></span></button>`
       :`<div class="voice-live-actions"><button class="voice-record ${paused?'paused':'recording'}" data-action="${paused?'voice-inventory-resume':'voice-inventory-pause'}">${phRegular(paused?'play':'pause')}<span><b>${paused?'RIPRENDI':'PAUSA'}</b><small>${paused?'Continua dalla stessa sessione':'Ferma l’ascolto senza chiudere la sessione'}</small></span></button><button class="voice-record voice-live-stop" data-action="voice-inventory-stop">${phRegular('stop')}<span><b>TERMINA DETTATURA</b><small>Conclude l’ascolto mantenendo il testo già acquisito</small></span></button></div>`;
-    const engineLabel=liveCapable?'LIVE':esc(this.voiceEngine||(navigator.gpu?'WEBGPU':'WASM'));
+    const engineLabel=this.voiceEngine==='AZURE'?'AZURE AI':azureReady?'AZURE READY':browserLive?'LIVE':esc(this.voiceEngine||(navigator.gpu?'WEBGPU':'WASM'));
     const statusTitle=this.voiceBusy?'Elaborazione in corso…':recording?'Ascolto live attivo':paused?'Dettatura in pausa':'Pronto';
-    const statusDetail=this.voiceBusy?'Sto preparando il fallback locale.':recording?'Parla normalmente: SOMA aggiorna il testo in tempo reale e lo confronta con il Master.':paused?'Premi RIPRENDI quando vuoi continuare.':liveCapable?'Nessun modello Whisper da attendere: il riconoscimento parte subito.':'Questo browser userà il fallback locale.';
-    return `<section class="voice-inventory-shell"><header class="voice-inventory-head"><span class="voice-inventory-logo">${phRegular('waveform')}</span><div><small>INVENTARIO VOCALE AI</small><h2>Detta. Controlla. Conferma.</h2><p>Riconoscimento in tempo reale con correzione guidata da articoli, taglie e stati presenti nel Master.</p></div><span class="voice-engine-badge">${engineLabel}</span></header><div class="voice-inventory-controls"><div>${recordControls}</div><div class="voice-inventory-tip"><b>Esempio consigliato</b><span>I01127UHF, taglia L, 45, scaricato. M 23 nuovo. S 17 scaricato. I002BD, S 24 nuovo.</span></div></div><div class="voice-mic-note ${this.voiceMicIssue?'warn':''}">${this.voiceMicIssue?esc(this.voiceMicIssue):(liveCapable?'Il testo viene mostrato mentre parli. SOMA usa il Master come vocabolario per ridurre gli errori sui codici articolo.':'Modalità compatibilità: il browser non offre riconoscimento live e verrà usato il motore locale.')}</div><div class="voice-model-status" id="voiceModelStatus"><span class="dot ${this.voiceBusy?'busy':''}"></span><b>${statusTitle}</b><small>${statusDetail}</small></div><label class="voice-transcript-label"><span>TRASCRIZIONE LIVE</span><textarea id="voiceInventoryTranscript" class="field textarea" ${recording?'readonly':''} placeholder="La trascrizione apparirà qui mentre parli. Puoi anche scrivere o correggere manualmente.">${esc(d.transcript||'')}</textarea></label><div class="voice-transcript-actions"><button class="soft small" data-action="voice-inventory-parse">${phRegular('magic-wand')} ANALIZZA TESTO</button><button class="soft small" data-action="voice-inventory-clear">${phRegular('trash')} SVUOTA</button></div><div class="voice-review-head"><div><small>RIGHE INTERPRETATE</small><h3>${rows.length} ${rows.length===1?'riga':'righe'}</h3></div><div class="voice-review-kpis"><span class="ok"><b>${valid}</b><small>VALIDE</small></span><span class="${warn?'warn':''}"><b>${warn}</b><small>DA VERIFICARE</small></span></div></div><div class="voice-review-list">${rows.length?rows.map((r,i)=>this.voiceInventoryRowHtml(r,i)).join(''):'<div class="voice-review-empty">Nessuna riga ancora. Avvia la dettatura oppure inserisci il testo manualmente.</div>'}</div><footer class="voice-inventory-footer"><div><small>MEMORIA TEMPORANEA</small><b>Le giacenze non vengono modificate finché non confermi.</b></div><button class="voice-confirm" data-action="voice-inventory-confirm" ${!rows.length||warn?'disabled':''}>${phRegular('check-circle')}<span>CONFERMA E AGGIORNA GIACENZE</span></button></footer></section>`
+    const statusDetail=this.voiceBusy?'Sto preparando il fallback locale.':recording?'Parla normalmente: SOMA aggiorna il testo in tempo reale e lo confronta con il Master.':paused?'Premi RIPRENDI quando vuoi continuare.':azureReady?'Azure Speech è pronto: streaming immediato con Phrase List ricavata dal Master.':browserLive?'Nessun modello Whisper da attendere: il riconoscimento parte subito.':'Questo browser userà il fallback locale.';
+    return `<section class="voice-inventory-shell"><header class="voice-inventory-head"><span class="voice-inventory-logo">${phRegular('waveform')}</span><div><small>INVENTARIO VOCALE AI</small><h2>Detta. Controlla. Conferma.</h2><p>Riconoscimento in tempo reale con correzione guidata da articoli, taglie e stati presenti nel Master.</p></div><span class="voice-engine-badge">${engineLabel}</span></header><div class="voice-inventory-controls"><div>${recordControls}</div><div class="voice-inventory-tip"><b>Esempio consigliato</b><span>I01127UHF, taglia L, 45, scaricato. M 23 nuovo. S 17 scaricato. I002BD, S 24 nuovo.</span></div></div><div class="voice-mic-note ${this.voiceMicIssue?'warn':''}">${this.voiceMicIssue?esc(this.voiceMicIssue):(azureReady?'Azure Speech usa fino a 1.900 termini contestuali del Master per privilegiare codici, taglie e stati corretti.':browserLive?'Il testo viene mostrato mentre parli. SOMA usa il Master come vocabolario per ridurre gli errori sui codici articolo.':'Modalità compatibilità: il browser non offre riconoscimento live e verrà usato il motore locale.')}</div><div class="voice-model-status" id="voiceModelStatus"><span class="dot ${this.voiceBusy?'busy':''}"></span><b>${statusTitle}</b><small>${statusDetail}</small></div><label class="voice-transcript-label"><span>TRASCRIZIONE LIVE</span><textarea id="voiceInventoryTranscript" class="field textarea" ${recording?'readonly':''} placeholder="La trascrizione apparirà qui mentre parli. Puoi anche scrivere o correggere manualmente.">${esc(d.transcript||'')}</textarea></label><div class="voice-transcript-actions"><button class="soft small" data-action="voice-inventory-parse">${phRegular('magic-wand')} ANALIZZA TESTO</button><button class="soft small" data-action="voice-inventory-clear">${phRegular('trash')} SVUOTA</button></div><div class="voice-review-head"><div><small>RIGHE INTERPRETATE</small><h3>${rows.length} ${rows.length===1?'riga':'righe'}</h3></div><div class="voice-review-kpis"><span class="ok"><b>${valid}</b><small>VALIDE</small></span><span class="${warn?'warn':''}"><b>${warn}</b><small>DA VERIFICARE</small></span></div></div><div class="voice-review-list">${rows.length?rows.map((r,i)=>this.voiceInventoryRowHtml(r,i)).join(''):'<div class="voice-review-empty">Nessuna riga ancora. Avvia la dettatura oppure inserisci il testo manualmente.</div>'}</div><footer class="voice-inventory-footer"><div><small>MEMORIA TEMPORANEA</small><b>Le giacenze non vengono modificate finché non confermi.</b></div><button class="voice-confirm" data-action="voice-inventory-confirm" ${!rows.length||warn?'disabled':''}>${phRegular('check-circle')}<span>CONFERMA E AGGIORNA GIACENZE</span></button></footer></section>`
   }
   voiceInventoryRowState(r){
     const article=normalizeArticle(r.article),size=norm(r.size),state=norm(r.state),counted=Number(r.counted),master=normalizeMasterRows(this.store.db.master.rows||[]),knownArticle=master.some(x=>x.article===article),knownSize=master.some(x=>x.article===article&&x.size===size),stateOk=CONFIG.states.includes(state),qtyOk=Number.isInteger(counted)&&counted>=0;
@@ -20145,6 +20149,76 @@ class UI{
     if(n==='OverconstrainedError')return 'Il microfono non supporta i parametri richiesti. Riprova dopo aver cambiato dispositivo audio.';
     return e?.message||'Impossibile accedere al microfono.'
   }
+  azureSpeechTokenEndpoint(){
+    try{
+      const params=new URLSearchParams(location.search),q=params.get('speechProxy');
+      if(q&&/^https:\/\//i.test(q))localStorage.setItem('soma:azure-speech-proxy',q.replace(/\/$/,''));
+      const saved=String(localStorage.getItem('soma:azure-speech-proxy')||'').trim().replace(/\/$/,'');
+      if(saved)return saved.endsWith('/api/azure-speech-token')?saved:saved+'/api/azure-speech-token';
+    }catch{}
+    const host=String(location.hostname||'').toLowerCase();
+    if(host&&host!=='mexpy88.github.io'&&!host.endsWith('.github.io'))return '/api/azure-speech-token';
+    return ''
+  }
+  azureSpeechReady(){return !!this.azureSpeechTokenEndpoint()}
+  async loadAzureSpeechSdk(){
+    if(globalThis.SpeechSDK)return globalThis.SpeechSDK;
+    if(globalThis.__SOMA_AZURE_SDK_PROMISE)return globalThis.__SOMA_AZURE_SDK_PROMISE;
+    globalThis.__SOMA_AZURE_SDK_PROMISE=new Promise((resolve,reject)=>{
+      const old=document.querySelector('script[data-soma-azure-speech]');if(old){old.addEventListener('load',()=>resolve(globalThis.SpeechSDK),{once:true});old.addEventListener('error',()=>reject(new Error('Azure Speech SDK non disponibile.')),{once:true});return}
+      const script=document.createElement('script');script.dataset.somaAzureSpeech='1';script.async=true;
+      script.src='https://cdn.jsdelivr.net/npm/microsoft-cognitiveservices-speech-sdk@1.51.0/distrib/browser/microsoft.cognitiveservices.speech.sdk.bundle-min.js';
+      script.onload=()=>globalThis.SpeechSDK?resolve(globalThis.SpeechSDK):reject(new Error('Azure Speech SDK non inizializzato.'));
+      script.onerror=()=>reject(new Error('Impossibile caricare Azure Speech SDK.'));
+      document.head.appendChild(script)
+    });
+    return globalThis.__SOMA_AZURE_SDK_PROMISE
+  }
+  async fetchAzureSpeechToken(force=false){
+    const endpoint=this.azureSpeechTokenEndpoint();if(!endpoint)throw new Error('Backend Azure Speech non configurato.');
+    const now=Date.now(),cache=this.voiceAzureTokenCache;if(!force&&cache?.token&&cache?.region&&Number(cache.expiresAt||0)>now+60000)return cache;
+    const res=await fetch(endpoint,{method:'GET',cache:'no-store',headers:{'Accept':'application/json'}});
+    let data={};try{data=await res.json()}catch{}
+    if(!res.ok||!data.token||!data.region)throw new Error(data.error||`Backend Azure Speech non disponibile (${res.status}).`);
+    const expiresIn=Math.max(60,Number(data.expiresIn)||540),out={token:String(data.token),region:String(data.region),expiresAt:now+expiresIn*1000,expiresIn};this.voiceAzureTokenCache=out;return out
+  }
+  scheduleAzureTokenRefresh(expiresIn=540){
+    clearTimeout(this.voiceAzureTokenTimer);const wait=Math.max(60000,(Number(expiresIn)||540)*1000-60000);
+    this.voiceAzureTokenTimer=setTimeout(()=>this.safe(async()=>{
+      if(!this.voiceAzureRecognizer||!this.voiceListeningWanted)return;
+      const auth=await this.fetchAzureSpeechToken(true);if(this.voiceAzureRecognizer)this.voiceAzureRecognizer.authorizationToken=auth.token;this.scheduleAzureTokenRefresh(auth.expiresIn)
+    }),wait)
+  }
+  azureSpeechPhrases(){
+    const rows=this.voiceContextRows(),articles=[...new Set(rows.map(r=>r.article).filter(Boolean))],sizes=[...new Set(rows.map(r=>r.size).filter(Boolean))],phrases=[];
+    for(const a of articles.slice(0,850)){phrases.push(a,this.voiceArticleSpokenAlias(a))}
+    phrases.push(...sizes.slice(0,120),'NUOVO','USATO','SCARICATO','DISMESSO','NON CHIARO','ARTICOLO','TAGLIA','PEZZI');
+    return [...new Set(phrases.filter(Boolean))].slice(0,1900)
+  }
+  async startAzureVoiceInventory(){
+    if(this.voiceAzureStarting)return;this.voiceAzureStarting=true;
+    try{
+      const [sdk,auth]=await Promise.all([this.loadAzureSpeechSdk(),this.fetchAzureSpeechToken()]);
+      const speechConfig=sdk.SpeechConfig.fromAuthorizationToken(auth.token,auth.region);speechConfig.speechRecognitionLanguage='it-IT';speechConfig.enableDictation?.();
+      if(sdk.OutputFormat)speechConfig.outputFormat=sdk.OutputFormat.Detailed;
+      const audioConfig=sdk.AudioConfig.fromDefaultMicrophoneInput(),recognizer=new sdk.SpeechRecognizer(speechConfig,audioConfig);
+      const grammar=sdk.PhraseListGrammar.fromRecognizer(recognizer),phrases=this.azureSpeechPhrases();if(grammar.addPhrases)grammar.addPhrases(phrases);else phrases.forEach(p=>grammar.addPhrase(p));grammar.setWeight?.(2.0);
+      this.voiceAzureRecognizer=recognizer;this.voiceEngine='AZURE';this.voiceLiveSessionFinal='';
+      recognizer.recognizing=(_sender,e)=>{const interim=String(e?.result?.text||'').trim();this.voiceLiveTranscript(this.voiceLiveSessionFinal,interim)};
+      recognizer.recognized=(_sender,e)=>{
+        if(e?.result?.reason!==sdk.ResultReason.RecognizedSpeech)return;const text=String(e?.result?.text||'').trim();if(!text)return;
+        this.voiceLiveSessionFinal=[this.voiceLiveSessionFinal,text].filter(Boolean).join(' ').replace(/\s+/g,' ').trim();
+        const combined=[this.voiceLiveBaseText,this.voiceLiveSessionFinal].filter(Boolean).join(' ').replace(/\s+/g,' ').trim();this.parseVoiceInventoryText(combined);this.renderView()
+      };
+      recognizer.canceled=(_sender,e)=>{const detail=String(e?.errorDetails||e?.reason||'');this.voiceMicIssue='Azure Speech: '+(detail||'riconoscimento interrotto.');if(e?.reason===sdk.CancellationReason.Error){this.voiceListeningWanted=false;this.renderView()}};
+      await new Promise((resolve,reject)=>recognizer.startContinuousRecognitionAsync(resolve,reject));this.scheduleAzureTokenRefresh(auth.expiresIn);return true
+    }finally{this.voiceAzureStarting=false}
+  }
+  async stopAzureVoiceInventory(){
+    clearTimeout(this.voiceAzureTokenTimer);this.voiceAzureTokenTimer=null;const rec=this.voiceAzureRecognizer;this.voiceAzureRecognizer=null;if(!rec)return false;
+    await new Promise(resolve=>{try{rec.stopContinuousRecognitionAsync(()=>resolve(),()=>resolve())}catch{resolve()}});
+    try{rec.close()}catch{}return true
+  }
   voiceSpeechCtor(){return globalThis.SpeechRecognition||globalThis.webkitSpeechRecognition||null}
   voiceLiveTranscript(finalText='',interimText=''){
     const combined=[this.voiceLiveBaseText,finalText,interimText].filter(Boolean).join(' ').replace(/\s+/g,' ').trim(),ta=document.getElementById('voiceInventoryTranscript');if(ta)ta.value=combined;return combined
@@ -20200,22 +20274,30 @@ class UI{
   }
   async startVoiceInventory(){
     const location=norm(document.getElementById('countLocation')?.value),pallet=norm(document.getElementById('countPallet')?.value);if(!location)throw new Error('Inserisci prima Fila/Scaffale: serve per sapere dove applicare il conteggio.');this.voiceInventoryDraft.location=location;this.voiceInventoryDraft.pallet=pallet;this.persistVoiceInventoryDraft();
-    this.voiceMicIssue='';this.voicePaused=false;this.voiceListeningWanted=true;this.voiceLiveBaseText=String(this.voiceInventoryDraft?.transcript||'').trim();this.voiceLiveSessionFinal='';
-    await this.requestVoiceWakeLock();
+    this.voiceMicIssue='';this.voicePaused=false;this.voiceListeningWanted=true;this.voiceLiveBaseText=String(this.voiceInventoryDraft?.transcript||'').trim();this.voiceLiveSessionFinal='';await this.requestVoiceWakeLock();
+    if(this.azureSpeechReady()){
+      try{await this.startAzureVoiceInventory();this.renderView();this.toast('Azure Speech avviato: trascrizione professionale in tempo reale.');return}
+      catch(e){this.voiceMicIssue='Azure non disponibile: '+String(e?.message||e)+' Passo automaticamente al motore live del browser.';this.voiceAzureRecognizer=null}
+    }
     if(this.voiceSpeechCtor()){this.voiceEngine='LIVE';this.startVoiceRecognitionSession();this.renderView();this.toast('Dettatura live avviata: il testo apparirà mentre parli.');return}
     this.voiceListeningWanted=false;await this.startVoiceInventoryFallback();this.toast('Modalità live non disponibile: uso il fallback locale.')
   }
-  pauseVoiceInventory(){
-    if(this.voiceListeningWanted&&this.voiceRecognition){this.voicePaused=true;this.voiceListeningWanted=false;try{this.voiceRecognition.stop()}catch{}this.releaseVoiceWakeLock();this.renderView();this.toast('Dettatura in pausa.');return}
-    if(this.voiceRecorder?.state==='recording'){this.voiceRecorder.pause();this.releaseVoiceWakeLock();this.renderView();this.toast('Dettatura in pausa.')}
+  async pauseVoiceInventory(){
+    if(this.voiceAzureRecognizer){this.voicePaused=true;this.voiceListeningWanted=false;await this.stopAzureVoiceInventory();await this.releaseVoiceWakeLock();this.renderView();this.toast('Dettatura Azure in pausa.');return}
+    if(this.voiceListeningWanted&&this.voiceRecognition){this.voicePaused=true;this.voiceListeningWanted=false;try{this.voiceRecognition.stop()}catch{}await this.releaseVoiceWakeLock();this.renderView();this.toast('Dettatura in pausa.');return}
+    if(this.voiceRecorder?.state==='recording'){this.voiceRecorder.pause();await this.releaseVoiceWakeLock();this.renderView();this.toast('Dettatura in pausa.')}
   }
   async resumeVoiceInventory(){
-    if(this.voicePaused&&this.voiceSpeechCtor()){this.voicePaused=false;this.voiceListeningWanted=true;this.voiceLiveBaseText=String(this.voiceInventoryDraft?.transcript||'').trim();await this.requestVoiceWakeLock();this.startVoiceRecognitionSession();this.renderView();this.toast('Dettatura ripresa.');return}
+    if(this.voicePaused){this.voicePaused=false;this.voiceListeningWanted=true;this.voiceLiveBaseText=String(this.voiceInventoryDraft?.transcript||'').trim();this.voiceLiveSessionFinal='';await this.requestVoiceWakeLock();
+      if(this.azureSpeechReady()){try{await this.startAzureVoiceInventory();this.renderView();this.toast('Dettatura Azure ripresa.');return}catch(e){this.voiceMicIssue='Azure non disponibile: '+String(e?.message||e)}}
+      if(this.voiceSpeechCtor()){this.voiceEngine='LIVE';this.startVoiceRecognitionSession();this.renderView();this.toast('Dettatura ripresa.');return}
+    }
     if(this.voiceRecorder?.state==='paused'){this.voiceRecorder.resume();await this.requestVoiceWakeLock();this.renderView();this.toast('Dettatura ripresa.')}
   }
-  stopVoiceInventory(){
+  async stopVoiceInventory(){
     clearTimeout(this.voiceRestartTimer);this.voiceListeningWanted=false;this.voicePaused=false;
-    if(this.voiceRecognition){try{this.voiceRecognition.stop()}catch{}this.releaseVoiceWakeLock();this.renderView();this.toast('Dettatura terminata.');return}
+    if(this.voiceAzureRecognizer){await this.stopAzureVoiceInventory();await this.releaseVoiceWakeLock();this.renderView();this.toast('Dettatura Azure terminata.');return}
+    if(this.voiceRecognition){try{this.voiceRecognition.stop()}catch{}await this.releaseVoiceWakeLock();this.renderView();this.toast('Dettatura terminata.');return}
     if(['recording','paused'].includes(this.voiceRecorder?.state)){try{this.voiceRecorder.requestData?.()}catch{}this.voiceRecorder.stop()}
   }
 
@@ -20224,11 +20306,11 @@ class UI{
     try{if(!chunks.length)throw new Error('Nessun audio registrato.');const blob=new Blob(chunks,{type:mime}),audio=await this.decodeVoiceAudio(blob),pipe=await this.ensureVoiceTranscriber();this.setVoiceStatus('Trascrizione in corso…','Whisper sta analizzando la dettatura localmente.');const out=await pipe(audio,{language:'italian',task:'transcribe',chunk_length_s:30,stride_length_s:5});const text=String(out?.text||'').trim();if(!text)throw new Error('Whisper non ha riconosciuto parole nella registrazione.');const combined=[this.voiceInventoryDraft?.transcript,text].filter(Boolean).join(' ');this.parseVoiceInventoryText(combined);this.toast('Dettatura analizzata. Controlla le righe prima di confermare.')}finally{this.voiceBusy=false;this.renderView()}
   }
   voiceInventoryParse(){const t=document.getElementById('voiceInventoryTranscript')?.value||'';this.parseVoiceInventoryText(t);this.renderView()}
-  voiceInventoryClear(){clearTimeout(this.voiceRestartTimer);this.voiceListeningWanted=false;this.voicePaused=false;if(this.voiceRecognition){try{this.voiceRecognition.abort()}catch{}this.voiceRecognition=null}if(['recording','paused'].includes(this.voiceRecorder?.state)){try{this.voiceRecorder.onstop=null;this.voiceRecorder.stop()}catch{}this.voiceRecorderStream?.getTracks?.().forEach(t=>t.stop());this.voiceRecorderStream=null;this.voiceRecorder=null;this.voiceChunks=[];this.voiceBusy=false}this.releaseVoiceWakeLock();this.voiceLiveBaseText='';this.voiceLiveSessionFinal='';this.voiceMicIssue='';this.clearVoiceInventoryDraft();this.renderView()}
+  async voiceInventoryClear(){clearTimeout(this.voiceRestartTimer);this.voiceListeningWanted=false;this.voicePaused=false;await this.stopAzureVoiceInventory();if(this.voiceRecognition){try{this.voiceRecognition.abort()}catch{}this.voiceRecognition=null}if(['recording','paused'].includes(this.voiceRecorder?.state)){try{this.voiceRecorder.onstop=null;this.voiceRecorder.stop()}catch{}this.voiceRecorderStream?.getTracks?.().forEach(t=>t.stop());this.voiceRecorderStream=null;this.voiceRecorder=null;this.voiceChunks=[];this.voiceBusy=false}await this.releaseVoiceWakeLock();this.voiceLiveBaseText='';this.voiceLiveSessionFinal='';this.voiceMicIssue='';this.clearVoiceInventoryDraft();this.renderView()}
   voiceInventoryRemove(index){const i=Number(index);if(!Number.isInteger(i))return;this.voiceInventoryDraft.rows.splice(i,1);this.persistVoiceInventoryDraft();this.renderView()}
   updateVoiceInventoryField(el){const rowEl=el.closest('[data-voice-row]');if(!rowEl)return;const i=Number(rowEl.dataset.voiceRow),r=this.voiceInventoryDraft?.rows?.[i],field=el.dataset.voiceField;if(!r||!field)return;r[field]=field==='counted'?Math.max(0,Math.floor(Number(el.value)||0)):field==='article'?normalizeArticle(el.value):norm(el.value);this.persistVoiceInventoryDraft()}
   confirmVoiceInventory(){
-    const location=norm(document.getElementById('countLocation')?.value||this.voiceInventoryDraft?.location),pallet=norm(document.getElementById('countPallet')?.value||this.voiceInventoryDraft?.pallet),rows=this.voiceInventoryDraft?.rows||[];if(!location)throw new Error('Inserisci Fila/Scaffale.');if(!rows.length)throw new Error('Nessuna riga da confermare.');const bad=rows.filter(r=>this.voiceInventoryRowState(r).kind!=='ok');if(bad.length)throw new Error(`${bad.length} ${bad.length===1?'riga deve':'righe devono'} essere verificata prima della conferma.`);if(!confirm(`Aggiornare ${rows.length} righe nella posizione ${location}${pallet?' · Bancale '+pallet:''}? Le modifiche saranno registrate nell’Audit.`))return;const sessionId=this.voiceInventoryDraft.id||('VC-'+Date.now());for(const r of rows){const item={article:normalizeArticle(r.article),size:norm(r.size),state:norm(r.state)},bucket={location,pallet},key=bucketKey({...item,...bucket}),existing=this.domain.stock.findByKey(key);this.domain.rectifications.setQuantity({currentKey:existing?key:'',article:item.article,size:item.size,state:item.state,location,pallet,counted:Number(r.counted),reason:'INVENTARIO VOCALE',note:'Confermato da Inventario vocale SOMA HUB',sourceKind:'COUNT_ASSISTED',sessionId})}this.domain.audit.record('VOICE_INVENTORY_CONFIRMED','COUNT',sessionId,null,{rows:rows.length,location,pallet},{engine:this.voiceEngine==='LIVE'?'Browser Live ASR + Master context':'Whisper / Transformers.js fallback',operator:this.auth.user});this.store.save('voice:inventory');this.clearVoiceInventoryDraft();this.voiceInventoryOpen=false;this.toast(`${rows.length} righe aggiornate nelle giacenze.`);this.router.go('stock')
+    const location=norm(document.getElementById('countLocation')?.value||this.voiceInventoryDraft?.location),pallet=norm(document.getElementById('countPallet')?.value||this.voiceInventoryDraft?.pallet),rows=this.voiceInventoryDraft?.rows||[];if(!location)throw new Error('Inserisci Fila/Scaffale.');if(!rows.length)throw new Error('Nessuna riga da confermare.');const bad=rows.filter(r=>this.voiceInventoryRowState(r).kind!=='ok');if(bad.length)throw new Error(`${bad.length} ${bad.length===1?'riga deve':'righe devono'} essere verificata prima della conferma.`);if(!confirm(`Aggiornare ${rows.length} righe nella posizione ${location}${pallet?' · Bancale '+pallet:''}? Le modifiche saranno registrate nell’Audit.`))return;const sessionId=this.voiceInventoryDraft.id||('VC-'+Date.now());for(const r of rows){const item={article:normalizeArticle(r.article),size:norm(r.size),state:norm(r.state)},bucket={location,pallet},key=bucketKey({...item,...bucket}),existing=this.domain.stock.findByKey(key);this.domain.rectifications.setQuantity({currentKey:existing?key:'',article:item.article,size:item.size,state:item.state,location,pallet,counted:Number(r.counted),reason:'INVENTARIO VOCALE',note:'Confermato da Inventario vocale SOMA HUB',sourceKind:'COUNT_ASSISTED',sessionId})}this.domain.audit.record('VOICE_INVENTORY_CONFIRMED','COUNT',sessionId,null,{rows:rows.length,location,pallet},{engine:this.voiceEngine==='AZURE'?'Azure Speech real-time + PhraseList Master':this.voiceEngine==='LIVE'?'Browser Live ASR + Master context':'Whisper / Transformers.js fallback',operator:this.auth.user});this.store.save('voice:inventory');this.clearVoiceInventoryDraft();this.voiceInventoryOpen=false;this.toast(`${rows.length} righe aggiornate nelle giacenze.`);this.router.go('stock')
   }
 
   clearCountPositionField(field){
@@ -20615,6 +20697,6 @@ try{globalThis.__NOVA_LEGACY_AVAILABLE=!!localStorage.getItem(CONFIG.legacyStora
 const switchSite=async siteId=>{await ui.selectSite(siteId);return auth.site()};
 globalThis.NOVA=Object.freeze({version:CONFIG.appVersion,schema:CONFIG.version,identityVersion:CONFIG.identityVersion,store,auth,router,domain,excel,requestDocs,ui,sounds,sites:SITES,operators:OPERATORS,roles:ROLE_DEFS,saveIdentityRegistry,capabilities:Object.freeze({operational:ALL_CAPS,master:MASTER_CAPS,administration:ADMIN_CAPS,globalAdmin:GLOBAL_ADMIN_CAPS}),identityValidation:IDENTITY_VALIDATION,switchSite});
 ui.render();</script>
-<!-- SOMA_BUILD:R31.89-20260929 -->
+<!-- SOMA_BUILD:R31.90-20260929 -->
 </body>
 </html>
