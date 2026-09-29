@@ -1,13 +1,13 @@
 <!doctype html>
 <html lang="it">
 <head>
-<meta name="soma-build" content="R31.79-20260929">
+<meta name="soma-build" content="R31.80-20260929">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
 <script id="soma-build-freshness">
 (() => {
-  const CURRENT_BUILD='R31.79-20260929',CHECK_KEY='soma:last-build-refresh';
+  const CURRENT_BUILD='R31.80-20260929',CHECK_KEY='soma:last-build-refresh';
   globalThis.SOMA_BUILD=CURRENT_BUILD;
   const check=async()=>{
     try{
@@ -9604,6 +9604,46 @@ body.desktop-mode .activity-desktop .activity-kpi.wide{grid-column:auto!importan
 @media(hover:hover) and (pointer:fine){
   .request-detail-v3-line:hover{transform:translateY(-2px)!important;border-color:color-mix(in srgb,var(--line-accent) 30%,#dce6ed)!important;background:linear-gradient(180deg,color-mix(in srgb,var(--line-soft) 48%,#fff),#fff 76%)!important;box-shadow:0 10px 24px rgba(30,62,86,.065)!important}
 }
+
+/* ===== R31.80 · COMPACT OPERATIONAL REQUEST DETAIL ===== */
+.request-detail-v3-lines{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:12px!important;align-items:start!important}
+.request-detail-v3-line{min-width:0!important;padding:0!important;border-radius:17px!important;overflow:hidden!important;box-shadow:0 6px 18px rgba(30,62,86,.04)!important}
+.request-detail-v3-line-main{min-height:76px!important;grid-template-columns:42px minmax(0,1fr) auto!important;gap:12px!important;padding:13px 14px 11px 16px!important;background:linear-gradient(180deg,#fff,#fffdfa)!important;border-bottom:1px solid #e9eef2!important}
+.request-detail-v3-line-index{width:38px!important;height:38px!important;border-radius:12px!important;font-size:11px!important}
+.request-detail-v3-line-id small{font-size:8px!important;letter-spacing:.1em!important}
+.request-detail-v3-line-id b{margin-top:2px!important;font-size:clamp(16px,1.05vw,21px)!important;line-height:1.05!important;white-space:nowrap!important;overflow:hidden!important;text-overflow:ellipsis!important}
+.request-detail-v3-line-id b i{margin:0 2px!important}
+.request-detail-v3-line-state{display:inline-flex!important;width:max-content!important;margin-top:5px!important;padding:3px 7px!important;border-radius:999px!important;background:var(--line-soft)!important;color:var(--line-accent)!important;font-size:7.5px!important;font-weight:950!important;letter-spacing:.055em!important}
+.request-detail-v3-line-rem{min-width:76px!important;padding-left:10px!important;border-left:1px solid #e7edf1!important}
+.request-detail-v3-line-rem small{font-size:7.5px!important}
+.request-detail-v3-line-rem strong{font-size:27px!important}
+.request-detail-v3-line-rem span{font-size:7px!important}
+.request-detail-v3-line-progress{display:none!important}
+.request-detail-v3-line-stats{display:grid!important;grid-template-columns:repeat(4,minmax(0,1fr))!important;gap:0!important;margin:0!important;border-bottom:0!important}
+.request-detail-v3-line-stats>span{display:flex!important;min-width:0!important;min-height:66px!important;flex-direction:column!important;justify-content:center!important;align-items:flex-start!important;gap:2px!important;padding:10px 12px!important;border:0!important;border-right:1px solid #e2e9ee!important;border-radius:0!important;background:#f8fafb!important}
+.request-detail-v3-line-stats>span:last-child{border-right:0!important}
+.request-detail-v3-line-stats small{font-size:7.5px!important;letter-spacing:.07em!important}
+.request-detail-v3-line-stats b{font-size:20px!important;line-height:1!important}
+.request-detail-v3-line-stats em{font-size:7px!important}
+.request-detail-v3-line-stats>span.available{background:#eef8f3!important}
+.request-detail-v3-line-stats>span.unavailable,.request-detail-v3-line-stats>span.missing{background:#fff1ef!important}
+.request-detail-v3-line-stats>span.unavailable b,.request-detail-v3-line-stats>span.missing b{color:#b54b44!important}
+.request-detail-v3-line-foot{margin:0!important;padding:8px 12px!important;border-radius:0!important;border-top:1px solid transparent!important;font-size:8.5px!important}
+.request-detail-v3-line-foot.available{border-top-color:#d3e9dc!important}
+.request-detail-v3-line-foot.unavailable,.request-detail-v3-line-foot.missing{border-top-color:#efd4d1!important}
+.request-detail-v3-note,.request-detail-v3-marker{margin:0!important;padding:8px 12px!important;border-radius:0!important;border-top:1px solid #e4ebef!important;font-size:8.5px!important}
+.request-detail-v3-note+.request-detail-v3-marker{border-top-color:#ead9ac!important}
+.request-detail-v3-line.done .request-detail-v3-line-main{background:linear-gradient(180deg,#fbfffd,#f4fbf7)!important}
+.request-detail-v3-line.partial .request-detail-v3-line-main{background:linear-gradient(180deg,#fbfdff,#f4f8fd)!important}
+@media(max-width:1350px){.request-detail-v3-lines{grid-template-columns:1fr!important}}
+@media(max-width:760px){
+ .request-detail-v3-line-main{grid-template-columns:38px minmax(0,1fr) auto!important;padding:11px 11px 10px 13px!important}
+ .request-detail-v3-line-id b{font-size:15px!important}
+ .request-detail-v3-line-stats{grid-template-columns:repeat(2,minmax(0,1fr))!important}
+ .request-detail-v3-line-stats>span:nth-child(2){border-right:0!important}
+ .request-detail-v3-line-stats>span:nth-child(-n+2){border-bottom:1px solid #e2e9ee!important}
+}
+
 
 .request-detail-v3-actions{
   display:flex!important;align-items:center!important;justify-content:flex-end!important;gap:9px!important;margin-top:16px!important;padding:14px!important;
@@ -20004,7 +20044,7 @@ class UI{
     const prepare=this.auth.can('REQUEST_PROCESS')&&status!=='COMPLETATA'?`<button class="request-detail-v3-primary" data-action="request-pick" data-id="${esc(r.id)}"><span>${phRegular('package')} PREPARA RICHIESTA</span>${phRegular('arrow-right')}</button>`:'',remove=canDelete?`<button class="request-detail-v3-delete" data-action="request-delete" data-id="${esc(r.id)}">${phRegular('trash')}<span>ELIMINA RICHIESTA</span></button>`:'';
     const rows=(r.lines||[]).map((l,index)=>{
       const d=this.domain.requests.deliveredForLine(r,l.id),requested=integer(l.cartonsRequested),rem=Math.max(0,requested-d.cartons),percent=requested?Math.min(100,Math.round(d.cartons*100/requested)):0,available=this.domain.stock.total(l.article,l.size),receiving=this.domain.stock.receivingTotal(l.article,l.size),masterRows=normalizeMasterRows(this.store.db.master.rows||[]),known=masterRows.some(x=>x.article===normalizeArticle(l.article)&&(!norm(l.size)||x.size===norm(l.size))),lineState=rem===0?'done':d.cartons>0?'partial':'pending',availabilityClass=available>0?'available':known?'unavailable':'missing';
-      return `<article class="request-detail-v3-line ${lineState}"><div class="request-detail-v3-line-main"><span class="request-detail-v3-line-index">${String(index+1).padStart(2,'0')}</span><div class="request-detail-v3-line-id"><small>ARTICOLO</small><b>${esc(l.article)}${l.size?` <i>·</i> ${esc(l.size)}`:''}</b><span>${rem===0?'Riga completata':d.cartons>0?'Prelievo parziale':'Da preparare'}</span></div><div class="request-detail-v3-line-rem"><small>RESIDUI</small><strong>${rem}</strong><span>cartoni</span></div></div><div class="request-detail-v3-line-progress"><i style="width:${percent}%"></i></div><div class="request-detail-v3-line-stats"><span><small>RICHIESTI</small><b>${requested}</b><em>cartoni</em></span><span><small>PRELEVATI</small><b>${d.cartons}</b><em>cartoni</em></span><span><small>SCARICATI</small><b>${d.pieces}</b><em>pezzi</em></span><span class="${availabilityClass}"><small>DISPONIBILI</small><b>${available}</b><em>pezzi</em></span></div><div class="request-detail-v3-line-foot ${availabilityClass}">${phRegular(available>0?'package':'warning-circle')}<span>${available>0?`Disponibilità attuale: <b>${available} pezzi</b>${receiving?` · <strong>${receiving} in Area Ricevimento</strong>`:''}`:known?'<b>NON DISPONIBILE</b> · Giacenza attuale 0':'<b>NON PRESENTE NEL MAGAZZINO</b> · Codice/taglia non trovati nel Master'}</span></div>${l.note?`<div class="request-detail-v3-note">${phRegular('note-pencil')}<span>${esc(l.note)}</span></div>`:''}${l.marker?`<div class="request-detail-v3-marker">${phRegular('asterisk')} Segnalazione presente sulla richiesta originale</div>`:''}</article>`
+      return `<article class="request-detail-v3-line ${lineState} ${availabilityClass}"><div class="request-detail-v3-line-main"><span class="request-detail-v3-line-index">${String(index+1).padStart(2,'0')}</span><div class="request-detail-v3-line-id"><small>ARTICOLO</small><b>${esc(l.article)}${l.size?` <i>·</i> ${esc(l.size)}`:''}</b><span class="request-detail-v3-line-state">${rem===0?'COMPLETATA':d.cartons>0?'PARZIALE':'DA PREPARARE'}</span></div><div class="request-detail-v3-line-rem"><small>RESIDUI</small><strong>${rem}</strong><span>cartoni</span></div></div><div class="request-detail-v3-line-stats"><span><small>RICHIESTI</small><b>${requested}</b><em>cartoni</em></span><span><small>PRELEVATI</small><b>${d.cartons}</b><em>cartoni</em></span><span><small>SCARICATI</small><b>${d.pieces}</b><em>pezzi</em></span><span class="available ${availabilityClass}"><small>DISPONIBILI</small><b>${available}</b><em>pezzi</em></span></div>${(available<=0||receiving)?`<div class="request-detail-v3-line-foot ${availabilityClass}">${phRegular(available>0?'tray':'warning-circle')}<span>${available>0?`<strong>${receiving} pezzi</strong> in Area Ricevimento`:known?'<b>NON DISPONIBILE</b> · Giacenza attuale 0':'<b>NON PRESENTE NEL MAGAZZINO</b> · Codice/taglia non trovati nel Master'}</span></div>`:''}${l.note?`<div class="request-detail-v3-note">${phRegular('note-pencil')}<span>${esc(l.note)}</span></div>`:''}${l.marker?`<div class="request-detail-v3-marker">${phRegular('asterisk')} Segnalazione presente sulla richiesta originale</div>`:''}</article>`
     }).join('');
     return `<section class="request-detail-v3 ${statusClass}"><header class="request-detail-v3-hero"><div class="request-detail-v3-title"><span class="request-detail-v3-title-icon">${phRegular('clipboard-text')}</span><div><small>${esc(r.id)}</small><h1>${esc(r.destination||'Richiesta')}</h1><p>${fmtDateTime(r.requestedAt)} · ${esc(r.operator||'—')}${r.reference?` · Rif. ${esc(r.reference)}`:''}</p></div></div><em class="request-detail-v3-status">${phRegular(statusIcon)}<span>${esc(status)}</span></em></header>${docbar}<section class="request-detail-v3-overview"><div class="request-detail-v3-progress"><div class="request-detail-v3-progress-top"><div><small>AVANZAMENTO RICHIESTA</small><span>${s.delivered} di ${s.requested} cartoni prelevati</span></div><strong>${s.percent}<i>%</i></strong></div><div class="request-detail-v3-progress-bar"><i style="width:${s.percent}%"></i></div><div class="request-detail-v3-progress-foot"><span>${s.remaining} cartoni residui</span><span>${s.pieces} pezzi scaricati</span></div></div><div class="request-detail-v3-kpis"><span><small>RICHIESTI</small><b>${s.requested}</b><em>cartoni</em></span><span><small>PRELEVATI</small><b>${s.delivered}</b><em>cartoni</em></span><span><small>RESIDUI</small><b>${s.remaining}</b><em>cartoni</em></span></div></section>${inconsistent?`<section class="request-detail-v3-integrity">${phRegular('warning-circle')}<div><b>Dati storici da verificare</b><p>Lo stato salvato e l’avanzamento calcolato non coincidono.</p><div><span>STATO SALVATO <strong>${esc(status)}</strong></span><span>AVANZAMENTO CALCOLATO <strong>${esc(calculatedStatus)} · ${s.percent}%</strong></span></div></div></section>`:''}<div class="request-detail-v3-section-head"><div><small>DETTAGLIO ARTICOLI</small><h2>${(r.lines||[]).length} ${(r.lines||[]).length===1?'riga operativa':'righe operative'}</h2></div><span>${s.remaining} cartoni residui</span></div><div class="request-detail-v3-lines">${rows}</div>${prepare||remove?`<footer class="request-detail-v3-actions">${prepare}${remove}</footer>`:''}</section>`
   }
@@ -20173,6 +20213,6 @@ try{globalThis.__NOVA_LEGACY_AVAILABLE=!!localStorage.getItem(CONFIG.legacyStora
 const switchSite=async siteId=>{await ui.selectSite(siteId);return auth.site()};
 globalThis.NOVA=Object.freeze({version:CONFIG.appVersion,schema:CONFIG.version,identityVersion:CONFIG.identityVersion,store,auth,router,domain,excel,requestDocs,ui,sounds,sites:SITES,operators:OPERATORS,roles:ROLE_DEFS,saveIdentityRegistry,capabilities:Object.freeze({operational:ALL_CAPS,master:MASTER_CAPS,administration:ADMIN_CAPS,globalAdmin:GLOBAL_ADMIN_CAPS}),identityValidation:IDENTITY_VALIDATION,switchSite});
 ui.render();</script>
-<!-- SOMA_BUILD:R31.79-20260929 -->
+<!-- SOMA_BUILD:R31.80-20260929 -->
 </body>
 </html>
