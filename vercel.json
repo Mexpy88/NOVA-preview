@@ -1,0 +1,17 @@
+{
+  "version": 2,
+  "functions": {
+    "api/azure-speech-token.js": {
+      "maxDuration": 10
+    }
+  },
+  "headers": [
+    {
+      "source": "/api/azure-speech-token",
+      "headers": [
+        {"key": "Cache-Control", "value": "no-store, max-age=0"},
+        {"key": "X-Content-Type-Options", "value": "nosniff"}
+      ]
+    }
+  ]
+}
