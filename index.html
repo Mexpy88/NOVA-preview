@@ -1,13 +1,13 @@
 <!doctype html>
 <html lang="it">
 <head>
-<meta name="soma-build" content="R31.87-20260929">
+<meta name="soma-build" content="R31.88-20260929">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
 <script id="soma-build-freshness">
 (() => {
-  const CURRENT_BUILD='R31.87-20260929',CHECK_KEY='soma:last-build-refresh';
+  const CURRENT_BUILD='R31.88-20260929',CHECK_KEY='soma:last-build-refresh';
   globalThis.SOMA_BUILD=CURRENT_BUILD;
   const check=async()=>{
     try{
@@ -20080,9 +20080,14 @@ class UI{
     const master=normalizeMasterRows(this.store.db.master.rows||[]),location=norm(document.getElementById('countLocation')?.value||this.voiceInventoryDraft?.location),pallet=norm(document.getElementById('countPallet')?.value||this.voiceInventoryDraft?.pallet);
     const scoped=master.filter(r=>(!location||norm(r.location)===location)&&(!pallet||norm(r.pallet)===pallet));return scoped.length?scoped:master
   }
+  voiceArticleSpokenAlias(article){
+    const names={A:'a',B:'bi',C:'ci',D:'di',E:'e',F:'effe',G:'gi',H:'acca',I:'i',J:'i lunga',K:'cappa',L:'elle',M:'emme',N:'enne',O:'o',P:'pi',Q:'cu',R:'erre',S:'esse',T:'ti',U:'u',V:'vi',W:'doppia vu',X:'ics',Y:'ipsilon',Z:'zeta','0':'zero','1':'uno','2':'due','3':'tre','4':'quattro','5':'cinque','6':'sei','7':'sette','8':'otto','9':'nove'};
+    return String(article||'').toUpperCase().split('').map(c=>names[c]||c).join(' ')
+  }
   voiceRecognitionPhraseData(){
-    const rows=this.voiceContextRows(),articles=[...new Set(rows.map(r=>r.article).filter(Boolean))].slice(0,350),sizes=[...new Set(rows.map(r=>r.size).filter(Boolean))].slice(0,80);
-    return [...articles.map(phrase=>({phrase,boost:10})),...sizes.map(phrase=>({phrase,boost:6})),...['NUOVO','USATO','SCARICATO','DISMESSO','NON CHIARO','TAGLIA','ARTICOLO'].map(phrase=>({phrase,boost:5}))]
+    const rows=this.voiceContextRows(),articles=[...new Set(rows.map(r=>r.article).filter(Boolean))].slice(0,180),sizes=[...new Set(rows.map(r=>r.size).filter(Boolean))].slice(0,80),data=[];
+    for(const article of articles){data.push({phrase:article,boost:10});data.push({phrase:this.voiceArticleSpokenAlias(article),boost:9})}
+    data.push(...sizes.map(phrase=>({phrase,boost:6})),...['NUOVO','USATO','SCARICATO','DISMESSO','NON CHIARO','TAGLIA','ARTICOLO'].map(phrase=>({phrase,boost:5})));return data
   }
 
   voiceQuantityToken(value){
@@ -20093,18 +20098,24 @@ class UI{
     for(const [stem,base] of tens){if(raw===stem+'I'||raw===stem+'A')return base;for(const [u,n] of Object.entries(units)){const forms=[stem+(u==='UNO'||u==='OTTO'?'':base===20?'I':'A')+u,stem+u];if(forms.includes(raw))return base+n}}
     return NaN
   }
+  voiceQuantityAt(tokens,i){
+    const one=this.voiceQuantityToken(tokens[i]);if(Number.isInteger(one)){const twoWord=this.voiceQuantityToken(String(tokens[i]||'')+String(tokens[i+1]||''));if(Number.isInteger(twoWord)&&twoWord!==one)return{qty:twoWord,used:2};return{qty:one,used:1}}
+    const joined=this.voiceQuantityToken(String(tokens[i]||'')+String(tokens[i+1]||''));if(Number.isInteger(joined))return{qty:joined,used:2};return{qty:NaN,used:0}
+  }
+
   parseVoiceInventoryText(text){
     const clean=this.voiceNormalizeSpoken(text),tokens=clean.split(' ').filter(Boolean),master=normalizeMasterRows(this.store.db.master.rows||[]),articles=[...new Set(master.map(x=>x.article).filter(Boolean))],rows=[];let current='';
-    const stateAt=i=>{const one=norm(tokens[i]||''),two=norm((tokens[i]||'')+' '+(tokens[i+1]||''));if(CONFIG.states.includes(two))return{state:two,used:2};if(CONFIG.states.includes(one))return{state:one,used:1};return{state:'',used:0}};
+    const stateAt=i=>{while(['PEZZI','PEZZO','PZ'].includes(norm(tokens[i]||'')))i++;const one=norm(tokens[i]||''),two=norm((tokens[i]||'')+' '+(tokens[i+1]||''));if(CONFIG.states.includes(two))return{state:two,used:2+(one==='PEZZI'||one==='PEZZO'||one==='PZ'?1:0)};if(CONFIG.states.includes(one))return{state:one,used:1};return{state:'',used:0}};
     const plausibleSize=v=>/^[A-Z0-9]{1,10}(?:[-\/.][A-Z0-9]{1,10})?$/.test(v)&&!CONFIG.states.includes(v);
     for(let i=0;i<tokens.length;){
       const art=this.voiceArticleAt(tokens,i,articles);if(art){current=art.article;i+=art.used;continue}
       if(!current){i++;continue}
       if(tokens[i]==='ARTICOLO'||tokens[i]==='TAGLIA'){i++;continue}
-      const size=norm(tokens[i]||''),qty=this.voiceQuantityToken(tokens[i+1]),knownArticle=articles.includes(current),validSizes=[...new Set(master.filter(x=>x.article===current).map(x=>x.size).filter(Boolean))];
-      if(!Number.isInteger(qty)){if(knownArticle&&validSizes.includes(size))rows.push({article:current,size,counted:'',state:'',source:'VOICE'});i++;continue}
+      const size=norm(tokens[i]||''),q=this.voiceQuantityAt(tokens,i+1),knownArticle=articles.includes(current),validSizes=[...new Set(master.filter(x=>x.article===current).map(x=>x.size).filter(Boolean))];
+      if(!Number.isInteger(q.qty)){if(knownArticle&&validSizes.includes(size))rows.push({article:current,size,counted:'',state:'',source:'VOICE'});i++;continue}
       if(!size||(!validSizes.includes(size)&&!plausibleSize(size))){i++;continue}
-      const stateInfo=stateAt(i+2);rows.push({article:current,size,counted:qty,state:stateInfo.state,source:'VOICE'});i+=2+stateInfo.used
+      let stateIndex=i+1+q.used;while(['PEZZI','PEZZO','PZ'].includes(norm(tokens[stateIndex]||'')))stateIndex++;const stateInfo=stateAt(stateIndex);
+      rows.push({article:current,size,counted:q.qty,state:stateInfo.state,source:'VOICE'});i=stateIndex+stateInfo.used
     }
     this.voiceInventoryDraft={schema:1,id:this.voiceInventoryDraft?.id||('VC-'+Date.now()),location:norm(this.voiceInventoryDraft?.location||document.getElementById('countLocation')?.value),pallet:norm(this.voiceInventoryDraft?.pallet||document.getElementById('countPallet')?.value),transcript:String(text||'').trim(),rows,updatedAt:nowIso()};this.persistVoiceInventoryDraft();return rows
   }
@@ -20593,6 +20604,6 @@ try{globalThis.__NOVA_LEGACY_AVAILABLE=!!localStorage.getItem(CONFIG.legacyStora
 const switchSite=async siteId=>{await ui.selectSite(siteId);return auth.site()};
 globalThis.NOVA=Object.freeze({version:CONFIG.appVersion,schema:CONFIG.version,identityVersion:CONFIG.identityVersion,store,auth,router,domain,excel,requestDocs,ui,sounds,sites:SITES,operators:OPERATORS,roles:ROLE_DEFS,saveIdentityRegistry,capabilities:Object.freeze({operational:ALL_CAPS,master:MASTER_CAPS,administration:ADMIN_CAPS,globalAdmin:GLOBAL_ADMIN_CAPS}),identityValidation:IDENTITY_VALIDATION,switchSite});
 ui.render();</script>
-<!-- SOMA_BUILD:R31.87-20260929 -->
+<!-- SOMA_BUILD:R31.88-20260929 -->
 </body>
 </html>
