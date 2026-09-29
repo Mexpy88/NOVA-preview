@@ -41,6 +41,64 @@ function isRateLimited(req) {
   return hit.count > MAX_PER_WINDOW;
 }
 
+async function issueDeepgramToken(req, res) {
+  const origin = allowedOrigin(req);
+  if (origin === null) return json(res, 403, { error: 'Origin not allowed' });
+
+  const cors = origin
+    ? { 'Access-Control-Allow-Origin': origin, Vary: 'Origin' }
+    : {};
+
+  if (req.method === 'OPTIONS') {
+    res.writeHead(204, {
+      ...cors,
+      'Access-Control-Allow-Methods': 'GET,OPTIONS',
+      'Access-Control-Allow-Headers': 'Content-Type',
+      'Cache-Control': 'no-store, max-age=0',
+    });
+    return res.end();
+  }
+
+  if (req.method !== 'GET') return json(res, 405, { error: 'Method not allowed' }, cors);
+  if (isRateLimited(req)) return json(res, 429, { error: 'Too many token requests' }, cors);
+
+  const key = process.env.DEEPGRAM_API_KEY;
+  if (!key) return json(res, 503, { error: 'Deepgram is not configured' }, cors);
+
+  try {
+    const response = await fetch('https://api.deepgram.com/v1/auth/grant', {
+      method: 'POST',
+      headers: {
+        Authorization: `Token ${key}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ ttl_seconds: 120 }),
+    });
+
+    let data = {};
+    try { data = await response.json(); } catch {}
+
+    if (!response.ok || !data.access_token) {
+      return json(res, 502, {
+        error: 'Deepgram token request failed',
+        status: response.status,
+        detail: data?.err_msg || data?.error || 'Unknown Deepgram error',
+      }, cors);
+    }
+
+    return json(res, 200, {
+      token: String(data.access_token),
+      expiresIn: Number(data.expires_in || 120),
+      issuedAt: Date.now(),
+    }, cors);
+  } catch (error) {
+    return json(res, 502, {
+      error: 'Deepgram token request failed',
+      detail: String(error?.message || error),
+    }, cors);
+  }
+}
+
 async function issueSpeechToken(req, res) {
   const origin = allowedOrigin(req);
   if (origin === null) return json(res, 403, { error: 'Origin not allowed' });
@@ -107,8 +165,13 @@ const server = http.createServer(async (req, res) => {
     return json(res, 200, {
       ok: true,
       service: 'SOMA Speech Backend',
+      deepgramConfigured: Boolean(process.env.DEEPGRAM_API_KEY),
       azureConfigured: Boolean(process.env.AZURE_SPEECH_KEY && process.env.AZURE_SPEECH_REGION),
     });
+  }
+
+  if (url.pathname === '/api/deepgram-token') {
+    return issueDeepgramToken(req, res);
   }
 
   if (url.pathname === '/api/azure-speech-token') {
