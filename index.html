@@ -1,13 +1,13 @@
 <!doctype html>
 <html lang="it">
 <head>
-<meta name="soma-build" content="R31.77-20260929">
+<meta name="soma-build" content="R31.78-20260929">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
 <script id="soma-build-freshness">
 (() => {
-  const CURRENT_BUILD='R31.77-20260929',CHECK_KEY='soma:last-build-refresh';
+  const CURRENT_BUILD='R31.78-20260929',CHECK_KEY='soma:last-build-refresh';
   globalThis.SOMA_BUILD=CURRENT_BUILD;
   const check=async()=>{
     try{
@@ -2962,49 +2962,50 @@ body:not(.session-active) .app-view{width:100%;max-width:none;margin:0;padding:0
 .request-pro-workspace.is-single .request-pro-meta-grid .field{min-height:44px!important;padding:8px 11px!important;font-size:clamp(11px,.7vw,14px)!important;line-height:1.15}
 .request-pro-workspace.is-single .request-pro-date-field .field{padding-right:45px!important}
 .request-pro-workspace.is-single .request-pro-date-field>span{width:32px;height:32px;right:7px;font-size:17px}
-.request-pro-workspace.is-multi{grid-template-columns:minmax(320px,.42fr) minmax(0,1.58fr);gap:14px;align-items:start}
-.request-pro-workspace.is-multi>.request-pro-meta{min-width:0;position:sticky;top:96px;box-shadow:0 8px 24px rgba(43,86,117,.045);container-type:inline-size}
-.request-pro-workspace.is-multi .request-pro-meta-grid{grid-template-columns:1fr;gap:11px;padding:14px}
+.request-pro-workspace.is-multi{grid-template-columns:1fr;gap:12px;align-items:start}
+.request-pro-workspace.is-multi>.request-pro-meta{min-width:0;display:grid;grid-template-columns:minmax(210px,260px) minmax(0,1fr);align-items:stretch;overflow:hidden;border-radius:18px;box-shadow:0 7px 20px rgba(43,86,117,.04)}
+.request-pro-workspace.is-multi .request-pro-meta>header{min-height:94px;padding:14px 16px;border-bottom:0;border-right:1px solid #dce7ee;background:linear-gradient(135deg,#eaf5fb,#f6fbfe);align-items:center}
+.request-pro-workspace.is-multi .request-pro-meta>header>span{width:38px;height:38px;font-size:19px}
+.request-pro-workspace.is-multi .request-pro-meta>header small{font-size:8px}
+.request-pro-workspace.is-multi .request-pro-meta>header b{font-size:13px;line-height:1.15}
+.request-pro-workspace.is-multi .request-pro-meta-grid{display:grid;grid-template-columns:minmax(170px,.8fr) minmax(220px,1fr) minmax(260px,1.35fr);gap:12px;align-items:end;padding:13px 15px 14px}
 .request-pro-workspace.is-multi .request-pro-meta-grid .wide{grid-column:auto}
-.request-pro-workspace.is-multi .request-pro-meta>header{padding:12px 14px}
-.request-pro-workspace.is-multi .request-pro-meta>header small{font-size:clamp(8px,2.05cqi,10px)}
-.request-pro-workspace.is-multi .request-pro-meta>header b{font-size:clamp(12px,3.05cqi,15px)}
-.request-pro-workspace.is-multi .request-pro-meta-grid label>span{font-size:clamp(10px,2.45cqi,12px);line-height:1.15}
-.request-pro-workspace.is-multi .request-pro-meta-grid label>span em{font-size:clamp(7.5px,1.85cqi,9px)}
-.request-pro-workspace.is-multi .request-pro-meta-grid .field{min-height:48px!important;padding:9px 12px!important;font-size:clamp(13px,3.05cqi,16px)!important;line-height:1.15}
+.request-pro-workspace.is-multi .request-pro-meta-grid label>span{font-size:10.5px;line-height:1.15;margin-bottom:6px}
+.request-pro-workspace.is-multi .request-pro-meta-grid label>span em{font-size:8px}
+.request-pro-workspace.is-multi .request-pro-meta-grid .field{min-height:46px!important;padding:9px 12px!important;font-size:14px!important;line-height:1.15}
 .request-pro-workspace.is-multi .request-pro-date-field .field{padding-right:47px!important}
 .request-pro-workspace.is-multi .request-pro-articles{min-width:0;margin-top:0}
-.request-pro-workspace.is-multi .request-pro-section-head{min-height:62px;align-items:center;padding:4px 2px 8px}
+.request-pro-workspace.is-multi .request-pro-section-head{min-height:66px;align-items:center;padding:3px 2px 9px}
 .request-pro-workspace.is-multi .request-pro-section-head small{font-size:10px}
-.request-pro-workspace.is-multi .request-pro-section-head h3{font-size:clamp(22px,1.35vw,28px);line-height:1.05}
+.request-pro-workspace.is-multi .request-pro-section-head h3{font-size:clamp(23px,1.45vw,29px);line-height:1.03;margin-top:3px}
 .request-pro-workspace.is-multi .request-pro-section-head>div>span{font-size:11px}
-.request-pro-workspace.is-multi .request-pro-add{min-height:43px;padding:0 15px;font-size:11px}
-.request-pro-workspace.is-multi .request-pro-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:12px}
+.request-pro-workspace.is-multi .request-pro-add{min-height:44px;padding:0 16px;font-size:11px}
+.request-pro-workspace.is-multi .request-pro-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:13px}
 .request-pro-workspace.is-multi .request-pro-grid>.request-pro-card{grid-column:auto!important;container-type:inline-size}
-.request-pro-workspace.is-multi .request-pro-card>header{min-height:52px;padding:9px 11px 9px 13px}
-.request-pro-workspace.is-multi .request-pro-card-id>span{width:36px;height:36px;font-size:clamp(10px,2.4cqi,12px)}
-.request-pro-workspace.is-multi .request-pro-card-id small{font-size:clamp(7px,1.7cqi,8.5px)}
-.request-pro-workspace.is-multi .request-pro-card-id b{font-size:clamp(11px,2.65cqi,14px);line-height:1.12}
-.request-pro-workspace.is-multi .request-pro-remove{min-height:34px;padding:0 10px;font-size:clamp(9px,2.05cqi,11px)}
-.request-pro-workspace.is-multi .request-pro-fields{grid-template-columns:minmax(0,1.55fr) minmax(82px,.52fr) minmax(92px,.58fr);gap:9px;padding:13px 13px 14px}
+.request-pro-workspace.is-multi .request-pro-card>header{min-height:54px;padding:9px 12px 9px 14px}
+.request-pro-workspace.is-multi .request-pro-card-id>span{width:37px;height:37px;font-size:clamp(10px,1.55cqi,12px)}
+.request-pro-workspace.is-multi .request-pro-card-id small{font-size:clamp(7px,1.05cqi,8.5px)}
+.request-pro-workspace.is-multi .request-pro-card-id b{font-size:clamp(12px,1.7cqi,15px);line-height:1.12}
+.request-pro-workspace.is-multi .request-pro-remove{min-height:35px;padding:0 11px;font-size:clamp(9px,1.35cqi,11px)}
+.request-pro-workspace.is-multi .request-pro-fields{grid-template-columns:minmax(0,1.65fr) minmax(95px,.5fr) minmax(110px,.58fr);gap:10px;padding:14px 14px 15px}
 .request-pro-workspace.is-multi .request-pro-fields .note{grid-column:1/-1}
-.request-pro-workspace.is-multi .request-pro-fields label>span{font-size:clamp(10px,2.35cqi,12px);line-height:1.15;margin-bottom:7px}
-.request-pro-workspace.is-multi .request-pro-fields label>span em{font-size:clamp(7.5px,1.75cqi,9px)}
-.request-pro-workspace.is-multi .request-pro-fields .field{min-height:46px!important;padding:9px 12px!important;font-size:clamp(13px,3.15cqi,16px)!important;line-height:1.15}
-.request-pro-workspace.is-multi .request-pro-fields .cartons .field{font-size:clamp(16px,3.6cqi,19px)!important}
-.request-pro-workspace.is-multi .request-pro-card .request-create-availability{margin:0 13px 12px;min-height:41px;padding:7px 9px}
-.request-pro-workspace.is-multi .request-pro-card .request-create-availability b{font-size:clamp(10px,2.35cqi,12px)}
-.request-pro-workspace.is-multi .request-pro-card .request-create-availability span{font-size:clamp(9px,2cqi,10.5px)}
-.request-pro .field.request-fit-long{font-size:12px!important}
-.request-pro .field.request-fit-xlong{font-size:11px!important}
-.request-pro .field.request-fit-xxlong{font-size:10px!important}
+.request-pro-workspace.is-multi .request-pro-fields label>span{font-size:clamp(10.5px,1.45cqi,12.5px);line-height:1.15;margin-bottom:7px}
+.request-pro-workspace.is-multi .request-pro-fields label>span em{font-size:clamp(8px,1.05cqi,9px)}
+.request-pro-workspace.is-multi .request-pro-fields .field{min-height:47px!important;padding:9px 12px!important;font-size:clamp(14px,1.9cqi,17px)!important;line-height:1.15}
+.request-pro-workspace.is-multi .request-pro-fields .cartons .field{font-size:clamp(17px,2.15cqi,20px)!important}
+.request-pro-workspace.is-multi .request-pro-card .request-create-availability{margin:0 14px 13px;min-height:42px;padding:7px 10px}
+.request-pro-workspace.is-multi .request-pro-card .request-create-availability b{font-size:clamp(10px,1.45cqi,12px)}
+.request-pro-workspace.is-multi .request-pro-card .request-create-availability span{font-size:clamp(9px,1.25cqi,10.5px)}
+.request-pro .field.request-fit-long{font-size:14px!important}
+.request-pro .field.request-fit-xlong{font-size:13px!important}
+.request-pro .field.request-fit-xxlong{font-size:12px!important}
 @media(min-width:1200px) and (max-width:1450px){
   .request-pro-workspace.is-single{grid-template-columns:minmax(350px,.82fr) minmax(520px,1.18fr)}
   .request-pro-workspace.is-single .request-pro-fields{grid-template-columns:minmax(170px,1.45fr) minmax(82px,.48fr) minmax(96px,.54fr)!important}
   .request-pro-workspace.is-single .request-pro-section-head>div>span{display:none}
 }
 
-@media(max-width:1199px){.request-pro-workspace.is-single,.request-pro-workspace.is-multi{grid-template-columns:1fr}.request-pro-workspace.is-multi>.request-pro-meta{position:relative;top:auto}.request-pro-workspace.is-multi .request-pro-meta-grid{grid-template-columns:1fr 1fr}.request-pro-workspace.is-multi .request-pro-meta-grid .wide{grid-column:1/-1}.request-pro-grid{grid-template-columns:1fr}.request-pro-workspace.is-multi .request-pro-grid{grid-template-columns:1fr!important}.request-pro-final{grid-template-columns:1fr}}
+@media(max-width:1199px){.request-pro-workspace.is-single,.request-pro-workspace.is-multi{grid-template-columns:1fr}.request-pro-workspace.is-multi>.request-pro-meta{grid-template-columns:1fr}.request-pro-workspace.is-multi .request-pro-meta>header{min-height:auto;border-right:0;border-bottom:1px solid #dce7ee}.request-pro-workspace.is-multi .request-pro-meta-grid{grid-template-columns:1fr 1fr}.request-pro-workspace.is-multi .request-pro-meta-grid .wide{grid-column:1/-1}.request-pro-grid{grid-template-columns:1fr}.request-pro-workspace.is-multi .request-pro-grid{grid-template-columns:1fr!important}.request-pro-final{grid-template-columns:1fr}}
 @media(max-width:760px){.request-pro-workspace.is-single .request-pro-meta-grid{grid-template-columns:1fr}.request-pro-workspace.is-single .request-pro-fields{grid-template-columns:1fr 1fr!important}.request-pro-workspace.is-single .request-pro-fields .article,.request-pro-workspace.is-single .request-pro-fields .note{grid-column:1/-1!important}.request-pro-workspace.is-single .request-pro-section-head{padding:10px 12px}.request-pro-workspace.is-single .request-pro-add span{display:none}.request-pro-hero{flex-direction:column;align-items:flex-start;padding:15px}.request-pro-hero-main{align-items:flex-start}.request-pro-hero-icon{width:48px;height:48px}.request-pro-hero-main h2{font-size:23px}.request-pro-kpis{width:100%;grid-template-columns:repeat(3,1fr)}.request-pro-actions{grid-template-columns:1fr}.request-pro-meta-grid{grid-template-columns:1fr}.request-pro-meta-grid .wide{grid-column:auto}.request-pro-section-head{align-items:center}.request-pro-section-head>div>span{display:none}.request-pro-add span{display:none}.request-pro-fields{grid-template-columns:1fr 1fr}.request-pro-fields .article,.request-pro-fields .note{grid-column:1/-1}}
 </style>
 <!-- NOVA V28 MOBILE R4: optimized stock search + premium request picking UI -->
@@ -20172,6 +20173,6 @@ try{globalThis.__NOVA_LEGACY_AVAILABLE=!!localStorage.getItem(CONFIG.legacyStora
 const switchSite=async siteId=>{await ui.selectSite(siteId);return auth.site()};
 globalThis.NOVA=Object.freeze({version:CONFIG.appVersion,schema:CONFIG.version,identityVersion:CONFIG.identityVersion,store,auth,router,domain,excel,requestDocs,ui,sounds,sites:SITES,operators:OPERATORS,roles:ROLE_DEFS,saveIdentityRegistry,capabilities:Object.freeze({operational:ALL_CAPS,master:MASTER_CAPS,administration:ADMIN_CAPS,globalAdmin:GLOBAL_ADMIN_CAPS}),identityValidation:IDENTITY_VALIDATION,switchSite});
 ui.render();</script>
-<!-- SOMA_BUILD:R31.77-20260929 -->
+<!-- SOMA_BUILD:R31.78-20260929 -->
 </body>
 </html>
