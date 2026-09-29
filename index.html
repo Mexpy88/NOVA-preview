@@ -1,13 +1,13 @@
 <!doctype html>
 <html lang="it">
 <head>
-<meta name="soma-build" content="R31.88-20260929">
+<meta name="soma-build" content="R31.89-20260929">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
 <script id="soma-build-freshness">
 (() => {
-  const CURRENT_BUILD='R31.88-20260929',CHECK_KEY='soma:last-build-refresh';
+  const CURRENT_BUILD='R31.89-20260929',CHECK_KEY='soma:last-build-refresh';
   globalThis.SOMA_BUILD=CURRENT_BUILD;
   const check=async()=>{
     try{
@@ -20099,7 +20099,11 @@ class UI{
     return NaN
   }
   voiceQuantityAt(tokens,i){
-    const one=this.voiceQuantityToken(tokens[i]);if(Number.isInteger(one)){const twoWord=this.voiceQuantityToken(String(tokens[i]||'')+String(tokens[i+1]||''));if(Number.isInteger(twoWord)&&twoWord!==one)return{qty:twoWord,used:2};return{qty:one,used:1}}
+    const one=this.voiceQuantityToken(tokens[i]),next=this.voiceQuantityToken(tokens[i+1]);
+    if(Number.isInteger(one)){
+      if(one>=20&&one%10===0&&Number.isInteger(next)&&next>0&&next<10)return{qty:one+next,used:2};
+      const twoWord=this.voiceQuantityToken(String(tokens[i]||'')+String(tokens[i+1]||''));if(Number.isInteger(twoWord)&&twoWord!==one)return{qty:twoWord,used:2};return{qty:one,used:1}
+    }
     const joined=this.voiceQuantityToken(String(tokens[i]||'')+String(tokens[i+1]||''));if(Number.isInteger(joined))return{qty:joined,used:2};return{qty:NaN,used:0}
   }
 
@@ -20148,6 +20152,13 @@ class UI{
   applyVoiceFinalText(text){
     const finalText=String(text||'').trim(),combined=[this.voiceLiveBaseText,finalText].filter(Boolean).join(' ').replace(/\s+/g,' ').trim();this.voiceLiveSessionFinal=finalText;this.parseVoiceInventoryText(combined);const ta=document.getElementById('voiceInventoryTranscript');if(ta)ta.value=combined
   }
+  voiceRecognitionScore(text){
+    const clean=this.voiceNormalizeSpoken(text),tokens=clean.split(' ').filter(Boolean),rows=this.voiceContextRows(),articles=[...new Set(rows.map(r=>r.article).filter(Boolean))],sizes=new Set(rows.map(r=>r.size).filter(Boolean));let score=0;
+    for(let i=0;i<tokens.length;i++){const hit=this.voiceArticleAt(tokens,i,articles);if(hit){score+=120+hit.article.length;i+=hit.used-1;continue}if(sizes.has(norm(tokens[i])))score+=8;if(CONFIG.states.includes(norm(tokens[i])))score+=8;if(Number.isInteger(this.voiceQuantityToken(tokens[i])))score+=2}return score
+  }
+  voiceBestRecognitionText(result){
+    let best='',bestScore=-1;for(let i=0;i<(result?.length||0);i++){const text=String(result[i]?.transcript||'').trim(),score=this.voiceRecognitionScore(text);if(score>bestScore){best=text;bestScore=score}}return best
+  }
   configureVoiceRecognition(rec){
     rec.lang='it-IT';rec.continuous=true;rec.interimResults=true;rec.maxAlternatives=3;
     try{
@@ -20160,7 +20171,7 @@ class UI{
     rec.onstart=()=>{this.voiceEngine='LIVE';this.voiceMicIssue='';this.renderView()};
     rec.onresult=e=>{
       let finalText='',interim='';
-      for(let i=0;i<e.results.length;i++){const r=e.results[i],t=String(r?.[0]?.transcript||'').trim();if(!t)continue;if(r.isFinal)finalText+=(finalText?' ':'')+t;else interim+=(interim?' ':'')+t}
+      for(let i=0;i<e.results.length;i++){const r=e.results[i],t=this.voiceBestRecognitionText(r);if(!t)continue;if(r.isFinal)finalText+=(finalText?' ':'')+t;else interim+=(interim?' ':'')+t}
       this.voiceLiveSessionFinal=finalText;
       this.voiceLiveTranscript(finalText,interim);
       if(finalText){this.applyVoiceFinalText(finalText);this.renderView()}
@@ -20604,6 +20615,6 @@ try{globalThis.__NOVA_LEGACY_AVAILABLE=!!localStorage.getItem(CONFIG.legacyStora
 const switchSite=async siteId=>{await ui.selectSite(siteId);return auth.site()};
 globalThis.NOVA=Object.freeze({version:CONFIG.appVersion,schema:CONFIG.version,identityVersion:CONFIG.identityVersion,store,auth,router,domain,excel,requestDocs,ui,sounds,sites:SITES,operators:OPERATORS,roles:ROLE_DEFS,saveIdentityRegistry,capabilities:Object.freeze({operational:ALL_CAPS,master:MASTER_CAPS,administration:ADMIN_CAPS,globalAdmin:GLOBAL_ADMIN_CAPS}),identityValidation:IDENTITY_VALIDATION,switchSite});
 ui.render();</script>
-<!-- SOMA_BUILD:R31.88-20260929 -->
+<!-- SOMA_BUILD:R31.89-20260929 -->
 </body>
 </html>
