@@ -1,13 +1,13 @@
 <!doctype html>
 <html lang="it">
 <head>
-<meta name="soma-build" content="R31.75-20260929">
+<meta name="soma-build" content="R31.76-20260929">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
 <script id="soma-build-freshness">
 (() => {
-  const CURRENT_BUILD='R31.75-20260929',CHECK_KEY='soma:last-build-refresh';
+  const CURRENT_BUILD='R31.76-20260929',CHECK_KEY='soma:last-build-refresh';
   globalThis.SOMA_BUILD=CURRENT_BUILD;
   const check=async()=>{
     try{
@@ -2925,8 +2925,53 @@ body:not(.session-active) .app-view{width:100%;max-width:none;margin:0;padding:0
 @media(min-width:1500px){.request-pro-grid{grid-template-columns:repeat(6,minmax(0,1fr))}.request-pro-grid.count-1>.request-pro-card{grid-column:span 6}.request-pro-grid.count-2>.request-pro-card{grid-column:span 3}.request-pro-grid.count-3>.request-pro-card{grid-column:span 2}.request-pro-grid.count-4>.request-pro-card{grid-column:span 3}.request-pro-grid.count-5>.request-pro-card{grid-column:span 2}.request-pro-grid.count-5>.request-pro-card:nth-last-child(-n+2){grid-column:span 3}.request-pro-grid.count-6>.request-pro-card{grid-column:span 2}.request-pro-grid.count-1>.request-pro-card .request-pro-fields{grid-template-columns:minmax(260px,1.65fr) minmax(110px,.48fr) minmax(125px,.52fr) minmax(300px,1.35fr);gap:10px;padding:14px 15px}.request-pro-grid.count-1>.request-pro-card .request-pro-fields .note{grid-column:auto}.request-pro-grid.count-1>.request-pro-card{box-shadow:0 10px 28px rgba(81,65,24,.055)}}
 .request-pro-final{display:grid;grid-template-columns:minmax(0,1.35fr) minmax(330px,.65fr);gap:12px}.request-pro-note,.request-pro-send{border:1px solid #dbe5eb;border-radius:19px;background:#fff}.request-pro-note{padding:15px 16px}.request-pro-final-title{display:flex;align-items:center;gap:10px;margin-bottom:10px}.request-pro-final-title>span{width:36px;height:36px;border-radius:11px;display:grid;place-items:center;background:#eef3f7;color:#58788f;font-size:18px}.request-pro-final-title small,.request-pro-final-title b{display:block}.request-pro-final-title small{font-size:7px;font-weight:950;color:#8395a2}.request-pro-final-title b{font-size:12px;color:#486175}.request-pro-note textarea{min-height:82px!important}
 .request-pro-send{padding:15px 16px;background:linear-gradient(145deg,#fff9e9,#fff)}.request-pro-send-head small,.request-pro-send-head b{display:block}.request-pro-send-head small{font-size:7px;font-weight:950;color:#a27620}.request-pro-send-head b{font-size:15px;color:#3c566d;margin-top:2px}.request-pro-send-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-top:11px}.request-pro-send-stats>span{padding:8px 6px;border-radius:10px;background:#fff;border:1px solid #ece4d0;text-align:center}.request-pro-send-stats small,.request-pro-send-stats b{display:block}.request-pro-send-stats small{font-size:6px;font-weight:950;color:#8a98a3}.request-pro-send-stats b{font-size:18px;color:#294a65}.request-pro-send-stats .warn{background:#fff1ef;border-color:#efcbc7}.request-pro-send p{margin:9px 0 10px;font-size:9px;color:#788994}.request-pro-submit{min-height:50px;width:100%;padding:0 14px;border-radius:13px;background:#d9980e;color:#fff;display:grid;grid-template-columns:18px 1fr 16px;align-items:center;gap:7px;font-size:10px;font-weight:950}
-@media(max-width:1199px){.request-pro-grid{grid-template-columns:1fr}.request-pro-final{grid-template-columns:1fr}}
-@media(max-width:760px){.request-pro-hero{flex-direction:column;align-items:flex-start;padding:15px}.request-pro-hero-main{align-items:flex-start}.request-pro-hero-icon{width:48px;height:48px}.request-pro-hero-main h2{font-size:23px}.request-pro-kpis{width:100%;grid-template-columns:repeat(3,1fr)}.request-pro-actions{grid-template-columns:1fr}.request-pro-meta-grid{grid-template-columns:1fr}.request-pro-meta-grid .wide{grid-column:auto}.request-pro-section-head{align-items:center}.request-pro-section-head>div>span{display:none}.request-pro-add span{display:none}.request-pro-fields{grid-template-columns:1fr 1fr}.request-pro-fields .article,.request-pro-fields .note{grid-column:1/-1}}
+
+/* ===== R31.76 · ADAPTIVE REQUEST WORKSPACE ===== */
+.request-pro-workspace{display:grid;grid-template-columns:1fr;gap:12px;align-items:start}
+.request-pro-workspace.is-single{grid-template-columns:minmax(390px,.86fr) minmax(560px,1.14fr);align-items:stretch}
+.request-pro-workspace.is-single>.request-pro-meta,.request-pro-workspace.is-single>.request-pro-articles{min-width:0;height:100%}
+.request-pro-workspace.is-single>.request-pro-meta{box-shadow:0 8px 24px rgba(43,86,117,.045)}
+.request-pro-workspace.is-single>.request-pro-articles{overflow:hidden;border:1px solid #ead8a8;border-radius:20px;background:#fff;box-shadow:0 8px 24px rgba(120,88,22,.045)}
+.request-pro-workspace.is-single .request-pro-section-head{min-height:63px;align-items:center;padding:11px 14px 11px 16px;border-bottom:1px solid #efe5ce;background:linear-gradient(90deg,#fff9eb,#fffdf7)}
+.request-pro-workspace.is-single .request-pro-section-head small{font-size:clamp(7px,.42vw,9px)}
+.request-pro-workspace.is-single .request-pro-section-head h3{font-size:clamp(16px,1.05vw,21px);line-height:1.08;margin-top:2px}
+.request-pro-workspace.is-single .request-pro-section-head>div>span{font-size:clamp(7px,.48vw,9px)}
+.request-pro-workspace.is-single .request-pro-add{min-height:38px;padding:0 12px;font-size:clamp(8px,.52vw,10px);white-space:nowrap}
+.request-pro-workspace.is-single .request-pro-grid.count-1{width:100%;margin:0;padding:12px 14px 14px;display:block}
+.request-pro-workspace.is-single .request-pro-grid.count-1>.request-pro-card{width:100%;box-shadow:none;border-color:#e8dec8!important}
+.request-pro-workspace.is-single .request-pro-card>header{min-height:44px;padding:7px 10px 7px 12px}
+.request-pro-workspace.is-single .request-pro-card-id>span{width:31px;height:31px;border-radius:9px;font-size:clamp(8px,.5vw,10px)}
+.request-pro-workspace.is-single .request-pro-card-id small{font-size:clamp(6px,.36vw,7px)}
+.request-pro-workspace.is-single .request-pro-card-id b{font-size:clamp(9px,.62vw,12px)}
+.request-pro-workspace.is-single .request-pro-fields{grid-template-columns:minmax(190px,1.6fr) minmax(88px,.5fr) minmax(102px,.58fr)!important;gap:9px!important;padding:11px 12px 12px!important}
+.request-pro-workspace.is-single .request-pro-fields .note{grid-column:1/-1!important}
+.request-pro-workspace.is-single .request-pro-fields label>span{font-size:clamp(8px,.5vw,10px);line-height:1.15}
+.request-pro-workspace.is-single .request-pro-fields label>span em{font-size:clamp(6.5px,.39vw,8px)}
+.request-pro-workspace.is-single .request-pro-fields .field{min-height:42px!important;padding:8px 11px!important;font-size:clamp(11px,.7vw,14px)!important;line-height:1.15}
+.request-pro-workspace.is-single .request-pro-fields .cartons .field{font-size:clamp(14px,.86vw,17px)!important}
+.request-pro-workspace.is-single .request-pro-card .request-create-availability{margin:0 12px 11px;min-height:38px;padding:6px 8px}
+.request-pro-workspace.is-single .request-pro-card .request-create-availability b{font-size:clamp(8px,.52vw,10px)}
+.request-pro-workspace.is-single .request-pro-card .request-create-availability span{font-size:clamp(7px,.46vw,9px)}
+.request-pro-workspace.is-single .request-pro-meta>header{min-height:63px;padding:11px 14px}
+.request-pro-workspace.is-single .request-pro-meta>header>span{width:34px;height:34px;font-size:17px}
+.request-pro-workspace.is-single .request-pro-meta>header small{font-size:clamp(7px,.42vw,8px)}
+.request-pro-workspace.is-single .request-pro-meta>header b{font-size:clamp(10px,.68vw,13px)}
+.request-pro-workspace.is-single .request-pro-meta-grid{grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:10px;padding:13px 14px 14px}
+.request-pro-workspace.is-single .request-pro-meta-grid label>span{font-size:clamp(8px,.5vw,10px);line-height:1.15}
+.request-pro-workspace.is-single .request-pro-meta-grid label>span em{font-size:clamp(6.5px,.39vw,8px)}
+.request-pro-workspace.is-single .request-pro-meta-grid .field{min-height:44px!important;padding:8px 11px!important;font-size:clamp(11px,.7vw,14px)!important;line-height:1.15}
+.request-pro-workspace.is-single .request-pro-date-field .field{padding-right:45px!important}
+.request-pro-workspace.is-single .request-pro-date-field>span{width:32px;height:32px;right:7px;font-size:17px}
+.request-pro-workspace.is-multi{grid-template-columns:1fr}
+.request-pro-workspace.is-multi .request-pro-articles{margin-top:0}
+@media(min-width:1200px) and (max-width:1450px){
+  .request-pro-workspace.is-single{grid-template-columns:minmax(350px,.82fr) minmax(520px,1.18fr)}
+  .request-pro-workspace.is-single .request-pro-fields{grid-template-columns:minmax(170px,1.45fr) minmax(82px,.48fr) minmax(96px,.54fr)!important}
+  .request-pro-workspace.is-single .request-pro-section-head>div>span{display:none}
+}
+
+@media(max-width:1199px){.request-pro-workspace.is-single{grid-template-columns:1fr}.request-pro-grid{grid-template-columns:1fr}.request-pro-final{grid-template-columns:1fr}}
+@media(max-width:760px){.request-pro-workspace.is-single .request-pro-meta-grid{grid-template-columns:1fr}.request-pro-workspace.is-single .request-pro-fields{grid-template-columns:1fr 1fr!important}.request-pro-workspace.is-single .request-pro-fields .article,.request-pro-workspace.is-single .request-pro-fields .note{grid-column:1/-1!important}.request-pro-workspace.is-single .request-pro-section-head{padding:10px 12px}.request-pro-workspace.is-single .request-pro-add span{display:none}.request-pro-hero{flex-direction:column;align-items:flex-start;padding:15px}.request-pro-hero-main{align-items:flex-start}.request-pro-hero-icon{width:48px;height:48px}.request-pro-hero-main h2{font-size:23px}.request-pro-kpis{width:100%;grid-template-columns:repeat(3,1fr)}.request-pro-actions{grid-template-columns:1fr}.request-pro-meta-grid{grid-template-columns:1fr}.request-pro-meta-grid .wide{grid-column:auto}.request-pro-section-head{align-items:center}.request-pro-section-head>div>span{display:none}.request-pro-add span{display:none}.request-pro-fields{grid-template-columns:1fr 1fr}.request-pro-fields .article,.request-pro-fields .note{grid-column:1/-1}}
 </style>
 <!-- NOVA V28 MOBILE R4: optimized stock search + premium request picking UI -->
 
@@ -19863,6 +19908,7 @@ class UI{
 
       ${this.requestFiles.length?`<section class="request-create-attachments"><header><div><small>ALLEGATI CARICATI</small><b>${this.requestFiles.length} file</b></div><span>Controlla prima di analizzare</span></header><div class="request-create-file-list">${this.requestFiles.map((f,i)=>`<article class="request-create-file-card"><span class="request-create-file-icon">${phRegular((f.type||'').includes('pdf')?'file-pdf':'file-image')}</span><div class="request-create-file-copy"><small>FILE ALLEGATO</small><b title="${esc(f.name)}">${esc(f.name)}</b><span>${f.size?Math.max(1,Math.round(f.size/1024))+' KB':''}</span></div><button type="button" class="request-create-file-remove" data-action="request-file-remove" data-file-index="${i}" aria-label="Rimuovi ${esc(f.name)}" title="Rimuovi allegato">${phRegular('x')}</button></article>`).join('')}</div></section>`:''}
 
+      <section class="request-pro-workspace ${d.lines.length===1?'is-single':'is-multi'}">
       <section class="request-pro-meta">
         <header><span>${phRegular('map-pin-line')}</span><div><small>DETTAGLI RICHIESTA</small><b>Destinazione e riferimento</b></div></header>
         <div class="request-pro-meta-grid">
@@ -19873,7 +19919,7 @@ class UI{
       </section>
 
       <section class="request-pro-articles">
-        <header class="request-pro-section-head"><div><small>ARTICOLI RICHIESTI</small><h3>${d.lines.length} ${d.lines.length===1?'riga':'righe'}</h3><span>La disponibilità non blocca l’invio</span></div><button class="request-pro-add" data-action="request-line-add">${phRegular('plus')}<span>AGGIUNGI ARTICOLO</span></button></header>
+        <header class="request-pro-section-head"><div><small>ARTICOLI RICHIESTI</small><h3>${d.lines.length===1?'Articolo richiesto':d.lines.length+' articoli'}</h3><span>La disponibilità non blocca l’invio</span></div><button class="request-pro-add" data-action="request-line-add">${phRegular('plus')}<span>AGGIUNGI ARTICOLO</span></button></header>
         <div class="request-pro-grid ${countClass}">
           ${d.lines.map((l,i)=>`<article class="request-create-line request-pro-card">
             <header><div class="request-pro-card-id"><span>${String(i+1).padStart(2,'0')}</span><div><small>RIGA</small><b>Articolo richiesto</b></div></div>${d.lines.length>1?`<button class="request-pro-remove" data-action="request-line-remove" data-line="${l.id}">${phRegular('trash')}<span>Rimuovi</span></button>`:''}</header>
@@ -19887,6 +19933,7 @@ class UI{
             <div data-request-availability>${this.requestAvailabilityHtml(l)}</div>
           </article>`).join('')}
         </div>
+      </section>
       </section>
 
       <section class="request-pro-final">
@@ -20081,6 +20128,6 @@ try{globalThis.__NOVA_LEGACY_AVAILABLE=!!localStorage.getItem(CONFIG.legacyStora
 const switchSite=async siteId=>{await ui.selectSite(siteId);return auth.site()};
 globalThis.NOVA=Object.freeze({version:CONFIG.appVersion,schema:CONFIG.version,identityVersion:CONFIG.identityVersion,store,auth,router,domain,excel,requestDocs,ui,sounds,sites:SITES,operators:OPERATORS,roles:ROLE_DEFS,saveIdentityRegistry,capabilities:Object.freeze({operational:ALL_CAPS,master:MASTER_CAPS,administration:ADMIN_CAPS,globalAdmin:GLOBAL_ADMIN_CAPS}),identityValidation:IDENTITY_VALIDATION,switchSite});
 ui.render();</script>
-<!-- SOMA_BUILD:R31.75-20260929 -->
+<!-- SOMA_BUILD:R31.76-20260929 -->
 </body>
 </html>
