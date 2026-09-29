@@ -1,13 +1,13 @@
 <!doctype html>
 <html lang="it">
 <head>
-<meta name="soma-build" content="R31.76-20260929">
+<meta name="soma-build" content="R31.77-20260929">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
 <script id="soma-build-freshness">
 (() => {
-  const CURRENT_BUILD='R31.76-20260929',CHECK_KEY='soma:last-build-refresh';
+  const CURRENT_BUILD='R31.77-20260929',CHECK_KEY='soma:last-build-refresh';
   globalThis.SOMA_BUILD=CURRENT_BUILD;
   const check=async()=>{
     try{
@@ -2962,15 +2962,49 @@ body:not(.session-active) .app-view{width:100%;max-width:none;margin:0;padding:0
 .request-pro-workspace.is-single .request-pro-meta-grid .field{min-height:44px!important;padding:8px 11px!important;font-size:clamp(11px,.7vw,14px)!important;line-height:1.15}
 .request-pro-workspace.is-single .request-pro-date-field .field{padding-right:45px!important}
 .request-pro-workspace.is-single .request-pro-date-field>span{width:32px;height:32px;right:7px;font-size:17px}
-.request-pro-workspace.is-multi{grid-template-columns:1fr}
-.request-pro-workspace.is-multi .request-pro-articles{margin-top:0}
+.request-pro-workspace.is-multi{grid-template-columns:minmax(320px,.42fr) minmax(0,1.58fr);gap:14px;align-items:start}
+.request-pro-workspace.is-multi>.request-pro-meta{min-width:0;position:sticky;top:96px;box-shadow:0 8px 24px rgba(43,86,117,.045);container-type:inline-size}
+.request-pro-workspace.is-multi .request-pro-meta-grid{grid-template-columns:1fr;gap:11px;padding:14px}
+.request-pro-workspace.is-multi .request-pro-meta-grid .wide{grid-column:auto}
+.request-pro-workspace.is-multi .request-pro-meta>header{padding:12px 14px}
+.request-pro-workspace.is-multi .request-pro-meta>header small{font-size:clamp(8px,2.05cqi,10px)}
+.request-pro-workspace.is-multi .request-pro-meta>header b{font-size:clamp(12px,3.05cqi,15px)}
+.request-pro-workspace.is-multi .request-pro-meta-grid label>span{font-size:clamp(10px,2.45cqi,12px);line-height:1.15}
+.request-pro-workspace.is-multi .request-pro-meta-grid label>span em{font-size:clamp(7.5px,1.85cqi,9px)}
+.request-pro-workspace.is-multi .request-pro-meta-grid .field{min-height:48px!important;padding:9px 12px!important;font-size:clamp(13px,3.05cqi,16px)!important;line-height:1.15}
+.request-pro-workspace.is-multi .request-pro-date-field .field{padding-right:47px!important}
+.request-pro-workspace.is-multi .request-pro-articles{min-width:0;margin-top:0}
+.request-pro-workspace.is-multi .request-pro-section-head{min-height:62px;align-items:center;padding:4px 2px 8px}
+.request-pro-workspace.is-multi .request-pro-section-head small{font-size:10px}
+.request-pro-workspace.is-multi .request-pro-section-head h3{font-size:clamp(22px,1.35vw,28px);line-height:1.05}
+.request-pro-workspace.is-multi .request-pro-section-head>div>span{font-size:11px}
+.request-pro-workspace.is-multi .request-pro-add{min-height:43px;padding:0 15px;font-size:11px}
+.request-pro-workspace.is-multi .request-pro-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:12px}
+.request-pro-workspace.is-multi .request-pro-grid>.request-pro-card{grid-column:auto!important;container-type:inline-size}
+.request-pro-workspace.is-multi .request-pro-card>header{min-height:52px;padding:9px 11px 9px 13px}
+.request-pro-workspace.is-multi .request-pro-card-id>span{width:36px;height:36px;font-size:clamp(10px,2.4cqi,12px)}
+.request-pro-workspace.is-multi .request-pro-card-id small{font-size:clamp(7px,1.7cqi,8.5px)}
+.request-pro-workspace.is-multi .request-pro-card-id b{font-size:clamp(11px,2.65cqi,14px);line-height:1.12}
+.request-pro-workspace.is-multi .request-pro-remove{min-height:34px;padding:0 10px;font-size:clamp(9px,2.05cqi,11px)}
+.request-pro-workspace.is-multi .request-pro-fields{grid-template-columns:minmax(0,1.55fr) minmax(82px,.52fr) minmax(92px,.58fr);gap:9px;padding:13px 13px 14px}
+.request-pro-workspace.is-multi .request-pro-fields .note{grid-column:1/-1}
+.request-pro-workspace.is-multi .request-pro-fields label>span{font-size:clamp(10px,2.35cqi,12px);line-height:1.15;margin-bottom:7px}
+.request-pro-workspace.is-multi .request-pro-fields label>span em{font-size:clamp(7.5px,1.75cqi,9px)}
+.request-pro-workspace.is-multi .request-pro-fields .field{min-height:46px!important;padding:9px 12px!important;font-size:clamp(13px,3.15cqi,16px)!important;line-height:1.15}
+.request-pro-workspace.is-multi .request-pro-fields .cartons .field{font-size:clamp(16px,3.6cqi,19px)!important}
+.request-pro-workspace.is-multi .request-pro-card .request-create-availability{margin:0 13px 12px;min-height:41px;padding:7px 9px}
+.request-pro-workspace.is-multi .request-pro-card .request-create-availability b{font-size:clamp(10px,2.35cqi,12px)}
+.request-pro-workspace.is-multi .request-pro-card .request-create-availability span{font-size:clamp(9px,2cqi,10.5px)}
+.request-pro .field.request-fit-long{font-size:12px!important}
+.request-pro .field.request-fit-xlong{font-size:11px!important}
+.request-pro .field.request-fit-xxlong{font-size:10px!important}
 @media(min-width:1200px) and (max-width:1450px){
   .request-pro-workspace.is-single{grid-template-columns:minmax(350px,.82fr) minmax(520px,1.18fr)}
   .request-pro-workspace.is-single .request-pro-fields{grid-template-columns:minmax(170px,1.45fr) minmax(82px,.48fr) minmax(96px,.54fr)!important}
   .request-pro-workspace.is-single .request-pro-section-head>div>span{display:none}
 }
 
-@media(max-width:1199px){.request-pro-workspace.is-single{grid-template-columns:1fr}.request-pro-grid{grid-template-columns:1fr}.request-pro-final{grid-template-columns:1fr}}
+@media(max-width:1199px){.request-pro-workspace.is-single,.request-pro-workspace.is-multi{grid-template-columns:1fr}.request-pro-workspace.is-multi>.request-pro-meta{position:relative;top:auto}.request-pro-workspace.is-multi .request-pro-meta-grid{grid-template-columns:1fr 1fr}.request-pro-workspace.is-multi .request-pro-meta-grid .wide{grid-column:1/-1}.request-pro-grid{grid-template-columns:1fr}.request-pro-workspace.is-multi .request-pro-grid{grid-template-columns:1fr!important}.request-pro-final{grid-template-columns:1fr}}
 @media(max-width:760px){.request-pro-workspace.is-single .request-pro-meta-grid{grid-template-columns:1fr}.request-pro-workspace.is-single .request-pro-fields{grid-template-columns:1fr 1fr!important}.request-pro-workspace.is-single .request-pro-fields .article,.request-pro-workspace.is-single .request-pro-fields .note{grid-column:1/-1!important}.request-pro-workspace.is-single .request-pro-section-head{padding:10px 12px}.request-pro-workspace.is-single .request-pro-add span{display:none}.request-pro-hero{flex-direction:column;align-items:flex-start;padding:15px}.request-pro-hero-main{align-items:flex-start}.request-pro-hero-icon{width:48px;height:48px}.request-pro-hero-main h2{font-size:23px}.request-pro-kpis{width:100%;grid-template-columns:repeat(3,1fr)}.request-pro-actions{grid-template-columns:1fr}.request-pro-meta-grid{grid-template-columns:1fr}.request-pro-meta-grid .wide{grid-column:auto}.request-pro-section-head{align-items:center}.request-pro-section-head>div>span{display:none}.request-pro-add span{display:none}.request-pro-fields{grid-template-columns:1fr 1fr}.request-pro-fields .article,.request-pro-fields .note{grid-column:1/-1}}
 </style>
 <!-- NOVA V28 MOBILE R4: optimized stock search + premium request picking UI -->
@@ -19095,7 +19129,7 @@ class UI{
   }
   renderView(){const host=document.getElementById('appView');if(!host)return;if(!this.auth.user){host.innerHTML=this.landing();return}const {name,params}=this.router.route;const renderers={home:()=>this.home(),master:()=>this.master(),receiving:()=>this.receivingHome(),'receipt-new':()=>this.receiptNew(),receipts:()=>this.receipts(params.mode),'receipt-detail':()=>this.receiptDetail(params.id),putaway:()=>this.putAway(params.receipt,params.line),stock:()=>this.stock(),rectify:()=>this.rectify(params.key),count:()=>this.count(),issue:()=>this.issue(),transfer:()=>this.transfer(),'request-new':()=>this.requestNew(),'requests-progress':()=>this.requestList('PROGRESS'),'requests-process':()=>this.requestList('PROCESS'),'request-detail':()=>this.requestDetail(params.id),'request-pick':()=>this.requestPick(params.id),registry:()=>this.registryHome(),'registry-list':()=>this.registryList(),admin:()=>this.adminHome(),'admin-operators':()=>this.adminOperators(),'admin-operator':()=>this.adminOperatorForm(params.id||''),'admin-sites':()=>this.adminSites(),'admin-site':()=>this.adminSiteForm(params.id||''),'admin-roles':()=>this.adminRoles()};host.innerHTML=(renderers[name]||renderers.home)()+this.mobileDock(name);this.afterRender(name)}
   mobileDock(name='home'){const items=[['home','house','Home',name==='home'],...(this.auth.can('STOCK_VIEW')?[['stock','magnifying-glass','Cerca',['stock','rectify','count'].includes(name)]]:[]),...(this.auth.can('REQUEST_VIEW')||this.auth.can('REQUEST_CREATE')?[['requests-progress','clipboard-text','Richieste',String(name).startsWith('request')||String(name).startsWith('requests')]]:[]),...(this.auth.can('MOVE')?[['issue','arrow-down','Scarica',['issue','transfer'].includes(name)]]:[]),['notifications','bell','Avvisi',false]];return `<nav class="mobile-dock">${items.map(([a,i,l,on])=>`<button data-action="${a}" class="${on?'active':''}">${phDashboardIcon(i)}<span>${l}</span></button>`).join('')}</nav>`}
-  afterRender(name){if(name==='master'){this.renderMasterViewerBody();this.renderMasterRequestDock()}if(name==='stock'){const pending=this.globalStockQuery;if(pending){const q=document.getElementById('stockQuery');if(q)q.value=pending;this.globalStockQuery=''}this.renderStockResults()}if(name==='rectify')this.renderRectResults();if(name==='registry-list')this.renderRegistryResults();if(name==='request-pick')this.renderRequestPickSources();if(name==='count'&&this.countDraft)this.renderCountBody();if(name==='issue'){this.renderIssueSources();this.updateIssueQtyState()}}
+  afterRender(name){if(name==='master'){this.renderMasterViewerBody();this.renderMasterRequestDock()}if(name==='stock'){const pending=this.globalStockQuery;if(pending){const q=document.getElementById('stockQuery');if(q)q.value=pending;this.globalStockQuery=''}this.renderStockResults()}if(name==='rectify')this.renderRectResults();if(name==='registry-list')this.renderRegistryResults();if(name==='request-new')this.fitAllRequestFields();if(name==='request-pick')this.renderRequestPickSources();if(name==='count'&&this.countDraft)this.renderCountBody();if(name==='issue'){this.renderIssueSources();this.updateIssueQtyState()}}
   landing(){return `<section class="landing landing-shell"><div class="landing-watermark" aria-hidden="true">${phIcon('warehouse')}</div><div class="landing-stage"><div class="landing-copy"><img class="landing-brand" src="${LOGO}" alt="Servizi Ospedalieri"><div class="landing-kicker">SOMA HUB</div><h1>Gestione<br>Magazzino</h1><p class="landing-lead">Un unico ambiente per accedere in modo semplice e sicuro alle attività del tuo magazzino.</p></div><aside class="landing-access-card"><div class="landing-access-head"><span class="landing-access-icon">${phIcon('shield-check')}</span><div class="landing-access-titleblock"><div class="landing-access-eyebrow">ACCESSO OPERATORE</div><h2>Accedi al magazzino</h2></div></div><p>Inserisci il tuo PIN personale per entrare nell'area operativa.</p><button class="landing-login" data-action="login"><i class="ph ph-sign-in landing-login-icon" aria-hidden="true"></i><span>ACCEDI</span></button><small>${phIcon('lock-key')} Accesso riservato agli operatori autorizzati</small></aside></div></section>`}
   sectionTitle(eyebrow,title,sub=''){return `<div class="page-title"><div class="eyebrow">${esc(eyebrow)}</div><h1>${esc(title)}</h1></div>`}
   actionRow(action,label,ico,sub=''){const masterDependent=['receipt-new','stock','rectify-new','count','issue','transfer','request-new'].includes(action),locked=masterDependent&&!this.masterReady();return `<button class="module-action ${locked?'master-dependent-locked':''}" data-action="${action}" ${locked?'data-master-locked="true"':''}>${phDashboardActionIcon(action,ico)}<b>${label}</b>${locked?`<span class="module-master-lock">${phRegular('lock-key')} MASTER</span>`:''}</button>`}
@@ -19887,6 +19921,16 @@ class UI{
     const line=this.requestDraft?.lines?.find(x=>x.id===id),card=el.closest('.request-create-line'),host=card?.querySelector('[data-request-availability]');
     if(host&&line)host.innerHTML=this.requestAvailabilityHtml(line)
   }
+  fitRequestField(el){
+    const bind=el?.dataset?.bind||'';if(!bind.startsWith('request:')||!el.classList?.contains('field'))return;
+    const key=bind.split(':').pop(),fitKeys=['article','size','note','reference','destination'];if(!fitKeys.includes(key))return;
+    const len=String(el.value||el.getAttribute?.('placeholder')||'').trim().length;
+    el.classList.remove('request-fit-long','request-fit-xlong','request-fit-xxlong');
+    if(len>52)el.classList.add('request-fit-xxlong');
+    else if(len>36)el.classList.add('request-fit-xlong');
+    else if(len>24)el.classList.add('request-fit-long');
+  }
+  fitAllRequestFields(){document.querySelectorAll('.request-pro .field[data-bind^="request:"]').forEach(el=>this.fitRequestField(el))}
   openRequestNew(){if(!this.require('REQUEST_CREATE'))return;if(!this.masterReady()){this.toast('Per creare una richiesta è necessario il Master Excel.','error');this.router.go('request-new');return}this.requestFiles=[];this.requestDraft={destination:'LINA',reference:'',requestedAt:localDateTimeInput(),note:'',lines:[this.newRequestLine()]};this.router.go('request-new')}
   requestNew(){
     if(!this.require('REQUEST_CREATE'))return'';
@@ -20044,7 +20088,7 @@ class UI{
   logout(){this.persistCountSession();document.getElementById('requestDeleteDialog')?.close();document.getElementById('siteDialog')?.close();this.pendingRequestDeleteId='';this.siteChoiceRequired=false;this.siteChoiceSource='';this.auth.logout();this.store.useSite(CONFIG.defaultSiteId,{silent:true});this.receiptDraft=null;this.requestDraft=null;this.rectDraft=null;this.masterRequestMode=false;this.masterRequestItems=[];this.masterRequestOpenKey='';this.countDraft=null;this.ddtFiles=[];this.requestFiles=[];this.router.home();this.render()}
   openNotifications(){const d=document.getElementById('notificationDialog'),rows=this.domain.notifications.visibleTo(this.auth.user);d.querySelector('.dialog-body').innerHTML=rows.length?rows.map(n=>`<button class="notif-row ${n.readAt?'read':''}" data-action="notif-read" data-id="${n.id}" data-entity="${n.entityType}" data-entity-id="${n.entityId}"><b>${esc(n.title)}</b><span>${esc(n.body)}</span><small>${fmtDateTime(n.createdAt)}</small></button>`).join(''):'<div class="empty">Nessuna notifica.</div>';d.showModal()}
 
-  input(el){if(el.dataset.masterRequestQty)this.updateMasterRequestQty(el,false);if(el.id==='loginPin'){const next=String(el.value||'').replace(/\D/g,'').slice(0,4);if(el.value!==next)el.value=next;if(next.length>this.lastPinLength)this.sounds?.pinKey?.();this.lastPinLength=next.length}if(el.id==='requestDeletePin'){const next=String(el.value||'').replace(/\D/g,'').slice(0,CONFIG.pinLength);if(el.value!==next)el.value=next;if(next.length>this.lastDeletePinLength)this.sounds?.pinKey?.();this.lastDeletePinLength=next.length;document.getElementById('requestDeleteError')?.classList.add('hidden')}if(el.dataset.countExtra)this.updateCountExtra(el.dataset.dom,el.dataset.countExtra,el.value);if(el.id?.startsWith('count-value-'))this.updateCountValue(el.id.replace('count-value-',''),el.value);if(el.id==='rectCounted')this.updateRectCount(el.value);const bind=el.dataset.bind;if(bind){this.bindDraft(bind,el.value);if(bind.startsWith('receipt:')||bind.startsWith('receiptgroup:'))this.updateReceiptNewSummary?.();if(bind.startsWith('request:'))this.updateRequestLineAvailability?.(el)}if(['stockQuery','stockLocation','stockPallet'].includes(el.id))this.scheduleStockRender();if(el.id==='putLocation')this.renderPutAwaySuggestions('location');if(el.id==='putPallet')this.renderPutAwaySuggestions('pallet');if(el.id==='issueSourceSearch')this.renderIssueSources();if(el.id==='issueQty')this.updateIssueQtyState();if(el.id==='globalSearchInput'){const upper=String(el.value||'').toUpperCase();if(el.value!==upper){const pos=el.selectionStart;el.value=upper;try{el.setSelectionRange(pos,pos)}catch{}}this.renderGlobalSearch(el.value);}if(['rectSearch','rectFilterSize','rectFilterLocation','rectFilterPallet'].includes(el.id))this.renderRectResults();if(el.id==='registryQuery')this.renderRegistryResults();if(el.id==='masterQuery'){this.masterView.query=el.value;this.masterView.page=1;this.scheduleMasterRender()}if(el.id==='masterFilterArticle'){this.masterView.article=el.value;this.masterView.page=1;this.scheduleMasterRender()}if(el.id==='masterFilterLocation'){this.masterView.location=el.value;this.masterView.page=1;this.scheduleMasterRender()}if(el.id==='masterFilterPallet'){this.masterView.pallet=el.value;this.masterView.page=1;this.scheduleMasterRender()}if(el.id==='loginPin'){el.value=el.value.replace(/\D/g,'').slice(0,4);document.getElementById('loginError')?.classList.add('hidden')}}
+  input(el){if(el.dataset.masterRequestQty)this.updateMasterRequestQty(el,false);if(el.id==='loginPin'){const next=String(el.value||'').replace(/\D/g,'').slice(0,4);if(el.value!==next)el.value=next;if(next.length>this.lastPinLength)this.sounds?.pinKey?.();this.lastPinLength=next.length}if(el.id==='requestDeletePin'){const next=String(el.value||'').replace(/\D/g,'').slice(0,CONFIG.pinLength);if(el.value!==next)el.value=next;if(next.length>this.lastDeletePinLength)this.sounds?.pinKey?.();this.lastDeletePinLength=next.length;document.getElementById('requestDeleteError')?.classList.add('hidden')}if(el.dataset.countExtra)this.updateCountExtra(el.dataset.dom,el.dataset.countExtra,el.value);if(el.id?.startsWith('count-value-'))this.updateCountValue(el.id.replace('count-value-',''),el.value);if(el.id==='rectCounted')this.updateRectCount(el.value);const bind=el.dataset.bind;if(bind){this.bindDraft(bind,el.value);if(bind.startsWith('receipt:')||bind.startsWith('receiptgroup:'))this.updateReceiptNewSummary?.();if(bind.startsWith('request:')){this.updateRequestLineAvailability?.(el);this.fitRequestField?.(el)}}if(['stockQuery','stockLocation','stockPallet'].includes(el.id))this.scheduleStockRender();if(el.id==='putLocation')this.renderPutAwaySuggestions('location');if(el.id==='putPallet')this.renderPutAwaySuggestions('pallet');if(el.id==='issueSourceSearch')this.renderIssueSources();if(el.id==='issueQty')this.updateIssueQtyState();if(el.id==='globalSearchInput'){const upper=String(el.value||'').toUpperCase();if(el.value!==upper){const pos=el.selectionStart;el.value=upper;try{el.setSelectionRange(pos,pos)}catch{}}this.renderGlobalSearch(el.value);}if(['rectSearch','rectFilterSize','rectFilterLocation','rectFilterPallet'].includes(el.id))this.renderRectResults();if(el.id==='registryQuery')this.renderRegistryResults();if(el.id==='masterQuery'){this.masterView.query=el.value;this.masterView.page=1;this.scheduleMasterRender()}if(el.id==='masterFilterArticle'){this.masterView.article=el.value;this.masterView.page=1;this.scheduleMasterRender()}if(el.id==='masterFilterLocation'){this.masterView.location=el.value;this.masterView.page=1;this.scheduleMasterRender()}if(el.id==='masterFilterPallet'){this.masterView.pallet=el.value;this.masterView.page=1;this.scheduleMasterRender()}if(el.id==='loginPin'){el.value=el.value.replace(/\D/g,'').slice(0,4);document.getElementById('loginError')?.classList.add('hidden')}}
   change(el){if(el.dataset.masterRequestQty)this.updateMasterRequestQty(el,true);if(el.dataset.countExtra)this.updateCountExtra(el.dataset.dom,el.dataset.countExtra,el.value);if(el.id==='rectFilterState')this.renderRectResults();if(el.id==='rectReason'&&this.rectDraft)this.rectDraft.reason=norm(el.value);const bind=el.dataset.bind;if(bind){this.bindDraft(bind,el.value);if(bind.includes(':article')||bind.includes(':size')||bind.includes(':state')||bind.startsWith('receiptgroup:'))this.renderView()}if(el.id==='stockState')this.renderStockResults();if(el.id==='issueDestination')this.updateIssueQtyState();if(['registryFrom','registryTo','registryType','registryState'].includes(el.id))this.renderRegistryResults();if(el.id==='masterFilterSize'){this.masterView.size=el.value;this.masterView.page=1;this.renderMasterViewerBody()}if(el.id==='masterSort'){this.masterView.sort=el.value;this.masterView.page=1;this.renderMasterViewerBody()}if(el.id==='requestDocOrientation')this.requestDocOrientation=['portrait','landscape'].includes(el.value)?el.value:'auto';if(el.id?.startsWith('activityDate-')){this.activityDate=el.value||localDateInput();this.renderView()}}
   bindDraft(bind,value){
     const [kind,id,key]=bind.split(':');
@@ -20128,6 +20172,6 @@ try{globalThis.__NOVA_LEGACY_AVAILABLE=!!localStorage.getItem(CONFIG.legacyStora
 const switchSite=async siteId=>{await ui.selectSite(siteId);return auth.site()};
 globalThis.NOVA=Object.freeze({version:CONFIG.appVersion,schema:CONFIG.version,identityVersion:CONFIG.identityVersion,store,auth,router,domain,excel,requestDocs,ui,sounds,sites:SITES,operators:OPERATORS,roles:ROLE_DEFS,saveIdentityRegistry,capabilities:Object.freeze({operational:ALL_CAPS,master:MASTER_CAPS,administration:ADMIN_CAPS,globalAdmin:GLOBAL_ADMIN_CAPS}),identityValidation:IDENTITY_VALIDATION,switchSite});
 ui.render();</script>
-<!-- SOMA_BUILD:R31.76-20260929 -->
+<!-- SOMA_BUILD:R31.77-20260929 -->
 </body>
 </html>
