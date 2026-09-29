@@ -1,13 +1,13 @@
 <!doctype html>
 <html lang="it">
 <head>
-<meta name="soma-build" content="R31.86-20260929">
+<meta name="soma-build" content="R31.87-20260929">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
 <script id="soma-build-freshness">
 (() => {
-  const CURRENT_BUILD='R31.86-20260929',CHECK_KEY='soma:last-build-refresh';
+  const CURRENT_BUILD='R31.87-20260929',CHECK_KEY='soma:last-build-refresh';
   globalThis.SOMA_BUILD=CURRENT_BUILD;
   const check=async()=>{
     try{
@@ -20085,6 +20085,14 @@ class UI{
     return [...articles.map(phrase=>({phrase,boost:10})),...sizes.map(phrase=>({phrase,boost:6})),...['NUOVO','USATO','SCARICATO','DISMESSO','NON CHIARO','TAGLIA','ARTICOLO'].map(phrase=>({phrase,boost:5}))]
   }
 
+  voiceQuantityToken(value){
+    const raw=String(value||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toUpperCase().replace(/[^A-Z0-9]/g,'');if(/^\d+$/.test(raw))return Number(raw);
+    const special={ZERO:0,UNO:1,UNA:1,DUE:2,TRE:3,QUATTRO:4,CINQUE:5,SEI:6,SETTE:7,OTTO:8,NOVE:9,DIECI:10,UNDICI:11,DODICI:12,TREDICI:13,QUATTORDICI:14,QUINDICI:15,SEDICI:16,DICIASSETTE:17,DICIOTTO:18,DICIANNOVE:19,CENTO:100};
+    if(Object.hasOwn(special,raw))return special[raw];
+    const tens=[['VENT',20],['TRENT',30],['QUARANT',40],['CINQUANT',50],['SESSANT',60],['SETTANT',70],['OTTANT',80],['NOVANT',90]],units={UNO:1,DUE:2,TRE:3,QUATTRO:4,CINQUE:5,SEI:6,SETTE:7,OTTO:8,NOVE:9};
+    for(const [stem,base] of tens){if(raw===stem+'I'||raw===stem+'A')return base;for(const [u,n] of Object.entries(units)){const forms=[stem+(u==='UNO'||u==='OTTO'?'':base===20?'I':'A')+u,stem+u];if(forms.includes(raw))return base+n}}
+    return NaN
+  }
   parseVoiceInventoryText(text){
     const clean=this.voiceNormalizeSpoken(text),tokens=clean.split(' ').filter(Boolean),master=normalizeMasterRows(this.store.db.master.rows||[]),articles=[...new Set(master.map(x=>x.article).filter(Boolean))],rows=[];let current='';
     const stateAt=i=>{const one=norm(tokens[i]||''),two=norm((tokens[i]||'')+' '+(tokens[i+1]||''));if(CONFIG.states.includes(two))return{state:two,used:2};if(CONFIG.states.includes(one))return{state:one,used:1};return{state:'',used:0}};
@@ -20092,7 +20100,8 @@ class UI{
     for(let i=0;i<tokens.length;){
       const art=this.voiceArticleAt(tokens,i,articles);if(art){current=art.article;i+=art.used;continue}
       if(!current){i++;continue}
-      const size=norm(tokens[i]||''),qtyToken=(tokens[i+1]||'').replace(/[^0-9]/g,''),qty=qtyToken===''?NaN:Number(qtyToken),knownArticle=articles.includes(current),validSizes=[...new Set(master.filter(x=>x.article===current).map(x=>x.size).filter(Boolean))];
+      if(tokens[i]==='ARTICOLO'||tokens[i]==='TAGLIA'){i++;continue}
+      const size=norm(tokens[i]||''),qty=this.voiceQuantityToken(tokens[i+1]),knownArticle=articles.includes(current),validSizes=[...new Set(master.filter(x=>x.article===current).map(x=>x.size).filter(Boolean))];
       if(!Number.isInteger(qty)){if(knownArticle&&validSizes.includes(size))rows.push({article:current,size,counted:'',state:'',source:'VOICE'});i++;continue}
       if(!size||(!validSizes.includes(size)&&!plausibleSize(size))){i++;continue}
       const stateInfo=stateAt(i+2);rows.push({article:current,size,counted:qty,state:stateInfo.state,source:'VOICE'});i+=2+stateInfo.used
@@ -20584,6 +20593,6 @@ try{globalThis.__NOVA_LEGACY_AVAILABLE=!!localStorage.getItem(CONFIG.legacyStora
 const switchSite=async siteId=>{await ui.selectSite(siteId);return auth.site()};
 globalThis.NOVA=Object.freeze({version:CONFIG.appVersion,schema:CONFIG.version,identityVersion:CONFIG.identityVersion,store,auth,router,domain,excel,requestDocs,ui,sounds,sites:SITES,operators:OPERATORS,roles:ROLE_DEFS,saveIdentityRegistry,capabilities:Object.freeze({operational:ALL_CAPS,master:MASTER_CAPS,administration:ADMIN_CAPS,globalAdmin:GLOBAL_ADMIN_CAPS}),identityValidation:IDENTITY_VALIDATION,switchSite});
 ui.render();</script>
-<!-- SOMA_BUILD:R31.86-20260929 -->
+<!-- SOMA_BUILD:R31.87-20260929 -->
 </body>
 </html>
