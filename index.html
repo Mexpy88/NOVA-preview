@@ -1,13 +1,13 @@
 <!doctype html>
 <html lang="it">
 <head>
-<meta name="soma-build" content="R31.90-20260929">
+<meta name="soma-build" content="R31.91-20260929">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
 <script id="soma-build-freshness">
 (() => {
-  const CURRENT_BUILD='R31.90-20260929',CHECK_KEY='soma:last-build-refresh';
+  const CURRENT_BUILD='R31.91-20260929',CHECK_KEY='soma:last-build-refresh';
   globalThis.SOMA_BUILD=CURRENT_BUILD;
   const check=async()=>{
     try{
@@ -3106,6 +3106,8 @@ body:not(.session-active) .app-view{width:100%;max-width:none;margin:0;padding:0
   .voice-count-cta{grid-template-columns:43px 1fr 34px!important;gap:10px!important}
   .voice-count-icon{width:42px;height:42px;border-radius:14px;font-size:23px}
 }
+/* ===== R31.91 · DEEPGRAM NOVA-3 PRIMARY ENGINE ===== */
+.voice-engine-badge{letter-spacing:.06em}
 /* ===== R31.90 · AZURE SPEECH PRIMARY ENGINE ===== */
 .voice-engine-badge{font-size:8px!important;font-weight:950!important}
 .voice-engine-badge:has(*){white-space:nowrap}
@@ -19318,7 +19320,7 @@ class RequestDocumentService{
 class UI{
   constructor({store,auth,router,domain,excel,requestDocs,sounds}){
     Object.assign(this,{store,auth,router,domain,excel,requestDocs,sounds});
-    this.activityDate=localDateInput();this.receiptDraft=null;this.requestDraft=null;this.rectDraft=null;this.rectFiltersOpen=false;this.countDraft=this.loadCountSession();this.voiceInventoryOpen=false;this.voiceInventoryDraft=this.loadVoiceInventoryDraft();this.voiceRecorder=null;this.voiceRecorderStream=null;this.voiceChunks=[];this.voiceTranscriber=null;this.voiceBusy=false;this.voiceEngine=(globalThis.SpeechRecognition||globalThis.webkitSpeechRecognition)?'LIVE':'LOCAL';this.voiceWakeLock=null;this.voiceMicIssue='';this.voiceRecognition=null;this.voiceListeningWanted=false;this.voicePaused=false;this.voiceLiveBaseText='';this.voiceLiveSessionFinal='';this.voiceRestartTimer=null;this.voiceAzureRecognizer=null;this.voiceAzureTokenTimer=null;this.voiceAzureTokenCache=null;this.voiceAzureStarting=false;this.registryTab='MOVIMENTI';this.ddtFiles=[];this.requestFiles=[];this.analysisKind='';this.stockSearchTimer=null;this.masterSearchTimer=null;this.masterView={query:'',article:'',size:'',location:'',pallet:'',sort:'article',page:1,pageSize:100};this.masterEditKey='';this.masterRequestMode=false;this.masterRequestItems=[];this.masterRequestOpenKey='';this.adminGeneratedPin='';this.siteChoiceRequired=false;this.siteChoiceSource='';this.lastPinLength=0;this.lastDeletePinLength=0;this.pendingRequestDeleteId='';this.requestDocOrientation='auto';this.globalSearchIndex=0;this.globalStockQuery='';
+    this.activityDate=localDateInput();this.receiptDraft=null;this.requestDraft=null;this.rectDraft=null;this.rectFiltersOpen=false;this.countDraft=this.loadCountSession();this.voiceInventoryOpen=false;this.voiceInventoryDraft=this.loadVoiceInventoryDraft();this.voiceRecorder=null;this.voiceRecorderStream=null;this.voiceChunks=[];this.voiceTranscriber=null;this.voiceBusy=false;this.voiceEngine=(globalThis.SpeechRecognition||globalThis.webkitSpeechRecognition)?'LIVE':'LOCAL';this.voiceWakeLock=null;this.voiceMicIssue='';this.voiceRecognition=null;this.voiceListeningWanted=false;this.voicePaused=false;this.voiceLiveBaseText='';this.voiceLiveSessionFinal='';this.voiceRestartTimer=null;this.voiceAzureRecognizer=null;this.voiceAzureTokenTimer=null;this.voiceAzureTokenCache=null;this.voiceAzureStarting=false;this.voiceDeepgramSocket=null;this.voiceDeepgramRecorder=null;this.voiceDeepgramStream=null;this.voiceDeepgramFinal='';this.voiceDeepgramKeepAlive=null;this.voiceDeepgramReconnect=null;this.voiceDeepgramStopping=false;this.registryTab='MOVIMENTI';this.ddtFiles=[];this.requestFiles=[];this.analysisKind='';this.stockSearchTimer=null;this.masterSearchTimer=null;this.masterView={query:'',article:'',size:'',location:'',pallet:'',sort:'article',page:1,pageSize:100};this.masterEditKey='';this.masterRequestMode=false;this.masterRequestItems=[];this.masterRequestOpenKey='';this.adminGeneratedPin='';this.siteChoiceRequired=false;this.siteChoiceSource='';this.lastPinLength=0;this.lastDeletePinLength=0;this.pendingRequestDeleteId='';this.requestDocOrientation='auto';this.globalSearchIndex=0;this.globalStockQuery='';
     this.bind();this.setupVisualViewport();this.applyView(globalThis.localStorage?.getItem(CONFIG.viewKey)||'smartphone');
     if(this.auth.user&&this.auth.needsSiteChoice())setTimeout(()=>this.openSiteChoice({required:true,source:'restore'}),0);
   }
@@ -20040,7 +20042,7 @@ class UI{
   persistCountSession(){if(!this.countDraft)return;this.countDraft.updatedAt=nowIso();this.countDraft.masterFingerprint=this.countFingerprint();try{localStorage.setItem(siteCountSessionKey(this.auth.siteId),JSON.stringify(this.countDraft))}catch{}}
   clearCountSession(){this.countDraft=null;try{localStorage.removeItem(siteCountSessionKey(this.auth.siteId))}catch{}}
   nextCountId(){const day=localDateInput();if(this.store.db.counters.countDate!==day){this.store.db.counters.countDate=day;this.store.db.counters.count=0}this.store.db.counters.count=(this.store.db.counters.count||0)+1;this.store.save('count:id');return `CNT-${day}-${String(this.store.db.counters.count).padStart(3,'0')}`}
-  count(){if(!this.require('COUNT'))return'';if(!this.masterReady())return this.masterRequiredView({context:'avviare un conteggio assistito',backAction:'home',backLabel:'TORNA ALLA DASHBOARD'});const d=this.countDraft,location=d?.location||this.voiceInventoryDraft?.location||'',pallet=d?.pallet||this.voiceInventoryDraft?.pallet||'';return `<section class="count-page-hero"><span class="count-page-hero-icon">${phRegular('list-checks')}</span><div class="count-page-hero-copy"><small>GIACENZE · CONTROLLO FISICO</small><h1>Conteggio assistito</h1><p>Verifica una posizione in modo guidato senza modificare subito le giacenze.</p></div></section><section class="form-card count-step4 count-command-card"><header class="count-command-head"><span class="count-command-icon">${phRegular('list-checks')}</span><div class="count-command-copy"><b>Prepara il conteggio</b><small>Indica la posizione da controllare oppure passa direttamente all’inventario vocale.</small></div><span class="count-command-badge">${phRegular('shield-check')} MODALITÀ SICURA</span></header>${d?`<div class="count-session-banner"><div><b>${esc(d.id)}</b><span>Sessione in corso · ${esc(d.location)} / ${esc(d.pallet||'tutti i bancali')}</span></div><span>Salvataggio automatico</span></div>`:''}<div class="count-position-grid"><label class="count-field-modern"><span>Fila / Scaffale</span><div class="count-input-shell"><i class="count-input-icon">${phRegular('rows')}</i><input id="countLocation" class="field" value="${esc(location)}" placeholder="Es. 18"><button type="button" class="count-field-clear" data-action="count-field-clear" data-field="location" aria-label="Svuota Fila/Scaffale">${phRegular('x')}</button></div></label><label class="count-field-modern"><span>Bancale</span><div class="count-input-shell"><i class="count-input-icon">${phRegular('stack')}</i><input id="countPallet" class="field" value="${esc(pallet)}" placeholder="Inserisci bancale"><button type="button" class="count-field-clear" data-action="count-field-clear" data-field="pallet" aria-label="Svuota Bancale">${phRegular('x')}</button></div></label></div><div class="count-mode-actions"><button class="primary count-load-cta" data-action="count-load"><span class="count-load-icon">${phRegular('map-pin-line')}</span><span class="count-load-copy"><b>${d?'RICARICA POSIZIONE':'CARICA POSIZIONE'}</b><small>${d?'Aggiorna la posizione della sessione corrente':'Carica gli articoli presenti nella posizione indicata'}</small></span><span class="count-load-arrow">${phRegular('arrow-right')}</span></button><button class="voice-count-cta ${this.voiceInventoryOpen?'active':''}" data-action="voice-inventory-toggle"><span class="voice-count-icon">${phRegular(this.voiceInventoryOpen?'microphone-slash':'microphone')}</span><span class="voice-count-copy"><b>INVENTARIO VOCALE</b><small>Trascrizione live · riconoscimento guidato dal Master</small></span><span class="voice-count-chevron">${phRegular(this.voiceInventoryOpen?'caret-up':'caret-down')}</span></button></div></section>${this.voiceInventoryOpen?this.voiceInventoryPanel():''}<div id="countBody"></div>`}
+  count(){if(!this.require('COUNT'))return'';if(!this.masterReady())return this.masterRequiredView({context:'avviare un conteggio assistito',backAction:'home',backLabel:'TORNA ALLA DASHBOARD'});const d=this.countDraft,location=d?.location||this.voiceInventoryDraft?.location||'',pallet=d?.pallet||this.voiceInventoryDraft?.pallet||'';return `<section class="count-page-hero"><span class="count-page-hero-icon">${phRegular('list-checks')}</span><div class="count-page-hero-copy"><small>GIACENZE · CONTROLLO FISICO</small><h1>Conteggio assistito</h1><p>Verifica una posizione in modo guidato senza modificare subito le giacenze.</p></div></section><section class="form-card count-step4 count-command-card"><header class="count-command-head"><span class="count-command-icon">${phRegular('list-checks')}</span><div class="count-command-copy"><b>Prepara il conteggio</b><small>Indica la posizione da controllare oppure passa direttamente all’inventario vocale.</small></div><span class="count-command-badge">${phRegular('shield-check')} MODALITÀ SICURA</span></header>${d?`<div class="count-session-banner"><div><b>${esc(d.id)}</b><span>Sessione in corso · ${esc(d.location)} / ${esc(d.pallet||'tutti i bancali')}</span></div><span>Salvataggio automatico</span></div>`:''}<div class="count-position-grid"><label class="count-field-modern"><span>Fila / Scaffale</span><div class="count-input-shell"><i class="count-input-icon">${phRegular('rows')}</i><input id="countLocation" class="field" value="${esc(location)}" placeholder="Es. 18"><button type="button" class="count-field-clear" data-action="count-field-clear" data-field="location" aria-label="Svuota Fila/Scaffale">${phRegular('x')}</button></div></label><label class="count-field-modern"><span>Bancale</span><div class="count-input-shell"><i class="count-input-icon">${phRegular('stack')}</i><input id="countPallet" class="field" value="${esc(pallet)}" placeholder="Inserisci bancale"><button type="button" class="count-field-clear" data-action="count-field-clear" data-field="pallet" aria-label="Svuota Bancale">${phRegular('x')}</button></div></label></div><div class="count-mode-actions"><button class="primary count-load-cta" data-action="count-load"><span class="count-load-icon">${phRegular('map-pin-line')}</span><span class="count-load-copy"><b>${d?'RICARICA POSIZIONE':'CARICA POSIZIONE'}</b><small>${d?'Aggiorna la posizione della sessione corrente':'Carica gli articoli presenti nella posizione indicata'}</small></span><span class="count-load-arrow">${phRegular('arrow-right')}</span></button><button class="voice-count-cta ${this.voiceInventoryOpen?'active':''}" data-action="voice-inventory-toggle"><span class="voice-count-icon">${phRegular(this.voiceInventoryOpen?'microphone-slash':'microphone')}</span><span class="voice-count-copy"><b>INVENTARIO VOCALE</b><small>Deepgram Nova-3 · streaming live + Master</small></span><span class="voice-count-chevron">${phRegular(this.voiceInventoryOpen?'caret-up':'caret-down')}</span></button></div></section>${this.voiceInventoryOpen?this.voiceInventoryPanel():''}<div id="countBody"></div>`}
 
   loadVoiceInventoryDraft(){try{const raw=localStorage.getItem(siteVoiceInventoryKey(this.auth.siteId));if(!raw)return{schema:1,id:'',location:'',pallet:'',transcript:'',rows:[],updatedAt:''};const d=JSON.parse(raw);return d?.schema===1?d:{schema:1,id:'',location:'',pallet:'',transcript:'',rows:[],updatedAt:''}}catch{return{schema:1,id:'',location:'',pallet:'',transcript:'',rows:[],updatedAt:''}}}
   persistVoiceInventoryDraft(){if(!this.voiceInventoryDraft)return;this.voiceInventoryDraft.updatedAt=nowIso();try{localStorage.setItem(siteVoiceInventoryKey(this.auth.siteId),JSON.stringify(this.voiceInventoryDraft))}catch{}}
@@ -20048,14 +20050,14 @@ class UI{
   voiceInventoryToggle(){this.voiceInventoryOpen=!this.voiceInventoryOpen;this.renderView()}
   voiceInventoryPanel(){
     const d=this.voiceInventoryDraft||{transcript:'',rows:[]},rows=d.rows||[],valid=rows.filter(r=>this.voiceInventoryRowState(r).kind==='ok').length,warn=rows.length-valid;
-    const fallbackState=this.voiceRecorder?.state||'inactive',liveActive=!!this.voiceListeningWanted&&!this.voicePaused,livePaused=!!this.voicePaused,recording=liveActive||fallbackState==='recording',paused=livePaused||fallbackState==='paused',active=recording||paused,azureReady=this.azureSpeechReady(),browserLive=!!(globalThis.SpeechRecognition||globalThis.webkitSpeechRecognition),liveCapable=azureReady||browserLive;
+    const fallbackState=this.voiceRecorder?.state||'inactive',liveActive=!!this.voiceListeningWanted&&!this.voicePaused,livePaused=!!this.voicePaused,recording=liveActive||fallbackState==='recording',paused=livePaused||fallbackState==='paused',active=recording||paused,deepgramReady=this.deepgramReady(),browserLive=!!(globalThis.SpeechRecognition||globalThis.webkitSpeechRecognition),liveCapable=deepgramReady||browserLive;
     const recordControls=!active
-      ?`<button class="voice-record" data-action="voice-inventory-start">${phRegular('microphone')}<span><b>AVVIA DETTATURA LIVE</b><small>${azureReady?'Azure Speech AI · streaming professionale':browserLive?'Il testo appare mentre parli':'Fallback locale disponibile su questo browser'}</small></span></button>`
+      ?`<button class="voice-record" data-action="voice-inventory-start">${phRegular('microphone')}<span><b>AVVIA DETTATURA LIVE</b><small>${deepgramReady?'Deepgram Nova-3 · streaming professionale':browserLive?'Il testo appare mentre parli':'Fallback locale disponibile su questo browser'}</small></span></button>`
       :`<div class="voice-live-actions"><button class="voice-record ${paused?'paused':'recording'}" data-action="${paused?'voice-inventory-resume':'voice-inventory-pause'}">${phRegular(paused?'play':'pause')}<span><b>${paused?'RIPRENDI':'PAUSA'}</b><small>${paused?'Continua dalla stessa sessione':'Ferma l’ascolto senza chiudere la sessione'}</small></span></button><button class="voice-record voice-live-stop" data-action="voice-inventory-stop">${phRegular('stop')}<span><b>TERMINA DETTATURA</b><small>Conclude l’ascolto mantenendo il testo già acquisito</small></span></button></div>`;
-    const engineLabel=this.voiceEngine==='AZURE'?'AZURE AI':azureReady?'AZURE READY':browserLive?'LIVE':esc(this.voiceEngine||(navigator.gpu?'WEBGPU':'WASM'));
+    const engineLabel=this.voiceEngine==='DEEPGRAM'?'NOVA-3':deepgramReady?'DEEPGRAM':browserLive?'LIVE':esc(this.voiceEngine||(navigator.gpu?'WEBGPU':'WASM'));
     const statusTitle=this.voiceBusy?'Elaborazione in corso…':recording?'Ascolto live attivo':paused?'Dettatura in pausa':'Pronto';
-    const statusDetail=this.voiceBusy?'Sto preparando il fallback locale.':recording?'Parla normalmente: SOMA aggiorna il testo in tempo reale e lo confronta con il Master.':paused?'Premi RIPRENDI quando vuoi continuare.':azureReady?'Azure Speech è pronto: streaming immediato con Phrase List ricavata dal Master.':browserLive?'Nessun modello Whisper da attendere: il riconoscimento parte subito.':'Questo browser userà il fallback locale.';
-    return `<section class="voice-inventory-shell"><header class="voice-inventory-head"><span class="voice-inventory-logo">${phRegular('waveform')}</span><div><small>INVENTARIO VOCALE AI</small><h2>Detta. Controlla. Conferma.</h2><p>Riconoscimento in tempo reale con correzione guidata da articoli, taglie e stati presenti nel Master.</p></div><span class="voice-engine-badge">${engineLabel}</span></header><div class="voice-inventory-controls"><div>${recordControls}</div><div class="voice-inventory-tip"><b>Esempio consigliato</b><span>I01127UHF, taglia L, 45, scaricato. M 23 nuovo. S 17 scaricato. I002BD, S 24 nuovo.</span></div></div><div class="voice-mic-note ${this.voiceMicIssue?'warn':''}">${this.voiceMicIssue?esc(this.voiceMicIssue):(azureReady?'Azure Speech usa fino a 1.900 termini contestuali del Master per privilegiare codici, taglie e stati corretti.':browserLive?'Il testo viene mostrato mentre parli. SOMA usa il Master come vocabolario per ridurre gli errori sui codici articolo.':'Modalità compatibilità: il browser non offre riconoscimento live e verrà usato il motore locale.')}</div><div class="voice-model-status" id="voiceModelStatus"><span class="dot ${this.voiceBusy?'busy':''}"></span><b>${statusTitle}</b><small>${statusDetail}</small></div><label class="voice-transcript-label"><span>TRASCRIZIONE LIVE</span><textarea id="voiceInventoryTranscript" class="field textarea" ${recording?'readonly':''} placeholder="La trascrizione apparirà qui mentre parli. Puoi anche scrivere o correggere manualmente.">${esc(d.transcript||'')}</textarea></label><div class="voice-transcript-actions"><button class="soft small" data-action="voice-inventory-parse">${phRegular('magic-wand')} ANALIZZA TESTO</button><button class="soft small" data-action="voice-inventory-clear">${phRegular('trash')} SVUOTA</button></div><div class="voice-review-head"><div><small>RIGHE INTERPRETATE</small><h3>${rows.length} ${rows.length===1?'riga':'righe'}</h3></div><div class="voice-review-kpis"><span class="ok"><b>${valid}</b><small>VALIDE</small></span><span class="${warn?'warn':''}"><b>${warn}</b><small>DA VERIFICARE</small></span></div></div><div class="voice-review-list">${rows.length?rows.map((r,i)=>this.voiceInventoryRowHtml(r,i)).join(''):'<div class="voice-review-empty">Nessuna riga ancora. Avvia la dettatura oppure inserisci il testo manualmente.</div>'}</div><footer class="voice-inventory-footer"><div><small>MEMORIA TEMPORANEA</small><b>Le giacenze non vengono modificate finché non confermi.</b></div><button class="voice-confirm" data-action="voice-inventory-confirm" ${!rows.length||warn?'disabled':''}>${phRegular('check-circle')}<span>CONFERMA E AGGIORNA GIACENZE</span></button></footer></section>`
+    const statusDetail=this.voiceBusy?'Sto preparando il fallback locale.':recording?'Parla normalmente: SOMA aggiorna il testo in tempo reale e lo confronta con il Master.':paused?'Premi RIPRENDI quando vuoi continuare.':deepgramReady?'Deepgram Nova-3 è il motore prioritario: streaming live, numeri automatici e keyterm dal Master.':browserLive?'Nessun modello Whisper da attendere: il riconoscimento parte subito.':'Questo browser userà il fallback locale.';
+    return `<section class="voice-inventory-shell"><header class="voice-inventory-head"><span class="voice-inventory-logo">${phRegular('waveform')}</span><div><small>INVENTARIO VOCALE AI</small><h2>Detta. Controlla. Conferma.</h2><p>Riconoscimento in tempo reale con correzione guidata da articoli, taglie e stati presenti nel Master.</p></div><span class="voice-engine-badge">${engineLabel}</span></header><div class="voice-inventory-controls"><div>${recordControls}</div><div class="voice-inventory-tip"><b>Esempio consigliato</b><span>I01127UHF, taglia L, 45, scaricato. M 23 nuovo. S 17 scaricato. I002BD, S 24 nuovo.</span></div></div><div class="voice-mic-note ${this.voiceMicIssue?'warn':''}">${this.voiceMicIssue?esc(this.voiceMicIssue):(deepgramReady?'Nova-3 riceve fino a 100 keyterm dinamici dalla posizione corrente: codici, taglie e stati hanno priorità nel riconoscimento.':browserLive?'Il testo viene mostrato mentre parli. SOMA usa il Master come vocabolario per ridurre gli errori sui codici articolo.':'Modalità compatibilità: il browser non offre riconoscimento live e verrà usato il motore locale.')}</div><div class="voice-model-status" id="voiceModelStatus"><span class="dot ${this.voiceBusy?'busy':''}"></span><b>${statusTitle}</b><small>${statusDetail}</small></div><label class="voice-transcript-label"><span>TRASCRIZIONE LIVE</span><textarea id="voiceInventoryTranscript" class="field textarea" ${recording?'readonly':''} placeholder="La trascrizione apparirà qui mentre parli. Puoi anche scrivere o correggere manualmente.">${esc(d.transcript||'')}</textarea></label><div class="voice-transcript-actions"><button class="soft small" data-action="voice-inventory-parse">${phRegular('magic-wand')} ANALIZZA TESTO</button><button class="soft small" data-action="voice-inventory-clear">${phRegular('trash')} SVUOTA</button></div><div class="voice-review-head"><div><small>RIGHE INTERPRETATE</small><h3>${rows.length} ${rows.length===1?'riga':'righe'}</h3></div><div class="voice-review-kpis"><span class="ok"><b>${valid}</b><small>VALIDE</small></span><span class="${warn?'warn':''}"><b>${warn}</b><small>DA VERIFICARE</small></span></div></div><div class="voice-review-list">${rows.length?rows.map((r,i)=>this.voiceInventoryRowHtml(r,i)).join(''):'<div class="voice-review-empty">Nessuna riga ancora. Avvia la dettatura oppure inserisci il testo manualmente.</div>'}</div><footer class="voice-inventory-footer"><div><small>MEMORIA TEMPORANEA</small><b>Le giacenze non vengono modificate finché non confermi.</b></div><button class="voice-confirm" data-action="voice-inventory-confirm" ${!rows.length||warn?'disabled':''}>${phRegular('check-circle')}<span>CONFERMA E AGGIORNA GIACENZE</span></button></footer></section>`
   }
   voiceInventoryRowState(r){
     const article=normalizeArticle(r.article),size=norm(r.size),state=norm(r.state),counted=Number(r.counted),master=normalizeMasterRows(this.store.db.master.rows||[]),knownArticle=master.some(x=>x.article===article),knownSize=master.some(x=>x.article===article&&x.size===size),stateOk=CONFIG.states.includes(state),qtyOk=Number.isInteger(counted)&&counted>=0;
@@ -20148,6 +20150,96 @@ class UI{
     if(n==='NotReadableError'||n==='TrackStartError')return 'Il microfono è occupato o non accessibile. Chiudi altre app che lo stanno usando e riprova.';
     if(n==='OverconstrainedError')return 'Il microfono non supporta i parametri richiesti. Riprova dopo aver cambiato dispositivo audio.';
     return e?.message||'Impossibile accedere al microfono.'
+  }
+  speechBackendBase(){
+    try{
+      const params=new URLSearchParams(location.search),q=params.get('speechProxy');
+      if(q&&/^https:\/\//i.test(q))localStorage.setItem('soma:speech-backend',q.replace(/\/$/,''));
+      const saved=String(localStorage.getItem('soma:speech-backend')||'').trim().replace(/\/$/,'');
+      if(saved)return saved;
+    }catch{}
+    const host=String(location.hostname||'').toLowerCase();
+    if(host==='mexpy88.github.io'||host.endsWith('.github.io'))return 'https://soma-hub-speech.onrender.com';
+    return ''
+  }
+  deepgramTokenEndpoint(){const base=this.speechBackendBase();return base?base+'/api/deepgram-token':'/api/deepgram-token'}
+  deepgramReady(){return !!this.deepgramTokenEndpoint()}
+  async fetchDeepgramToken(){
+    const endpoint=this.deepgramTokenEndpoint();if(!endpoint)throw new Error('Backend Deepgram non configurato.');
+    const res=await fetch(endpoint,{method:'GET',cache:'no-store',headers:{Accept:'application/json'}});
+    let data={};try{data=await res.json()}catch{}
+    if(!res.ok||!data.token)throw new Error(data.error||data.detail||`Deepgram token non disponibile (${res.status}).`);
+    return String(data.token)
+  }
+  deepgramKeyterms(){
+    const rows=this.voiceContextRows(),articles=[...new Set(rows.map(r=>r.article).filter(Boolean))],sizes=[...new Set(rows.map(r=>r.size).filter(Boolean))],out=[];
+    const add=v=>{v=String(v||'').trim();if(v&&!out.includes(v)&&out.length<100)out.push(v)};
+    ['NUOVO','USATO','SCARICATO','DISMESSO','NON CHIARO','ARTICOLO','TAGLIA','PEZZI'].forEach(add);
+    sizes.slice(0,20).forEach(add);
+    articles.slice(0,60).forEach(add);
+    for(const a of articles){if(out.length>=100)break;add(this.voiceArticleSpokenAlias(a))}
+    return out
+  }
+  deepgramWsUrl(){
+    const u=new URL('wss://api.deepgram.com/v1/listen'),p=u.searchParams;
+    p.set('model','nova-3');p.set('language','it');p.set('interim_results','true');p.set('smart_format','true');p.set('punctuate','true');p.set('numerals','true');p.set('endpointing','500');p.set('vad_events','true');p.set('utterance_end_ms','1000');
+    this.deepgramKeyterms().forEach(k=>p.append('keyterm',k));return u.toString()
+  }
+  stopDeepgramMedia(){
+    clearInterval(this.voiceDeepgramKeepAlive);this.voiceDeepgramKeepAlive=null;
+    const rec=this.voiceDeepgramRecorder;this.voiceDeepgramRecorder=null;
+    if(rec&&rec.state!=='inactive'){try{rec.requestData?.()}catch{}try{rec.stop()}catch{}}
+    this.voiceDeepgramStream?.getTracks?.().forEach(t=>t.stop());this.voiceDeepgramStream=null
+  }
+  async closeDeepgramSocket({finalize=true}={}){
+    clearTimeout(this.voiceDeepgramReconnect);this.voiceDeepgramReconnect=null;this.voiceDeepgramStopping=true;this.stopDeepgramMedia();
+    const ws=this.voiceDeepgramSocket;this.voiceDeepgramSocket=null;if(!ws){this.voiceDeepgramStopping=false;return}
+    if(ws.readyState===WebSocket.OPEN&&finalize){try{ws.send(JSON.stringify({type:'Finalize'}))}catch{}await new Promise(r=>setTimeout(r,350));try{ws.send(JSON.stringify({type:'CloseStream'}))}catch{}}
+    try{ws.close(1000,'SOMA operator stop')}catch{}this.voiceDeepgramStopping=false
+  }
+  scheduleDeepgramReconnect(){
+    if(!this.voiceListeningWanted||this.voicePaused||this.voiceDeepgramStopping)return;
+    clearTimeout(this.voiceDeepgramReconnect);this.voiceDeepgramReconnect=setTimeout(()=>this.safe(async()=>{
+      if(!this.voiceListeningWanted||this.voicePaused||this.voiceDeepgramSocket)return;
+      this.voiceLiveBaseText=String(this.voiceInventoryDraft?.transcript||'').trim();this.voiceDeepgramFinal='';
+      try{await this.startDeepgramVoiceInventory();this.toast('Deepgram riconnesso automaticamente.')}catch(e){this.voiceMicIssue='Deepgram: '+String(e?.message||e);this.renderView()}
+    }),700)
+  }
+  async startDeepgramVoiceInventory(){
+    if(!globalThis.isSecureContext)throw new Error('Il microfono richiede HTTPS.');
+    if(!navigator.mediaDevices?.getUserMedia||!globalThis.MediaRecorder||!globalThis.WebSocket)throw new Error('Streaming audio non supportato da questo browser.');
+    const mime=['audio/webm;codecs=opus','audio/webm'].find(t=>MediaRecorder.isTypeSupported?.(t));if(!mime)throw new Error('Deepgram live richiede WebM/Opus su questo browser.');
+    const [token,stream]=await Promise.all([this.fetchDeepgramToken(),navigator.mediaDevices.getUserMedia({audio:{echoCancellation:true,noiseSuppression:true,autoGainControl:true},video:false})]);
+    const ws=new WebSocket(this.deepgramWsUrl(),['bearer',token]);this.voiceDeepgramSocket=ws;this.voiceDeepgramStream=stream;this.voiceDeepgramFinal='';this.voiceEngine='DEEPGRAM';this.voiceMicIssue='';
+    await new Promise((resolve,reject)=>{
+      let settled=false;
+      const fail=e=>{if(settled)return;settled=true;reject(e instanceof Error?e:new Error('Connessione Deepgram non riuscita.'))};
+      ws.onopen=()=>{
+        if(settled)return;settled=true;
+        const rec=new MediaRecorder(stream,{mimeType:mime});this.voiceDeepgramRecorder=rec;
+        rec.ondataavailable=e=>{if(e.data?.size&&ws.readyState===WebSocket.OPEN)try{ws.send(e.data)}catch{}};
+        rec.onerror=e=>{this.voiceMicIssue=this.voiceMicErrorMessage(e?.error||e);this.renderView()};
+        rec.start(250);
+        this.voiceDeepgramKeepAlive=setInterval(()=>{if(ws.readyState===WebSocket.OPEN)try{ws.send(JSON.stringify({type:'KeepAlive'}))}catch{}},8000);
+        resolve()
+      };
+      ws.onerror=()=>fail(new Error('Connessione WebSocket Deepgram non riuscita.'));
+      setTimeout(()=>fail(new Error('Timeout connessione Deepgram.')),10000)
+    });
+    ws.onmessage=e=>{
+      let msg;try{msg=JSON.parse(e.data)}catch{return}
+      if(msg?.type!=='Results')return;
+      const text=String(msg?.channel?.alternatives?.[0]?.transcript||'').trim();if(!text)return;
+      if(msg.is_final){
+        this.voiceDeepgramFinal=[this.voiceDeepgramFinal,text].filter(Boolean).join(' ').replace(/\s+/g,' ').trim();
+        const combined=[this.voiceLiveBaseText,this.voiceDeepgramFinal].filter(Boolean).join(' ').replace(/\s+/g,' ').trim();this.parseVoiceInventoryText(combined);this.renderView()
+      }else this.voiceLiveTranscript(this.voiceDeepgramFinal,text)
+    };
+    ws.onclose=e=>{
+      const wasCurrent=this.voiceDeepgramSocket===ws;if(wasCurrent)this.voiceDeepgramSocket=null;this.stopDeepgramMedia();
+      if(e.code!==1000&&this.voiceListeningWanted&&!this.voicePaused&&!this.voiceDeepgramStopping){this.voiceMicIssue='Connessione Deepgram interrotta: riconnessione automatica…';this.renderView();this.scheduleDeepgramReconnect()}
+    };
+    return true
   }
   azureSpeechTokenEndpoint(){
     try{
@@ -20274,29 +20366,29 @@ class UI{
   }
   async startVoiceInventory(){
     const location=norm(document.getElementById('countLocation')?.value),pallet=norm(document.getElementById('countPallet')?.value);if(!location)throw new Error('Inserisci prima Fila/Scaffale: serve per sapere dove applicare il conteggio.');this.voiceInventoryDraft.location=location;this.voiceInventoryDraft.pallet=pallet;this.persistVoiceInventoryDraft();
-    this.voiceMicIssue='';this.voicePaused=false;this.voiceListeningWanted=true;this.voiceLiveBaseText=String(this.voiceInventoryDraft?.transcript||'').trim();this.voiceLiveSessionFinal='';await this.requestVoiceWakeLock();
-    if(this.azureSpeechReady()){
-      try{await this.startAzureVoiceInventory();this.renderView();this.toast('Azure Speech avviato: trascrizione professionale in tempo reale.');return}
-      catch(e){this.voiceMicIssue='Azure non disponibile: '+String(e?.message||e)+' Passo automaticamente al motore live del browser.';this.voiceAzureRecognizer=null}
+    this.voiceMicIssue='';this.voicePaused=false;this.voiceListeningWanted=true;this.voiceLiveBaseText=String(this.voiceInventoryDraft?.transcript||'').trim();this.voiceLiveSessionFinal='';this.voiceDeepgramFinal='';await this.requestVoiceWakeLock();
+    if(this.deepgramReady()){
+      try{await this.startDeepgramVoiceInventory();this.renderView();this.toast('Deepgram Nova-3 avviato: trascrizione live in tempo reale.');return}
+      catch(e){await this.closeDeepgramSocket({finalize:false});this.voiceMicIssue='Deepgram non disponibile: '+String(e?.message||e)+' Passo automaticamente al motore live del browser.'}
     }
-    if(this.voiceSpeechCtor()){this.voiceEngine='LIVE';this.startVoiceRecognitionSession();this.renderView();this.toast('Dettatura live avviata: il testo apparirà mentre parli.');return}
-    this.voiceListeningWanted=false;await this.startVoiceInventoryFallback();this.toast('Modalità live non disponibile: uso il fallback locale.')
+    if(this.voiceSpeechCtor()){this.voiceEngine='LIVE';this.startVoiceRecognitionSession();this.renderView();this.toast('Fallback browser live avviato.');return}
+    this.voiceListeningWanted=false;await this.startVoiceInventoryFallback();this.toast('Ultimo fallback: trascrizione locale Whisper.')
   }
   async pauseVoiceInventory(){
-    if(this.voiceAzureRecognizer){this.voicePaused=true;this.voiceListeningWanted=false;await this.stopAzureVoiceInventory();await this.releaseVoiceWakeLock();this.renderView();this.toast('Dettatura Azure in pausa.');return}
+    if(this.voiceDeepgramSocket||this.voiceDeepgramRecorder){this.voicePaused=true;this.voiceListeningWanted=false;await this.closeDeepgramSocket();await this.releaseVoiceWakeLock();this.renderView();this.toast('Dettatura Deepgram in pausa.');return}
     if(this.voiceListeningWanted&&this.voiceRecognition){this.voicePaused=true;this.voiceListeningWanted=false;try{this.voiceRecognition.stop()}catch{}await this.releaseVoiceWakeLock();this.renderView();this.toast('Dettatura in pausa.');return}
     if(this.voiceRecorder?.state==='recording'){this.voiceRecorder.pause();await this.releaseVoiceWakeLock();this.renderView();this.toast('Dettatura in pausa.')}
   }
   async resumeVoiceInventory(){
-    if(this.voicePaused){this.voicePaused=false;this.voiceListeningWanted=true;this.voiceLiveBaseText=String(this.voiceInventoryDraft?.transcript||'').trim();this.voiceLiveSessionFinal='';await this.requestVoiceWakeLock();
-      if(this.azureSpeechReady()){try{await this.startAzureVoiceInventory();this.renderView();this.toast('Dettatura Azure ripresa.');return}catch(e){this.voiceMicIssue='Azure non disponibile: '+String(e?.message||e)}}
-      if(this.voiceSpeechCtor()){this.voiceEngine='LIVE';this.startVoiceRecognitionSession();this.renderView();this.toast('Dettatura ripresa.');return}
+    if(this.voicePaused){this.voicePaused=false;this.voiceListeningWanted=true;this.voiceLiveBaseText=String(this.voiceInventoryDraft?.transcript||'').trim();this.voiceLiveSessionFinal='';this.voiceDeepgramFinal='';await this.requestVoiceWakeLock();
+      if(this.deepgramReady()){try{await this.startDeepgramVoiceInventory();this.renderView();this.toast('Dettatura Deepgram ripresa.');return}catch(e){await this.closeDeepgramSocket({finalize:false});this.voiceMicIssue='Deepgram non disponibile: '+String(e?.message||e)}}
+      if(this.voiceSpeechCtor()){this.voiceEngine='LIVE';this.startVoiceRecognitionSession();this.renderView();this.toast('Dettatura ripresa con fallback browser.');return}
     }
     if(this.voiceRecorder?.state==='paused'){this.voiceRecorder.resume();await this.requestVoiceWakeLock();this.renderView();this.toast('Dettatura ripresa.')}
   }
   async stopVoiceInventory(){
     clearTimeout(this.voiceRestartTimer);this.voiceListeningWanted=false;this.voicePaused=false;
-    if(this.voiceAzureRecognizer){await this.stopAzureVoiceInventory();await this.releaseVoiceWakeLock();this.renderView();this.toast('Dettatura Azure terminata.');return}
+    if(this.voiceDeepgramSocket||this.voiceDeepgramRecorder){await this.closeDeepgramSocket();await this.releaseVoiceWakeLock();this.renderView();this.toast('Dettatura Deepgram terminata.');return}
     if(this.voiceRecognition){try{this.voiceRecognition.stop()}catch{}await this.releaseVoiceWakeLock();this.renderView();this.toast('Dettatura terminata.');return}
     if(['recording','paused'].includes(this.voiceRecorder?.state)){try{this.voiceRecorder.requestData?.()}catch{}this.voiceRecorder.stop()}
   }
@@ -20306,11 +20398,11 @@ class UI{
     try{if(!chunks.length)throw new Error('Nessun audio registrato.');const blob=new Blob(chunks,{type:mime}),audio=await this.decodeVoiceAudio(blob),pipe=await this.ensureVoiceTranscriber();this.setVoiceStatus('Trascrizione in corso…','Whisper sta analizzando la dettatura localmente.');const out=await pipe(audio,{language:'italian',task:'transcribe',chunk_length_s:30,stride_length_s:5});const text=String(out?.text||'').trim();if(!text)throw new Error('Whisper non ha riconosciuto parole nella registrazione.');const combined=[this.voiceInventoryDraft?.transcript,text].filter(Boolean).join(' ');this.parseVoiceInventoryText(combined);this.toast('Dettatura analizzata. Controlla le righe prima di confermare.')}finally{this.voiceBusy=false;this.renderView()}
   }
   voiceInventoryParse(){const t=document.getElementById('voiceInventoryTranscript')?.value||'';this.parseVoiceInventoryText(t);this.renderView()}
-  async voiceInventoryClear(){clearTimeout(this.voiceRestartTimer);this.voiceListeningWanted=false;this.voicePaused=false;await this.stopAzureVoiceInventory();if(this.voiceRecognition){try{this.voiceRecognition.abort()}catch{}this.voiceRecognition=null}if(['recording','paused'].includes(this.voiceRecorder?.state)){try{this.voiceRecorder.onstop=null;this.voiceRecorder.stop()}catch{}this.voiceRecorderStream?.getTracks?.().forEach(t=>t.stop());this.voiceRecorderStream=null;this.voiceRecorder=null;this.voiceChunks=[];this.voiceBusy=false}await this.releaseVoiceWakeLock();this.voiceLiveBaseText='';this.voiceLiveSessionFinal='';this.voiceMicIssue='';this.clearVoiceInventoryDraft();this.renderView()}
+  async voiceInventoryClear(){clearTimeout(this.voiceRestartTimer);this.voiceListeningWanted=false;this.voicePaused=false;await this.closeDeepgramSocket({finalize:false});await this.stopAzureVoiceInventory();if(this.voiceRecognition){try{this.voiceRecognition.abort()}catch{}this.voiceRecognition=null}if(['recording','paused'].includes(this.voiceRecorder?.state)){try{this.voiceRecorder.onstop=null;this.voiceRecorder.stop()}catch{}this.voiceRecorderStream?.getTracks?.().forEach(t=>t.stop());this.voiceRecorderStream=null;this.voiceRecorder=null;this.voiceChunks=[];this.voiceBusy=false}await this.releaseVoiceWakeLock();this.voiceLiveBaseText='';this.voiceLiveSessionFinal='';this.voiceDeepgramFinal='';this.voiceMicIssue='';this.clearVoiceInventoryDraft();this.renderView()}
   voiceInventoryRemove(index){const i=Number(index);if(!Number.isInteger(i))return;this.voiceInventoryDraft.rows.splice(i,1);this.persistVoiceInventoryDraft();this.renderView()}
   updateVoiceInventoryField(el){const rowEl=el.closest('[data-voice-row]');if(!rowEl)return;const i=Number(rowEl.dataset.voiceRow),r=this.voiceInventoryDraft?.rows?.[i],field=el.dataset.voiceField;if(!r||!field)return;r[field]=field==='counted'?Math.max(0,Math.floor(Number(el.value)||0)):field==='article'?normalizeArticle(el.value):norm(el.value);this.persistVoiceInventoryDraft()}
   confirmVoiceInventory(){
-    const location=norm(document.getElementById('countLocation')?.value||this.voiceInventoryDraft?.location),pallet=norm(document.getElementById('countPallet')?.value||this.voiceInventoryDraft?.pallet),rows=this.voiceInventoryDraft?.rows||[];if(!location)throw new Error('Inserisci Fila/Scaffale.');if(!rows.length)throw new Error('Nessuna riga da confermare.');const bad=rows.filter(r=>this.voiceInventoryRowState(r).kind!=='ok');if(bad.length)throw new Error(`${bad.length} ${bad.length===1?'riga deve':'righe devono'} essere verificata prima della conferma.`);if(!confirm(`Aggiornare ${rows.length} righe nella posizione ${location}${pallet?' · Bancale '+pallet:''}? Le modifiche saranno registrate nell’Audit.`))return;const sessionId=this.voiceInventoryDraft.id||('VC-'+Date.now());for(const r of rows){const item={article:normalizeArticle(r.article),size:norm(r.size),state:norm(r.state)},bucket={location,pallet},key=bucketKey({...item,...bucket}),existing=this.domain.stock.findByKey(key);this.domain.rectifications.setQuantity({currentKey:existing?key:'',article:item.article,size:item.size,state:item.state,location,pallet,counted:Number(r.counted),reason:'INVENTARIO VOCALE',note:'Confermato da Inventario vocale SOMA HUB',sourceKind:'COUNT_ASSISTED',sessionId})}this.domain.audit.record('VOICE_INVENTORY_CONFIRMED','COUNT',sessionId,null,{rows:rows.length,location,pallet},{engine:this.voiceEngine==='AZURE'?'Azure Speech real-time + PhraseList Master':this.voiceEngine==='LIVE'?'Browser Live ASR + Master context':'Whisper / Transformers.js fallback',operator:this.auth.user});this.store.save('voice:inventory');this.clearVoiceInventoryDraft();this.voiceInventoryOpen=false;this.toast(`${rows.length} righe aggiornate nelle giacenze.`);this.router.go('stock')
+    const location=norm(document.getElementById('countLocation')?.value||this.voiceInventoryDraft?.location),pallet=norm(document.getElementById('countPallet')?.value||this.voiceInventoryDraft?.pallet),rows=this.voiceInventoryDraft?.rows||[];if(!location)throw new Error('Inserisci Fila/Scaffale.');if(!rows.length)throw new Error('Nessuna riga da confermare.');const bad=rows.filter(r=>this.voiceInventoryRowState(r).kind!=='ok');if(bad.length)throw new Error(`${bad.length} ${bad.length===1?'riga deve':'righe devono'} essere verificata prima della conferma.`);if(!confirm(`Aggiornare ${rows.length} righe nella posizione ${location}${pallet?' · Bancale '+pallet:''}? Le modifiche saranno registrate nell’Audit.`))return;const sessionId=this.voiceInventoryDraft.id||('VC-'+Date.now());for(const r of rows){const item={article:normalizeArticle(r.article),size:norm(r.size),state:norm(r.state)},bucket={location,pallet},key=bucketKey({...item,...bucket}),existing=this.domain.stock.findByKey(key);this.domain.rectifications.setQuantity({currentKey:existing?key:'',article:item.article,size:item.size,state:item.state,location,pallet,counted:Number(r.counted),reason:'INVENTARIO VOCALE',note:'Confermato da Inventario vocale SOMA HUB',sourceKind:'COUNT_ASSISTED',sessionId})}this.domain.audit.record('VOICE_INVENTORY_CONFIRMED','COUNT',sessionId,null,{rows:rows.length,location,pallet},{engine:this.voiceEngine==='DEEPGRAM'?'Deepgram Nova-3 streaming + Master keyterms':this.voiceEngine==='LIVE'?'Browser Live ASR + Master context':'Whisper / Transformers.js fallback',operator:this.auth.user});this.store.save('voice:inventory');this.clearVoiceInventoryDraft();this.voiceInventoryOpen=false;this.toast(`${rows.length} righe aggiornate nelle giacenze.`);this.router.go('stock')
   }
 
   clearCountPositionField(field){
@@ -20697,6 +20789,6 @@ try{globalThis.__NOVA_LEGACY_AVAILABLE=!!localStorage.getItem(CONFIG.legacyStora
 const switchSite=async siteId=>{await ui.selectSite(siteId);return auth.site()};
 globalThis.NOVA=Object.freeze({version:CONFIG.appVersion,schema:CONFIG.version,identityVersion:CONFIG.identityVersion,store,auth,router,domain,excel,requestDocs,ui,sounds,sites:SITES,operators:OPERATORS,roles:ROLE_DEFS,saveIdentityRegistry,capabilities:Object.freeze({operational:ALL_CAPS,master:MASTER_CAPS,administration:ADMIN_CAPS,globalAdmin:GLOBAL_ADMIN_CAPS}),identityValidation:IDENTITY_VALIDATION,switchSite});
 ui.render();</script>
-<!-- SOMA_BUILD:R31.90-20260929 -->
+<!-- SOMA_BUILD:R31.91-20260929 -->
 </body>
 </html>
