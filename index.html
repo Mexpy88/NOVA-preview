@@ -18876,9 +18876,11 @@ class ExcelService{
     this.exportTableRanges.delete(name);this.exportTableHeaders.delete(name);this.exportFreezeRows.delete(name);return true
   }
   #orderExportSheets(wb,preferred=[]){
-    const hidden=new Map((wb.Workbook?.Sheets||[]).map(x=>[x?.name,x])),seen=new Set(),ordered=[];
+    const oldNames=[...wb.SheetNames],hidden=new Map((wb.Workbook?.Sheets||[]).map(x=>[x?.name,x])),seen=new Set(),ordered=[];
     for(const n of preferred)if(wb.Sheets[n]&&!seen.has(n)){ordered.push(n);seen.add(n)}
-    for(const n of wb.SheetNames)if(!seen.has(n)){ordered.push(n);seen.add(n)}
+    for(const n of oldNames)if(!seen.has(n)){ordered.push(n);seen.add(n)}
+    const newIndex=new Map(ordered.map((n,i)=>[n,i]));
+    if(Array.isArray(wb.Workbook?.Names))for(const def of wb.Workbook.Names){const oldIdx=Number(def?.Sheet);if(Number.isInteger(oldIdx)&&oldIdx>=0&&oldIdx<oldNames.length){const sheetName=oldNames[oldIdx];if(newIndex.has(sheetName))def.Sheet=newIndex.get(sheetName)}}
     wb.SheetNames=ordered;
     if(wb.Workbook){wb.Workbook.Sheets=ordered.map(n=>({...hidden.get(n),name:n,Hidden:Number(hidden.get(n)?.Hidden||0)}))}
   }
