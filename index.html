@@ -1,13 +1,13 @@
 <!doctype html>
 <html lang="it">
 <head>
-<meta name="soma-build" content="R31.92-20260930">
+<meta name="soma-build" content="R31.93-20260930">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
 <script id="soma-build-freshness">
 (() => {
-  const CURRENT_BUILD='R31.92-20260930',CHECK_KEY='soma:last-build-refresh';
+  const CURRENT_BUILD='R31.93-20260930',CHECK_KEY='soma:last-build-refresh';
   globalThis.SOMA_BUILD=CURRENT_BUILD;
   const check=async()=>{
     try{
@@ -18789,7 +18789,7 @@ const aliases={article:['CODICE SAP','CODICE ARTICOLO','ARTICOLO','CODICE'],size
 function findCol(headers,names){const set=new Set(names.map(headerNorm));return headers.findIndex(h=>set.has(headerNorm(h)))}
 function detectHeader(matrix){let best={row:0,score:-1,cols:{}};for(let r=0;r<Math.min(matrix.length,30);r++){const headers=matrix[r]||[],cols={};for(const [k,names] of Object.entries(aliases))cols[k]=findCol(headers,names);const score=(cols.article>=0?6:0)+(cols.size>=0?1:0)+(cols.location>=0||cols.fila>=0?2:0)+(cols.pallet>=0?1:0)+(cols.state>=0&&cols.quantity>=0?4:0)+CONFIG.states.filter(s=>cols[s]>=0).length;if(score>best.score)best={row:r,score,cols}}if(best.cols.article<0)throw new Error('Colonna CODICE SAP / ARTICOLO non trovata nel Master.');return best}
 function readLocation(row,cols){if(cols.location>=0)return norm(row[cols.location]);return [cols.fila>=0?norm(row[cols.fila]):'',cols.scaffale>=0?norm(row[cols.scaffale]):''].filter(Boolean).join('/')}
-function parseMaster(wb){const sheetName=wb.SheetNames.includes('MAGAZZINO')?'MAGAZZINO':wb.SheetNames.find(n=>!['APP_DATI','NOVA_DATI'].includes(n))||wb.SheetNames[0],ws=wb.Sheets[sheetName];if(!ws)throw new Error('Foglio Master non trovato.');const matrix=X().utils.sheet_to_json(ws,{header:1,defval:'',raw:true,blankrows:false}),det=detectHeader(matrix),mode=det.cols.state>=0&&det.cols.quantity>=0?'long':'wide',rows=[];
+function parseMaster(wb){const sheetName=wb.SheetNames.find(n=>headerNorm(n)==='MAGAZZINO');if(!sheetName)throw new Error('Foglio MAGAZZINO non trovato. Per importare in SOMA HUB basta un workbook con il solo foglio MAGAZZINO.');const ws=wb.Sheets[sheetName],matrix=X().utils.sheet_to_json(ws,{header:1,defval:'',raw:true,blankrows:false}),det=detectHeader(matrix),mode=det.cols.state>=0&&det.cols.quantity>=0?'long':'wide',rows=[];
   for(let r=det.row+1;r<matrix.length;r++){const row=matrix[r]||[],article=normalizeArticle(row[det.cols.article]);if(!article)continue;const size=det.cols.size>=0?norm(row[det.cols.size]):'',location=readLocation(row,det.cols),pallet=det.cols.pallet>=0?norm(row[det.cols.pallet]):'',description=det.cols.description>=0?String(row[det.cols.description]||'').trim():'';
     if(mode==='long'){const state=norm(row[det.cols.state]),quantity=Number(row[det.cols.quantity]||0)||0;if(state&&quantity)rows.push({article,size,state,quantity,location,pallet,description,sourceRow:r})}
     else for(const state of CONFIG.states){const c=det.cols[state];if(c<0)continue;const quantity=Number(row[c]||0)||0;if(quantity)rows.push({article,size,state,quantity,location,pallet,description,sourceRow:r})}
@@ -18813,7 +18813,7 @@ function appendDeltaToSnapshotCell(row,c,delta,templateCell){delta=Number(delta)
 function rowIdentityFromSnapshot(row,cols){const get=c=>Number.isInteger(c)&&c>=0?snapshotValue(row,c):'';const article=normalizeArticle(get(cols.article));if(!article)return null;const size=cols.size>=0?norm(get(cols.size)):'',pallet=cols.pallet>=0?norm(get(cols.pallet)):'';let location='';if(cols.location>=0)location=norm(get(cols.location));else location=[cols.fila>=0?norm(get(cols.fila)):'',cols.scaffale>=0?norm(get(cols.scaffale)):''].filter(Boolean).join('/');return{article,size,location,pallet,key:identity({article,size,location,pallet})}}
 
 class ExcelService{
-  constructor(store,domain){this.store=store;this.domain=domain;this.exportTableRanges=new Map();this.exportTableHeaders=new Map();this.tableBlueprints=[];this.lastValidation=null;this.searchDataReport=null}
+  constructor(store,domain){this.store=store;this.domain=domain;this.exportTableRanges=new Map();this.exportTableHeaders=new Map();this.exportFreezeRows=new Map();this.tableBlueprints=[];this.exportStyles=null;this.lastValidation=null;this.searchDataReport=null;this.lastGeneratedSheets=[]}
   masterKey(){return masterFileKey(this.store.siteId)}
   async originalBytes(){
     let bytes=await idbGet(this.masterKey()).catch(()=>null);
@@ -18851,6 +18851,37 @@ class ExcelService{
   }
   #reconcileMigratedReceipts(db){for(const r of db.receipts||[])for(const l of r.lines||[]){const available=(db.master.rows||[]).filter(x=>normalizeArticle(x.article)===normalizeArticle(l.article)&&norm(x.size)===norm(l.size)&&norm(x.state)===norm(l.state)&&norm(x.location)===CONFIG.receivingLocation&&norm(x.pallet)===norm(l.receivingPallet)).reduce((n,x)=>n+Number(x.quantity||0),0);l.remainingToPutAway=Math.min(Number(l.checkedQuantity||0),Math.max(0,available))}}
   async hasOriginal(){return !!(await this.originalBytes())}
+  #captureExportStyles(wb){
+    const XLSX=X(),master=wb.Sheets?.MAGAZZINO||wb.Sheets?.[this.store.db.master?.sheetName],search=wb.Sheets?.CERCA_GIACENZE,headerRow=Math.max(0,Number(this.store.db.master?.headerRow)||0),pick=v=>v==null?null:clone(v);
+    const firstStyle=(ws,row,start=0,end=12)=>{if(!ws)return null;for(let c=start;c<=end;c++){const cell=ws[XLSX.utils.encode_cell({r:row,c})];if(cell?.s!=null)return pick(cell.s)}return null};
+    const header=firstStyle(master,headerRow),body=firstStyle(master,headerRow+1)||header;
+    return{header,body,title:pick(search?.A1?.s)||header,note:pick(search?.A2?.s)||body,input:pick(search?.B3?.s)||body,section:pick(search?.A6?.s)||header};
+  }
+  #excelDate(value){if(!value)return'';const d=value instanceof Date?new Date(value):new Date(value);return Number.isNaN(d.getTime())?'':d}
+  #formatTableSheet(ws,{widths=[],dateCols=[],dateOnlyCols=[],filter=true,headerRow=0}={}){
+    const XLSX=X(),rg=ws?.['!ref']?XLSX.utils.decode_range(ws['!ref']):null;if(widths.length)ws['!cols']=widths.map(w=>({wch:w}));
+    if(!rg)return ws;
+    const head=this.exportStyles?.header,body=this.exportStyles?.body;
+    for(let c=rg.s.c;c<=rg.e.c;c++){const cell=ws[XLSX.utils.encode_cell({r:headerRow,c})];if(cell&&head!=null)cell.s=clone(head)}
+    for(let r=Math.max(headerRow+1,rg.s.r);r<=rg.e.r;r++)for(let c=rg.s.c;c<=rg.e.c;c++){const cell=ws[XLSX.utils.encode_cell({r,c})];if(cell&&body!=null&&cell.s==null)cell.s=clone(body)}
+    for(const c of dateCols)for(let r=headerRow+1;r<=rg.e.r;r++){const cell=ws[XLSX.utils.encode_cell({r,c})];if(cell)cell.z='dd/mm/yyyy hh:mm'}
+    for(const c of dateOnlyCols)for(let r=headerRow+1;r<=rg.e.r;r++){const cell=ws[XLSX.utils.encode_cell({r,c})];if(cell)cell.z='dd/mm/yyyy'}
+    if(filter)ws['!autofilter']={ref:XLSX.utils.encode_range({s:{r:headerRow,c:rg.s.c},e:rg.e})};
+    return ws
+  }
+  #removeSheet(wb,name){
+    const idx=wb.SheetNames.indexOf(name);if(idx<0)return false;wb.SheetNames.splice(idx,1);delete wb.Sheets[name];
+    if(Array.isArray(wb.Workbook?.Sheets))wb.Workbook.Sheets.splice(idx,1);
+    if(Array.isArray(wb.Workbook?.Names))wb.Workbook.Names=wb.Workbook.Names.filter(n=>!Number.isInteger(Number(n?.Sheet))||Number(n.Sheet)!==idx).map(n=>{if(Number.isInteger(Number(n?.Sheet))&&Number(n.Sheet)>idx)n.Sheet=Number(n.Sheet)-1;return n});
+    this.exportTableRanges.delete(name);this.exportTableHeaders.delete(name);this.exportFreezeRows.delete(name);return true
+  }
+  #orderExportSheets(wb,preferred=[]){
+    const hidden=new Map((wb.Workbook?.Sheets||[]).map(x=>[x?.name,x])),seen=new Set(),ordered=[];
+    for(const n of preferred)if(wb.Sheets[n]&&!seen.has(n)){ordered.push(n);seen.add(n)}
+    for(const n of wb.SheetNames)if(!seen.has(n)){ordered.push(n);seen.add(n)}
+    wb.SheetNames=ordered;
+    if(wb.Workbook){wb.Workbook.Sheets=ordered.map(n=>({...hidden.get(n),name:n,Hidden:Number(hidden.get(n)?.Hidden||0)}))}
+  }
   async removeMaster(){
     const m=this.store.db.master,rows=Array.isArray(m?.rows)?m.rows.length:0;
     if(!rows)throw new Error('Nessun Master caricato da rimuovere.');
@@ -18879,19 +18910,29 @@ class ExcelService{
     this.store.db.settings.lastExportAt=a.at;this.store.save('legacy:migrate:baseline');return next
   }
   async buildExportBytes(){
-    await ensureXlsx();await ensureJsZip();this.exportTableRanges=new Map();this.exportTableHeaders=new Map();
+    await ensureXlsx();await ensureJsZip();this.exportTableRanges=new Map();this.exportTableHeaders=new Map();this.exportFreezeRows=new Map();this.lastGeneratedSheets=[];
     const bytes=await this.originalBytes();this.tableBlueprints=bytes?await this.#captureTableBlueprints(bytes):[];
-    const wb=bytes?X().read(bytes,{type:'array',cellDates:true,cellStyles:true,bookVBA:true}):X().utils.book_new();
-    this.updateMagazine(wb);this.updateSearchData(wb);this.replaceSheet(wb,'REGISTRO_MOVIMENTI',this.movementSheet());this.replaceSheet(wb,'ENTRATE_MERCI',this.receiptSheet());this.replaceSheet(wb,'RICHIESTE',this.requestSheet());this.replaceSheet(wb,'SCARICHI',this.issueSheet());this.replaceSheet(wb,'AUDIT',this.auditSheet());this.buildDataSheet(wb);
-    this.#dropSheetFilterNames(wb);
+    const wb=bytes?X().read(bytes,{type:'array',cellDates:true,cellStyles:true,bookVBA:true}):X().utils.book_new();this.exportStyles=this.#captureExportStyles(wb);
+    this.#removeSheet(wb,'APP_DATI');this.#removeSheet(wb,'REGISTRO_MOVIMENTI');
+    this.updateMagazine(wb);this.exportFreezeRows.set('MAGAZZINO',Math.max(1,(Number(this.store.db.master?.headerRow)||0)+1));this.updateSearchData(wb);
+    this.replaceSheet(wb,'MOVIMENTI',this.movementSheet(),{keepAutofilter:true,freezeRows:1});
+    this.replaceSheet(wb,'SCARICHI',this.issueSheet(),{keepAutofilter:true,freezeRows:1});
+    this.replaceSheet(wb,'ENTRATE_MERCI',this.receiptSheet(),{keepAutofilter:true,freezeRows:1});
+    this.replaceSheet(wb,'RICHIESTE',this.requestSheet(),{keepAutofilter:true,freezeRows:1});
+    this.replaceSheet(wb,'REGISTRO',this.registrySheet(),{keepAutofilter:true,freezeRows:1});
+    this.replaceSheet(wb,'AUDIT',this.auditSheet(),{keepAutofilter:true,freezeRows:1});
+    const counts=this.countSheet();if(counts)this.replaceSheet(wb,'CONTEGGI',counts,{keepAutofilter:true,freezeRows:1});else this.#removeSheet(wb,'CONTEGGI');
+    this.buildDataSheet(wb);
+    const visible=['MAGAZZINO','CERCA_GIACENZE','MOVIMENTI','SCARICHI','ENTRATE_MERCI','RICHIESTE','REGISTRO','AUDIT',...(counts?['CONTEGGI']:[])];this.lastGeneratedSheets=visible;
+    this.#orderExportSheets(wb,[...visible,'GIACENZE_RICERCA_DATI','NOVA_DATI','ELIMINATI']);this.#dropSheetFilterNames(wb);
     const raw=X().write(wb,{type:'array',bookType:'xlsx',compression:true,cellStyles:true,bookSST:false});
     return await this.#normalizeAndValidatePackage(raw)
   }
   async export(){
     const out=await this.buildExportBytes();
-    const stamp=new Date().toISOString().slice(0,16).replace(/[:T]/g,'-'),stem=(this.store.db.master.filename||'MAGAZZINO').replace(/\.xlsx$/i,'').replace(/_NOVA_.*/i,''),name=`${stem}_NOVA_V28_${stamp}.xlsx`;
+    const stamp=new Date().toISOString().slice(0,16).replace(/[:T]/g,'-'),stem=(this.store.db.master.filename||'MAGAZZINO').replace(/\.xlsx$/i,'').replace(/_(?:NOVA|SOMA)_.*/i,''),name=`${stem}_SOMA_R31_93_${stamp}.xlsx`;
     this.#download(out,name);
-    const exportedAudit=this.domain.audit.record('MASTER_EXPORTED','MASTER',name,null,{name,validation:this.lastValidation,generatedSheets:['CERCA_GIACENZE','REGISTRO_MOVIMENTI','ENTRATE_MERCI','RICHIESTE','SCARICHI','AUDIT']});this.store.db.settings.lastExportAt=exportedAudit.at;this.store.db.settings.lastExportName=name;this.store.save('master:export:baseline');return name
+    const exportedAudit=this.domain.audit.record('MASTER_EXPORTED','MASTER',name,null,{name,validation:this.lastValidation,generatedSheets:this.lastGeneratedSheets});this.store.db.settings.lastExportAt=exportedAudit.at;this.store.db.settings.lastExportName=name;this.store.save('master:export:baseline');return name
   }
   #activeSearchChanges(){
     const out=[],push=(item,bucket,delta,event)=>{const d=Number(delta)||0;if(!d)return;out.push({item:cleanItem(item),bucket:cleanBucket(bucket),delta:d,eventId:event?.id||'',at:event?.at||'',kind:event?.source?.kind||event?.type||''})};
@@ -18916,22 +18957,23 @@ class ExcelService{
     wb.Workbook.Sheets=wb.SheetNames.map(n=>{const prev=byName.get(n)||{};return{...prev,name:n,Hidden:n===name?hidden:Number(prev.Hidden||0)}})
   }
   updateSearchData(wb){
-    const XLSX=X(),dataName='GIACENZE_RICERCA_DATI',searchName='CERCA_GIACENZE',live=this.#searchExportRows(),occurrences=new Map();
-    const dataRows=[['FILA/SCAFFALE','BANCALE','ARTICOLO','TAGLIA','STATO','QUANTITÀ','NOTE','CHIAVE_RICERCA']];
-    const searchRows=[['ARTICOLO','TAGLIA','DESCRIZIONE','STATO','QUANTITÀ','FILA/SCAFFALE','BANCALE']];
-    for(const r of live){
-      const k=[r.article,r.size].join('|'),n=(occurrences.get(k)||0)+1;occurrences.set(k,n);
-      dataRows.push([r.location,r.pallet,r.article,r.size,r.state,r.quantity,'',r.article+'|'+r.size+'|'+n]);
-      searchRows.push([r.article,r.size,r.description,r.state,r.quantity,r.location,r.pallet])
-    }
-    const dataWs=XLSX.utils.aoa_to_sheet(dataRows),searchWs=XLSX.utils.aoa_to_sheet(searchRows);
-    dataWs['!cols']=[{wch:18},{wch:16},{wch:20},{wch:11},{wch:16},{wch:12},{wch:24},{wch:30}];
-    searchWs['!cols']=[{wch:20},{wch:11},{wch:42},{wch:16},{wch:12},{wch:18},{wch:16}];
-    searchWs['!autofilter']={ref:'A1:G'+Math.max(1,searchRows.length)};
-    this.replaceSheet(wb,dataName,dataWs);
-    this.replaceSheet(wb,searchName,searchWs,{keepAutofilter:true});
-    this.#setSheetHidden(wb,dataName,2);
-    this.searchDataReport={ok:true,generatedBy:'SOMA_HUB',source:'CURRENT_STOCK',rows:live.length,lastRow:Math.max(1,live.length+1),formulaCells:0,formulaRanges:0,formulasUpdated:0,unmatchedNegative:0}
+    const XLSX=X(),dataName='GIACENZE_RICERCA_DATI',searchName='CERCA_GIACENZE',live=this.#searchExportRows(),occurrences=new Map(),dataRows=[['FILA/SCAFFALE','BANCALE','ARTICOLO','TAGLIA','STATO','QUANTITÀ','NOTE','CHIAVE_RICERCA']];
+    for(const r of live){const k=[r.article,r.size].join('|'),n=(occurrences.get(k)||0)+1;occurrences.set(k,n);dataRows.push([r.location,r.pallet,r.article,r.size,r.state,r.quantity,'',r.article+'|'+r.size+'|'+n])}
+    const dataWs=XLSX.utils.aoa_to_sheet(dataRows),lastDataRow=Math.max(2,dataRows.length),states=['NUOVO','USATO','SCARICATO','DISMESSO','NON_CHIARO'],stateStart=7,totalRow=12,noteRow=13,tableHeader=15,resultStart=16,resultCount=Math.min(100,Math.max(40,...occurrences.values(),0)),resultEnd=resultStart+resultCount-1;
+    dataWs['!cols']=[{wch:18},{wch:16},{wch:20},{wch:11},{wch:16},{wch:12},{wch:24},{wch:30}];dataWs['!autofilter']={ref:'A1:H'+Math.max(1,dataRows.length)};
+    const layout=[];for(let i=0;i<resultEnd;i++)layout.push([]);
+    layout[0]=['CERCA GIACENZE MAGAZZINO'];layout[1]=['INSERISCI ARTICOLO E TAGLIA: I TOTALI E LE POSIZIONI SI AGGIORNANO AUTOMATICAMENTE.'];layout[2]=['ARTICOLO',''];layout[3]=['TAGLIA',''];layout[5]=['STATO','TOTALE'];
+    states.forEach((st,i)=>{layout[stateStart-1+i]=[st,'']});layout[totalRow-1]=['TOTALE GENERALE',''];layout[noteRow-1]=['DATI GENERATI DALLA GIACENZA CORRENTE DI SOMA HUB. IL FOGLIO DATI NASCOSTO VIENE RICOSTRUITO A OGNI ESPORTAZIONE.'];
+    layout[tableHeader-1]=['FILA / SCAFFALE','BANCALE','ARTICOLO','TAGLIA','STATO','QUANTITÀ','NOTE'];
+    const searchWs=XLSX.utils.aoa_to_sheet(layout),rng={qty:`GIACENZE_RICERCA_DATI!$F$2:$F$${lastDataRow}`,article:`GIACENZE_RICERCA_DATI!$C$2:$C$${lastDataRow}`,size:`GIACENZE_RICERCA_DATI!$D$2:$D$${lastDataRow}`,state:`GIACENZE_RICERCA_DATI!$E$2:$E$${lastDataRow}`,key:`GIACENZE_RICERCA_DATI!$H$2:$H$${lastDataRow}`};
+    states.forEach((st,i)=>{const row=stateStart+i,addr='B'+row;searchWs[addr]={t:'str',v:'',f:`IF(OR($B$3="",$B$4=""),"",SUMIFS(${rng.qty},${rng.article},TRIM($B$3),${rng.size},TRIM($B$4),${rng.state},$A$${row}))`}});
+    searchWs['B'+totalRow]={t:'str',v:'',f:`IF(OR($B$3="",$B$4=""),"",SUM($B$${stateStart}:$B$${stateStart+states.length-1}))`};
+    const dataCols=['A','B','C','D','E','F','G'];for(let n=1;n<=resultCount;n++){const row=resultStart+n-1;for(let c=0;c<dataCols.length;c++){const col=dataCols[c],sourceCol=dataCols[c];searchWs[col+row]={t:'str',v:'',f:`IF(OR($B$3="",$B$4=""),"",IFERROR(INDEX(GIACENZE_RICERCA_DATI!$${sourceCol}$2:$${sourceCol}$${lastDataRow},MATCH(TRIM($B$3)&"|"&TRIM($B$4)&"|${n}",${rng.key},0)),""))`}}}
+    searchWs['!ref']=`A1:G${resultEnd}`;searchWs['!cols']=[{wch:18},{wch:18},{wch:28},{wch:12},{wch:16},{wch:14},{wch:42}];searchWs['!merges']=['A1:G1','A2:G2',`A${noteRow}:G${noteRow}`].map(XLSX.utils.decode_range);
+    const style=(addr,sx)=>{if(searchWs[addr]&&sx!=null)searchWs[addr].s=clone(sx)},fill=(row,a,b,sx)=>{for(let c=a;c<=b;c++)style(XLSX.utils.encode_cell({r:row-1,c}),sx)};
+    fill(1,0,6,this.exportStyles?.title);fill(2,0,6,this.exportStyles?.note);style('A3',this.exportStyles?.header);style('B3',this.exportStyles?.input);style('A4',this.exportStyles?.header);style('B4',this.exportStyles?.input);fill(6,0,1,this.exportStyles?.section);for(let r=stateStart;r<=totalRow;r++){style('A'+r,r===totalRow?this.exportStyles?.header:this.exportStyles?.body);style('B'+r,this.exportStyles?.body)}fill(noteRow,0,6,this.exportStyles?.note);fill(tableHeader,0,6,this.exportStyles?.header);for(let r=resultStart;r<=resultEnd;r++)fill(r,0,6,this.exportStyles?.body);
+    this.replaceSheet(wb,dataName,dataWs,{keepAutofilter:true,freezeRows:1});this.replaceSheet(wb,searchName,searchWs,{keepAutofilter:true,freezeRows:tableHeader});this.#setSheetHidden(wb,dataName,2);
+    this.searchDataReport={ok:true,generatedBy:'SOMA_HUB',source:'CURRENT_STOCK',rows:live.length,lastRow:lastDataRow,formulaCells:states.length+1+resultCount*7,formulaRanges:resultCount,formulasUpdated:0,unmatchedNegative:0}
   }
 
   #dropSheetFilterNames(wb){
@@ -18978,9 +19020,12 @@ class ExcelService{
     }
     zip.file(ctPath,this.#xmlString(ctDoc))
   }
+  async #applyFreezePanes(zip,pkg,errors,fixes){
+    for(const [sheetName,rowsRaw] of this.exportFreezeRows||[]){const rows=Math.max(1,Number(rowsRaw)||1),info=pkg.sheets.get(sheetName);if(!info)continue;const sf=zip.file(info.path);if(!sf)continue;const doc=this.#parseXml(await sf.async('string'),info.path,errors),root=doc.documentElement,ns=root.namespaceURI;let views=[...root.children].find(n=>n.localName==='sheetViews');if(!views){views=doc.createElementNS(ns,'sheetViews');const before=[...root.children].find(n=>['sheetFormatPr','cols','sheetData'].includes(n.localName));before?root.insertBefore(views,before):root.appendChild(views)}let view=[...views.children].find(n=>n.localName==='sheetView');if(!view){view=doc.createElementNS(ns,'sheetView');view.setAttribute('workbookViewId','0');views.appendChild(view)}[...view.children].filter(n=>n.localName==='pane').forEach(n=>n.remove());const pane=doc.createElementNS(ns,'pane');pane.setAttribute('ySplit',String(rows));pane.setAttribute('topLeftCell',`A${rows+1}`);pane.setAttribute('activePane','bottomLeft');pane.setAttribute('state','frozen');const selection=[...view.children].find(n=>n.localName==='selection');selection?view.insertBefore(pane,selection):view.appendChild(pane);zip.file(info.path,this.#xmlString(doc));fixes.push(`${sheetName}: intestazione bloccata (${rows} righe)`)}
+  }
   async #normalizeAndValidatePackage(raw){
     const zip=await globalThis.JSZip.loadAsync(raw),errors=[],fixes=[],pkg=await this.#packageSheets(zip,errors);if(!pkg.wbDoc)throw new Error('Export Excel non valido: workbook non disponibile.');
-    await this.#restoreBlueprintTables(zip,pkg,errors,fixes);
+    await this.#restoreBlueprintTables(zip,pkg,errors,fixes);await this.#applyFreezePanes(zip,pkg,errors,fixes);
     // Remove stale Excel filter database names from every sheet backed by a real table.
     const tableSheetIds=new Set(this.tableBlueprints.map(b=>pkg.sheets.get(b.sheetName)?.index).filter(Number.isInteger));const defined=[...pkg.wbDoc.getElementsByTagNameNS('*','definedName')];for(const n of defined){if(n.getAttribute('name')==='_xlnm._FilterDatabase'&&tableSheetIds.has(Number(n.getAttribute('localSheetId')))){const idx=Number(n.getAttribute('localSheetId')),name=pkg.sheetNodes[idx]?.getAttribute('name')||'Foglio';fixes.push(`${name}: rimosso _FilterDatabase ridondante`);n.remove()}}
     const dn=[...pkg.wbDoc.getElementsByTagNameNS('*','definedNames')][0];if(dn&&!dn.children.length)dn.remove();
@@ -18990,7 +19035,7 @@ class ExcelService{
     // Validator: relationships, table refs, column counts, no duplicate worksheet filters, no #REF!.
     const validated=[];for(const bp of this.tableBlueprints){const info=pkg.sheets.get(bp.sheetName);if(!info)continue;const sf=zip.file(info.path);if(!sf){errors.push(`${bp.sheetName}: foglio mancante`);continue}const sdoc=this.#parseXml(await sf.async('string'),info.path,errors),root=sdoc.documentElement;if([...root.children].some(n=>n.localName==='autoFilter'))errors.push(`${bp.sheetName}: AutoFilter foglio ridondante ancora presente`);const parts=[...root.getElementsByTagNameNS('*','tablePart')];if(!parts.length){errors.push(`${bp.sheetName}: tableParts assente`);continue}const rp=this.#relsPath(info.path),rf=zip.file(rp);if(!rf){errors.push(`${bp.sheetName}: relazioni foglio assenti`);continue}const rdoc=this.#parseXml(await rf.async('string'),rp,errors),rels=new Map([...rdoc.getElementsByTagNameNS('*','Relationship')].map(r=>[r.getAttribute('Id'),r.getAttribute('Target')]));for(const part of parts){const rid=part.getAttributeNS('http://schemas.openxmlformats.org/officeDocument/2006/relationships','id')||part.getAttribute('r:id'),target=rels.get(rid);if(!target){errors.push(`${bp.sheetName}: relazione ${rid||'?'} non risolta`);continue}const tablePath=this.#xmlPath(info.path,target),tf=zip.file(tablePath);if(!tf){errors.push(`${bp.sheetName}: ${tablePath} mancante`);continue}const tdoc=this.#parseXml(await tf.async('string'),tablePath,errors),table=tdoc.documentElement,ref=table.getAttribute('ref')||'',af=[...table.children].find(n=>n.localName==='autoFilter'),cols=[...tdoc.getElementsByTagNameNS('*','tableColumn')],expected=this.exportTableRanges.get(bp.sheetName)||bp.ref;if(ref!==expected)errors.push(`${bp.sheetName}: range tabella ${ref} ≠ ${expected}`);if(!af||af.getAttribute('ref')!==ref)errors.push(`${bp.sheetName}: AutoFilter tabella non sincronizzato`);const m=ref.match(/^([A-Z]+)(\d+):([A-Z]+)(\d+)$/);if(!m)errors.push(`${bp.sheetName}: range tabella non valido (${ref})`);else{const col=n=>{let v=0;for(const ch of n)v=v*26+ch.charCodeAt(0)-64;return v};const width=col(m[3])-col(m[1])+1;if(cols.length!==width)errors.push(`${bp.sheetName}: ${cols.length} colonne tabella per range largo ${width}`)}validated.push(bp.sheetName)}}
     const badRefs=[];for(const path of Object.keys(zip.files).filter(p=>/^xl\/worksheets\/sheet\d+\.xml$/.test(p))){const f=zip.file(path);if(f&&(await f.async('string')).includes('#REF!'))badRefs.push(path)}if(badRefs.length)errors.push(`Riferimenti #REF! trovati in ${badRefs.join(', ')}`);
-    this.lastValidation={ok:errors.length===0,appVersion:CONFIG.appVersion,checkedAt:nowIso(),tableSheets:[...new Set(validated)],fixes:[...new Set(fixes)],integrity:this.lastIntegrity||null,searchData:this.searchDataReport||null,errors};if(errors.length)throw new Error(`Export Excel bloccato dal validatore V28: ${errors.slice(0,4).join(' · ')}`);return await zip.generateAsync({type:'uint8array',compression:'DEFLATE',compressionOptions:{level:6}})
+    this.lastValidation={ok:errors.length===0,appVersion:CONFIG.appVersion,checkedAt:nowIso(),tableSheets:[...new Set(validated)],fixes:[...new Set(fixes)],integrity:this.lastIntegrity||null,searchData:this.searchDataReport||null,errors};if(errors.length)throw new Error(`Export Excel bloccato dal validatore SOMA: ${errors.slice(0,4).join(' · ')}`);return await zip.generateAsync({type:'uint8array',compression:'DEFLATE',compressionOptions:{level:6}})
   }
   async exportRegistry(){await ensureXlsx();const wb=X().utils.book_new();X().utils.book_append_sheet(wb,this.movementSheet(),'MOVIMENTI');X().utils.book_append_sheet(wb,this.auditSheet(),'AUDIT');const name=`REGISTRO_NOVA_${new Date().toISOString().slice(0,10)}.xlsx`,out=X().write(wb,{type:'array',bookType:'xlsx',compression:true});this.#download(out,name);return name}
   #download(out,name){const blob=new Blob([out],{type:'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download=name;a.style.display='none';document.body.appendChild(a);a.click();setTimeout(()=>{URL.revokeObjectURL(url);a.remove()},1500)}
@@ -19050,12 +19095,39 @@ class ExcelService{
   }
   #writeIdentityRow(ws,rowIndex,cols,r,templateRow){const template=c=>Number.isInteger(c)&&c>=0?ws[X().utils.encode_cell({r:templateRow,c})]:null;setCell(ws,rowIndex,cols.article,r.article,template(cols.article));setCell(ws,rowIndex,cols.size,r.size,template(cols.size));if(cols.location>=0)setCell(ws,rowIndex,cols.location,r.location,template(cols.location));else{const [fila='',scaffale='']=String(r.location||'').split('/');setCell(ws,rowIndex,cols.fila,fila,template(cols.fila));setCell(ws,rowIndex,cols.scaffale,scaffale,template(cols.scaffale))}setCell(ws,rowIndex,cols.pallet,r.pallet,template(cols.pallet));setCell(ws,rowIndex,cols.description,r.description||'',template(cols.description))}
   #replaceSimpleMagazine(wb,sheetName,rows){const headers=['CODICE SAP','TAGLIA','DESCRIZIONE','FILA/SCAFFALE','BANCALE',...CONFIG.states],groups=new Map();for(const r of rows){const k=identity(r);if(!groups.has(k))groups.set(k,{...r,states:Object.fromEntries(CONFIG.states.map(s=>[s,0]))});groups.get(k).states[r.state]=(groups.get(k).states[r.state]||0)+r.quantity}const aoa=[headers,...[...groups.values()].map(r=>[r.article,r.size,r.description||'',r.location,r.pallet,...CONFIG.states.map(s=>r.states[s]||0)])],ws=X().utils.aoa_to_sheet(aoa);this.replaceSheet(wb,sheetName,ws)}
-  replaceSheet(wb,name,ws,{keepAutofilter=false}={}){if(wb.SheetNames.includes(name))wb.Sheets[name]=ws;else X().utils.book_append_sheet(wb,ws,name);if(name!=='NOVA_DATI'&&ws?.['!ref']){this.exportTableRanges.set(name,ws['!ref']);const rg=X().utils.decode_range(ws['!ref']),h=[];for(let c=rg.s.c;c<=rg.e.c;c++)h.push(String(ws[X().utils.encode_cell({r:rg.s.r,c})]?.v??`COLONNA ${c-rg.s.c+1}`));this.exportTableHeaders.set(name,h)}if(!keepAutofilter)delete ws?.['!autofilter']}
-  movementSheet(){const h=['ID','DATA / ORA','TIPO','OPERATORE','ARTICOLO','TAGLIA','STATO','QUANTITÀ','DA','BANCALE DA','A','BANCALE A','DESTINAZIONE','ORIGINE','NOTE','ANNULLATO'];const rows=this.store.db.ledger.map(e=>[e.id,fmtDateTime(e.at),e.type,e.operator,e.item?.article||'',e.item?.size||'',e.item?.state||'',e.quantity||Math.abs(e.delta||0),e.from?.location||e.atBucket?.location||'',e.from?.pallet||e.atBucket?.pallet||'',e.to?.location||'',e.to?.pallet||'',e.destination||e.source?.destination||'',e.source?.kind||'',e.note||e.source?.note||'',e.cancelledAt?fmtDateTime(e.cancelledAt):'']),ws=X().utils.aoa_to_sheet([h,...rows]);ws['!cols']=[{wch:20},{wch:19},{wch:14},{wch:16},{wch:20},{wch:10},{wch:15},{wch:12},{wch:16},{wch:16},{wch:16},{wch:16},{wch:22},{wch:18},{wch:36},{wch:19}];return ws}
-  receiptSheet(){const h=['ENTRATA','FORNITORE','NUMERO DOCUMENTO','DATA DOCUMENTO','ARRIVO','OPERATORE','ARTICOLO','TAGLIA','STATO','QTA DOCUMENTO','QTA CONTROLLATA','DA UBICARE','UBICATI','PRELEVATI DIRETTI','PALLET RICEVIMENTO','POSIZIONE SUGGERITA','STATO ENTRATA','ANNULLATA IL','ANNULLATA DA'];const rows=[];for(const r of this.store.db.receipts)for(const l of r.lines||[]){const s=this.domain.receiving.lineStats(r,l);rows.push([r.id,r.supplier,r.ddtNumber,r.ddtDate,fmtDateTime(r.receivedAt),r.operator,l.article,l.size,l.state,l.ddtQuantity,l.checkedQuantity,s.pending,s.putAway,s.direct,l.receivingPallet,[l.suggestedLocation,l.suggestedPallet].filter(Boolean).join(' · '),this.domain.receiving.status(r),r.cancelledAt?fmtDateTime(r.cancelledAt):'',r.cancelledBy||''])}return X().utils.aoa_to_sheet([h,...rows])}
-  requestSheet(){const h=['RICHIESTA','DATA','DESTINAZIONE','OPERATORE','RIFERIMENTO','STATO','ARTICOLO','TAGLIA','CARTONI RICHIESTI','CARTONI PRESI','CARTONI RESIDUI','PEZZI SCARICATI','MARKER','NOTE'];const rows=[];for(const r of this.store.db.requests)for(const l of r.lines||[]){const d=this.domain.requests.deliveredForLine(r,l.id);rows.push([r.id,fmtDateTime(r.requestedAt),r.destination,r.operator,r.reference,r.deletedAt?'ELIMINATA':r.status,l.article,l.size,l.cartonsRequested,d.cartons,Math.max(0,l.cartonsRequested-d.cartons),d.pieces,l.marker,l.note])}return X().utils.aoa_to_sheet([h,...rows])}
-  issueSheet(){const h=['SCARICO','DATA','OPERATORE','DESTINAZIONE','RICHIESTA','ARTICOLO','TAGLIA','STATO','PEZZI','CARTONI','FILA/SCAFFALE','BANCALE','NOTE'];const rows=[];for(const d of this.store.db.issues)for(const i of d.items||[])rows.push([d.id,fmtDateTime(d.createdAt),d.operator,d.destination,d.requestId,i.article,i.size,i.state,i.pieces,i.cartons,i.source?.location||'',i.source?.pallet||'',d.note]);return X().utils.aoa_to_sheet([h,...rows])}
-  auditSheet(){const h=['DATA / ORA','OPERATORE','AZIONE','ENTITÀ','ID','ARTICOLO','TAGLIA','STATO','FILA/SCAFFALE','BANCALE','PRIMA','DOPO','DELTA','MOTIVO','SESSIONE','DETTAGLI'];const rows=this.store.db.audits.map(a=>{const m=a.meta||{},before=Number(a.before?.quantity),after=Number(a.after?.quantity),hasBefore=Number.isFinite(before),hasAfter=Number.isFinite(after),delta=Number.isFinite(Number(m.delta))?Number(m.delta):(hasBefore&&hasAfter?after-before:'');return[fmtDateTime(a.at),a.operator,a.action,a.entityType,a.entityId,m.article||'',m.size||'',m.state||'',m.location||'',m.pallet||'',hasBefore?before:'',hasAfter?after:'',delta,m.reason||'',m.sessionId||'',JSON.stringify(m)]});return X().utils.aoa_to_sheet([h,...rows])}
+  replaceSheet(wb,name,ws,{keepAutofilter=false,freezeRows=0}={}){if(wb.SheetNames.includes(name))wb.Sheets[name]=ws;else X().utils.book_append_sheet(wb,ws,name);if(name!=='NOVA_DATI'&&ws?.['!ref']){this.exportTableRanges.set(name,ws['!ref']);const rg=X().utils.decode_range(ws['!ref']),h=[];for(let c=rg.s.c;c<=rg.e.c;c++)h.push(String(ws[X().utils.encode_cell({r:rg.s.r,c})]?.v??`COLONNA ${c-rg.s.c+1}`));this.exportTableHeaders.set(name,h)}if(freezeRows>0)this.exportFreezeRows.set(name,freezeRows);if(!keepAutofilter)delete ws?.['!autofilter']}
+  movementSheet(){
+    const h=['ID','DATA / ORA','TIPO','OPERATORE','ARTICOLO','TAGLIA','STATO','QUANTITÀ','DA','BANCALE DA','A','BANCALE A','DESTINAZIONE','ORIGINE','NOTE','ANNULLATO IL'],labels={IN:'ENTRATA',OUT:'SCARICO',TRANSFER:'TRASFERIMENTO',ADJUST:'RETTIFICA'},events=[...(this.store.db.ledger||[])].sort((a,b)=>new Date(a.at||0)-new Date(b.at||0)),rows=events.map(e=>[e.id,this.#excelDate(e.at),labels[e.type]||e.type,e.operator,e.item?.article||'',e.item?.size||'',e.item?.state||'',Number(e.quantity??Math.abs(e.delta||0))||0,e.from?.location||e.atBucket?.location||'',e.from?.pallet||e.atBucket?.pallet||'',e.to?.location||'',e.to?.pallet||'',e.destination||e.source?.destination||'',e.source?.kind||'',e.note||e.source?.note||'',this.#excelDate(e.cancelledAt)]);
+    return this.#formatTableSheet(X().utils.aoa_to_sheet([h,...rows]),{widths:[22,19,17,16,20,10,15,12,18,16,18,16,22,18,36,19],dateCols:[1,15]})
+  }
+  receiptSheet(){
+    const h=['ENTRATA','FORNITORE','NUMERO DOCUMENTO','DATA DOCUMENTO','ARRIVO','OPERATORE','ARTICOLO','TAGLIA','STATO','QTA DOCUMENTO','QTA CONTROLLATA','DA UBICARE','UBICATI','PRELEVATI DIRETTI','PALLET RICEVIMENTO','POSIZIONE SUGGERITA','STATO ENTRATA','ANNULLATA IL','ANNULLATA DA'],rows=[],receipts=[...(this.store.db.receipts||[])].sort((a,b)=>new Date(a.receivedAt||a.createdAt||0)-new Date(b.receivedAt||b.createdAt||0));
+    for(const r of receipts)for(const l of r.lines||[]){const s=this.domain.receiving.lineStats(r,l);rows.push([r.id,r.supplier,r.ddtNumber,this.#excelDate(r.ddtDate),this.#excelDate(r.receivedAt),r.operator,l.article,l.size,l.state,Number(l.ddtQuantity)||0,Number(l.checkedQuantity)||0,Number(s.pending)||0,Number(s.putAway)||0,Number(s.direct)||0,l.receivingPallet,[l.suggestedLocation,l.suggestedPallet].filter(Boolean).join(' · '),this.domain.receiving.status(r),this.#excelDate(r.cancelledAt),r.cancelledBy||''])}
+    return this.#formatTableSheet(X().utils.aoa_to_sheet([h,...rows]),{widths:[20,24,20,15,19,16,20,10,15,14,16,12,12,18,18,26,18,19,16],dateCols:[4,17],dateOnlyCols:[3]})
+  }
+  requestSheet(){
+    const h=['RICHIESTA','DATA','DESTINAZIONE','OPERATORE','RIFERIMENTO','STATO','ARTICOLO','TAGLIA','CARTONI RICHIESTI','CARTONI PRESI','CARTONI RESIDUI','PEZZI SCARICATI','MARKER','NOTE'],rows=[],requests=[...(this.store.db.requests||[])].sort((a,b)=>new Date(a.requestedAt||a.createdAt||0)-new Date(b.requestedAt||b.createdAt||0));
+    for(const r of requests)for(const l of r.lines||[]){const d=this.domain.requests.deliveredForLine(r,l.id);rows.push([r.id,this.#excelDate(r.requestedAt||r.createdAt),r.destination,r.operator,r.reference,r.deletedAt?'ELIMINATA':r.status,l.article,l.size,Number(l.cartonsRequested)||0,Number(d.cartons)||0,Math.max(0,(Number(l.cartonsRequested)||0)-(Number(d.cartons)||0)),Number(d.pieces)||0,l.marker,l.note])}
+    return this.#formatTableSheet(X().utils.aoa_to_sheet([h,...rows]),{widths:[20,19,20,16,22,16,20,10,18,16,16,16,10,36],dateCols:[1]})
+  }
+  issueSheet(){
+    const h=['SCARICO','DATA','OPERATORE','DESTINAZIONE','RICHIESTA','ARTICOLO','TAGLIA','STATO','PEZZI','CARTONI','FILA/SCAFFALE','BANCALE','NOTE'],rows=[],issues=[...(this.store.db.issues||[])].sort((a,b)=>new Date(a.createdAt||0)-new Date(b.createdAt||0));
+    for(const d of issues)for(const i of d.items||[])rows.push([d.id,this.#excelDate(d.createdAt),d.operator,d.destination,d.requestId,i.article,i.size,i.state,Number(i.pieces)||0,Number(i.cartons)||0,i.source?.location||'',i.source?.pallet||'',d.note]);
+    return this.#formatTableSheet(X().utils.aoa_to_sheet([h,...rows]),{widths:[20,19,16,20,20,20,10,15,12,12,18,16,36],dateCols:[1]})
+  }
+  registrySheet(){
+    const h=['DATA / ORA','OPERATORE','AREA','OPERAZIONE','RIFERIMENTO','DETTAGLIO'],rows=[...(this.store.db.audits||[])].sort((a,b)=>new Date(a.at||0)-new Date(b.at||0)).map(a=>{const m=a.meta||{},p=[];if(m.article)p.push([m.article,m.size].filter(Boolean).join(' · '));if(m.state)p.push(m.state);if(m.location||m.pallet)p.push([m.location,m.pallet].filter(Boolean).join(' / '));const before=Number(a.before?.quantity),after=Number(a.after?.quantity);if(Number.isFinite(before)&&Number.isFinite(after))p.push(`Q.tà ${before} → ${after}`);else if(a.before?.status||a.after?.status)p.push([a.before?.status,a.after?.status].filter(Boolean).join(' → '));if(Number.isFinite(Number(m.delta)))p.push(`Δ ${Number(m.delta)>0?'+':''}${Number(m.delta)}`);if(m.reason)p.push(m.reason);if(m.note)p.push(m.note);return[this.#excelDate(a.at),a.operator,a.entityType,a.action,a.entityId,p.join(' · ')]});
+    return this.#formatTableSheet(X().utils.aoa_to_sheet([h,...rows]),{widths:[19,16,16,28,24,56],dateCols:[0]})
+  }
+  auditSheet(){
+    const h=['DATA / ORA','OPERATORE','AZIONE','ENTITÀ','ID','ARTICOLO','TAGLIA','STATO','FILA/SCAFFALE','BANCALE','PRIMA','DOPO','DELTA','MOTIVO','SESSIONE','DETTAGLI'],rows=[...(this.store.db.audits||[])].sort((a,b)=>new Date(a.at||0)-new Date(b.at||0)).map(a=>{const m=a.meta||{},before=Number(a.before?.quantity),after=Number(a.after?.quantity),hasBefore=Number.isFinite(before),hasAfter=Number.isFinite(after),delta=Number.isFinite(Number(m.delta))?Number(m.delta):(hasBefore&&hasAfter?after-before:'');return[this.#excelDate(a.at),a.operator,a.action,a.entityType,a.entityId,m.article||'',m.size||'',m.state||'',m.location||'',m.pallet||'',hasBefore?before:'',hasAfter?after:'',delta,m.reason||'',m.sessionId||'',JSON.stringify(m)]});
+    return this.#formatTableSheet(X().utils.aoa_to_sheet([h,...rows]),{widths:[19,16,28,14,24,20,10,15,18,16,12,12,12,24,24,60],dateCols:[0]})
+  }
+  countSheet(){
+    const relevant=[...(this.store.db.audits||[])].filter(a=>['COUNT_RECTIFICATION','COUNT_SESSION_COMPLETED','VOICE_INVENTORY_CONFIRMED'].includes(a.action)).sort((a,b)=>new Date(a.at||0)-new Date(b.at||0));if(!relevant.length)return null;
+    const h=['SESSIONE','DATA / ORA','OPERATORE','RECORD','ARTICOLO','TAGLIA','STATO','FILA / SCAFFALE','BANCALE','ATTESO','CONTATO','DIFFERENZA','MOTIVO','NOTE','RIEPILOGO'],rows=relevant.map(a=>{const m=a.meta||{},session=m.sessionId||a.entityId||'',isLine=a.action==='COUNT_RECTIFICATION',before=Number(a.before?.quantity),after=Number(a.after?.quantity),delta=Number.isFinite(Number(m.delta))?Number(m.delta):(Number.isFinite(before)&&Number.isFinite(after)?after-before:''),sum=a.after?.summary||{},summary=a.action==='COUNT_SESSION_COMPLETED'?[`invariati ${sum.unchanged??''}`,`differenze ${sum.differences??''}`,`+${sum.positive??0}`,`${sum.negative??0}`,`saldo ${sum.net??0}`].join(' · '):a.action==='VOICE_INVENTORY_CONFIRMED'?`${a.after?.rows??''} righe · ${m.engine||''}`:'';return[session,this.#excelDate(a.at),a.operator,a.action,isLine?m.article||'':'',isLine?m.size||'':'',isLine?m.state||'':'',isLine?m.location||'':a.after?.location||'',isLine?m.pallet||'':a.after?.pallet||'',isLine&&Number.isFinite(before)?before:'',isLine&&Number.isFinite(after)?after:'',isLine?delta:'',isLine?m.reason||'':'',isLine?m.note||'':'',summary]});
+    return this.#formatTableSheet(X().utils.aoa_to_sheet([h,...rows]),{widths:[24,19,16,28,20,10,15,18,16,12,12,12,22,38,54],dateCols:[1]})
+  }
   #exportDb(){const out=clone(this.store.db);out.master={...out.master,rows:this.domain.stock.positive().map(r=>({...r,sourceRow:null})),importedAt:nowIso(),source:'NOVA_EXPORT_BASELINE'};out.ledger=(out.ledger||[]).map(e=>({...e,affectsStock:false}));return out}
   buildDataSheet(wb){const exportedAt=nowIso(),payload={schema:CONFIG.version,exportedAt,db:this.#exportDb()},json=JSON.stringify(payload),chunk=30000,rows=[['SO_MAGAZZINO_NOVA_V1'],['SCHEMA',CONFIG.version],['ESPORTATO_IL',exportedAt],['JSON_CHUNKS',Math.ceil(json.length/chunk)]];for(let i=0;i<json.length;i+=chunk)rows.push([json.slice(i,i+chunk)]);const ws=X().utils.aoa_to_sheet(rows);this.replaceSheet(wb,'NOVA_DATI',ws);wb.Workbook=wb.Workbook||{};wb.Workbook.Sheets=Array.isArray(wb.Workbook.Sheets)?wb.Workbook.Sheets:wb.SheetNames.map(name=>({name,Hidden:0}));while(wb.Workbook.Sheets.length<wb.SheetNames.length)wb.Workbook.Sheets.push({name:wb.SheetNames[wb.Workbook.Sheets.length],Hidden:0});const idx=wb.SheetNames.indexOf('NOVA_DATI');if(idx>=0){wb.Workbook.Sheets[idx]=wb.Workbook.Sheets[idx]||{name:'NOVA_DATI'};wb.Workbook.Sheets[idx].name='NOVA_DATI';wb.Workbook.Sheets[idx].Hidden=2}}
 }
@@ -20788,6 +20860,6 @@ try{globalThis.__NOVA_LEGACY_AVAILABLE=!!localStorage.getItem(CONFIG.legacyStora
 const switchSite=async siteId=>{await ui.selectSite(siteId);return auth.site()};
 globalThis.NOVA=Object.freeze({version:CONFIG.appVersion,schema:CONFIG.version,identityVersion:CONFIG.identityVersion,store,auth,router,domain,excel,requestDocs,ui,sounds,sites:SITES,operators:OPERATORS,roles:ROLE_DEFS,saveIdentityRegistry,capabilities:Object.freeze({operational:ALL_CAPS,master:MASTER_CAPS,administration:ADMIN_CAPS,globalAdmin:GLOBAL_ADMIN_CAPS}),identityValidation:IDENTITY_VALIDATION,switchSite});
 ui.render();</script>
-<!-- SOMA_BUILD:R31.92-20260930 -->
+<!-- SOMA_BUILD:R31.93-20260930 -->
 </body>
 </html>
