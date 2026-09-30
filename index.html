@@ -1,13 +1,13 @@
 <!doctype html>
 <html lang="it">
 <head>
-<meta name="soma-build" content="R31.91-20260929">
+<meta name="soma-build" content="R31.92-20260930">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
 <script id="soma-build-freshness">
 (() => {
-  const CURRENT_BUILD='R31.91-20260929',CHECK_KEY='soma:last-build-refresh';
+  const CURRENT_BUILD='R31.92-20260930',CHECK_KEY='soma:last-build-refresh';
   globalThis.SOMA_BUILD=CURRENT_BUILD;
   const check=async()=>{
     try{
@@ -18891,48 +18891,47 @@ class ExcelService{
     const out=await this.buildExportBytes();
     const stamp=new Date().toISOString().slice(0,16).replace(/[:T]/g,'-'),stem=(this.store.db.master.filename||'MAGAZZINO').replace(/\.xlsx$/i,'').replace(/_NOVA_.*/i,''),name=`${stem}_NOVA_V28_${stamp}.xlsx`;
     this.#download(out,name);
-    const exportedAudit=this.domain.audit.record('MASTER_EXPORTED','MASTER',name,null,{name,validation:this.lastValidation});this.store.db.settings.lastExportAt=exportedAudit.at;this.store.db.settings.lastExportName=name;this.store.save('master:export:baseline');return name
+    const exportedAudit=this.domain.audit.record('MASTER_EXPORTED','MASTER',name,null,{name,validation:this.lastValidation,generatedSheets:['CERCA_GIACENZE','REGISTRO_MOVIMENTI','ENTRATE_MERCI','RICHIESTE','SCARICHI','AUDIT']});this.store.db.settings.lastExportAt=exportedAudit.at;this.store.db.settings.lastExportName=name;this.store.save('master:export:baseline');return name
   }
   #activeSearchChanges(){
     const out=[],push=(item,bucket,delta,event)=>{const d=Number(delta)||0;if(!d)return;out.push({item:cleanItem(item),bucket:cleanBucket(bucket),delta:d,eventId:event?.id||'',at:event?.at||'',kind:event?.source?.kind||event?.type||''})};
     for(const e of this.store.db.ledger||[]){if(e?.cancelledAt||e?.affectsStock===false)continue;const q=number(e.quantity);if(e.type==='IN')push(e.item,e.to,q,e);else if(e.type==='OUT')push(e.item,e.from,-q,e);else if(e.type==='TRANSFER'){push(e.item,e.from,-q,e);push(e.item,e.to,q,e)}else if(e.type==='ADJUST')push(e.item,e.atBucket,number(e.delta),e)}
     return out
   }
+  #searchExportRows(){
+    const descriptions=new Map();
+    for(const r of normalizeMasterRows(this.store.db.master.rows||[])){
+      const key=[normalizeArticle(r.article),norm(r.size)].join('|');
+      if(!descriptions.has(key)&&r.description)descriptions.set(key,String(r.description).trim())
+    }
+    return this.domain.stock.positive().map(r=>({
+      article:normalizeArticle(r.article),size:norm(r.size),state:norm(r.state),quantity:Number(r.quantity)||0,
+      location:norm(r.location),pallet:norm(r.pallet),
+      description:String(r.description||descriptions.get([normalizeArticle(r.article),norm(r.size)].join('|'))||'').trim()
+    })).sort((a,b)=>a.article.localeCompare(b.article,'it',{numeric:true})||a.size.localeCompare(b.size,'it',{numeric:true})||a.location.localeCompare(b.location,'it',{numeric:true})||a.pallet.localeCompare(b.pallet,'it',{numeric:true})||a.state.localeCompare(b.state,'it'))
+  }
+  #setSheetHidden(wb,name,hidden=1){
+    wb.Workbook=wb.Workbook||{};
+    const old=Array.isArray(wb.Workbook.Sheets)?wb.Workbook.Sheets:[],byName=new Map(old.map(x=>[x?.name,x]));
+    wb.Workbook.Sheets=wb.SheetNames.map(n=>{const prev=byName.get(n)||{};return{...prev,name:n,Hidden:n===name?hidden:Number(prev.Hidden||0)}})
+  }
   updateSearchData(wb){
-    const XLSX=X(),dataName='GIACENZE_RICERCA_DATI',searchName='CERCA_GIACENZE',ws=wb.Sheets[dataName];
-    if(!ws){this.searchDataReport={ok:true,skipped:true,reason:'Foglio GIACENZE_RICERCA_DATI non presente'};return}
-    const rg=XLSX.utils.decode_range(ws['!ref']||'A1:H1'),dataStart=rg.s.r+1,oldEnd=rg.e.r,template=snapshotRow(ws,Math.min(dataStart,oldEnd),7),rows=[];
-    const fullKey=x=>[normalizeArticle(x.article),norm(x.size),norm(x.location),norm(x.pallet),norm(x.state)].join('|'),physicalKey=x=>[normalizeArticle(x.article),norm(x.size),norm(x.location),norm(x.pallet)].join('|');
-    for(let r=dataStart;r<=oldEnd;r++){
-      const read=c=>ws[XLSX.utils.encode_cell({r,c})]?.v??'',article=normalizeArticle(read(2)),quantity=Math.max(0,Number(read(5)||0)||0);
-      if(!article)continue;
-      rows.push({location:norm(read(0)),pallet:norm(read(1)),article,size:norm(read(3)),state:norm(read(4))||'NUOVO',quantity,note:String(read(6)||''),snapshot:snapshotRow(ws,r,7),sourceOrder:r})
+    const XLSX=X(),dataName='GIACENZE_RICERCA_DATI',searchName='CERCA_GIACENZE',live=this.#searchExportRows(),occurrences=new Map();
+    const dataRows=[['FILA/SCAFFALE','BANCALE','ARTICOLO','TAGLIA','STATO','QUANTITÀ','NOTE','CHIAVE_RICERCA']];
+    const searchRows=[['ARTICOLO','TAGLIA','DESCRIZIONE','STATO','QUANTITÀ','FILA/SCAFFALE','BANCALE']];
+    for(const r of live){
+      const k=[r.article,r.size].join('|'),n=(occurrences.get(k)||0)+1;occurrences.set(k,n);
+      dataRows.push([r.location,r.pallet,r.article,r.size,r.state,r.quantity,'',r.article+'|'+r.size+'|'+n]);
+      searchRows.push([r.article,r.size,r.description,r.state,r.quantity,r.location,r.pallet])
     }
-    const baselineRows=rows.length,changes=this.#activeSearchChanges();let unmatchedNegative=0,newRows=0,changedRows=0;
-    for(const change of changes){
-      const target={article:change.item.article,size:change.item.size,state:change.item.state,location:change.bucket.location,pallet:change.bucket.pallet},d=Number(change.delta)||0;if(!d)continue;
-      const exact=rows.find(r=>fullKey(r)===fullKey(target)),physical=rows.filter(r=>physicalKey(r)===physicalKey(target)).sort((a,b)=>(a.sourceOrder??1e12)-(b.sourceOrder??1e12));
-      if(d>0){
-        const row=exact||(physical.length===1?physical[0]:null);
-        if(row){row.quantity+=d;changedRows++}
-        else{rows.push({...target,quantity:d,note:'',snapshot:null,sourceOrder:1e12+rows.length});newRows++}
-        continue
-      }
-      let remaining=Math.abs(d),candidates=[...(exact&&exact.quantity>1e-9?[exact]:[]),...physical.filter(r=>r!==exact&&r.quantity>1e-9)];
-      for(const row of candidates){if(remaining<=1e-9)break;const take=Math.min(row.quantity,remaining);if(take>0){row.quantity=Math.max(0,row.quantity-take);remaining-=take;changedRows++}}
-      if(remaining>1e-9)unmatchedNegative+=remaining
-    }
-    const live=rows.filter(r=>r.quantity>=0),occurrences=new Map();
-    for(const row of live){const k=[normalizeArticle(row.article),norm(row.size)].join('|'),n=(occurrences.get(k)||0)+1;occurrences.set(k,n);row.searchKey=`${normalizeArticle(row.article)}|${norm(row.size)}|${n}`}
-    const newEnd=Math.max(rg.s.r,dataStart+live.length-1),clearEnd=Math.max(oldEnd,newEnd);
-    for(let r=dataStart;r<=clearEnd;r++)for(let c=0;c<=7;c++)delete ws[XLSX.utils.encode_cell({r,c})];
-    ws['!rows']=ws['!rows']||[];
-    live.forEach((row,i)=>{const rr=dataStart+i,snap=row.snapshot||template,values=[row.location,row.pallet,row.article,row.size,row.state,Number(row.quantity),row.note,row.searchKey];for(let c=0;c<=7;c++)setCell(ws,rr,c,values[c],snap?.cells?.[c]||template?.cells?.[c]);if(snap?.rowMeta)ws['!rows'][rr]=clone(snap.rowMeta)});
-    ws['!ref']=XLSX.utils.encode_range({s:rg.s,e:{r:newEnd,c:Math.max(7,rg.e.c)}});
-    const lastExcelRow=newEnd+1,search=wb.Sheets[searchName],rangeRe=/GIACENZE_RICERCA_DATI!\$([A-H])\$2:\$\1\$(\d+)/g;let formulaCells=0,formulaRanges=0,formulasUpdated=0,staleRefs=0;
-    if(search)for(const addr of Object.keys(search)){if(addr[0]==='!')continue;const cell=search[addr];if(typeof cell?.f!=='string'||!cell.f.includes('GIACENZE_RICERCA_DATI!'))continue;formulaCells++;const before=cell.f;cell.f=before.replace(rangeRe,(m,col)=>'GIACENZE_RICERCA_DATI!$'+col+'$2:$'+col+'$'+lastExcelRow);if(cell.f!==before){formulasUpdated++;delete cell.w}let rangesInCell=0;for(const m of cell.f.matchAll(rangeRe)){formulaRanges++;rangesInCell++;if(Number(m[2])!==lastExcelRow)staleRefs++}if(!rangesInCell)staleRefs++}
-    if(staleRefs)throw new Error(`Export Excel: ${staleRefs} riferimenti CERCA_GIACENZE non sincronizzati.`);
-    this.searchDataReport={ok:true,baselineRows,rows:live.length,zeroRows:live.filter(r=>r.quantity===0).length,netRows:live.length-baselineRows,rowsCreatedDuringSync:newRows,rowsChanged:changedRows,lastRow:lastExcelRow,formulaCells,formulaRanges,formulasUpdated,unmatchedNegative}
+    const dataWs=XLSX.utils.aoa_to_sheet(dataRows),searchWs=XLSX.utils.aoa_to_sheet(searchRows);
+    dataWs['!cols']=[{wch:18},{wch:16},{wch:20},{wch:11},{wch:16},{wch:12},{wch:24},{wch:30}];
+    searchWs['!cols']=[{wch:20},{wch:11},{wch:42},{wch:16},{wch:12},{wch:18},{wch:16}];
+    searchWs['!autofilter']={ref:'A1:G'+Math.max(1,searchRows.length)};
+    this.replaceSheet(wb,dataName,dataWs);
+    this.replaceSheet(wb,searchName,searchWs,{keepAutofilter:true});
+    this.#setSheetHidden(wb,dataName,2);
+    this.searchDataReport={ok:true,generatedBy:'SOMA_HUB',source:'CURRENT_STOCK',rows:live.length,lastRow:Math.max(1,live.length+1),formulaCells:0,formulaRanges:0,formulasUpdated:0,unmatchedNegative:0}
   }
 
   #dropSheetFilterNames(wb){
@@ -19051,8 +19050,8 @@ class ExcelService{
   }
   #writeIdentityRow(ws,rowIndex,cols,r,templateRow){const template=c=>Number.isInteger(c)&&c>=0?ws[X().utils.encode_cell({r:templateRow,c})]:null;setCell(ws,rowIndex,cols.article,r.article,template(cols.article));setCell(ws,rowIndex,cols.size,r.size,template(cols.size));if(cols.location>=0)setCell(ws,rowIndex,cols.location,r.location,template(cols.location));else{const [fila='',scaffale='']=String(r.location||'').split('/');setCell(ws,rowIndex,cols.fila,fila,template(cols.fila));setCell(ws,rowIndex,cols.scaffale,scaffale,template(cols.scaffale))}setCell(ws,rowIndex,cols.pallet,r.pallet,template(cols.pallet));setCell(ws,rowIndex,cols.description,r.description||'',template(cols.description))}
   #replaceSimpleMagazine(wb,sheetName,rows){const headers=['CODICE SAP','TAGLIA','DESCRIZIONE','FILA/SCAFFALE','BANCALE',...CONFIG.states],groups=new Map();for(const r of rows){const k=identity(r);if(!groups.has(k))groups.set(k,{...r,states:Object.fromEntries(CONFIG.states.map(s=>[s,0]))});groups.get(k).states[r.state]=(groups.get(k).states[r.state]||0)+r.quantity}const aoa=[headers,...[...groups.values()].map(r=>[r.article,r.size,r.description||'',r.location,r.pallet,...CONFIG.states.map(s=>r.states[s]||0)])],ws=X().utils.aoa_to_sheet(aoa);this.replaceSheet(wb,sheetName,ws)}
-  replaceSheet(wb,name,ws){if(wb.SheetNames.includes(name))wb.Sheets[name]=ws;else X().utils.book_append_sheet(wb,ws,name);if(name!=='NOVA_DATI'&&ws?.['!ref']){this.exportTableRanges.set(name,ws['!ref']);const rg=X().utils.decode_range(ws['!ref']),h=[];for(let c=rg.s.c;c<=rg.e.c;c++)h.push(String(ws[X().utils.encode_cell({r:rg.s.r,c})]?.v??`COLONNA ${c-rg.s.c+1}`));this.exportTableHeaders.set(name,h)}delete ws?.['!autofilter']}
-  movementSheet(){const h=['ID','DATA / ORA','TIPO','OPERATORE','ARTICOLO','TAGLIA','STATO','QUANTITÀ','DA','BANCALE DA','A','BANCALE A','DESTINAZIONE','ORIGINE','NOTE','ANNULLATO'];const rows=this.store.db.ledger.map(e=>[e.id,fmtDateTime(e.at),e.type,e.operator,e.item?.article||'',e.item?.size||'',e.item?.state||'',e.quantity||Math.abs(e.delta||0),e.from?.location||e.atBucket?.location||'',e.from?.pallet||e.atBucket?.pallet||'',e.to?.location||'',e.to?.pallet||'',e.destination||e.source?.destination||'',e.source?.kind||'',e.note||e.source?.note||'',e.cancelledAt?fmtDateTime(e.cancelledAt):'']);return X().utils.aoa_to_sheet([h,...rows])}
+  replaceSheet(wb,name,ws,{keepAutofilter=false}={}){if(wb.SheetNames.includes(name))wb.Sheets[name]=ws;else X().utils.book_append_sheet(wb,ws,name);if(name!=='NOVA_DATI'&&ws?.['!ref']){this.exportTableRanges.set(name,ws['!ref']);const rg=X().utils.decode_range(ws['!ref']),h=[];for(let c=rg.s.c;c<=rg.e.c;c++)h.push(String(ws[X().utils.encode_cell({r:rg.s.r,c})]?.v??`COLONNA ${c-rg.s.c+1}`));this.exportTableHeaders.set(name,h)}if(!keepAutofilter)delete ws?.['!autofilter']}
+  movementSheet(){const h=['ID','DATA / ORA','TIPO','OPERATORE','ARTICOLO','TAGLIA','STATO','QUANTITÀ','DA','BANCALE DA','A','BANCALE A','DESTINAZIONE','ORIGINE','NOTE','ANNULLATO'];const rows=this.store.db.ledger.map(e=>[e.id,fmtDateTime(e.at),e.type,e.operator,e.item?.article||'',e.item?.size||'',e.item?.state||'',e.quantity||Math.abs(e.delta||0),e.from?.location||e.atBucket?.location||'',e.from?.pallet||e.atBucket?.pallet||'',e.to?.location||'',e.to?.pallet||'',e.destination||e.source?.destination||'',e.source?.kind||'',e.note||e.source?.note||'',e.cancelledAt?fmtDateTime(e.cancelledAt):'']),ws=X().utils.aoa_to_sheet([h,...rows]);ws['!cols']=[{wch:20},{wch:19},{wch:14},{wch:16},{wch:20},{wch:10},{wch:15},{wch:12},{wch:16},{wch:16},{wch:16},{wch:16},{wch:22},{wch:18},{wch:36},{wch:19}];return ws}
   receiptSheet(){const h=['ENTRATA','FORNITORE','NUMERO DOCUMENTO','DATA DOCUMENTO','ARRIVO','OPERATORE','ARTICOLO','TAGLIA','STATO','QTA DOCUMENTO','QTA CONTROLLATA','DA UBICARE','UBICATI','PRELEVATI DIRETTI','PALLET RICEVIMENTO','POSIZIONE SUGGERITA','STATO ENTRATA','ANNULLATA IL','ANNULLATA DA'];const rows=[];for(const r of this.store.db.receipts)for(const l of r.lines||[]){const s=this.domain.receiving.lineStats(r,l);rows.push([r.id,r.supplier,r.ddtNumber,r.ddtDate,fmtDateTime(r.receivedAt),r.operator,l.article,l.size,l.state,l.ddtQuantity,l.checkedQuantity,s.pending,s.putAway,s.direct,l.receivingPallet,[l.suggestedLocation,l.suggestedPallet].filter(Boolean).join(' · '),this.domain.receiving.status(r),r.cancelledAt?fmtDateTime(r.cancelledAt):'',r.cancelledBy||''])}return X().utils.aoa_to_sheet([h,...rows])}
   requestSheet(){const h=['RICHIESTA','DATA','DESTINAZIONE','OPERATORE','RIFERIMENTO','STATO','ARTICOLO','TAGLIA','CARTONI RICHIESTI','CARTONI PRESI','CARTONI RESIDUI','PEZZI SCARICATI','MARKER','NOTE'];const rows=[];for(const r of this.store.db.requests)for(const l of r.lines||[]){const d=this.domain.requests.deliveredForLine(r,l.id);rows.push([r.id,fmtDateTime(r.requestedAt),r.destination,r.operator,r.reference,r.deletedAt?'ELIMINATA':r.status,l.article,l.size,l.cartonsRequested,d.cartons,Math.max(0,l.cartonsRequested-d.cartons),d.pieces,l.marker,l.note])}return X().utils.aoa_to_sheet([h,...rows])}
   issueSheet(){const h=['SCARICO','DATA','OPERATORE','DESTINAZIONE','RICHIESTA','ARTICOLO','TAGLIA','STATO','PEZZI','CARTONI','FILA/SCAFFALE','BANCALE','NOTE'];const rows=[];for(const d of this.store.db.issues)for(const i of d.items||[])rows.push([d.id,fmtDateTime(d.createdAt),d.operator,d.destination,d.requestId,i.article,i.size,i.state,i.pieces,i.cartons,i.source?.location||'',i.source?.pallet||'',d.note]);return X().utils.aoa_to_sheet([h,...rows])}
@@ -20789,6 +20788,6 @@ try{globalThis.__NOVA_LEGACY_AVAILABLE=!!localStorage.getItem(CONFIG.legacyStora
 const switchSite=async siteId=>{await ui.selectSite(siteId);return auth.site()};
 globalThis.NOVA=Object.freeze({version:CONFIG.appVersion,schema:CONFIG.version,identityVersion:CONFIG.identityVersion,store,auth,router,domain,excel,requestDocs,ui,sounds,sites:SITES,operators:OPERATORS,roles:ROLE_DEFS,saveIdentityRegistry,capabilities:Object.freeze({operational:ALL_CAPS,master:MASTER_CAPS,administration:ADMIN_CAPS,globalAdmin:GLOBAL_ADMIN_CAPS}),identityValidation:IDENTITY_VALIDATION,switchSite});
 ui.render();</script>
-<!-- SOMA_BUILD:R31.91-20260929 -->
+<!-- SOMA_BUILD:R31.92-20260930 -->
 </body>
 </html>
