@@ -1,13 +1,13 @@
 <!doctype html>
 <html lang="it">
 <head>
-<meta name="soma-build" content="R31.93-20260930">
+<meta name="soma-build" content="R31.94-20261001">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
 <script id="soma-build-freshness">
 (() => {
-  const CURRENT_BUILD='R31.93-20260930',CHECK_KEY='soma:last-build-refresh';
+  const CURRENT_BUILD='R31.94-20261001',CHECK_KEY='soma:last-build-refresh';
   globalThis.SOMA_BUILD=CURRENT_BUILD;
   const check=async()=>{
     try{
@@ -18478,7 +18478,7 @@ function createEmptyDb(siteId=CONFIG.defaultSiteId){return {
   master:{rows:[],excelRows:[],filename:'',sheetName:'MAGAZZINO',importedAt:null,importedBy:'',siteId:norm(siteId)||CONFIG.defaultSiteId,headerRow:0,columns:{},mode:'wide',source:'NOVA'},
   ledger:[],receipts:[],requests:[],issues:[],audits:[],notifications:[],
   counters:{receipt:0,request:0,issue:0,count:0,countDate:''},
-  settings:{lastExportAt:null,lastExportName:'',legacyMigratedAt:null}
+  settings:{lastExportAt:null,lastExportName:'',legacyMigratedAt:null,historyEpoch:null}
 }}
 
 class EventBus{
@@ -18821,7 +18821,7 @@ class ExcelService{
     if(!bytes&&norm(this.store.siteId)===CONFIG.defaultSiteId){const legacy=await idbGet(MASTER_KEY_LEGACY).catch(()=>null);if(legacy){bytes=legacy;await idbPut(this.masterKey(),legacy).catch(()=>{})}}
     return bytes
   }
-  async importFile(file,{restoreHistory=true}={}){
+  async importFile(file,{restoreHistory=false}={}){
     await ensureXlsx();
     const bytes=await file.arrayBuffer(),wb=X().read(bytes,{type:'array',cellDates:true,cellStyles:true}),parsed=parseMaster(wb),nova=readChunkSheet(wb,'NOVA_DATI','SO_MAGAZZINO_NOVA_V1'),legacy=readChunkSheet(wb,'APP_DATI','SO_WAREHOUSE_APP_DATA_V3');
     let next;
@@ -18841,7 +18841,7 @@ class ExcelService{
       next.master={...next.master,rows:parsed.rows,excelRows:parsed.rows,filename:file.name,sheetName:parsed.sheetName,importedAt:nowIso(),headerRow:parsed.headerRow,columns:parsed.columns,mode:parsed.mode,source:'FRESH_IMPORT'};
     }
     next.master.importedBy=this.domain?.audit?.auth?.user||'';next.master.siteId=this.store.siteId;
-    next.settings={...(next.settings||{}),lastExportAt:null,lastExportName:''};
+    next.settings={...(next.settings||{}),lastExportAt:null,lastExportName:'',historyEpoch:restoreHistory&&nova?.db?(next.settings?.historyEpoch||next.master.importedAt):next.master.importedAt};
     this.store.replace(next,'master:import');
     await idbPut(this.masterKey(),bytes);
     const importedAudit=this.domain.audit.record('MASTER_IMPORTED','MASTER',file.name,null,{rows:parsed.rows.length,source:next.master.source});
@@ -18911,30 +18911,93 @@ class ExcelService{
     const a=this.domain.audit.record('REMOTO_MIGRATED','SYSTEM','REMOTO',null,{source:'localStorage',note:'REMOTO non viene modificato'});
     this.store.db.settings.lastExportAt=a.at;this.store.save('legacy:migrate:baseline');return next
   }
+  #excelHistoryEpoch(){
+    const raw=this.store.db.settings?.historyEpoch||this.store.db.master?.importedAt||this.store.db.createdAt||'',t=new Date(raw).getTime();
+    return Number.isFinite(t)?t:0
+  }
+  #excelHistoryRows(rows,getter){
+    const epoch=this.#excelHistoryEpoch(),src=Array.isArray(rows)?rows:[];
+    if(!epoch)return [...src];
+    return src.filter(x=>{const t=new Date(getter(x)||0).getTime();return Number.isFinite(t)&&t>=epoch})
+  }
+  #excelNatural(value){
+    const raw=String(value??'').trim();if(!raw)return'';if(/^-?\d+(?:[.,]\d+)?$/.test(raw)&&!/^0\d+/.test(raw))return Number(raw.replace(',','.'));return raw
+  }
+  #excelTheme(){
+    return{blue:'FF4472C4',blueDark:'FF2F5597',blueSoft:'FFD9E2F3',white:'FFFFFFFF',ink:'FF203864',text:'FF263746',muted:'FF6B7D8B',grid:'FFB7C9E2',green:'FF70AD47',amber:'FFF4B183',red:'FFC00000',surface:'FFF7F9FC'}
+  }
+  #excelBorder(color='FFB7C9E2'){
+    const e={style:'thin',color:{argb:color}};return{top:e,left:e,bottom:e,right:e}
+  }
+  #excelSafeTableName(name){
+    let x=String(name||'SOMA_TABLE').replace(/[^A-Za-z0-9_]/g,'_');if(!/^[A-Za-z_]/.test(x))x='T_'+x;return x.slice(0,240)
+  }
+  #excelStyleGrid(ws,{headerRow=1,dataStart=2,dataEnd=2,colCount=1,dateCols=[],dateOnlyCols=[],numberCols=[],centerCols=[],wrapCols=[]}={}){
+    const C=this.#excelTheme(),border=this.#excelBorder();ws.getRow(headerRow).height=24;
+    for(let c=1;c<=colCount;c++){const cell=ws.getCell(headerRow,c);cell.font={name:'Calibri',size:10,bold:true,color:{argb:C.white}};cell.fill={type:'pattern',pattern:'solid',fgColor:{argb:C.blue}};cell.alignment={vertical:'middle',horizontal:'center',wrapText:true};cell.border=border}
+    for(let r=dataStart;r<=dataEnd;r++){const row=ws.getRow(r);row.height=20;for(let c=1;c<=colCount;c++){const cell=ws.getCell(r,c);cell.font={name:'Calibri',size:10,color:{argb:C.text}};cell.border=border;cell.alignment={vertical:'middle',horizontal:centerCols.includes(c)?'center':'left',wrapText:wrapCols.includes(c)}}}
+    for(const c of dateCols)for(let r=dataStart;r<=dataEnd;r++)ws.getCell(r,c).numFmt='dd/mm/yyyy hh:mm';
+    for(const c of dateOnlyCols)for(let r=dataStart;r<=dataEnd;r++)ws.getCell(r,c).numFmt='dd/mm/yyyy';
+    for(const c of numberCols)for(let r=dataStart;r<=dataEnd;r++)ws.getCell(r,c).numFmt='0';
+  }
+  #excelAddTableSheet(wb,{name,tableName,headers,rows,widths=[],dateCols=[],dateOnlyCols=[],numberCols=[],centerCols=[],wrapCols=[],tabColor='FF4472C4'}){
+    const ws=wb.addWorksheet(name,{properties:{defaultRowHeight:20},views:[{state:'frozen',ySplit:1,showGridLines:false,zoomScale:90,activeCell:'A1'}]});
+    ws.properties.tabColor={argb:tabColor};ws.columns=headers.map((_,i)=>({width:Number(widths[i]||14)}));
+    const actual=rows.length?rows:[headers.map(()=>null)];
+    ws.addTable({name:this.#excelSafeTableName(tableName),ref:'A1',headerRow:true,totalsRow:false,style:{theme:'TableStyleMedium2',showFirstColumn:false,showLastColumn:false,showRowStripes:true,showColumnStripes:false},columns:headers.map(h=>({name:h})),rows:actual});
+    const end=1+actual.length;this.#excelStyleGrid(ws,{headerRow:1,dataStart:2,dataEnd:end,colCount:headers.length,dateCols,dateOnlyCols,numberCols,centerCols,wrapCols});
+    if(!rows.length)ws.getRow(2).hidden=true;
+    ws.pageSetup={paperSize:9,orientation:headers.length>9?'landscape':'portrait',fitToPage:true,fitToWidth:1,fitToHeight:0,margins:{left:.25,right:.25,top:.35,bottom:.35,header:.15,footer:.15}};ws.pageSetup.printTitlesRow='1:1';ws.pageSetup.printArea='A1:'+ws.getColumn(headers.length).letter+end;
+    return ws
+  }
+  #excelStockDataset(sourceBytes){
+    const live=this.domain.stock.positive(),byIdentity=new Map(),stateSet=new Set();
+    for(const r of live){const k=identity(r);if(!byIdentity.has(k))byIdentity.set(k,new Map());byIdentity.get(k).set(norm(r.state),(byIdentity.get(k).get(norm(r.state))||0)+Number(r.quantity||0));stateSet.add(norm(r.state))}
+    let matrix=null,det=null,noteCol=-1,dateCol=-1;
+    if(sourceBytes){try{const swb=X().read(sourceBytes,{type:'array',cellDates:true,cellStyles:false}),sn=swb.SheetNames.find(n=>headerNorm(n)==='MAGAZZINO'),sws=sn?swb.Sheets[sn]:null;if(sws){matrix=X().utils.sheet_to_json(sws,{header:1,defval:'',raw:true,blankrows:false});det=detectHeader(matrix);const hh=matrix[det.row]||[];noteCol=findCol(hh,['NOTE','NOTA']);dateCol=findCol(hh,['DATA ULTIMO INVENTARIO','DATA INVENTARIO','ULTIMO INVENTARIO'])}}catch(e){console.warn('[SOMA] Lettura layout MAGAZZINO per export fallita',e)}}
+    const order=['NUOVO','SCARICATO','USATO','DISMESSO','NON_CHIARO'],states=order.filter(st=>stateSet.has(st)||(det&&det.cols[st]>=0));if(!states.length)states.push('NUOVO','SCARICATO','USATO');
+    const headers=['SCAFFALE / FILA','BANCALE','ARTICOLO','TAGLIA',...states,'NOTE','DATA ULTIMO INVENTARIO'],rows=[],seen=new Set();
+    const push=(article,size,location,pallet,note='',invDate=null)=>{const rec={article:normalizeArticle(article),size:norm(size),location:norm(location),pallet:norm(pallet)};if(!rec.article)return;const k=identity(rec);if(seen.has(k))return;seen.add(k);const q=byIdentity.get(k)||new Map();rows.push([this.#excelNatural(rec.location),this.#excelNatural(rec.pallet),rec.article,rec.size,...states.map(st=>{const n=Number(q.get(st)||0);return n>0?n:null}),String(note||''),this.#excelDate(invDate)])};
+    if(matrix&&det)for(let r=det.row+1;r<matrix.length;r++){const row=matrix[r]||[],article=normalizeArticle(row[det.cols.article]);if(article)push(article,det.cols.size>=0?row[det.cols.size]:'',readLocation(row,det.cols),det.cols.pallet>=0?row[det.cols.pallet]:'',noteCol>=0?row[noteCol]:'',dateCol>=0?row[dateCol]:null)}
+    const extras=[];for(const r of live){const k=identity(r);if(!seen.has(k)){seen.add(k);extras.push({article:r.article,size:r.size,location:r.location,pallet:r.pallet,key:k})}}extras.sort((a,b)=>a.location.localeCompare(b.location,'it',{numeric:true})||a.pallet.localeCompare(b.pallet,'it',{numeric:true})||a.article.localeCompare(b.article,'it',{numeric:true})||a.size.localeCompare(b.size,'it',{numeric:true}));for(const x of extras){seen.delete(x.key);push(x.article,x.size,x.location,x.pallet,'',null)}
+    return{headers,rows,states}
+  }
+  #excelSearchSheet(wb,stockRows){
+    const C=this.#excelTheme(),ws=wb.addWorksheet('CERCA_GIACENZE',{properties:{defaultRowHeight:20},views:[{state:'frozen',ySplit:14,showGridLines:false,zoomScale:90,activeCell:'B3'}]});ws.properties.tabColor={argb:C.blue};ws.columns=[{width:22},{width:20},{width:26},{width:12},{width:16},{width:14},{width:38}];
+    ws.mergeCells('A1:G1');ws.getCell('A1').value='CERCA GIACENZE MAGAZZINO';ws.getCell('A1').font={name:'Calibri',size:12,bold:true,color:{argb:C.white}};ws.getCell('A1').fill={type:'pattern',pattern:'solid',fgColor:{argb:C.blue}};ws.getCell('A1').alignment={horizontal:'center',vertical:'middle'};ws.getRow(1).height=24;ws.mergeCells('A2:G2');ws.getCell('A2').value='INSERISCI ARTICOLO E TAGLIA: I TOTALI E LE POSIZIONI SI AGGIORNANO AUTOMATICAMENTE.';ws.getCell('A2').font={name:'Calibri',size:10,color:{argb:C.text}};ws.getCell('A2').alignment={horizontal:'center',vertical:'middle'};
+    for(const [r,label] of [[3,'ARTICOLO'],[4,'TAGLIA']]){ws.getCell(r,1).value=label;ws.getCell(r,1).font={name:'Calibri',size:10,bold:true,color:{argb:C.white}};ws.getCell(r,1).fill={type:'pattern',pattern:'solid',fgColor:{argb:C.blue}};ws.getCell(r,1).alignment={horizontal:'center'};ws.getCell(r,1).border=this.#excelBorder();ws.getCell(r,2).fill={type:'pattern',pattern:'solid',fgColor:{argb:C.white}};ws.getCell(r,2).border=this.#excelBorder('FF7F7F7F')}
+    ws.getCell('A6').value='STATO';ws.getCell('B6').value='TOTALE';for(const c of ['A6','B6']){ws.getCell(c).font={name:'Calibri',size:10,bold:true,color:{argb:C.white}};ws.getCell(c).fill={type:'pattern',pattern:'solid',fgColor:{argb:C.blue}};ws.getCell(c).alignment={horizontal:'center'};ws.getCell(c).border=this.#excelBorder()}
+    const states=['NUOVO','USATO','SCARICATO','DISMESSO','NON_CHIARO'],dataLast=Math.max(2,stockRows.length+1);states.forEach((st,i)=>{const r=7+i;ws.getCell(r,1).value=st;ws.getCell(r,1).border=this.#excelBorder();ws.getCell(r,2).border=this.#excelBorder();ws.getCell(r,1).alignment={horizontal:'center'};ws.getCell(r,2).alignment={horizontal:'center'};ws.getCell(r,2).value={formula:'IF(OR($B$3="",$B$4=""),"",SUMIFS(GIACENZE_RICERCA_DATI!$F$2:$F$'+dataLast+',GIACENZE_RICERCA_DATI!$C$2:$C$'+dataLast+',TRIM($B$3),GIACENZE_RICERCA_DATI!$D$2:$D$'+dataLast+',TRIM($B$4),GIACENZE_RICERCA_DATI!$E$2:$E$'+dataLast+',$A$'+r+'))',result:''}});
+    ws.getCell('A12').value='TOTALE GENERALE';ws.getCell('B12').value={formula:'IF(OR($B$3="",$B$4=""),"",SUM($B$7:$B$11))',result:''};for(const c of [1,2]){const x=ws.getCell(12,c);x.font={name:'Calibri',size:10,bold:true,color:{argb:C.white}};x.fill={type:'pattern',pattern:'solid',fgColor:{argb:C.blue}};x.border=this.#excelBorder();x.alignment={horizontal:'center'}}
+    ws.mergeCells('A13:G13');ws.getCell('A13').value='DATI E FORMULE GENERATI DA SOMA HUB. IL FOGLIO DATI DI SUPPORTO È NASCOSTO E VIENE RICOSTRUITO A OGNI ESPORTAZIONE.';ws.getCell('A13').font={name:'Calibri',size:9,italic:true,color:{argb:C.muted}};ws.getCell('A13').alignment={horizontal:'center'};
+    const occurrence=new Map();for(const r of stockRows){const k=[r[2],r[3]].join('|');occurrence.set(k,(occurrence.get(k)||0)+1)}const resultCount=Math.min(200,Math.max(40,...occurrence.values(),0)+5),rows=[];for(let n=1;n<=resultCount;n++){const out=[];for(const col of ['A','B','C','D','E','F','G'])out.push({formula:'IF(OR($B$3="",$B$4=""),"",IFERROR(INDEX(GIACENZE_RICERCA_DATI!$'+col+'$2:$'+col+'$'+dataLast+',MATCH(TRIM($B$3)&"|"&TRIM($B$4)&"|'+n+'",GIACENZE_RICERCA_DATI!$H$2:$H$'+dataLast+',0)),""))',result:''});rows.push(out)}
+    ws.addTable({name:'SOMA_CERCA_RISULTATI',ref:'A15',headerRow:true,totalsRow:false,style:{theme:'TableStyleMedium2',showRowStripes:true,showFirstColumn:false,showLastColumn:false,showColumnStripes:false},columns:['FILA / SCAFFALE','BANCALE','ARTICOLO','TAGLIA','STATO','QUANTITÀ','NOTE'].map(name=>({name})),rows});this.#excelStyleGrid(ws,{headerRow:15,dataStart:16,dataEnd:15+rows.length,colCount:7,numberCols:[6],centerCols:[1,2,4,5,6],wrapCols:[7]});ws.pageSetup={paperSize:9,orientation:'landscape',fitToPage:true,fitToWidth:1,fitToHeight:0,margins:{left:.25,right:.25,top:.35,bottom:.35,header:.15,footer:.15}};ws.pageSetup.printArea='A1:G'+(15+rows.length);return ws
+  }
+  async #excelValidateNativePackage(raw,expectedTables=[]){
+    const JSZip=await ensureJsZip(),zip=await JSZip.loadAsync(raw),errors=[],seen=new Set(),tablePaths=Object.keys(zip.files).filter(p=>/^xl\/tables\/table\d+\.xml$/.test(p));if(!zip.file('xl/workbook.xml'))errors.push('workbook.xml mancante');if(!tablePaths.length)errors.push('Nessuna Tabella Excel trovata');
+    for(const path of tablePaths){const xml=await zip.file(path).async('string'),doc=new DOMParser().parseFromString(xml,'application/xml');if(doc.getElementsByTagName('parsererror').length){errors.push(path+': XML non valido');continue}const t=doc.documentElement,name=t.getAttribute('displayName')||t.getAttribute('name')||'',ref=t.getAttribute('ref')||'',cols=[...doc.getElementsByTagNameNS('*','tableColumn')],m=ref.match(/^([A-Z]+)(\d+):([A-Z]+)(\d+)$/);if(!name)errors.push(path+': nome tabella mancante');if(seen.has(name))errors.push('Nome tabella duplicato: '+name);seen.add(name);if(!m)errors.push(path+': range tabella non valido '+ref);else{const col=n=>{let v=0;for(const ch of n)v=v*26+ch.charCodeAt(0)-64;return v},width=col(m[3])-col(m[1])+1;if(cols.length!==width)errors.push(path+': colonne '+cols.length+' per range largo '+width)}if(xml.includes('#REF!'))errors.push(path+': #REF!')}
+    for(const n of expectedTables)if(!seen.has(n))errors.push('Tabella attesa assente: '+n);for(const path of Object.keys(zip.files).filter(p=>/^xl\/worksheets\/sheet\d+\.xml$/.test(p))){const xml=await zip.file(path).async('string');if(xml.includes('#REF!'))errors.push(path+': #REF!')}
+    try{await ensureXlsx();const check=X().read(raw,{type:'array',cellDates:true});if(!check.SheetNames.includes('MAGAZZINO'))errors.push('Foglio MAGAZZINO assente');for(const n of ['CERCA_GIACENZE','MOVIMENTI','SCARICHI','ENTRATE_MERCI','RICHIESTE','REGISTRO','AUDIT'])if(!check.SheetNames.includes(n))errors.push('Foglio '+n+' assente')}catch(e){errors.push('Rilettura XLSX fallita: '+e.message)}
+    this.lastValidation={ok:!errors.length,engine:'ExcelJS 4.4.0 native tables',checkedAt:nowIso(),tables:[...seen],errors};if(errors.length)throw new Error('Export Excel bloccato dal validatore SOMA: '+errors.slice(0,5).join(' · '));return raw
+  }
   async buildExportBytes(){
-    await ensureXlsx();await ensureJsZip();this.exportTableRanges=new Map();this.exportTableHeaders=new Map();this.exportFreezeRows=new Map();this.lastGeneratedSheets=[];
-    const bytes=await this.originalBytes();this.tableBlueprints=bytes?await this.#captureTableBlueprints(bytes):[];
-    const wb=bytes?X().read(bytes,{type:'array',cellDates:true,cellStyles:true,bookVBA:true}):X().utils.book_new();this.exportStyles=this.#captureExportStyles(wb);
-    this.#removeSheet(wb,'APP_DATI');this.#removeSheet(wb,'REGISTRO_MOVIMENTI');
-    this.updateMagazine(wb);this.exportFreezeRows.set('MAGAZZINO',Math.max(1,(Number(this.store.db.master?.headerRow)||0)+1));this.updateSearchData(wb);
-    this.replaceSheet(wb,'MOVIMENTI',this.movementSheet(),{keepAutofilter:true,freezeRows:1});
-    this.replaceSheet(wb,'SCARICHI',this.issueSheet(),{keepAutofilter:true,freezeRows:1});
-    this.replaceSheet(wb,'ENTRATE_MERCI',this.receiptSheet(),{keepAutofilter:true,freezeRows:1});
-    this.replaceSheet(wb,'RICHIESTE',this.requestSheet(),{keepAutofilter:true,freezeRows:1});
-    this.replaceSheet(wb,'REGISTRO',this.registrySheet(),{keepAutofilter:true,freezeRows:1});
-    this.replaceSheet(wb,'AUDIT',this.auditSheet(),{keepAutofilter:true,freezeRows:1});
-    const counts=this.countSheet();if(counts)this.replaceSheet(wb,'CONTEGGI',counts,{keepAutofilter:true,freezeRows:1});else this.#removeSheet(wb,'CONTEGGI');
-    this.buildDataSheet(wb);
-    const visible=['MAGAZZINO','CERCA_GIACENZE','MOVIMENTI','SCARICHI','ENTRATE_MERCI','RICHIESTE','REGISTRO','AUDIT',...(counts?['CONTEGGI']:[])];this.lastGeneratedSheets=visible;
-    this.#orderExportSheets(wb,[...visible,'GIACENZE_RICERCA_DATI','NOVA_DATI','ELIMINATI']);this.#dropSheetFilterNames(wb);
-    const raw=X().write(wb,{type:'array',bookType:'xlsx',compression:true,cellStyles:true,bookSST:false});
-    return await this.#normalizeAndValidatePackage(raw)
+    await ensureXlsx();const ExcelJS=await ensureSomaExcelJs(),original=await this.originalBytes(),wb=new ExcelJS.Workbook(),C=this.#excelTheme();wb.creator='SOMA HUB';wb.company='Servizi Ospedalieri';wb.created=new Date();wb.modified=new Date();wb.calcProperties.fullCalcOnLoad=true;wb.calcProperties.forceFullCalc=true;
+    const stock=this.#excelStockDataset(original),magWidths=stock.headers.map(h=>h==='SCAFFALE / FILA'?20:h==='BANCALE'?18:h==='ARTICOLO'?24:h==='TAGLIA'?12:h==='NOTE'?36:h==='DATA ULTIMO INVENTARIO'?22:14),magDate=[stock.headers.indexOf('DATA ULTIMO INVENTARIO')+1].filter(x=>x>0),magNumbers=stock.states.map(st=>stock.headers.indexOf(st)+1);this.#excelAddTableSheet(wb,{name:'MAGAZZINO',tableName:'SOMA_MAGAZZINO',headers:stock.headers,rows:stock.rows,widths:magWidths,dateCols:magDate,numberCols:magNumbers,centerCols:[1,2,4,...magNumbers],wrapCols:[stock.headers.indexOf('NOTE')+1],tabColor:C.blue});
+    const searchRows=[];for(const r of this.#searchExportRows()){const k=[r.article,r.size].join('|');searchRows.push([this.#excelNatural(r.location),this.#excelNatural(r.pallet),r.article,r.size,r.state,Number(r.quantity)||0,r.description||'',k])}const occ=new Map();for(const r of searchRows){const k=r[7],n=(occ.get(k)||0)+1;occ.set(k,n);r[7]=k+'|'+n}const dataWs=this.#excelAddTableSheet(wb,{name:'GIACENZE_RICERCA_DATI',tableName:'SOMA_GIACENZE_DATI',headers:['FILA/SCAFFALE','BANCALE','ARTICOLO','TAGLIA','STATO','QUANTITÀ','NOTE','CHIAVE_RICERCA'],rows:searchRows,widths:[20,18,24,12,16,14,34,34],numberCols:[6],centerCols:[1,2,4,5,6]});dataWs.state='veryHidden';this.#excelSearchSheet(wb,searchRows);
+    const movements=this.#excelHistoryRows(this.store.db.ledger,e=>e.at).sort((a,b)=>new Date(a.at)-new Date(b.at)),moveRows=movements.map(e=>[this.#excelDate(e.at),e.operator||'',({IN:'ENTRATA',OUT:'SCARICO',TRANSFER:'TRASFERIMENTO',ADJUST:'RETTIFICA'})[e.type]||e.type||'',e.item?.article||'',e.item?.size||'',Number(e.quantity??Math.abs(e.delta||0))||0,e.item?.state||'',e.from?.location||e.atBucket?.location||'',e.from?.pallet||e.atBucket?.pallet||'',e.to?.location||'',e.to?.pallet||'',e.destination||e.source?.destination||'',e.source?.receiptId||e.source?.issueId||'',e.source?.requestId||'',e.note||e.source?.note||'',e.cancelledAt?'ANNULLATO':'ATTIVO',this.#excelDate(e.cancelledAt)]);this.#excelAddTableSheet(wb,{name:'MOVIMENTI',tableName:'SOMA_MOVIMENTI',headers:['DATA / ORA','OPERATORE','OPERAZIONE','ARTICOLO','TAGLIA','QUANTITÀ','STATO','FILA / SCAFFALE DA','BANCALE DA','FILA / SCAFFALE A','BANCALE A','DESTINAZIONE','DOCUMENTO','RICHIESTA','NOTE','STATO MOVIMENTO','ANNULLATO IL'],rows:moveRows,widths:[20,16,18,22,11,12,16,20,17,20,17,20,18,18,38,18,20],dateCols:[1,17],numberCols:[6],centerCols:[1,2,3,5,6,7,16],wrapCols:[15]});
+    const issues=this.#excelHistoryRows(this.store.db.issues,d=>d.createdAt).sort((a,b)=>new Date(a.createdAt)-new Date(b.createdAt)),issueRows=[];for(const d of issues)for(const i of d.items||[])issueRows.push([d.id,this.#excelDate(d.createdAt),d.operator||'',d.destination||'',d.cancelledAt?'ANNULLATO':'ATTIVO',d.requestId||'',i.article||'',i.size||'',Number(i.pieces)||0,i.state||'',i.source?.location||'',i.source?.pallet||'',d.note||'']);this.#excelAddTableSheet(wb,{name:'SCARICHI',tableName:'SOMA_SCARICHI',headers:['DOCUMENTO','DATA / ORA','OPERATORE','DESTINAZIONE','STATO DOCUMENTO','RICHIESTA','ARTICOLO','TAGLIA','QUANTITÀ','STATO MERCE','FILA / SCAFFALE','BANCALE','NOTE'],rows:issueRows,widths:[18,20,16,20,18,18,22,11,12,16,20,17,40],dateCols:[2],numberCols:[9],centerCols:[1,2,3,5,6,8,9,10],wrapCols:[13]});
+    const receipts=this.#excelHistoryRows(this.store.db.receipts,r=>r.receivedAt||r.createdAt).sort((a,b)=>new Date(a.receivedAt||a.createdAt)-new Date(b.receivedAt||b.createdAt)),receiptRows=[];for(const r of receipts)for(const l of r.lines||[]){const st=this.domain.receiving.lineStats(r,l);receiptRows.push([r.id,r.supplier||'',r.ddtNumber||'',this.#excelDate(r.ddtDate),this.#excelDate(r.receivedAt||r.createdAt),r.operator||'',l.article||'',l.size||'',l.state||'',Number(l.ddtQuantity)||0,Number(l.checkedQuantity)||0,Number(st.pending)||0,Number(st.putAway)||0,Number(st.direct)||0,l.receivingPallet||'',[l.suggestedLocation,l.suggestedPallet].filter(Boolean).join(' · '),this.domain.receiving.status(r),this.#excelDate(r.cancelledAt),r.cancelledBy||''])}this.#excelAddTableSheet(wb,{name:'ENTRATE_MERCI',tableName:'SOMA_ENTRATE_MERCI',headers:['ENTRATA','FORNITORE','NUMERO DOCUMENTO','DATA DOCUMENTO','ARRIVO','OPERATORE','ARTICOLO','TAGLIA','STATO','QTA DOCUMENTO','QTA CONTROLLATA','DA UBICARE','UBICATI','PRELEVATI DIRETTI','PALLET RICEVIMENTO','POSIZIONE SUGGERITA','STATO ENTRATA','ANNULLATA IL','ANNULLATA DA'],rows:receiptRows,widths:[18,24,20,16,20,16,22,11,16,14,16,13,12,18,18,28,18,20,16],dateCols:[5,18],dateOnlyCols:[4],numberCols:[10,11,12,13,14],centerCols:[1,4,5,6,8,9,10,11,12,13,14,17,18],wrapCols:[2,16]});
+    const requests=this.#excelHistoryRows(this.store.db.requests,r=>r.requestedAt||r.createdAt).sort((a,b)=>new Date(a.requestedAt||a.createdAt)-new Date(b.requestedAt||b.createdAt)),requestRows=[];for(const r of requests)for(const l of r.lines||[]){const d=this.domain.requests.deliveredForLine(r,l.id),linked=[...new Set((r.deliveries||[]).filter(x=>(x.items||[]).some(i=>i.lineId===l.id&&!i.extra)).map(x=>x.issueId).filter(Boolean))].join(', ');requestRows.push([r.id,this.#excelDate(r.requestedAt||r.createdAt),r.destination||'',r.operator||'',r.reference||'',r.deletedAt?'ELIMINATA':r.status||'',l.article||'',l.size||'',Number(l.cartonsRequested)||0,Number(d.cartons)||0,Math.max(0,(Number(l.cartonsRequested)||0)-(Number(d.cartons)||0)),Number(d.pieces)||0,l.marker||'',l.note||'',linked])}this.#excelAddTableSheet(wb,{name:'RICHIESTE',tableName:'SOMA_RICHIESTE',headers:['RICHIESTA','DATA RICHIESTA','DESTINAZIONE','OPERATORE','RIFERIMENTO','STATO','ARTICOLO','TAGLIA','CARTONI RICHIESTI','CARTONI PRELEVATI','CARTONI RESIDUI','PEZZI SCARICATI','MARKER','NOTE','SCARICHI COLLEGATI'],rows:requestRows,widths:[18,20,20,16,22,18,22,11,18,18,17,17,10,38,28],dateCols:[2],numberCols:[9,10,11,12],centerCols:[1,2,3,4,6,8,9,10,11,12,13],wrapCols:[14,15]});
+    const audits=this.#excelHistoryRows(this.store.db.audits,a=>a.at).filter(a=>a?.meta?.document!==true).sort((a,b)=>new Date(a.at)-new Date(b.at)),actionLabel=a=>({STOCK_IN:'ENTRATA',STOCK_OUT:'SCARICO',STOCK_TRANSFER:'TRASFERIMENTO',STOCK_ADJUST:'RETTIFICA',RECTIFICATION:'RETTIFICA',COUNT_RECTIFICATION:'RETTIFICA CONTEGGIO',RECEIPT_CONFIRMED:'ENTRATA MERCI',RECEIPT_PUTAWAY:'UBICAZIONE ENTRATA',ISSUE_CONFIRMED:'SCARICO CONFERMATO',REQUEST_CREATED:'RICHIESTA CREATA',REQUEST_DELIVERY:'RICHIESTA PRELEVATA',REQUEST_DELETED:'RICHIESTA ELIMINATA',COUNT_SESSION_COMPLETED:'CONTEGGIO COMPLETATO',VOICE_INVENTORY_CONFIRMED:'INVENTARIO VOCALE',MASTER_IMPORTED:'MASTER IMPORTATO',MASTER_REMOVED:'MASTER RIMOSSO'})[a]||a;
+    const regRows=audits.map(a=>{const m=a.meta||{},p=[];if(m.article)p.push([m.article,m.size].filter(Boolean).join(' · '));if(m.state)p.push(m.state);if(m.location||m.pallet)p.push([m.location,m.pallet].filter(Boolean).join(' / '));const b=Number(a.before?.quantity),af=Number(a.after?.quantity);if(Number.isFinite(b)&&Number.isFinite(af))p.push('Q.tà '+b+' → '+af);if(Number.isFinite(Number(m.delta)))p.push('Δ '+(Number(m.delta)>0?'+':'')+Number(m.delta));if(m.reason)p.push(m.reason);if(m.note)p.push(m.note);return[this.#excelDate(a.at),a.operator||'',a.entityType||'',actionLabel(a.action),a.entityId||'',p.join(' · ')]});this.#excelAddTableSheet(wb,{name:'REGISTRO',tableName:'SOMA_REGISTRO',headers:['DATA / ORA','OPERATORE','AREA','OPERAZIONE','RIFERIMENTO','DETTAGLIO'],rows:regRows,widths:[20,16,16,26,24,60],dateCols:[1],centerCols:[1,2,3,4],wrapCols:[6]});
+    const auditRows=audits.map(a=>{const m=a.meta||{},b=Number(a.before?.quantity),af=Number(a.after?.quantity),hb=Number.isFinite(b),ha=Number.isFinite(af),delta=Number.isFinite(Number(m.delta))?Number(m.delta):(hb&&ha?af-b:null);return[this.#excelDate(a.at),a.operator||'',actionLabel(a.action),a.entityType||'',a.entityId||'',m.article||'',m.size||'',m.state||'',m.location||'',m.pallet||'',hb?b:null,ha?af:null,delta,m.reason||'',m.sessionId||'',JSON.stringify(m)]});this.#excelAddTableSheet(wb,{name:'AUDIT',tableName:'SOMA_AUDIT',headers:['DATA / ORA','OPERATORE','AZIONE','ENTITÀ','ID','ARTICOLO','TAGLIA','STATO','FILA / SCAFFALE','BANCALE','PRIMA','DOPO','DELTA','MOTIVO','SESSIONE','DETTAGLI'],rows:auditRows,widths:[20,16,26,16,24,22,11,16,20,17,12,12,12,24,24,58],dateCols:[1],numberCols:[11,12,13],centerCols:[1,2,3,4,7,8,11,12,13],wrapCols:[16]});
+    const countAudits=audits.filter(a=>['COUNT_RECTIFICATION','COUNT_SESSION_COMPLETED','VOICE_INVENTORY_CONFIRMED'].includes(a.action));if(countAudits.length){const countRows=countAudits.map(a=>{const m=a.meta||{},is=a.action==='COUNT_RECTIFICATION',b=Number(a.before?.quantity),af=Number(a.after?.quantity),delta=Number.isFinite(Number(m.delta))?Number(m.delta):(Number.isFinite(b)&&Number.isFinite(af)?af-b:null),sum=a.after?.summary||{},summary=a.action==='COUNT_SESSION_COMPLETED'?['invariati '+(sum.unchanged??''),'differenze '+(sum.differences??''),'+'+(sum.positive??0),String(sum.negative??0),'saldo '+(sum.net??0)].join(' · '):a.action==='VOICE_INVENTORY_CONFIRMED'?String(a.after?.rows??'')+' righe · '+String(m.engine||''):'';return[m.sessionId||a.entityId||'',this.#excelDate(a.at),a.operator||'',actionLabel(a.action),is?m.article||'':'',is?m.size||'':'',is?m.state||'':'',is?m.location||'':a.after?.location||'',is?m.pallet||'':a.after?.pallet||'',is&&Number.isFinite(b)?b:null,is&&Number.isFinite(af)?af:null,is?delta:null,is?m.reason||'':'',is?m.note||'':'',summary]});this.#excelAddTableSheet(wb,{name:'CONTEGGI',tableName:'SOMA_CONTEGGI',headers:['SESSIONE','DATA / ORA','OPERATORE','OPERAZIONE','ARTICOLO','TAGLIA','STATO','FILA / SCAFFALE','BANCALE','ATTESO','CONTATO','DIFFERENZA','MOTIVO','NOTE','RIEPILOGO'],rows:countRows,widths:[24,20,16,26,22,11,16,20,17,12,12,12,24,38,54],dateCols:[2],numberCols:[10,11,12],centerCols:[1,2,3,4,6,7,10,11,12],wrapCols:[14,15]})}
+    const expected=['SOMA_MAGAZZINO','SOMA_GIACENZE_DATI','SOMA_CERCA_RISULTATI','SOMA_MOVIMENTI','SOMA_SCARICHI','SOMA_ENTRATE_MERCI','SOMA_RICHIESTE','SOMA_REGISTRO','SOMA_AUDIT',...(countAudits.length?['SOMA_CONTEGGI']:[])],raw=await wb.xlsx.writeBuffer();this.lastGeneratedSheets=wb.worksheets.filter(x=>x.state==='visible').map(x=>x.name);return await this.#excelValidateNativePackage(raw,expected)
   }
   async export(){
-    const out=await this.buildExportBytes();
-    const stamp=new Date().toISOString().slice(0,16).replace(/[:T]/g,'-'),stem=(this.store.db.master.filename||'MAGAZZINO').replace(/\.xlsx$/i,'').replace(/_(?:NOVA|SOMA)_.*/i,''),name=`${stem}_SOMA_R31_93_${stamp}.xlsx`;
+    const out=await this.buildExportBytes(),stamp=new Date().toISOString().slice(0,16).replace(/[:T]/g,'-'),stem=(this.store.db.master.filename||'MAGAZZINO').replace(/\.xlsx$/i,'').replace(/_(?:NOVA|SOMA)_.*/i,''),name=stem+'_SOMA_R31_94_'+stamp+'.xlsx';
     this.#download(out,name);
-    const exportedAudit=this.domain.audit.record('MASTER_EXPORTED','MASTER',name,null,{name,validation:this.lastValidation,generatedSheets:this.lastGeneratedSheets});this.store.db.settings.lastExportAt=exportedAudit.at;this.store.db.settings.lastExportName=name;this.store.save('master:export:baseline');return name
+    const exportedAudit=this.domain.audit.record('MASTER_EXPORTED','MASTER',name,null,{name,validation:this.lastValidation,generatedSheets:this.lastGeneratedSheets,engine:'ExcelJS native tables'});this.store.db.settings.lastExportAt=exportedAudit.at;this.store.db.settings.lastExportName=name;this.store.save('master:export');return name
   }
   #activeSearchChanges(){
     const out=[],push=(item,bucket,delta,event)=>{const d=Number(delta)||0;if(!d)return;out.push({item:cleanItem(item),bucket:cleanBucket(bucket),delta:d,eventId:event?.id||'',at:event?.at||'',kind:event?.source?.kind||event?.type||''})};
@@ -20862,6 +20925,6 @@ try{globalThis.__NOVA_LEGACY_AVAILABLE=!!localStorage.getItem(CONFIG.legacyStora
 const switchSite=async siteId=>{await ui.selectSite(siteId);return auth.site()};
 globalThis.NOVA=Object.freeze({version:CONFIG.appVersion,schema:CONFIG.version,identityVersion:CONFIG.identityVersion,store,auth,router,domain,excel,requestDocs,ui,sounds,sites:SITES,operators:OPERATORS,roles:ROLE_DEFS,saveIdentityRegistry,capabilities:Object.freeze({operational:ALL_CAPS,master:MASTER_CAPS,administration:ADMIN_CAPS,globalAdmin:GLOBAL_ADMIN_CAPS}),identityValidation:IDENTITY_VALIDATION,switchSite});
 ui.render();</script>
-<!-- SOMA_BUILD:R31.93-20260930 -->
+<!-- SOMA_BUILD:R31.94-20261001 -->
 </body>
 </html>
