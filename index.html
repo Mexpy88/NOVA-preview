@@ -20884,7 +20884,7 @@ class UI{
     this.closeMasterRemove();this.sounds?.success?.();this.toast(`${removed.filename} rimosso. Storico e Audit conservati.`);this.router.home()
   }
 
-  async importMaster(input){const file=input.files?.[0];input.value='';if(!file)return;if(this.masterReady()&&this.excel.dirtyCount()&&!confirm(`Ci sono ${this.excel.dirtyCount()} modifiche non esportate. Importare comunque?`))return;const r=await this.excel.importFile(file,{restoreHistory:true});this.countDraft=this.loadCountSession();this.rectDraft=null;this.toast(`${r.filename} importato · ${r.rows} righe.`);this.router.home()}
+  async importMaster(input){const file=input.files?.[0];input.value='';if(!file)return;if(this.masterReady()&&this.excel.dirtyCount()&&!confirm(`Ci sono ${this.excel.dirtyCount()} modifiche non esportate. Importare comunque?`))return;const r=await this.excel.importFile(file,{restoreHistory:false});this.countDraft=this.loadCountSession();this.rectDraft=null;this.toast(`${r.filename} importato · ${r.rows} righe.`);this.router.home()}
   addDdtFiles(input){for(const f of input.files||[])this.ddtFiles.push(f);input.value='';this.renderView()}
   addRequestFiles(input){for(const f of input.files||[])this.requestFiles.push(f);input.value='';this.renderView()}
   removeRequestFile(index){const i=Number(index);if(!Number.isInteger(i)||i<0||i>=this.requestFiles.length)return;const [removed]=this.requestFiles.splice(i,1);this.renderView();if(removed)this.toast(`${removed.name} rimosso dagli allegati.`)}
