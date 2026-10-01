@@ -18956,16 +18956,35 @@ class ExcelService{
     if(!rows.length)ws.getRow(2).hidden=true;if(hidden)ws.state='veryHidden';return ws
   }
   #excelStockDataset(sourceBytes){
-    const live=this.domain.stock.positive(),byIdentity=new Map(),stateSet=new Set(),sourceStatePresence=new Map();
-    for(const r of live){const k=identity(r);if(!byIdentity.has(k))byIdentity.set(k,new Map());byIdentity.get(k).set(norm(r.state),(byIdentity.get(k).get(norm(r.state))||0)+Number(r.quantity||0));stateSet.add(norm(r.state))}
+    const live=this.domain.stock.positive(),current=new Map(),stateSet=new Set();
+    for(const r of live){const k=identity(r),st=norm(r.state);if(!current.has(k))current.set(k,new Map());current.get(k).set(st,(current.get(k).get(st)||0)+Number(r.quantity||0));stateSet.add(st)}
     let matrix=null,det=null,noteCol=-1,dateCol=-1;
     if(sourceBytes){try{const swb=X().read(sourceBytes,{type:'array',cellDates:true,cellStyles:false}),sn=swb.SheetNames.find(n=>headerNorm(n)==='MAGAZZINO'),sws=sn?swb.Sheets[sn]:null;if(sws){matrix=X().utils.sheet_to_json(sws,{header:1,defval:'',raw:true,blankrows:false});det=detectHeader(matrix);const hh=matrix[det.row]||[];noteCol=findCol(hh,['NOTE','NOTA']);dateCol=findCol(hh,['DATA ULTIMO INVENTARIO','DATA INVENTARIO','ULTIMO INVENTARIO'])}}catch(e){console.warn('[SOMA] Lettura layout MAGAZZINO per export fallita',e)}}
-    const order=['NUOVO','SCARICATO','USATO','DISMESSO','NON_CHIARO'],states=order.filter(st=>stateSet.has(st)||(det&&det.cols[st]>=0));if(!states.length)states.push('NUOVO','SCARICATO','USATO');
-    const headers=['SCAFFALE / FILA','BANCALE','ARTICOLO','TAGLIA',...states,'NOTE','DATA ULTIMO INVENTARIO'],rows=[],seen=new Set();
-    if(matrix&&det)for(let r=det.row+1;r<matrix.length;r++){const row=matrix[r]||[],article=normalizeArticle(row[det.cols.article]);if(!article)continue;const rec={article,size:det.cols.size>=0?norm(row[det.cols.size]):'',location:readLocation(row,det.cols),pallet:det.cols.pallet>=0?norm(row[det.cols.pallet]):''},k=identity(rec);if(!sourceStatePresence.has(k))sourceStatePresence.set(k,new Set());for(const st of states){const col=det.cols[st];if(col>=0&&row[col]!==''&&row[col]!=null)sourceStatePresence.get(k).add(st)}}
-    const push=(article,size,location,pallet,note='',invDate=null)=>{const rec={article:normalizeArticle(article),size:norm(size),location:norm(location),pallet:norm(pallet)};if(!rec.article)return;const k=identity(rec);if(seen.has(k))return;seen.add(k);const q=byIdentity.get(k)||new Map(),presence=sourceStatePresence.get(k)||new Set();rows.push([this.#excelNatural(rec.location),this.#excelNatural(rec.pallet),rec.article,rec.size,...states.map(st=>q.has(st)?Number(q.get(st)||0):(presence.has(st)?0:null)),String(note||''),this.#excelDate(invDate)])};
-    if(matrix&&det)for(let r=det.row+1;r<matrix.length;r++){const row=matrix[r]||[],article=normalizeArticle(row[det.cols.article]);if(article)push(article,det.cols.size>=0?row[det.cols.size]:'',readLocation(row,det.cols),det.cols.pallet>=0?row[det.cols.pallet]:'',noteCol>=0?row[noteCol]:'',dateCol>=0?row[dateCol]:null)}
-    const extras=[];for(const r of live){const k=identity(r);if(!seen.has(k)){seen.add(k);extras.push({article:r.article,size:r.size,location:r.location,pallet:r.pallet,key:k})}}extras.sort((a,b)=>a.location.localeCompare(b.location,'it',{numeric:true})||a.pallet.localeCompare(b.pallet,'it',{numeric:true})||a.article.localeCompare(b.article,'it',{numeric:true})||a.size.localeCompare(b.size,'it',{numeric:true}));for(const x of extras){seen.delete(x.key);push(x.article,x.size,x.location,x.pallet,'',null)}
+    const order=['NUOVO','SCARICATO','USATO','DISMESSO','NON_CHIARO'];if(det)for(const st of order)if(det.cols[st]>=0)stateSet.add(st);const states=order.filter(st=>stateSet.has(st));if(!states.length)states.push('NUOVO','SCARICATO','USATO');
+    const headers=['SCAFFALE / FILA','BANCALE','ARTICOLO','TAGLIA',...states,'NOTE','DATA ULTIMO INVENTARIO'],rows=[],sourceRows=[],groups=new Map(),sourceKeys=new Set();
+    if(matrix&&det){
+      for(let r=det.row+1;r<matrix.length;r++){
+        const raw=matrix[r]||[],article=normalizeArticle(raw[det.cols.article]);if(!article)continue;
+        const rec={article,size:det.cols.size>=0?norm(raw[det.cols.size]):'',location:readLocation(raw,det.cols),pallet:det.cols.pallet>=0?norm(raw[det.cols.pallet]):'',note:noteCol>=0?String(raw[noteCol]||''):'',invDate:dateCol>=0?raw[dateCol]:null,states:{}},key=identity(rec);
+        for(const st of states){const col=det.cols[st],present=col>=0&&raw[col]!==''&&raw[col]!=null,n=present?Number(raw[col]):0;rec.states[st]={present,value:Number.isFinite(n)?n:0}}
+        sourceRows.push(rec);sourceKeys.add(key);if(!groups.has(key))groups.set(key,[]);groups.get(key).push(rec)
+      }
+      for(const [key,group] of groups){
+        const target=current.get(key)||new Map();
+        for(const st of states){
+          const targetQty=Math.max(0,Number(target.get(st)||0)),orig=group.map(r=>r.states[st]?.present?Math.max(0,Number(r.states[st].value)||0):0),origTotal=orig.reduce((a,n)=>a+n,0),alloc=[...orig],hadPresent=group.map(r=>!!r.states[st]?.present);
+          if(targetQty>origTotal){let idx=hadPresent.findIndex(Boolean);if(idx<0)idx=0;alloc[idx]+=targetQty-origTotal;hadPresent[idx]=true}
+          else if(targetQty<origTotal){let remove=origTotal-targetQty;for(let i=alloc.length-1;i>=0&&remove>0;i--){const take=Math.min(alloc[i],remove);alloc[i]-=take;remove-=take}}
+          for(let i=0;i<group.length;i++){group[i].states[st]={present:hadPresent[i]||alloc[i]!==0,value:alloc[i]}}
+        }
+      }
+      for(const rec of sourceRows)rows.push([this.#excelNatural(rec.location),this.#excelNatural(rec.pallet),rec.article,rec.size,...states.map(st=>rec.states[st]?.present?Number(rec.states[st].value||0):null),rec.note,this.#excelDate(rec.invDate)])
+    }
+    const extras=[];
+    for(const r of live){const k=identity(r);if(sourceKeys.has(k))continue;if(!extras.some(x=>x.key===k))extras.push({key:k,article:r.article,size:r.size,location:r.location,pallet:r.pallet})}
+    extras.sort((a,b)=>a.location.localeCompare(b.location,'it',{numeric:true})||a.pallet.localeCompare(b.pallet,'it',{numeric:true})||a.article.localeCompare(b.article,'it',{numeric:true})||a.size.localeCompare(b.size,'it',{numeric:true}));
+    for(const rec of extras){const q=current.get(rec.key)||new Map();rows.push([this.#excelNatural(rec.location),this.#excelNatural(rec.pallet),rec.article,rec.size,...states.map(st=>q.has(st)?Number(q.get(st)||0):null),'',null])}
+    if(!rows.length)for(const r of live){const q=current.get(identity(r))||new Map();rows.push([this.#excelNatural(r.location),this.#excelNatural(r.pallet),r.article,r.size,...states.map(st=>q.has(st)?Number(q.get(st)||0):null),'',null])}
     return{headers,rows,states}
   }
   #excelSearchSheet(wb,stockRows){
