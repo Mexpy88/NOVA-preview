@@ -18914,7 +18914,7 @@ class ExcelService{
   #cycleStartMs(){const t=new Date(this.store.db.master?.importedAt||0).getTime();return Number.isFinite(t)&&t>0?t:0}
   #inCurrentCycle(value){const start=this.#cycleStartMs();if(!start)return true;const t=new Date(value||0).getTime();return Number.isFinite(t)&&t>=start}
   async #polishExportWithExcelJs(raw){
-    const ExcelJS=await ensureSomaExcelJs(),book=new ExcelJS.Workbook();await book.xlsx.load(raw);
+    const ExcelJS=await ensureSomaExcelJs(),book=new ExcelJS.Workbook(),input=raw instanceof Uint8Array?raw.buffer.slice(raw.byteOffset,raw.byteOffset+raw.byteLength):raw;await book.xlsx.load(input);
     book.creator='SOMA HUB';book.company='Servizi Ospedalieri';book.modified=new Date();
     const C={blue:'FF4472C4',purple:'FF8064A2',pink:'FFF3C4CC',pinkAlt:'FFE8B0BC',ice:'FFD9E2F3',iceAlt:'FFEAF0F8',white:'FFFFFFFF',ink:'FF203F61',muted:'FF6E8293',line:'FF9FB3C8',gold:'FFFFE7A6',goldLine:'FFD6A935',green:'FF2E7D5B',greenSoft:'FFEAF5EF'};
     const edge={style:'thin',color:{argb:C.line}},border={top:edge,left:edge,bottom:edge,right:edge};
@@ -18924,7 +18924,7 @@ class ExcelService{
       lastCol=lastCol||ws.actualColumnCount||ws.columnCount||1;lastRow=lastRow||ws.actualRowCount||ws.rowCount||headerRow;if(lastRow<headerRow)lastRow=headerRow;
       const used=new Set(),columns=[];for(let c=firstCol;c<=lastCol;c++){let n=valueText(ws.getCell(headerRow,c).value).trim()||('COLONNA '+(c-firstCol+1)),base=n,k=2;while(used.has(n.toUpperCase()))n=base+' '+k++;used.add(n.toUpperCase());columns.push({name:n})}
       const rows=[];for(let r=headerRow+1;r<=lastRow;r++){const row=[];for(let c=firstCol;c<=lastCol;c++)row.push(ws.getCell(r,c).value);rows.push(row)}if(!rows.length)rows.push(Array(lastCol-firstCol+1).fill(''));
-      const ref=ws.getCell(headerRow,firstCol).address;ws.addTable({name:safeName(name,index),ref,headerRow:true,totalsRow:false,style:{theme:'TableStyleMedium2',showFirstColumn:false,showLastColumn:false,showRowStripes:true,showColumnStripes:false},columns,rows});return{headerRow,firstCol,lastCol,lastRow:headerRow+rows.length}
+      const ref=ws.getCell(headerRow,firstCol).address;ws.autoFilter=null;ws.addTable({name:safeName(name,index),ref,headerRow:true,totalsRow:false,style:{theme:'TableStyleMedium2',showFirstColumn:false,showLastColumn:false,showRowStripes:true,showColumnStripes:false},columns,rows});return{headerRow,firstCol,lastCol,lastRow:headerRow+rows.length}
     };
     const styleTable=(ws,rg)=>{
       const {headerRow,firstCol,lastCol,lastRow}=rg;ws.getRow(headerRow).height=24;
