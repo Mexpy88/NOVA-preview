@@ -1,13 +1,13 @@
 <!doctype html>
 <html lang="it">
 <head>
-<meta name="soma-build" content="R31.95-20261008">
+<meta name="soma-build" content="R31.96-20261008">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
 <script id="soma-build-freshness">
 (() => {
-  const CURRENT_BUILD='R31.95-20261008',CHECK_KEY='soma:last-build-refresh';
+  const CURRENT_BUILD='R31.96-20261008',CHECK_KEY='soma:last-build-refresh';
   globalThis.SOMA_BUILD=CURRENT_BUILD;
   const check=async()=>{
     try{
@@ -18765,12 +18765,26 @@ let xlsxPromise=null;
 async function ensureXlsx(){
   if(X())return X();
   if(typeof document==='undefined')throw new Error('Motore Excel non disponibile.');
-  if(!xlsxPromise)xlsxPromise=new Promise((resolve,reject)=>{
-    const existing=document.querySelector('script[data-nova-xlsx]');
-    if(existing){existing.addEventListener('load',()=>X()?resolve(X()):reject(new Error('Motore Excel non disponibile.')),{once:true});existing.addEventListener('error',()=>reject(new Error('Impossibile caricare il motore Excel.')),{once:true});return}
-    const s=document.createElement('script');s.src=SHEETJS_URL;s.async=true;s.dataset.novaXlsx='1';s.onload=()=>X()?resolve(X()):reject(new Error('Motore Excel non disponibile.'));s.onerror=()=>reject(new Error('Impossibile caricare il motore Excel. Verifica la connessione.'));document.head.appendChild(s);
-  }).catch(e=>{xlsxPromise=null;throw e});
-  return xlsxPromise;
+  if(!xlsxPromise)xlsxPromise=(async()=>{
+    const sources=[SHEETJS_URL,'https://unpkg.com/xlsx@0.18.5/dist/xlsx.full.min.js'];let lastError=null;
+    for(const url of sources){
+      if(X())return X();
+      try{
+        await new Promise((resolve,reject)=>{
+          const script=document.createElement('script');script.src=url;script.async=true;script.dataset.novaXlsx='1';
+          let finished=false;
+          const finish=error=>{if(finished)return;finished=true;clearTimeout(timeout);script.onload=null;script.onerror=null;if(error){script.remove();reject(error)}else resolve()};
+          const timeout=setTimeout(()=>finish(new Error('Timeout del servizio Excel.')),25000);
+          script.onload=()=>finish(X()?null:new Error('Motore Excel non inizializzato.'));
+          script.onerror=()=>finish(new Error('Libreria Excel non raggiungibile.'));
+          document.head.appendChild(script)
+        });
+        if(X())return X()
+      }catch(e){lastError=e}
+    }
+    throw new Error('Impossibile caricare il lettore Excel. Controlla la connessione e riprova. '+String(lastError?.message||''))
+  })().catch(e=>{xlsxPromise=null;throw e});
+  return xlsxPromise
 }
 const JSZIP_URL='https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js';
 let jszipPromise=null;
@@ -18824,6 +18838,7 @@ class ExcelService{
   async importFile(file,{restoreHistory=false}={}){
     await ensureXlsx();
     const bytes=await file.arrayBuffer(),wb=X().read(bytes,{type:'array',cellDates:true,cellStyles:true}),parsed=parseMaster(wb),nova=restoreHistory?readChunkSheet(wb,'NOVA_DATI','SO_MAGAZZINO_NOVA_V1'):null,legacy=restoreHistory?readChunkSheet(wb,'APP_DATI','SO_WAREHOUSE_APP_DATA_V3'):null;
+    if(!parsed.rows.length)throw new Error('Il foglio MAGAZZINO non contiene righe con quantità valide. Nessun dato è stato modificato.');
     let next;
     if(restoreHistory&&nova?.db){
       next={...createEmptyDb(),...clone(nova.db)};
@@ -18842,12 +18857,28 @@ class ExcelService{
     }
     next.master.importedBy=this.domain?.audit?.auth?.user||'';next.master.siteId=this.store.siteId;
     next.settings={...(next.settings||{}),lastExportAt:null,lastExportName:''};
-    this.store.replace(next,'master:import');
-    await idbPut(this.masterKey(),bytes);
-    const importedAudit=this.domain.audit.record('MASTER_IMPORTED','MASTER',file.name,null,{rows:parsed.rows.length,source:next.master.source});
-    this.store.db.settings.lastExportAt=importedAudit.at;
-    this.store.save('master:import:baseline');
-    return{rows:parsed.rows.length,source:next.master.source,filename:file.name,restored:!!(nova||legacy)};
+    const previousDb=this.store.snapshot(),previousFile=await idbGet(this.masterKey());
+    let replaced=false,fileSaved=false;
+    try{
+      replaced=true;
+      this.store.replace(next,'master:import');
+      await idbPut(this.masterKey(),bytes);fileSaved=true;
+      const importedAudit=this.domain.audit.record('MASTER_IMPORTED','MASTER',file.name,null,{rows:parsed.rows.length,source:next.master.source});
+      this.store.db.settings.lastExportAt=importedAudit.at;
+      this.store.save('master:import:baseline');
+      return{rows:parsed.rows.length,source:next.master.source,filename:file.name,restored:!!(nova||legacy)}
+    }catch(e){
+      let rollbackIssue='';
+      if(replaced){
+        try{this.store.replace(previousDb,'master:import:rollback')}
+        catch(err){this.store.db=previousDb;rollbackIssue=' Non è stato possibile verificare il ripristino del salvataggio locale.';console.error('[SOMA] Import rollback failed',err)}
+      }
+      if(fileSaved){
+        try{if(previousFile!=null)await idbPut(this.masterKey(),previousFile);else await idbDelete(this.masterKey())}
+        catch(err){rollbackIssue+=' Ripristino della copia Excel locale non riuscito.';console.error('[SOMA] Excel backup rollback failed',err)}
+      }
+      throw new Error('Importazione non completata: '+String(e?.message||e)+'.'+(rollbackIssue||' Dati precedenti ripristinati.'))
+    }
   }
   #reconcileMigratedReceipts(db){for(const r of db.receipts||[])for(const l of r.lines||[]){const available=(db.master.rows||[]).filter(x=>normalizeArticle(x.article)===normalizeArticle(l.article)&&norm(x.size)===norm(l.size)&&norm(x.state)===norm(l.state)&&norm(x.location)===CONFIG.receivingLocation&&norm(x.pallet)===norm(l.receivingPallet)).reduce((n,x)=>n+Number(x.quantity||0),0);l.remainingToPutAway=Math.min(Number(l.checkedQuantity||0),Math.max(0,available))}}
   async hasOriginal(){return !!(await this.originalBytes())}
@@ -19434,7 +19465,7 @@ class UI{
     document.addEventListener('input',e=>this.input(e.target));document.addEventListener('change',e=>this.change(e.target));
     document.addEventListener('keydown',e=>this.handleGlobalSearchKey(e));
     document.addEventListener('keydown',e=>{if(e.key!=='Enter'||e.shiftKey||e.ctrlKey||e.altKey||e.metaKey)return;const masterRemove=document.getElementById('masterRemoveDialog');if(masterRemove?.open){e.preventDefault();this.safe(()=>this.confirmMasterRemove());return}const requestDelete=document.getElementById('requestDeleteDialog');if(requestDelete?.open){e.preventDefault();this.safe(()=>this.confirmRequestDelete());return}const login=document.getElementById('loginDialog');if(login?.open){e.preventDefault();this.safe(()=>this.login())}});
-    document.getElementById('masterFile')?.addEventListener('change',e=>this.importMaster(e.target));
+    document.getElementById('masterFile')?.addEventListener('change',e=>this.safe(()=>this.importMaster(e.target)));
     document.getElementById('ddtCamera')?.addEventListener('change',e=>this.addDdtFiles(e.target));document.getElementById('ddtFile')?.addEventListener('change',e=>this.addDdtFiles(e.target));
     document.getElementById('requestCamera')?.addEventListener('change',e=>this.addRequestFiles(e.target));document.getElementById('requestFile')?.addEventListener('change',e=>this.addRequestFiles(e.target));
     this.store.bus.on('db:changed',()=>{this.renderHeader();if(this.router.route.name==='home')this.renderView()});
@@ -19456,7 +19487,7 @@ class UI{
   }
   safe(fn){try{const out=fn();if(out?.catch)out.catch(e=>this.error(e))}catch(e){this.error(e)}}
   error(e){console.error('[NOVA]',e);this.toast(e?.message||String(e),'error')}
-  toast(msg,type=''){const h=document.getElementById('toastHost'),d=document.createElement('div');d.className=`toast ${type}`;d.textContent=msg;h.appendChild(d);setTimeout(()=>d.remove(),3000)}
+  toast(msg,type=''){const h=document.getElementById('toastHost'),d=document.createElement('div');d.className=`toast ${type}`;d.textContent=msg;h.appendChild(d);setTimeout(()=>d.remove(),type==='error'?12000:3000)}
   applyView(mode){const desktop=mode==='desktop';document.body.classList.toggle('desktop-mode',desktop);try{localStorage.setItem(CONFIG.viewKey,desktop?'desktop':'smartphone')}catch{}this.renderHeader()}
   masterReady(){return this.store.db.master.rows.length>0}
   require(cap,{master=false}={}){if(!this.auth.user){this.openLogin();return false}if(!this.auth.can(cap)){this.toast('Operazione non autorizzata per questo utente.','error');return false}if(master&&!this.masterReady()){this.toast('Per continuare è necessario caricare il Master Excel.','error');return false}return true}
@@ -20873,7 +20904,20 @@ class UI{
     this.closeMasterRemove();this.sounds?.success?.();this.toast(`${removed.filename} rimosso. Storico e Audit conservati.`);this.router.home()
   }
 
-  async importMaster(input){const file=input.files?.[0];input.value='';if(!file)return;if(this.masterReady()&&this.excel.dirtyCount()&&!confirm(`Ci sono ${this.excel.dirtyCount()} modifiche non esportate. Importare comunque?`))return;const r=await this.excel.importFile(file,{restoreHistory:true});this.countDraft=this.loadCountSession();this.rectDraft=null;this.toast(`${r.filename} importato · ${r.rows} righe.`);this.router.home()}
+  async importMaster(input){
+    const file=input.files?.[0];input.value='';
+    if(!file||this.excelImportBusy)return;
+    if(!/\.xls(?:x|m)$/i.test(file.name))throw new Error('Seleziona un file Excel .xlsx o .xlsm.');
+    if(file.size===0)throw new Error('Il file Excel selezionato è vuoto.');
+    if(!this.auth.can('MASTER_IMPORT'))throw new Error('Operatore non autorizzato all’importazione del Master.');
+    if(this.masterReady()&&this.excel.dirtyCount()&&!confirm(`Ci sono ${this.excel.dirtyCount()} modifiche non esportate. Importare comunque?`))return;
+    this.excelImportBusy=true;this.toast('Lettura e verifica del Master Excel in corso…');
+    try{
+      const r=await this.excel.importFile(file,{restoreHistory:true});
+      this.countDraft=this.loadCountSession();this.rectDraft=null;
+      this.toast(`${r.filename} importato · ${r.rows} righe.`);this.router.home()
+    }finally{this.excelImportBusy=false}
+  }
   addDdtFiles(input){for(const f of input.files||[])this.ddtFiles.push(f);input.value='';this.renderView()}
   addRequestFiles(input){for(const f of input.files||[])this.requestFiles.push(f);input.value='';this.renderView()}
   removeRequestFile(index){const i=Number(index);if(!Number.isInteger(i)||i<0||i>=this.requestFiles.length)return;const [removed]=this.requestFiles.splice(i,1);this.renderView();if(removed)this.toast(`${removed.name} rimosso dagli allegati.`)}
@@ -20914,6 +20958,6 @@ try{globalThis.__NOVA_LEGACY_AVAILABLE=!!localStorage.getItem(CONFIG.legacyStora
 const switchSite=async siteId=>{await ui.selectSite(siteId);return auth.site()};
 globalThis.NOVA=Object.freeze({version:CONFIG.appVersion,schema:CONFIG.version,identityVersion:CONFIG.identityVersion,store,auth,router,domain,excel,requestDocs,ui,sounds,sites:SITES,operators:OPERATORS,roles:ROLE_DEFS,saveIdentityRegistry,capabilities:Object.freeze({operational:ALL_CAPS,master:MASTER_CAPS,administration:ADMIN_CAPS,globalAdmin:GLOBAL_ADMIN_CAPS}),identityValidation:IDENTITY_VALIDATION,switchSite});
 ui.render();</script>
-<!-- SOMA_BUILD:R31.95-20261008 -->
+<!-- SOMA_BUILD:R31.96-20261008 -->
 </body>
 </html>
