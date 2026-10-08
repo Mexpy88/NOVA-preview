@@ -1,13 +1,13 @@
 <!doctype html>
 <html lang="it">
 <head>
-<meta name="soma-build" content="R31.94-20261001">
+<meta name="soma-build" content="R31.95-20261008">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
 <script id="soma-build-freshness">
 (() => {
-  const CURRENT_BUILD='R31.94-20261001',CHECK_KEY='soma:last-build-refresh';
+  const CURRENT_BUILD='R31.95-20261008',CHECK_KEY='soma:last-build-refresh';
   globalThis.SOMA_BUILD=CURRENT_BUILD;
   const check=async()=>{
     try{
@@ -20152,30 +20152,40 @@ class UI{
   persistVoiceInventoryDraft(){if(!this.voiceInventoryDraft)return;this.voiceInventoryDraft.updatedAt=nowIso();try{localStorage.setItem(siteVoiceInventoryKey(this.auth.siteId),JSON.stringify(this.voiceInventoryDraft))}catch{}}
   clearVoiceInventoryDraft(){this.voiceInventoryDraft={schema:1,id:'',location:'',pallet:'',transcript:'',rows:[],updatedAt:''};try{localStorage.removeItem(siteVoiceInventoryKey(this.auth.siteId))}catch{}}
   voiceInventoryToggle(){this.voiceInventoryOpen=!this.voiceInventoryOpen;this.renderView()}
+  voiceMasterArticleSizes(){
+    return (this.store.db.master?.rows||[]).map(raw=>({
+      article:normalizeArticle(raw.article||raw.article_base||raw.codice||raw.codice_sap),
+      size:norm(raw.size||raw.taglia),
+      location:locationOf(raw),pallet:palletOf(raw)
+    })).filter(row=>row.article)
+  }
   voiceInventoryPanel(){
-    const d=this.voiceInventoryDraft||{transcript:'',rows:[]},rows=d.rows||[],valid=rows.filter(r=>this.voiceInventoryRowState(r).kind==='ok').length,warn=rows.length-valid;
+    const d=this.voiceInventoryDraft||{transcript:'',rows:[]},rows=d.rows||[],valid=rows.filter(r=>this.voiceInventoryRowState(r).kind==='ok').length,warn=rows.length-valid,canRectify=!!this.auth?.can?.('RECTIFY');
     const fallbackState=this.voiceRecorder?.state||'inactive',liveActive=!!this.voiceListeningWanted&&!this.voicePaused,livePaused=!!this.voicePaused,recording=liveActive||fallbackState==='recording',paused=livePaused||fallbackState==='paused',active=recording||paused,deepgramReady=this.deepgramReady(),browserLive=!!(globalThis.SpeechRecognition||globalThis.webkitSpeechRecognition),liveCapable=deepgramReady||browserLive;
     const recordControls=!active
       ?`<button class="voice-record" data-action="voice-inventory-start">${phRegular('microphone')}<span><b>AVVIA DETTATURA LIVE</b><small>${deepgramReady?'Deepgram Nova-3 · streaming professionale':browserLive?'Il testo appare mentre parli':'Fallback locale disponibile su questo browser'}</small></span></button>`
       :`<div class="voice-live-actions"><button class="voice-record ${paused?'paused':'recording'}" data-action="${paused?'voice-inventory-resume':'voice-inventory-pause'}">${phRegular(paused?'play':'pause')}<span><b>${paused?'RIPRENDI':'PAUSA'}</b><small>${paused?'Continua dalla stessa sessione':'Ferma l’ascolto senza chiudere la sessione'}</small></span></button><button class="voice-record voice-live-stop" data-action="voice-inventory-stop">${phRegular('stop')}<span><b>TERMINA DETTATURA</b><small>Conclude l’ascolto mantenendo il testo già acquisito</small></span></button></div>`;
-    const engineLabel=this.voiceEngine==='DEEPGRAM'?'NOVA-3':deepgramReady?'DEEPGRAM':browserLive?'LIVE':esc(this.voiceEngine||(navigator.gpu?'WEBGPU':'WASM'));
+    const engineLabel=this.voiceEngine==='DEEPGRAM'?'NOVA-3':['WEBGPU','WASM'].includes(this.voiceEngine)?this.voiceEngine:this.voiceEngine==='LIVE'?'LIVE':deepgramReady?'DEEPGRAM':browserLive?'LIVE':esc(this.voiceEngine||(navigator.gpu?'WEBGPU':'WASM'));
     const statusTitle=this.voiceBusy?'Elaborazione in corso…':recording?'Ascolto live attivo':paused?'Dettatura in pausa':'Pronto';
     const statusDetail=this.voiceBusy?'Sto preparando il fallback locale.':recording?'Parla normalmente: SOMA aggiorna il testo in tempo reale e lo confronta con il Master.':paused?'Premi RIPRENDI quando vuoi continuare.':deepgramReady?'Deepgram Nova-3 è il motore prioritario: streaming live, numeri automatici e keyterm dal Master.':browserLive?'Nessun modello Whisper da attendere: il riconoscimento parte subito.':'Questo browser userà il fallback locale.';
-    return `<section class="voice-inventory-shell"><header class="voice-inventory-head"><span class="voice-inventory-logo">${phRegular('waveform')}</span><div><small>INVENTARIO VOCALE AI</small><h2>Detta. Controlla. Conferma.</h2><p>Riconoscimento in tempo reale con correzione guidata da articoli, taglie e stati presenti nel Master.</p></div><span class="voice-engine-badge">${engineLabel}</span></header><div class="voice-inventory-controls"><div>${recordControls}</div><div class="voice-inventory-tip"><b>Esempio consigliato</b><span>I01127UHF, taglia L, 45, scaricato. M 23 nuovo. S 17 scaricato. I002BD, S 24 nuovo.</span></div></div><div class="voice-mic-note ${this.voiceMicIssue?'warn':''}">${this.voiceMicIssue?esc(this.voiceMicIssue):(deepgramReady?'Nova-3 riceve fino a 100 keyterm dinamici dalla posizione corrente: codici, taglie e stati hanno priorità nel riconoscimento.':browserLive?'Il testo viene mostrato mentre parli. SOMA usa il Master come vocabolario per ridurre gli errori sui codici articolo.':'Modalità compatibilità: il browser non offre riconoscimento live e verrà usato il motore locale.')}</div><div class="voice-model-status" id="voiceModelStatus"><span class="dot ${this.voiceBusy?'busy':''}"></span><b>${statusTitle}</b><small>${statusDetail}</small></div><label class="voice-transcript-label"><span>TRASCRIZIONE LIVE</span><textarea id="voiceInventoryTranscript" class="field textarea" ${recording?'readonly':''} placeholder="La trascrizione apparirà qui mentre parli. Puoi anche scrivere o correggere manualmente.">${esc(d.transcript||'')}</textarea></label><div class="voice-transcript-actions"><button class="soft small" data-action="voice-inventory-parse">${phRegular('magic-wand')} ANALIZZA TESTO</button><button class="soft small" data-action="voice-inventory-clear">${phRegular('trash')} SVUOTA</button></div><div class="voice-review-head"><div><small>RIGHE INTERPRETATE</small><h3>${rows.length} ${rows.length===1?'riga':'righe'}</h3></div><div class="voice-review-kpis"><span class="ok"><b>${valid}</b><small>VALIDE</small></span><span class="${warn?'warn':''}"><b>${warn}</b><small>DA VERIFICARE</small></span></div></div><div class="voice-review-list">${rows.length?rows.map((r,i)=>this.voiceInventoryRowHtml(r,i)).join(''):'<div class="voice-review-empty">Nessuna riga ancora. Avvia la dettatura oppure inserisci il testo manualmente.</div>'}</div><footer class="voice-inventory-footer"><div><small>MEMORIA TEMPORANEA</small><b>Le giacenze non vengono modificate finché non confermi.</b></div><button class="voice-confirm" data-action="voice-inventory-confirm" ${!rows.length||warn?'disabled':''}>${phRegular('check-circle')}<span>CONFERMA E AGGIORNA GIACENZE</span></button></footer></section>`
+    return `<section class="voice-inventory-shell"><header class="voice-inventory-head"><span class="voice-inventory-logo">${phRegular('waveform')}</span><div><small>INVENTARIO VOCALE AI</small><h2>Detta. Controlla. Conferma.</h2><p>Riconoscimento in tempo reale con correzione guidata da articoli, taglie e stati presenti nel Master.</p></div><span class="voice-engine-badge">${engineLabel}</span></header><div class="voice-inventory-controls"><div>${recordControls}</div><div class="voice-inventory-tip"><b>Esempio consigliato</b><span>I01127UHF, taglia L, 45, scaricato. M 23 nuovo. S 17 scaricato. I002BD, S 24 nuovo.</span></div></div><div class="voice-mic-note ${this.voiceMicIssue?'warn':''}">${this.voiceMicIssue?esc(this.voiceMicIssue):(deepgramReady?'Nova-3 riceve fino a 100 keyterm dinamici dalla posizione corrente: codici, taglie e stati hanno priorità nel riconoscimento.':browserLive?'Il testo viene mostrato mentre parli. SOMA usa il Master come vocabolario per ridurre gli errori sui codici articolo.':'Modalità compatibilità: il browser non offre riconoscimento live e verrà usato il motore locale.')}</div><div class="voice-model-status" id="voiceModelStatus"><span class="dot ${this.voiceBusy?'busy':''}"></span><b>${statusTitle}</b><small>${statusDetail}</small></div><label class="voice-transcript-label"><span>TRASCRIZIONE LIVE</span><textarea id="voiceInventoryTranscript" class="field textarea" ${recording?'readonly':''} placeholder="La trascrizione apparirà qui mentre parli. Puoi anche scrivere o correggere manualmente.">${esc(d.transcript||'')}</textarea></label><div class="voice-transcript-actions"><button class="soft small" data-action="voice-inventory-parse">${phRegular('magic-wand')} ANALIZZA TESTO</button><button class="soft small" data-action="voice-inventory-clear">${phRegular('trash')} SVUOTA</button></div><div class="voice-review-head"><div><small>RIGHE INTERPRETATE</small><h3>${rows.length} ${rows.length===1?'riga':'righe'}</h3></div><div class="voice-review-kpis"><span class="ok"><b>${valid}</b><small>VALIDE</small></span><span class="${warn?'warn':''}"><b>${warn}</b><small>DA VERIFICARE</small></span></div></div><div class="voice-review-list">${rows.length?rows.map((r,i)=>this.voiceInventoryRowHtml(r,i)).join(''):'<div class="voice-review-empty">Nessuna riga ancora. Avvia la dettatura oppure inserisci il testo manualmente.</div>'}</div><footer class="voice-inventory-footer"><div><small>MEMORIA TEMPORANEA</small><b>${canRectify?'Le giacenze non vengono modificate finché non confermi.':'Per confermare serve il permesso Rettifiche.'}</b></div><button class="voice-confirm" data-action="voice-inventory-confirm" ${!rows.length||warn||!canRectify?'disabled':''}>${phRegular('check-circle')}<span>CONFERMA E AGGIORNA GIACENZE</span></button></footer></section>`
   }
   voiceInventoryRowState(r){
-    const article=normalizeArticle(r.article),size=norm(r.size),state=norm(r.state),counted=Number(r.counted),master=normalizeMasterRows(this.store.db.master.rows||[]),knownArticle=master.some(x=>x.article===article),knownSize=master.some(x=>x.article===article&&x.size===size),stateOk=CONFIG.states.includes(state),qtyOk=Number.isInteger(counted)&&counted>=0;
+    const article=normalizeArticle(r.article),size=norm(r.size),state=norm(r.state),master=this.voiceMasterArticleSizes();
+    const qtyText=String(r.counted??'').trim(),counted=Number(qtyText);
+    const qtyOk=qtyText!==''&&/^\d+$/.test(qtyText)&&Number.isSafeInteger(counted)&&counted>=0;
+    const knownArticle=master.some(x=>x.article===article),knownSize=master.some(x=>x.article===article&&x.size===size);
     if(!article||!knownArticle)return{kind:'error',label:'CODICE DA VERIFICARE'};
     if(!size||!knownSize)return{kind:'error',label:'TAGLIA DA VERIFICARE'};
-    if(!stateOk)return{kind:'warn',label:'STATO DA SPECIFICARE'};
     if(!qtyOk)return{kind:'error',label:'QUANTITÀ NON VALIDA'};
+    if(!CONFIG.states.includes(state))return{kind:'warn',label:'STATO DA SPECIFICARE'};
     const dup=(this.voiceInventoryDraft?.rows||[]).filter(x=>normalizeArticle(x.article)===article&&norm(x.size)===size&&norm(x.state)===state).length>1;
     if(dup)return{kind:'warn',label:'DUPLICATO DA VERIFICARE'};
     return{kind:'ok',label:'VALIDA'}
   }
   voiceInventoryRowHtml(r,i){
     const st=this.voiceInventoryRowState(r);
-    return `<article class="voice-review-row ${st.kind}" data-voice-row="${i}"><span class="voice-review-index">${String(i+1).padStart(2,'0')}</span><label><span>Articolo</span><input class="field" data-voice-field="article" value="${esc(r.article||'')}"></label><label class="size"><span>Taglia</span><input class="field" data-voice-field="size" value="${esc(r.size||'')}"></label><label class="qty"><span>Quantità</span><input type="number" min="0" class="field" data-voice-field="counted" value="${Number.isFinite(Number(r.counted))?Number(r.counted):''}"></label><label class="state"><span>Stato</span><select class="field" data-voice-field="state"><option value="">— DA DEFINIRE —</option>${CONFIG.states.map(x=>`<option value="${esc(x)}" ${norm(r.state)===x?'selected':''}>${esc(x)}</option>`).join('')}</select></label><span class="voice-review-status">${phRegular(st.kind==='ok'?'check-circle':st.kind==='warn'?'warning':'x-circle')}${st.label}</span><button class="voice-review-remove" data-action="voice-inventory-remove" data-index="${i}" aria-label="Rimuovi riga">${phRegular('trash')}</button></article>`
+    return `<article class="voice-review-row ${st.kind}" data-voice-row="${i}"><span class="voice-review-index">${String(i+1).padStart(2,'0')}</span><label><span>Articolo</span><input class="field" data-voice-field="article" value="${esc(r.article||'')}"></label><label class="size"><span>Taglia</span><input class="field" data-voice-field="size" value="${esc(r.size||'')}"></label><label class="qty"><span>Quantità</span><input type="number" min="0" class="field" data-voice-field="counted" value="${r.counted==null||String(r.counted).trim()===''?'':esc(String(r.counted))}"></label><label class="state"><span>Stato</span><select class="field" data-voice-field="state"><option value="">— DA DEFINIRE —</option>${CONFIG.states.map(x=>`<option value="${esc(x)}" ${norm(r.state)===x?'selected':''}>${esc(x)}</option>`).join('')}</select></label><span class="voice-review-status">${phRegular(st.kind==='ok'?'check-circle':st.kind==='warn'?'warning':'x-circle')}${st.label}</span><button class="voice-review-remove" data-action="voice-inventory-remove" data-index="${i}" aria-label="Rimuovi riga">${phRegular('trash')}</button></article>`
   }
   voiceNormalizeSpoken(text){
     const words={ZERO:'0',UNO:'1',UNA:'1',UN:'1',DUE:'2',TRE:'3',QUATTRO:'4',CINQUE:'5',SEI:'6',SETTE:'7',OTTO:'8',NOVE:'9',ACCA:'H',EFFE:'F',ELLE:'L',EMME:'M',ENNE:'N',ERRE:'R',ESSE:'S',ZETA:'Z',BI:'B',CI:'C',DI:'D',GI:'G',PI:'P',TI:'T',VI:'V'};
@@ -20187,8 +20197,9 @@ class UI{
     const raw=normalizeArticle(tokens[i]||'');if(/^[A-Z]\d[A-Z0-9]{3,}$/.test(raw))return{article:raw,used:1};return null
   }
   voiceContextRows(){
-    const master=normalizeMasterRows(this.store.db.master.rows||[]),location=norm(document.getElementById('countLocation')?.value||this.voiceInventoryDraft?.location),pallet=norm(document.getElementById('countPallet')?.value||this.voiceInventoryDraft?.pallet);
-    const scoped=master.filter(r=>(!location||norm(r.location)===location)&&(!pallet||norm(r.pallet)===pallet));return scoped.length?scoped:master
+    const master=this.voiceMasterArticleSizes(),location=norm(document.getElementById('countLocation')?.value||this.voiceInventoryDraft?.location),pallet=norm(document.getElementById('countPallet')?.value||this.voiceInventoryDraft?.pallet);
+    const scoped=master.filter(r=>(!location||norm(r.location)===location)&&(!pallet||norm(r.pallet)===pallet));
+    return scoped.length?scoped:master
   }
   voiceArticleSpokenAlias(article){
     const names={A:'a',B:'bi',C:'ci',D:'di',E:'e',F:'effe',G:'gi',H:'acca',I:'i',J:'i lunga',K:'cappa',L:'elle',M:'emme',N:'enne',O:'o',P:'pi',Q:'cu',R:'erre',S:'esse',T:'ti',U:'u',V:'vi',W:'doppia vu',X:'ics',Y:'ipsilon',Z:'zeta','0':'zero','1':'uno','2':'due','3':'tre','4':'quattro','5':'cinque','6':'sei','7':'sette','8':'otto','9':'nove'};
@@ -20218,7 +20229,7 @@ class UI{
   }
 
   parseVoiceInventoryText(text){
-    const clean=this.voiceNormalizeSpoken(text),tokens=clean.split(' ').filter(Boolean),master=normalizeMasterRows(this.store.db.master.rows||[]),articles=[...new Set(master.map(x=>x.article).filter(Boolean))],rows=[];let current='';
+    const clean=this.voiceNormalizeSpoken(text),tokens=clean.split(' ').filter(Boolean),master=this.voiceMasterArticleSizes(),articles=[...new Set(master.map(x=>x.article).filter(Boolean))],rows=[];let current='';
     const stateAt=i=>{while(['PEZZI','PEZZO','PZ'].includes(norm(tokens[i]||'')))i++;const one=norm(tokens[i]||''),two=norm((tokens[i]||'')+' '+(tokens[i+1]||''));if(CONFIG.states.includes(two))return{state:two,used:2+(one==='PEZZI'||one==='PEZZO'||one==='PZ'?1:0)};if(CONFIG.states.includes(one))return{state:one,used:1};return{state:'',used:0}};
     const plausibleSize=v=>/^[A-Z0-9]{1,10}(?:[-\/.][A-Z0-9]{1,10})?$/.test(v)&&!CONFIG.states.includes(v);
     for(let i=0;i<tokens.length;){
@@ -20504,8 +20515,18 @@ class UI{
   voiceInventoryParse(){const t=document.getElementById('voiceInventoryTranscript')?.value||'';this.parseVoiceInventoryText(t);this.renderView()}
   async voiceInventoryClear(){clearTimeout(this.voiceRestartTimer);this.voiceListeningWanted=false;this.voicePaused=false;await this.closeDeepgramSocket({finalize:false});await this.stopAzureVoiceInventory();if(this.voiceRecognition){try{this.voiceRecognition.abort()}catch{}this.voiceRecognition=null}if(['recording','paused'].includes(this.voiceRecorder?.state)){try{this.voiceRecorder.onstop=null;this.voiceRecorder.stop()}catch{}this.voiceRecorderStream?.getTracks?.().forEach(t=>t.stop());this.voiceRecorderStream=null;this.voiceRecorder=null;this.voiceChunks=[];this.voiceBusy=false}await this.releaseVoiceWakeLock();this.voiceLiveBaseText='';this.voiceLiveSessionFinal='';this.voiceDeepgramFinal='';this.voiceMicIssue='';this.clearVoiceInventoryDraft();this.renderView()}
   voiceInventoryRemove(index){const i=Number(index);if(!Number.isInteger(i))return;this.voiceInventoryDraft.rows.splice(i,1);this.persistVoiceInventoryDraft();this.renderView()}
-  updateVoiceInventoryField(el){const rowEl=el.closest('[data-voice-row]');if(!rowEl)return;const i=Number(rowEl.dataset.voiceRow),r=this.voiceInventoryDraft?.rows?.[i],field=el.dataset.voiceField;if(!r||!field)return;r[field]=field==='counted'?Math.max(0,Math.floor(Number(el.value)||0)):field==='article'?normalizeArticle(el.value):norm(el.value);this.persistVoiceInventoryDraft()}
+  updateVoiceInventoryField(el){
+    const rowEl=el.closest('[data-voice-row]');if(!rowEl)return;
+    const i=Number(rowEl.dataset.voiceRow),r=this.voiceInventoryDraft?.rows?.[i],field=el.dataset.voiceField;
+    if(!r||!['article','size','counted','state'].includes(field))return;
+    if(field==='counted'){
+      const qty=String(el.value??'').trim();
+      r.counted=/^\d+$/.test(qty)&&Number.isSafeInteger(Number(qty))?Number(qty):qty;
+    }else r[field]=field==='article'?normalizeArticle(el.value):norm(el.value);
+    this.persistVoiceInventoryDraft()
+  }
   confirmVoiceInventory(){
+    if(!this.auth?.can?.('COUNT')||!this.auth?.can?.('RECTIFY'))throw new Error('Non hai i permessi necessari per confermare una rettifica da inventario vocale.');
     const location=norm(document.getElementById('countLocation')?.value||this.voiceInventoryDraft?.location),pallet=norm(document.getElementById('countPallet')?.value||this.voiceInventoryDraft?.pallet),rows=this.voiceInventoryDraft?.rows||[];if(!location)throw new Error('Inserisci Fila/Scaffale.');if(!rows.length)throw new Error('Nessuna riga da confermare.');const bad=rows.filter(r=>this.voiceInventoryRowState(r).kind!=='ok');if(bad.length)throw new Error(`${bad.length} ${bad.length===1?'riga deve':'righe devono'} essere verificata prima della conferma.`);if(!confirm(`Aggiornare ${rows.length} righe nella posizione ${location}${pallet?' · Bancale '+pallet:''}? Le modifiche saranno registrate nell’Audit.`))return;const sessionId=this.voiceInventoryDraft.id||('VC-'+Date.now());for(const r of rows){const item={article:normalizeArticle(r.article),size:norm(r.size),state:norm(r.state)},bucket={location,pallet},key=bucketKey({...item,...bucket}),existing=this.domain.stock.findByKey(key);this.domain.rectifications.setQuantity({currentKey:existing?key:'',article:item.article,size:item.size,state:item.state,location,pallet,counted:Number(r.counted),reason:'INVENTARIO VOCALE',note:'Confermato da Inventario vocale SOMA HUB',sourceKind:'COUNT_ASSISTED',sessionId})}this.domain.audit.record('VOICE_INVENTORY_CONFIRMED','COUNT',sessionId,null,{rows:rows.length,location,pallet},{engine:this.voiceEngine==='DEEPGRAM'?'Deepgram Nova-3 streaming + Master keyterms':this.voiceEngine==='LIVE'?'Browser Live ASR + Master context':'Whisper / Transformers.js fallback',operator:this.auth.user});this.store.save('voice:inventory');this.clearVoiceInventoryDraft();this.voiceInventoryOpen=false;this.toast(`${rows.length} righe aggiornate nelle giacenze.`);this.router.go('stock')
   }
 
@@ -20893,6 +20914,6 @@ try{globalThis.__NOVA_LEGACY_AVAILABLE=!!localStorage.getItem(CONFIG.legacyStora
 const switchSite=async siteId=>{await ui.selectSite(siteId);return auth.site()};
 globalThis.NOVA=Object.freeze({version:CONFIG.appVersion,schema:CONFIG.version,identityVersion:CONFIG.identityVersion,store,auth,router,domain,excel,requestDocs,ui,sounds,sites:SITES,operators:OPERATORS,roles:ROLE_DEFS,saveIdentityRegistry,capabilities:Object.freeze({operational:ALL_CAPS,master:MASTER_CAPS,administration:ADMIN_CAPS,globalAdmin:GLOBAL_ADMIN_CAPS}),identityValidation:IDENTITY_VALIDATION,switchSite});
 ui.render();</script>
-<!-- SOMA_BUILD:R31.94-20261001 -->
+<!-- SOMA_BUILD:R31.95-20261008 -->
 </body>
 </html>
