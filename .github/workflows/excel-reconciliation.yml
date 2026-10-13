@@ -2,7 +2,7 @@ name: Excel reconciliation regression
 
 on:
   push:
-    branches: [main, "fix/excel-r31-100"]
+    branches: [main, "fix/excel-r31-100", "fix/excel-r31-101"]
     paths:
       - index.html
       - tests/excel-reconciliation.mjs
