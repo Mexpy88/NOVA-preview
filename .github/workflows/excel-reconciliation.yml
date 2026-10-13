@@ -1,0 +1,39 @@
+name: Excel reconciliation regression
+
+on:
+  push:
+    branches: [main, "fix/excel-r31-100"]
+    paths:
+      - index.html
+      - tests/excel-reconciliation.mjs
+      - .github/workflows/excel-reconciliation.yml
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  browser-integration:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install test dependencies
+        run: npm install --no-save --no-package-lock playwright@1.56.1 xlsx@0.18.5 jszip@3.10.1 exceljs@4.4.0
+      - name: Install Chromium
+        run: npx playwright install --with-deps chromium
+      - name: Validate embedded JavaScript syntax
+        run: |
+          node --input-type=module <<'NODE'
+          import { readFileSync } from 'node:fs';
+          import vm from 'node:vm';
+          const source=readFileSync('index.html','utf8');
+          for(const m of source.matchAll(/<script(?: [^>]*)?>([\s\S]*?)<\/script>/g))
+            if(m[1].trim())new vm.Script(m[1]);
+          console.log('PASS inline JavaScript syntax');
+          NODE
+      - name: Exercise import and export reconciliation
+        run: node tests/excel-reconciliation.mjs
