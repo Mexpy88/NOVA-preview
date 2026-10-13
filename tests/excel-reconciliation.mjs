@@ -66,7 +66,7 @@ try{
 
   const collect=()=>page.evaluate(async()=>{
     const bytes=await window.NOVA.excel.buildExportBytes();
-    const book=window.XLSX.read(bytes,{type:'array',cellDates:false,cellFormula:true});
+    const book=window.XLSX.read(bytes,{type:'array',cellDates:false,cellFormula:true,cellStyles:true});
     const sheet=book.Sheets.MAGAZZINO;
     const rg=window.XLSX.utils.decode_range(sheet['!ref']);
     let rows=[];
