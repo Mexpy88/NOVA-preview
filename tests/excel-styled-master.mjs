@@ -66,6 +66,8 @@ try{
   assert.equal(o.getCell('C2').fill?.fgColor?.argb,'FFFFE0AA');
   assert.equal(o.getCell('C2').border?.bottom?.color?.argb,'FF123456');
   assert.equal(o.getCell('I2').numFmt,'dd/mm/yyyy');
+  console.log('DEBUG STYLED F2 SOURCE',JSON.stringify((await srcZip.file(sf).async('string')).match(/<c r="F2"[^>]*>[\\s\\S]*?<\\/c>/)?.[0]));
+  console.log('DEBUG STYLED F2 EXPORTED',JSON.stringify((await file.file(sf).async('string')).match(/<c r="F2"[^>]*>[\\s\\S]*?<\\/c>/)?.[0]),JSON.stringify(o.getCell('F2').value));
   assert.equal(o.getCell('F2').value?.result,0);
   assert.equal(o.getCell('F2').value?.formula,'1-1');
   assert.equal(o.getCell('C2').value,'I002BD');
