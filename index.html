@@ -19001,7 +19001,7 @@ class ExcelService{
   async buildExportBytes(){
     await ensureXlsx();await ensureJsZip();this.exportTableRanges=new Map();this.exportTableHeaders=new Map();this.exportFreezeRows=new Map();this.lastGeneratedSheets=[];this.tableBlueprints=[];
     const bytes=await this.originalBytes(),wb=bytes?X().read(bytes,{type:'array',cellDates:true,cellStyles:true,bookVBA:true}):X().utils.book_new();this.exportStyles=this.#captureExportStyles(wb);
-    this.#removeSheet(wb,'APP_DATI');this.#removeSheet(wb,'REGISTRO_MOVIMENTI');this.updateMagazine(wb);this.updateSearchData(wb);
+    this.#removeSheet(wb,'APP_DATI');this.#removeSheet(wb,'REGISTRO_MOVIMENTI');if(this.#activeLedgerDeltas().size===0)this.#preserveUnchangedMagazine(wb);else this.updateMagazine(wb);this.updateSearchData(wb);
     this.replaceSheet(wb,'MOVIMENTI',this.movementSheet(),{keepAutofilter:true});this.replaceSheet(wb,'SCARICHI',this.issueSheet(),{keepAutofilter:true});this.replaceSheet(wb,'ENTRATE_MERCI',this.receiptSheet(),{keepAutofilter:true});this.replaceSheet(wb,'RICHIESTE',this.requestSheet(),{keepAutofilter:true});this.replaceSheet(wb,'REGISTRO',this.registrySheet(),{keepAutofilter:true});this.replaceSheet(wb,'AUDIT',this.auditSheet(),{keepAutofilter:true});
     const counts=this.countSheet();if(counts)this.replaceSheet(wb,'CONTEGGI',counts,{keepAutofilter:true});else this.#removeSheet(wb,'CONTEGGI');this.buildDataSheet(wb);
     const visible=['MAGAZZINO','CERCA_GIACENZE','MOVIMENTI','SCARICHI','ENTRATE_MERCI','RICHIESTE','REGISTRO','AUDIT',...(counts?['CONTEGGI']:[])];this.lastGeneratedSheets=visible;this.#orderExportSheets(wb,[...visible,'GIACENZE_RICERCA_DATI','NOVA_DATI','ELIMINATI']);this.#dropSheetFilterNames(wb);
@@ -19009,7 +19009,7 @@ class ExcelService{
   }
   async export(){
     const out=await this.buildExportBytes();
-    const stamp=new Date().toISOString().slice(0,16).replace(/[:T]/g,'-'),stem=(this.store.db.master.filename||'MAGAZZINO').replace(/\.xlsx$/i,'').replace(/_(?:NOVA|SOMA)_.*/i,''),name=`${stem}_SOMA_R31_98_${stamp}.xlsx`;
+    const stamp=new Date().toISOString().slice(0,16).replace(/[:T]/g,'-'),stem=(this.store.db.master.filename||'MAGAZZINO').replace(/\.xlsx$/i,'').replace(/_(?:NOVA|SOMA)_.*/i,''),name=`${stem}_SOMA_R31_99_${stamp}.xlsx`;
     this.#download(out,name);
     const exportedAudit=this.domain.audit.record('MASTER_EXPORTED','MASTER',name,null,{name,validation:this.lastValidation,generatedSheets:this.lastGeneratedSheets});this.store.db.settings.lastExportAt=exportedAudit.at;this.store.db.settings.lastExportName=name;this.store.save('master:export:baseline');return name
   }
@@ -19140,6 +19140,41 @@ class ExcelService{
     const at=fmtDateTime(nowIso()),operator=this.domain?.audit?.auth?.user||this.domain?.ledger?.auth?.user||'';
     removedRows.forEach((row,i)=>{const rr=start+i;for(let c=0;c<=tableMaxCol;c++){const cell=row.cells[c];if(cell)ws[XLSX.utils.encode_cell({r:rr,c})]=clone(cell)}const id=rowIdentityFromSnapshot(row,this.store.db.master.columns)||{};setCell(ws,rr,tableMaxCol+1,at,null);setCell(ws,rr,tableMaxCol+2,operator,null);setCell(ws,rr,tableMaxCol+3,'GIACENZA AZZERATA / ELIMINATA DA NOVA',null);setCell(ws,rr,tableMaxCol+4,id.key||'',null)});
     const end=start+removedRows.length-1,ref=XLSX.utils.decode_range(ws['!ref']||'A1');ref.e.r=Math.max(ref.e.r,end);ref.e.c=Math.max(ref.e.c,tableMaxCol+4);ws['!ref']=XLSX.utils.encode_range(ref)
+  }
+  #preserveUnchangedMagazine(wb){
+    // Nessun movimento effettivo: preserva le celle del MAGAZZINO, ma verifica ogni giacenza.
+    const original=parseMaster(wb),current=this.domain.stock.positive();
+    const totalByBucket=rows=>{
+      const map=new Map();
+      for(const r of rows||[]){
+        const q=Number(r.quantity||0);
+        if(!Number.isFinite(q)||q<0)throw new Error('Export Excel bloccato: quantità non valida nel Master.');
+        if(!q)continue;
+        const k=bucketKey(r);map.set(k,(map.get(k)||0)+q)
+      }
+      return map
+    };
+    const source=totalByBucket(original.rows),live=totalByBucket(current);
+    if(source.size!==live.size)throw new Error('Export Excel bloccato: le giacenze del Master originale e di SOMA HUB non coincidono ('+source.size+' vs '+live.size+' combinazioni).');
+    for(const [key,quantity] of source){
+      const currentQuantity=live.get(key);
+      if(currentQuantity==null||Math.abs(currentQuantity-quantity)>1e-9)throw new Error('Export Excel bloccato: giacenza non coerente per '+key+' (Master '+quantity+', SOMA '+(currentQuantity??'assente')+').')
+    }
+    const sheetName=original.sheetName,ws=wb.Sheets[sheetName],XLSX=X(),rg=XLSX.utils.decode_range(ws['!ref']||'A1'),headerRow=original.headerRow||0,articleCol=original.columns.article;
+    let lastCol=0,lastDataRow=headerRow;
+    for(let c=0;c<=rg.e.c;c++){
+      const cell=ws[XLSX.utils.encode_cell({r:headerRow,c})];
+      if(cell?.v!=null&&String(cell.v).trim())lastCol=c
+    }
+    for(let r=headerRow+1;r<=rg.e.r;r++){
+      const cell=ws[XLSX.utils.encode_cell({r,c:articleCol})];
+      if(normalizeArticle(cell?.v))lastDataRow=r
+    }
+    if(lastDataRow<=headerRow)throw new Error('Export Excel bloccato: nessuna riga articolo nell’originale.');
+    const ref=XLSX.utils.encode_range({s:{r:headerRow,c:0},e:{r:lastDataRow,c:lastCol}});
+    this.exportTableRanges.set(sheetName,ref);
+    this.exportTableHeaders.set(sheetName,Array.from({length:lastCol+1},(_,i)=>String(ws[XLSX.utils.encode_cell({r:headerRow,c:i})]?.v??'COLONNA '+(i+1))));
+    this.lastIntegrity={ok:true,mode:'unchanged-master-verified',buckets:source.size,sourceRows:original.catalogRowCount,tableRange:ref,formulaUpdates:0,operationsApplied:0}
   }
   updateMagazine(wb){
     const meta=this.store.db.master,current=this.domain.stock.positive(),sheetName=meta.sheetName||'MAGAZZINO';let ws=wb.Sheets[sheetName];
@@ -20979,6 +21014,6 @@ try{globalThis.__NOVA_LEGACY_AVAILABLE=!!localStorage.getItem(CONFIG.legacyStora
 const switchSite=async siteId=>{await ui.selectSite(siteId);return auth.site()};
 globalThis.NOVA=Object.freeze({version:CONFIG.appVersion,schema:CONFIG.version,identityVersion:CONFIG.identityVersion,store,auth,router,domain,excel,requestDocs,ui,sounds,sites:SITES,operators:OPERATORS,roles:ROLE_DEFS,saveIdentityRegistry,capabilities:Object.freeze({operational:ALL_CAPS,master:MASTER_CAPS,administration:ADMIN_CAPS,globalAdmin:GLOBAL_ADMIN_CAPS}),identityValidation:IDENTITY_VALIDATION,switchSite});
 ui.render();</script>
-<!-- SOMA_BUILD:R31.98-20261013 -->
+<!-- SOMA_BUILD:R31.99-20261013 -->
 </body>
 </html>
