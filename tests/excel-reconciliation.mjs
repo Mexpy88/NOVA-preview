@@ -66,8 +66,8 @@ try{
       const val=c=>sheet[window.XLSX.utils.encode_cell({r,c})]?.v;
       if(val(2))rows.push({article:val(2),size:val(3),location:val(0),pallet:val(1),quantity:Number(val(4)||0),note:val(7),date:val(8),row:r+1})
     }
-    const zip=await window.JSZip.loadAsync(bytes),tables=Object.keys(zip.files).filter(k=>/^xl\\/tables\\/table\\d+\\.xml$/.test(k));
-    const footers=Object.keys(sheet).filter(k=>/^AK\\d+$/.test(k)&&sheet[k]?.v==='FOOTER FUORI TABELLA');
+    const zip=await window.JSZip.loadAsync(bytes),tables=Object.keys(zip.files).filter(k=>k.startsWith('xl/tables/table')&&k.endsWith('.xml'));
+    const footers=Object.keys(sheet).filter(k=>k.startsWith('AK')&&/^[0-9]+$/.test(k.slice(2))&&sheet[k]?.v==='FOOTER FUORI TABELLA');
     return {rows,formula:sheet.E6?.f,formulaValue:sheet.E6?.v,footers,tableCount:tables.length,sheets:book.SheetNames,integrity:window.NOVA.excel.lastIntegrity,validation:window.NOVA.excel.lastValidation}
   });
 
