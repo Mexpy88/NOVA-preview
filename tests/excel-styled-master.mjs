@@ -97,4 +97,83 @@ try{
   assert.match(await changedZip.file(sf).async('string'),/<c r="F2"[^>]*><f>1-1<\/f><v>0<\/v><\/c>/,'Unchanged cached formula zero must survive after a stock movement');
   assert.match(await changedZip.file('xl/tables/table1.xml').async('string'),/ref="A1:I4"/);
   console.log('PASS movement +7 on original structured table with stable layout and column range');
+  // Full demo cycle: +7 inbound, -5 outbound, then transfer 3 units
+  // without touching source master bytes or any unrelated catalogue field.
+  const transaction=await page.evaluate(async()=>{
+    const ledger=window.NOVA.domain.ledger;
+    ledger.outgoing({article:'I002BD',size:'S',state:'NUOVO'},{location:'R9',pallet:'B1'},5);
+    ledger.transfer({article:'I002BD',size:'S',state:'NUOVO'},{location:'R9',pallet:'B1'},{location:'R20',pallet:'B2'},3);
+    const bytes=await window.NOVA.excel.buildExportBytes();
+    const stock=window.NOVA.domain.stock.positive().filter(x=>x.article==='I002BD'||x.article==='I_LAST');
+    return {base64:btoa(String.fromCharCode(...new Uint8Array(bytes))),validation:window.NOVA.excel.lastValidation,stock,ledgerCount:window.NOVA.store.db.ledger.length}
+  });
+  assert.equal(transaction.validation.ok,true);
+  assert.equal(transaction.ledgerCount,3,'Expected exactly IN, OUT and TRANSFER in the fresh demo session');
+  const transactionBuffer=Buffer.from(transaction.base64,'base64');
+  const transactionZip=await JSZip.loadAsync(transactionBuffer);
+  const transactionBook=new ExcelJS.Workbook();await transactionBook.xlsx.load(transactionBuffer);
+  const inventory=transactionBook.getWorksheet('MAGAZZINO');
+  const numberValue=cell=>{
+    const value=cell.value;
+    return typeof value==='object'&&value!==null?Number(value.result):Number(value||0)
+  };
+  const catalogueRows=[];
+  inventory.eachRow({includeEmpty:false},(r,number)=>{
+    if(number===1)return;
+    const article=r.getCell(3).value;
+    if(!['I002BD','I_LAST'].includes(article))return;
+    catalogueRows.push({
+      article,size:r.getCell(4).value,location:r.getCell(1).value||'',
+      pallet:r.getCell(2).value||'',nuovo:numberValue(r.getCell(5)),
+      scaricato:numberValue(r.getCell(6)),usato:numberValue(r.getCell(7)),
+      note:r.getCell(8).value,date:r.getCell(9).value,physicalRow:number
+    })
+  });
+  const findRow=(article,size,location,pallet='')=>{
+    const matches=catalogueRows.filter(r=>r.article===article&&r.size===size&&r.location===location&&r.pallet===pallet);
+    assert.equal(matches.length,1,'Expected one row for '+[article,size,location,pallet].join('/'));
+    return matches[0]
+  };
+  const source=findRow('I002BD','S','R9','B1');
+  const destination=findRow('I002BD','S','R20','B2');
+  const unchangedZero=findRow('I002BD','M','R9','B1');
+  const unchangedOther=findRow('I_LAST','L','R10');
+  assert.equal(source.nuovo,52,'53 + 7 - 5 - 3 = 52 units at origin');
+  assert.equal(destination.nuovo,3,'Transferred units must appear exactly once at destination');
+  assert.equal(unchangedZero.nuovo,0,'Zero catalogue row must remain intact');
+  assert.equal(unchangedOther.nuovo,8,'Unrelated stock must not change');
+  assert.equal(source.note,'Nota fondamentale');
+  assert.equal(source.date,45678);
+  assert.equal(unchangedZero.note,'Riga a giacenza zero');
+  assert.equal(unchangedZero.date,45679);
+  assert.equal(unchangedOther.note,'Ultima riga tabella');
+  assert.equal(unchangedOther.date,45680);
+  assert.equal(catalogueRows.length,4,'One new destination and no unintended duplicate entries');
+  assert.equal(catalogueRows.reduce((sum,r)=>sum+r.nuovo+r.scaricato+r.usato,0),63,
+    'Stock conservation: (53+8)+7-5=63. Transfer has zero net effect');
+  assert.deepEqual(transaction.stock.filter(r=>r.quantity>0).map(r=>[r.article,r.size,r.location,r.pallet,r.quantity])
+    .sort((a,b)=>a.join('|').localeCompare(b.join('|'))),
+    [['I002BD','S','R20','B2',3],['I002BD','S','R9','B1',52],['I_LAST','L','R10','',8]]
+      .sort((a,b)=>a.join('|').localeCompare(b.join('|'))),
+    'Export quantities must agree exactly with the live stock engine');
+  assert.equal(inventory.getColumn(3).width,33);
+  assert.equal(inventory.pageSetup.orientation,'landscape');
+  assert.equal(inventory.pageSetup.paperSize,9);
+  assert.equal(inventory.getCell('C2').font?.size,13);
+  assert.equal(inventory.getCell('C2').font?.bold,true);
+  assert.equal(inventory.getCell('C2').fill?.fgColor?.argb,'FFFFE0AA');
+  assert.equal(inventory.getCell('C2').border?.bottom?.color?.argb,'FF123456');
+  assert.equal(inventory.getCell('I2').numFmt,'dd/mm/yyyy');
+  assert.match(await transactionZip.file(sf).async('string'),
+    /<c r="F2"[^>]*><f>1-1<\/f><v>0<\/v><\/c>/,
+    'Unchanged cached zero and formula must survive all three movements');
+  assert.match(await transactionZip.file('xl/tables/table1.xml').async('string'),
+    /ref="A1:I5"/,'Structured table must expand by one row and still have nine columns');
+  const outFooter=[];
+  inventory.eachRow({includeEmpty:false},r=>{if(r.getCell(37).value==='LITERAL_FOOTER')outFooter.push(r.number)});
+  assert.equal(outFooter.length,1,'Footer outside the table must be preserved exactly once');
+  assert.equal(transactionBook.getWorksheet('APP_DATI'),undefined,'Legacy history must not reappear');
+  console.log('PASS isolated three-movement cycle: IN +7, OUT -5, TRANSFER 3; source 52, destination 3, unchanged 8 and zero, total 63');
+  console.log('PASS no duplication and unchanged notes, inventory dates, formula cache, styles, print setup, external footer, 9-column structured table');
+
 }finally{await ctx.close();await browser.close();await new Promise(done=>server.close(done))}
