@@ -19226,6 +19226,7 @@ class ExcelService{
       // Restore original physical cells, formulas, cached zeros, notes,
       // dimensions, print settings and outline metadata, not just their values.
       const originalTableParts=findChild(sourceRoot,'tableParts'),restoredParts=findChild(outputRoot,'tableParts');
+      if(!originalTableParts&&restoredParts){const part=cloneTo(sdoc,restoredParts),ext=findChild(sourceRoot,'extLst');ext?sourceRoot.insertBefore(part,ext):sourceRoot.appendChild(part)}
       if(originalTableParts&&restoredParts){
         const tables=[...restoredParts.getElementsByTagNameNS('*','tablePart')].map(t=>t.getAttributeNS('http://schemas.openxmlformats.org/officeDocument/2006/relationships','id')||t.getAttribute('r:id'));
         const origParts=[...originalTableParts.getElementsByTagNameNS('*','tablePart')];
