@@ -78,7 +78,7 @@ try{
     const footers=Object.keys(sheet).filter(k=>k.startsWith('AK')&&/^[0-9]+$/.test(k.slice(2))&&sheet[k]?.v==='FOOTER FUORI TABELLA');
     const tableXml=await zip.file('xl/tables/table1.xml').async('string');
     const magXml=await zip.file('xl/worksheets/sheet1.xml').async('string');
-    const magTableRange=tableXml.match(/\\bref="([^"]+)"/)?.[1];
+    const magTableRange=tableXml.match(/ref="([^"]+)"/)?.[1];
     return {rows,formula:sheet.E6?.f,formulaValue:sheet.E6?.v,zeroFormula:sheet.F6?.f,zeroFormulaCache:sheet.F6?.v,footers,tableCount:tables.length,magTableRange,hasArtificialColumn:!!sheet.J1?.v,hasPrintLandscape:magXml.includes('orientation="landscape"'),magColumnWidth:sheet['!cols']?.[2]?.wch,sheets:book.SheetNames,integrity:window.NOVA.excel.lastIntegrity,validation:window.NOVA.excel.lastValidation}
   });
 
