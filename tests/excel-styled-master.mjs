@@ -143,11 +143,11 @@ try{
   assert.equal(unchangedZero.nuovo,0,'Zero catalogue row must remain intact');
   assert.equal(unchangedOther.nuovo,8,'Unrelated stock must not change');
   assert.equal(source.note,'Nota fondamentale');
-  assert.equal(source.date,45678);
+  assert.deepEqual(source.date,o.getCell('I2').value,'Original inventory date must be unchanged');
   assert.equal(unchangedZero.note,'Riga a giacenza zero');
-  assert.equal(unchangedZero.date,45679);
+  assert.deepEqual(unchangedZero.date,o.getCell('I3').value,'Zero-stock row inventory date must be unchanged');
   assert.equal(unchangedOther.note,'Ultima riga tabella');
-  assert.equal(unchangedOther.date,45680);
+  assert.deepEqual(unchangedOther.date,o.getCell('I4').value,'Unrelated row inventory date must be unchanged');
   assert.equal(catalogueRows.length,4,'One new destination and no unintended duplicate entries');
   assert.equal(catalogueRows.reduce((sum,r)=>sum+r.nuovo+r.scaricato+r.usato,0),63,
     'Stock conservation: (53+8)+7-5=63. Transfer has zero net effect');
