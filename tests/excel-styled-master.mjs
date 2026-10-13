@@ -66,10 +66,7 @@ try{
   assert.equal(o.getCell('C2').fill?.fgColor?.argb,'FFFFE0AA');
   assert.equal(o.getCell('C2').border?.bottom?.color?.argb,'FF123456');
   assert.equal(o.getCell('I2').numFmt,'dd/mm/yyyy');
-  const cellXml=xml=>{const at=xml.indexOf('<c r="F2"');return at<0?'not found':xml.slice(at,xml.indexOf('</c>',at)+4)};
-  console.log('DEBUG STYLED F2 SOURCE',cellXml(await srcZip.file(sf).async('string')));
-  console.log('DEBUG STYLED F2 EXPORTED',cellXml(await file.file(sf).async('string')),JSON.stringify(o.getCell('F2').value));
-  assert.equal(o.getCell('F2').value?.result,0);
+  assert.match(await file.file(sf).async('string'),/<c r="F2"[^>]*><f>1-1<\/f><v>0<\/v><\/c>/,'Cached zero must be explicit in worksheet OOXML');
   assert.equal(o.getCell('F2').value?.formula,'1-1');
   assert.equal(o.getCell('C2').value,'I002BD');
   assert.equal(o.getCell('AK22').value,'LITERAL_FOOTER');
