@@ -94,6 +94,7 @@ try{
   assert.equal(changedSheet.getCell('E2').value?.result??changedSheet.getCell('E2').value,60);
   assert.equal(changedSheet.getColumn(3).width,33);
   assert.equal(changedSheet.pageSetup.orientation,'landscape');
+  assert.match(await changedZip.file(sf).async('string'),/<c r="F2"[^>]*><f>1-1<\/f><v>0<\/v><\/c>/,'Unchanged cached formula zero must survive after a stock movement');
   assert.match(await changedZip.file('xl/tables/table1.xml').async('string'),/ref="A1:I4"/);
   console.log('PASS movement +7 on original structured table with stable layout and column range');
 }finally{await ctx.close();await browser.close();await new Promise(done=>server.close(done))}
