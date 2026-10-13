@@ -66,8 +66,9 @@ try{
   assert.equal(o.getCell('C2').fill?.fgColor?.argb,'FFFFE0AA');
   assert.equal(o.getCell('C2').border?.bottom?.color?.argb,'FF123456');
   assert.equal(o.getCell('I2').numFmt,'dd/mm/yyyy');
-  console.log('DEBUG STYLED F2 SOURCE',JSON.stringify((await srcZip.file(sf).async('string')).match(/<c r="F2"[^>]*>[\\s\\S]*?<\\/c>/)?.[0]));
-  console.log('DEBUG STYLED F2 EXPORTED',JSON.stringify((await file.file(sf).async('string')).match(/<c r="F2"[^>]*>[\\s\\S]*?<\\/c>/)?.[0]),JSON.stringify(o.getCell('F2').value));
+  const cellXml=xml=>{const at=xml.indexOf('<c r="F2"');return at<0?'not found':xml.slice(at,xml.indexOf('</c>',at)+4)};
+  console.log('DEBUG STYLED F2 SOURCE',cellXml(await srcZip.file(sf).async('string')));
+  console.log('DEBUG STYLED F2 EXPORTED',cellXml(await file.file(sf).async('string')),JSON.stringify(o.getCell('F2').value));
   assert.equal(o.getCell('F2').value?.result,0);
   assert.equal(o.getCell('F2').value?.formula,'1-1');
   assert.equal(o.getCell('C2').value,'I002BD');
