@@ -1,13 +1,13 @@
 <!doctype html>
 <html lang="it">
 <head>
-<meta name="soma-build" content="R31.102-20261013">
+<meta name="soma-build" content="R31.103-20261013">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
 <script id="soma-build-freshness">
 (() => {
-  const CURRENT_BUILD='R31.102-20261013',CHECK_KEY='soma:last-build-refresh';
+  const CURRENT_BUILD='R31.103-20261013',CHECK_KEY='soma:last-build-refresh';
   globalThis.SOMA_BUILD=CURRENT_BUILD;
   const check=async()=>{
     try{
@@ -18592,10 +18592,11 @@ class NotificationService{
 }
 
 class StockService{
-  constructor(store){this.store=store;this.cache=null;this.store?.bus?.on?.('db:changed',()=>this.invalidate())}
-  invalidate(){this.cache=null}
+  constructor(store){this.store=store;this.cache=null;this.cacheSiteId=null;this.cacheDb=null;this.store?.bus?.on?.('db:changed',()=>this.invalidate());this.store?.bus?.on?.('site:changed',()=>this.invalidate())}
+  invalidate(){this.cache=null;this.cacheSiteId=null;this.cacheDb=null}
   rows({excludeEventId=''}={}){
-    if(!excludeEventId&&this.cache)return this.cache;
+    // site:changed can be intentionally silent during login/switch: never reuse another site's stock.
+    if(!excludeEventId&&this.cache&&this.cacheSiteId===this.store.siteId&&this.cacheDb===this.store.db)return this.cache;
     const map=new Map(),apply=(bucket,delta)=>{const b={...cleanItem(bucket),...cleanBucket(bucket)},key=bucketKey(b);if(!map.has(key))map.set(key,{...b,quantity:0});map.get(key).quantity+=number(delta)};
     for(const r of normalizeMasterRows(this.store.db.master.rows))apply(r,r.quantity);
     for(const e of this.store.db.ledger){if(e.cancelledAt||e.id===excludeEventId||e.affectsStock===false)continue;const q=number(e.quantity);
@@ -18605,7 +18606,7 @@ class StockService{
       else if(e.type==='ADJUST')apply({...e.item,...e.atBucket},number(e.delta));
     }
     const rows=[...map.values()].filter(r=>Math.abs(r.quantity)>1e-9).sort((a,b)=>a.article.localeCompare(b.article,'it')||a.size.localeCompare(b.size,'it')||a.location.localeCompare(b.location,'it')||a.pallet.localeCompare(b.pallet,'it'));
-    if(!excludeEventId)this.cache=rows;
+    if(!excludeEventId){this.cache=rows;this.cacheSiteId=this.store.siteId;this.cacheDb=this.store.db}
     return rows;
   }
   positive(opts){return this.rows(opts).filter(r=>r.quantity>0)}
@@ -19030,7 +19031,7 @@ class ExcelService{
   }
   async export(){
     const out=await this.buildExportBytes();
-    const stamp=new Date().toISOString().slice(0,16).replace(/[:T]/g,'-'),stem=(this.store.db.master.filename||'MAGAZZINO').replace(/\.xlsx$/i,'').replace(/_(?:NOVA|SOMA)_.*/i,''),name=`${stem}_SOMA_R31_102_${stamp}.xlsx`;
+    const stamp=new Date().toISOString().slice(0,16).replace(/[:T]/g,'-'),stem=(this.store.db.master.filename||'MAGAZZINO').replace(/\.xlsx$/i,'').replace(/_(?:NOVA|SOMA)_.*/i,''),name=`${stem}_SOMA_R31_103_${stamp}.xlsx`;
     this.#download(out,name);
     const exportedAudit=this.domain.audit.record('MASTER_EXPORTED','MASTER',name,null,{name,validation:this.lastValidation,generatedSheets:this.lastGeneratedSheets});this.store.db.settings.lastExportAt=exportedAudit.at;this.store.db.settings.lastExportName=name;this.store.save('master:export:baseline');return name
   }
@@ -19824,12 +19825,29 @@ class UI{
 
   globalSearchFold(value){return String(value??'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().replace(/[._/|·-]+/g,' ').replace(/\s+/g,' ').trim()}
 
+  globalSearchStockIndex(){
+    // Precompute normalized search text only once per immutable stock snapshot.
+    // The snapshot identity changes on ledger updates, import, or site switching.
+    const snapshot=this.domain.stock.rows(),siteId=this.store.siteId;
+    const cached=this.globalSearchStockCache;
+    if(cached?.snapshot===snapshot&&cached.siteId===siteId)return cached.entries;
+    const entries=snapshot.filter(r=>r.quantity>0).map(r=>({
+      label:`${r.article}${r.size?` · ${r.size}`:''}`,
+      meta:`${r.state||'—'} · ${r.location||'—'} · Bancale ${r.pallet||'—'} · ${Number(r.quantity||0)} pz`,
+      hay:this.globalSearchFold(`${r.article} ${r.size} ${r.state} ${r.location} ${r.pallet} ${r.quantity}`),
+      key:bucketKey(r),query:`${r.article}${r.size?' '+r.size:''}`
+    }));
+    this.globalSearchStockCache={snapshot,siteId,entries};
+    return entries
+  }
+
   globalSearchEntries(query){
     const needle=this.globalSearchFold(query);if(needle.length<2)return[];
-    const terms=needle.split(' ').filter(Boolean),rows=[],score=text=>{const hay=this.globalSearchFold(text);if(!terms.every(t=>hay.includes(t)))return-1;let n=terms.reduce((v,t)=>v+(hay.startsWith(t)?18:hay.includes(' '+t)?10:5),0);if(hay.includes(needle))n+=28;if(hay.startsWith(needle))n+=34;return n};
-    const push=(category,kind,label,meta,text,opts={})=>{const relevance=score(text);if(relevance<0)return;rows.push({category,kind,label,meta,relevance,...opts})};
+    const terms=needle.split(' ').filter(Boolean),rows=[],score=(text,folded=false)=>{const hay=folded?text:this.globalSearchFold(text);if(!terms.every(t=>hay.includes(t)))return-1;let n=terms.reduce((v,t)=>v+(hay.startsWith(t)?18:hay.includes(' '+t)?10:5),0);if(hay.includes(needle))n+=28;if(hay.startsWith(needle))n+=34;return n};
+    const push=(category,kind,label,meta,text,opts={},folded=false)=>{const relevance=score(text,folded);if(relevance<0)return;rows.push({category,kind,label,meta,relevance,...opts})};
     if(this.auth.can('STOCK_VIEW')){
-      for(const r of this.domain.stock.positive())push('GIACENZE','stock',`${r.article}${r.size?` · ${r.size}`:''}`,`${r.state||'—'} · ${r.location||'—'} · Bancale ${r.pallet||'—'} · ${Number(r.quantity||0)} pz`,`${r.article} ${r.size} ${r.state} ${r.location} ${r.pallet} ${r.quantity}`,{key:bucketKey(r),query:`${r.article}${r.size?' '+r.size:''}`,icon:'warehouse',quick:this.auth.can('MOVE')?'issue':''});
+      const quick=this.auth.can('MOVE')?'issue':'';
+      for(const r of this.globalSearchStockIndex())push('GIACENZE','stock',r.label,r.meta,r.hay,{key:r.key,query:r.query,icon:'warehouse',quick},true);
     }
     if(this.auth.can('REQUEST_VIEW')||this.auth.can('REQUEST_PROCESS')||this.auth.can('REQUEST_CREATE')){
       for(const r of (this.store.db.requests||[])){if(r.deletedAt||(this.auth.isLina()&&r.operator!=='Lina'&&r.destination!=='LINA'))continue;const lines=(r.lines||[]).map(l=>`${l.article} ${l.size||''}`).join(' ');push('RICHIESTE','request',r.id,`${r.destination||'—'} · ${r.status||'DA PREPARARE'}${r.reference?` · Rif. ${r.reference}`:''}`,`${r.id} ${r.destination} ${r.status} ${r.reference} ${r.operator} ${r.note} ${lines}`,{id:r.id,icon:'clipboard-text'})}
@@ -21245,6 +21263,6 @@ try{globalThis.__NOVA_LEGACY_AVAILABLE=!!localStorage.getItem(CONFIG.legacyStora
 const switchSite=async siteId=>{await ui.selectSite(siteId);return auth.site()};
 globalThis.NOVA=Object.freeze({version:CONFIG.appVersion,schema:CONFIG.version,identityVersion:CONFIG.identityVersion,store,auth,router,domain,excel,requestDocs,ui,sounds,sites:SITES,operators:OPERATORS,roles:ROLE_DEFS,saveIdentityRegistry,capabilities:Object.freeze({operational:ALL_CAPS,master:MASTER_CAPS,administration:ADMIN_CAPS,globalAdmin:GLOBAL_ADMIN_CAPS}),identityValidation:IDENTITY_VALIDATION,switchSite});
 ui.render();</script>
-<!-- SOMA_BUILD:R31.102-20261013 -->
+<!-- SOMA_BUILD:R31.103-20261013 -->
 </body>
 </html>
