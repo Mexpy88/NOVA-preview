@@ -68,7 +68,7 @@ try{
       store.db.master.rows=[{article:'I_SITE_ONLY',size:'L',state:'NUOVO',location:'AREA_B',pallet:'PX',quantity:19}];
       store.db.ledger=[];
       assert.notStrictEqual(domain.stock.rows(),afterSnapshot,
-        'Different site's db must never reuse previous cached stock even with silent:true');
+        'Different site database must never reuse prior cached stock even with silent:true');
       assert.equal(domain.stock.rows().length,1);
       assert.equal(ui.globalSearchEntries('I00042').filter(x=>x.category==='GIACENZE').length,0,
         'Previous site stock must never appear in new site results');
