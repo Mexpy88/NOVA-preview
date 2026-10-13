@@ -18,13 +18,21 @@ const ws=SheetJS.utils.aoa_to_sheet([
   ['R2','','I_LAST','L',0,0,0,'ULTIMO ARTICOLO',45683],
 ]);
 ws.E6={t:'n',f:'10+10',v:20};
+ws.F6={t:'n',f:'1-1',v:0};
+ws['!cols']=[{wch:26},{wch:17},{wch:34},{wch:12},{wch:13},{wch:13},{wch:13},{wch:29},{wch:23}];
+ws['!rows']=[{hpt:27}, {hpt:21}];
 ws.AK25={t:'s',v:'FOOTER FUORI TABELLA'};
 ws['!ref']='A1:AK25';
 SheetJS.utils.book_append_sheet(master,ws,'MAGAZZINO');
 SheetJS.utils.book_append_sheet(master,SheetJS.utils.aoa_to_sheet([['APP_DATI legacy da ignorare']]),'APP_DATI');
 SheetJS.utils.book_append_sheet(master,SheetJS.utils.aoa_to_sheet([['NOVA_DATI legacy da ignorare']]),'NOVA_DATI');
 master.Workbook={Sheets:[{Hidden:0},{Hidden:2},{Hidden:2}]};
-const input64=SheetJS.write(master,{bookType:'xlsx',type:'base64',compression:true});
+const sourceBytes=SheetJS.write(master,{bookType:'xlsx',type:'buffer',compression:true});
+const JSZip=(await import('jszip')).default;
+const prepared=await JSZip.loadAsync(sourceBytes);
+const masterSheet=await prepared.file('xl/worksheets/sheet1.xml').async('string');
+prepared.file('xl/worksheets/sheet1.xml',masterSheet.replace('</worksheet>','<pageSetup orientation="landscape" paperSize="9" scale="160"/></worksheet>'));
+const input64=Buffer.from(await prepared.generateAsync({type:'nodebuffer'})).toString('base64');
 
 const server=createServer((req,res)=>{
   if(!['/','/index.html'].includes((req.url||'').split('?')[0])){res.writeHead(404);res.end('Not found');return}
@@ -68,7 +76,10 @@ try{
     }
     const zip=await window.JSZip.loadAsync(bytes),tables=Object.keys(zip.files).filter(k=>k.startsWith('xl/tables/table')&&k.endsWith('.xml'));
     const footers=Object.keys(sheet).filter(k=>k.startsWith('AK')&&/^[0-9]+$/.test(k.slice(2))&&sheet[k]?.v==='FOOTER FUORI TABELLA');
-    return {rows,formula:sheet.E6?.f,formulaValue:sheet.E6?.v,footers,tableCount:tables.length,sheets:book.SheetNames,integrity:window.NOVA.excel.lastIntegrity,validation:window.NOVA.excel.lastValidation}
+    const tableXml=await zip.file('xl/tables/table1.xml').async('string');
+    const magXml=await zip.file('xl/worksheets/sheet1.xml').async('string');
+    const magTableRange=tableXml.match(/\\bref="([^"]+)"/)?.[1];
+    return {rows,formula:sheet.E6?.f,formulaValue:sheet.E6?.v,zeroFormula:sheet.F6?.f,zeroFormulaCache:sheet.F6?.v,footers,tableCount:tables.length,magTableRange,hasArtificialColumn:!!sheet.J1?.v,hasPrintLandscape:magXml.includes('orientation="landscape"'),magColumnWidth:sheet['!cols']?.[2]?.wch,sheets:book.SheetNames,integrity:window.NOVA.excel.lastIntegrity,validation:window.NOVA.excel.lastValidation}
   });
 
   const baseline=await collect();
@@ -78,6 +89,12 @@ try{
   assert.ok(baseline.rows.some(r=>r.article==='I_ZERO'&&r.quantity===0));
   assert.equal(baseline.rows.filter(r=>r.article==='I002BD').length,2);
   assert.equal(baseline.formula,'10+10');
+  assert.equal(baseline.zeroFormula,'1-1');
+  assert.equal(baseline.zeroFormulaCache,0,'Cached formula zero must remain numeric zero');
+  assert.equal(baseline.magTableRange,'A1:I8','Table must cover all real Master rows and no extra column');
+  assert.equal(baseline.hasArtificialColumn,false,'No artificial J column permitted');
+  assert.equal(baseline.hasPrintLandscape,true,'Original page orientation must be preserved');
+  assert.ok(baseline.magColumnWidth>=30,'Original column width must be preserved');
   assert.ok(baseline.footers.length>0);
   assert.equal(cas(baseline.rows)[0].note,'NOTA ORIGINALE');
   assert.equal(Number(cas(baseline.rows)[0].date),45678);
@@ -109,6 +126,8 @@ try{
   assert.ok(changes.rows.some(r=>r.article==='I_ZERO'&&r.quantity===0));
   assert.ok(changes.footers.length>0);
   assert.equal(changes.validation.ok,true);
+  assert.equal(changes.hasPrintLandscape,true);
+  assert.ok(changes.magTableRange.startsWith('A1:I'),'Master table may not grow a tenth artificial column');
   console.log('PASS zero depletion, transfer, new row, unaffected data, output tables');
 
   const integrity=await page.evaluate(async()=>{
