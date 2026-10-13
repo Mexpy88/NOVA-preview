@@ -18806,7 +18806,7 @@ function readLocation(row,cols){if(cols.location>=0)return norm(row[cols.locatio
 function parseMaster(wb){
   const sheetName=wb.SheetNames.find(n=>headerNorm(n)==='MAGAZZINO');
   if(!sheetName)throw new Error('Foglio MAGAZZINO non trovato. SOMA HUB richiede solamente il foglio MAGAZZINO.');
-  const ws=wb.Sheets[sheetName],matrix=X().utils.sheet_to_json(ws,{header:1,defval:'',raw:true,blankrows:false}),det=detectHeader(matrix),mode=det.cols.state>=0&&det.cols.quantity>=0?'long':'wide',rows=[];
+  const ws=wb.Sheets[sheetName],matrix=X().utils.sheet_to_json(ws,{header:1,defval:'',raw:true,blankrows:true}),det=detectHeader(matrix),mode=det.cols.state>=0&&det.cols.quantity>=0?'long':'wide',rows=[];
   let catalogRowCount=0,zeroRowCount=0;
   const readQty=(value,rowNumber,state)=>{
     if(value==null||String(value).trim()==='')return 0;
@@ -18854,6 +18854,18 @@ function snapshotValue(row,c){return row?.cells?.[c]?.v}
 function setSnapshotValue(row,c,value,templateCell){const old=row.cells[c]||{},cell={...old,v:value,t:typeof value==='number'?'n':'s'};delete cell.f;delete cell.F;delete cell.D;delete cell.w;if(cell.s==null&&templateCell?.s!=null)cell.s=clone(templateCell.s);if(cell.z==null&&templateCell?.z!=null)cell.z=templateCell.z;row.cells[c]=cell}
 function appendDeltaToSnapshotCell(row,c,delta,templateCell){delta=Number(delta)||0;if(!delta)return;const old=row.cells[c]||{},oldValue=qCellNumber(old),cell={...old},hadFormula=old.f!=null&&String(old.f).trim(),hadValue=old.v!=null&&old.v!=='';if(cell.s==null&&templateCell?.s!=null)cell.s=clone(templateCell.s);if(cell.z==null&&templateCell?.z!=null)cell.z=templateCell.z;const base=hadFormula?String(old.f).trim().replace(/^=/,''):hadValue?String(oldValue):'';cell.f=base?`${base}${signedTerm(delta)}`:delta>0?String(delta):`0${signedTerm(delta)}`;cell.v=oldValue+delta;cell.t='n';delete cell.F;delete cell.D;delete cell.w;row.cells[c]=cell}
 function rowIdentityFromSnapshot(row,cols){const get=c=>Number.isInteger(c)&&c>=0?snapshotValue(row,c):'';const article=normalizeArticle(get(cols.article));if(!article)return null;const size=cols.size>=0?norm(get(cols.size)):'',pallet=cols.pallet>=0?norm(get(cols.pallet)):'';let location='';if(cols.location>=0)location=norm(get(cols.location));else location=[cols.fila>=0?norm(get(cols.fila)):'',cols.scaffale>=0?norm(get(cols.scaffale)):''].filter(Boolean).join('/');return{article,size,location,pallet,key:identity({article,size,location,pallet})}}
+function magazinePhysicalDataEnd(ws,cols,headerRow=0){
+  // The workbook used-range can extend beyond the structured stock table (notes, footer, styles).
+  // Find the last physical article row instead of trusting missing/stale import metadata.
+  const XLSX=X(),used=XLSX.utils.decode_range(ws['!ref']||'A1'),articleCol=cols?.article;
+  if(!Number.isInteger(articleCol)||articleCol<0)throw new Error('Export Excel bloccato: colonna articolo non valida.');
+  let end=headerRow;
+  for(let r=headerRow+1;r<=used.e.r;r++){
+    if(normalizeArticle(ws[XLSX.utils.encode_cell({r,c:articleCol})]?.v))end=r
+  }
+  if(end<=headerRow)throw new Error('Export Excel bloccato: il Master non contiene articoli fisici.');
+  return end
+}
 
 class ExcelService{
   constructor(store,domain){this.store=store;this.domain=domain;this.exportTableRanges=new Map();this.exportTableHeaders=new Map();this.exportFreezeRows=new Map();this.tableBlueprints=[];this.exportStyles=null;this.lastValidation=null;this.searchDataReport=null;this.lastGeneratedSheets=[]}
@@ -18871,7 +18883,7 @@ class ExcelService{
     // DEMO: MAGAZZINO è l'unica fonte. APP_DATI, NOVA_DATI e i fogli di ricerca non vengono letti.
     // Il database operativo riparte vuoto; le funzionalità di storico per i nuovi test restano attive.
     const next=createEmptyDb(this.store.siteId);
-    next.master={...next.master,rows:parsed.rows,excelRows:parsed.rows,filename:file.name,sheetName:parsed.sheetName,importedAt:nowIso(),headerRow:parsed.headerRow,columns:parsed.columns,mode:parsed.mode,source:'DEMO_MAGAZZINO_ONLY',catalogRowCount:parsed.catalogRowCount,zeroRowCount:parsed.zeroRowCount};
+    next.master={...next.master,rows:parsed.rows,excelRows:parsed.rows,filename:file.name,sheetName:parsed.sheetName,importedAt:nowIso(),headerRow:parsed.headerRow,columns:parsed.columns,mode:parsed.mode,source:'DEMO_MAGAZZINO_ONLY',catalogRowCount:parsed.catalogRowCount,zeroRowCount:parsed.zeroRowCount,tableEndRow:magazinePhysicalDataEnd(wb.Sheets[parsed.sheetName],parsed.columns,parsed.headerRow)};
     next.master.importedBy=this.domain?.audit?.auth?.user||'';
     next.settings={...(next.settings||{}),lastExportAt:null,lastExportName:''};
     const previousDb=this.store.snapshot(),previousFile=await idbGet(this.masterKey());
@@ -19009,7 +19021,7 @@ class ExcelService{
   }
   async export(){
     const out=await this.buildExportBytes();
-    const stamp=new Date().toISOString().slice(0,16).replace(/[:T]/g,'-'),stem=(this.store.db.master.filename||'MAGAZZINO').replace(/\.xlsx$/i,'').replace(/_(?:NOVA|SOMA)_.*/i,''),name=`${stem}_SOMA_R31_99_${stamp}.xlsx`;
+    const stamp=new Date().toISOString().slice(0,16).replace(/[:T]/g,'-'),stem=(this.store.db.master.filename||'MAGAZZINO').replace(/\.xlsx$/i,'').replace(/_(?:NOVA|SOMA)_.*/i,''),name=`${stem}_SOMA_R31_100_${stamp}.xlsx`;
     this.#download(out,name);
     const exportedAudit=this.domain.audit.record('MASTER_EXPORTED','MASTER',name,null,{name,validation:this.lastValidation,generatedSheets:this.lastGeneratedSheets});this.store.db.settings.lastExportAt=exportedAudit.at;this.store.db.settings.lastExportName=name;this.store.save('master:export:baseline');return name
   }
@@ -19180,18 +19192,26 @@ class ExcelService{
     const meta=this.store.db.master,current=this.domain.stock.positive(),sheetName=meta.sheetName||'MAGAZZINO';let ws=wb.Sheets[sheetName];
     if(!ws||!meta.columns||meta.columns.article==null){this.#replaceSimpleMagazine(wb,sheetName,current);this.lastIntegrity={ok:true,mode:'fallback',warning:'Master senza struttura riconosciuta'};return}
     const XLSX=X(),cols=meta.columns,mode=meta.mode||'wide';if(mode!=='wide'){this.#updateMagazineLong(wb,ws,meta,current,sheetName);return}
-    const bp=this.tableBlueprints.find(x=>x.sheetName===sheetName),sheetRange=XLSX.utils.decode_range(ws['!ref']||'A1'),tableRange=bp?.ref?XLSX.utils.decode_range(bp.ref):{s:{r:meta.headerRow||0,c:0},e:{r:(meta.headerRow||0)+(meta.rowCount||0),c:Math.max(...Object.values(cols).filter(x=>Number.isInteger(x)&&x>=0),0)}},dataStart=(meta.headerRow||0)+1,dataEnd=Math.max(dataStart-1,tableRange.e.r),tableMaxCol=Math.max(tableRange.e.c,...Object.values(cols).filter(x=>Number.isInteger(x)&&x>=0)),sheetMaxCol=Math.max(sheetRange.e.c,tableMaxCol),sheetMaxRow=Math.max(sheetRange.e.r,dataEnd),headerSnap=snapshotRow(ws,meta.headerRow||0,tableMaxCol),dataRows=[];
+    const bp=this.tableBlueprints.find(x=>x.sheetName===sheetName),sheetRange=XLSX.utils.decode_range(ws['!ref']||'A1'),physicalEnd=magazinePhysicalDataEnd(ws,cols,meta.headerRow||0),tableRange=bp?.ref?XLSX.utils.decode_range(bp.ref):{s:{r:meta.headerRow||0,c:0},e:{r:physicalEnd,c:Math.max(...Object.values(cols).filter(x=>Number.isInteger(x)&&x>=0),0)}},dataStart=(meta.headerRow||0)+1,dataEnd=Math.max(physicalEnd,tableRange.e.r),tableMaxCol=Math.max(tableRange.e.c,...Object.values(cols).filter(x=>Number.isInteger(x)&&x>=0)),sheetMaxCol=Math.max(sheetRange.e.c,tableMaxCol),sheetMaxRow=Math.max(sheetRange.e.r,dataEnd),headerSnap=snapshotRow(ws,meta.headerRow||0,tableMaxCol),dataRows=[];
     for(let r=dataStart;r<=dataEnd;r++)dataRows.push(snapshotRow(ws,r,sheetMaxCol));
     const suffixRows=[];for(let r=dataEnd+1;r<=sheetMaxRow;r++)suffixRows.push(snapshotRow(ws,r,sheetMaxCol));
     const groups=new Map();for(const row of dataRows){const id=rowIdentityFromSnapshot(row,cols);row._novaIdentity=id;if(!id)continue;if(!groups.has(id.key))groups.set(id.key,{id,rows:[]});groups.get(id.key).rows.push(row)}
+    // Verify that the physical Excel baseline still agrees with the imported master.
+    // A ledger can only explain changes AFTER this baseline; it cannot reconstruct missing source rows.
+    const baselineImported=new Map(),baselinePhysical=new Map(),addBaseline=(map,key,q)=>{if(q>0)map.set(key,(map.get(key)||0)+q)};
+    for(const r of normalizeMasterRows(meta.rows||[]))addBaseline(baselineImported,fullIdentity(r),Number(r.quantity||0));
+    for(const g of groups.values())for(const state of CONFIG.states){const c=cols[state];if(c<0)continue;addBaseline(baselinePhysical,fullIdentity({...g.id,state}),g.rows.reduce((sum,row)=>sum+qCellNumber(row.cells[c]),0))}
+    if(baselineImported.size!==baselinePhysical.size)throw new Error('Export Excel bloccato: anagrafica originale non riconciliata ('+baselinePhysical.size+' combinazioni fisiche contro '+baselineImported.size+' importate).');
+    for(const [key,q] of baselineImported)if(Math.abs((baselinePhysical.get(key)||0)-q)>1e-9)throw new Error('Export Excel bloccato: quantità iniziale non coerente per '+key+' (Excel '+(baselinePhysical.get(key)||0)+', importato '+q+').');
     const currentMap=new Map();for(const r of current){const key=identity(r);if(!currentMap.has(key))currentMap.set(key,{article:r.article,size:r.size,location:r.location,pallet:r.pallet,description:r.description||'',states:Object.fromEntries(CONFIG.states.map(s=>[s,0]))});currentMap.get(key).states[r.state]=(currentMap.get(key).states[r.state]||0)+Number(r.quantity||0)}
     const deltas=this.#activeLedgerDeltas(),template=dataRows.find(r=>r._novaIdentity)||dataRows[0]||snapshotRow(ws,dataStart,sheetMaxCol),removed=new Set(),removedRows=[],report={ok:false,mode:'wide-safe-v28',sourceRows:dataRows.length,rowsAdded:0,rowsRemoved:0,rowMoves:0,formulaUpdates:0,operationsApplied:0,formulaCellsBefore:0,formulaCellsAfter:0,checkedKeys:0};
     for(const row of dataRows)for(const state of CONFIG.states){const c=cols[state];if(c>=0&&row.cells[c]?.f!=null)report.formulaCellsBefore++}
     for(const [key,g] of groups){const target=currentMap.get(key),baselineStates=Object.fromEntries(CONFIG.states.map(s=>[s,0]));for(const state of CONFIG.states){const c=cols[state];if(c>=0)baselineStates[state]=g.rows.reduce((n,row)=>n+qCellNumber(row.cells[c]),0)}
       for(const state of CONFIG.states){const targetQ=Number(target?.states?.[state]||0),c=cols[state];if(c<0){if(targetQ>0)throw new Error(`Export Excel bloccato: lo stato ${state} di ${g.id.article}${g.id.size?' · '+g.id.size:''} ha ${targetQ} pezzi ma il Master non contiene la relativa colonna.`);continue}const before=Number(baselineStates[state]||0),expectedDelta=targetQ-before,stateKey=fullIdentity({...g.id,state}),ops=deltas.get(stateKey)||[],opSum=ops.reduce((n,x)=>n+Number(x.delta||0),0);if(Math.abs(opSum-expectedDelta)>1e-9)throw new Error(`Export Excel bloccato: storico quantità non coerente per ${g.id.article}${g.id.size?' · '+g.id.size:''} · ${state}. Master ${before}, NOVA ${targetQ}, movimenti ${opSum>=0?'+':''}${opSum}.`);this.#applyOpsToRows(g.rows,c,ops,template.cells[c],report);const after=g.rows.reduce((n,row)=>n+qCellNumber(row.cells[c]),0);if(Math.abs(after-targetQ)>1e-9)throw new Error(`Export Excel bloccato: controllo quantità fallito per ${g.id.article}${g.id.size?' · '+g.id.size:''} · ${state} (${after} ≠ ${targetQ}).`)}
-      const baselinePositive=CONFIG.states.reduce((n,s)=>n+Number(baselineStates[s]||0),0)>0,currentPositive=CONFIG.states.reduce((n,s)=>n+Number(target?.states?.[s]||0),0)>0;if(baselinePositive&&!currentPositive){for(const row of g.rows){removed.add(row);removedRows.push(row)}report.rowsRemoved+=g.rows.length}}
+      // Keep source catalog rows, including rows whose quantity has reached zero.
+    }
     const newRows=[];for(const [key,target] of currentMap){if(groups.has(key))continue;const sameArticleTemplate=dataRows.find(r=>r._novaIdentity?.article===target.article)||template,row=styledBlankRow(sameArticleTemplate,sheetMaxCol);row._novaIdentity={article:target.article,size:target.size,location:target.location,pallet:target.pallet,key};this.#setSnapshotIdentity(row,cols,target,sameArticleTemplate);for(const state of CONFIG.states){const q=Number(target.states[state]||0),c=cols[state];if(c<0){if(q>0)throw new Error(`Export Excel bloccato: nuovo record ${target.article}${target.size?' · '+target.size:''} usa lo stato ${state}, ma il Master non contiene la colonna.`);continue}const ops=deltas.get(fullIdentity({...target,state}))||[],opSum=ops.reduce((n,x)=>n+Number(x.delta||0),0);if(Math.abs(opSum-q)>1e-9)throw new Error(`Export Excel bloccato: nuovo record ${target.article}${target.size?' · '+target.size:''} · ${state} non è ricostruibile dai movimenti (${opSum} ≠ ${q}).`);this.#applyOpsToRows([row],c,ops,sameArticleTemplate.cells[c],report);if(Math.abs(qCellNumber(row.cells[c])-q)>1e-9)throw new Error(`Export Excel bloccato: quantità nuova non coerente per ${target.article} · ${state}.`)}newRows.push(row);report.rowsAdded++}
-    const finalRows=dataRows.filter(r=>!removed.has(r));for(const row of newRows){const article=row._novaIdentity?.article||'',idx=(()=>{for(let i=finalRows.length-1;i>=0;i--)if(finalRows[i]._novaIdentity?.article===article)return i;return-1})();if(idx>=0)finalRows.splice(idx+1,0,row);else finalRows.push(row)}
+    const finalRows=dataRows.slice();for(const row of newRows){const article=row._novaIdentity?.article||'',idx=(()=>{for(let i=finalRows.length-1;i>=0;i--)if(finalRows[i]._novaIdentity?.article===article)return i;return-1})();if(idx>=0)finalRows.splice(idx+1,0,row);else finalRows.push(row)}
     // Ricostruzione atomica: ogni riga viene spostata come blocco completo, con formule, note, data, stile, commenti e hyperlink.
     const oldRowsMeta=ws['!rows']?clone(ws['!rows']):[],oldMerges=ws['!merges']?clone(ws['!merges']):[];for(const addr of Object.keys(ws)){if(addr[0]==='!')continue;let pos;try{pos=XLSX.utils.decode_cell(addr)}catch{continue}if(pos.r>=dataStart)delete ws[addr]}
     const newRowsMeta=oldRowsMeta.slice(0,dataStart),writeSnap=(snap,r)=>{for(let c=0;c<=sheetMaxCol;c++){const cell=snap.cells[c];if(cell)ws[XLSX.utils.encode_cell({r,c})]=clone(cell)}if(snap.rowMeta)newRowsMeta[r]=clone(snap.rowMeta)};let rr=dataStart;for(const row of finalRows){if(row.sourceRow!=null&&row.sourceRow!==rr){const risky=row.cells.some(cell=>cell?.f&&formulaUsesA1Ref(cell.f));if(risky)throw new Error(`Export Excel bloccato: la riga ${row.sourceRow+1} contiene una formula con riferimenti di cella e dovrebbe essere spostata. NOVA non la sposta per evitare riferimenti errati.`);report.rowMoves++}writeSnap(row,rr);rr++}const newDataEnd=rr-1;for(const row of suffixRows){if(row.sourceRow!=null&&row.sourceRow!==rr&&row.cells.some(cell=>cell?.f&&formulaUsesA1Ref(cell.f)))throw new Error(`Export Excel bloccato: una riga sotto la tabella contiene formule con riferimenti e dovrebbe essere spostata.`);writeSnap(row,rr);rr++}ws['!rows']=newRowsMeta;
@@ -21014,6 +21034,6 @@ try{globalThis.__NOVA_LEGACY_AVAILABLE=!!localStorage.getItem(CONFIG.legacyStora
 const switchSite=async siteId=>{await ui.selectSite(siteId);return auth.site()};
 globalThis.NOVA=Object.freeze({version:CONFIG.appVersion,schema:CONFIG.version,identityVersion:CONFIG.identityVersion,store,auth,router,domain,excel,requestDocs,ui,sounds,sites:SITES,operators:OPERATORS,roles:ROLE_DEFS,saveIdentityRegistry,capabilities:Object.freeze({operational:ALL_CAPS,master:MASTER_CAPS,administration:ADMIN_CAPS,globalAdmin:GLOBAL_ADMIN_CAPS}),identityValidation:IDENTITY_VALIDATION,switchSite});
 ui.render();</script>
-<!-- SOMA_BUILD:R31.99-20261013 -->
+<!-- SOMA_BUILD:R31.100-20261013 -->
 </body>
 </html>
