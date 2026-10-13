@@ -18,6 +18,7 @@ sheet.getCell('F2').value={formula:'1-1',result:0};
 sheet.getCell('C2').font={name:'Arial',size:13,bold:true,color:{argb:'FF0A316A'}};
 sheet.getCell('C2').fill={type:'pattern',pattern:'solid',fgColor:{argb:'FFFFE0AA'}};
 sheet.getCell('C2').border={bottom:{style:'thin',color:{argb:'FF123456'}}};
+sheet.getCell('C4').font={name:'Georgia',size:14,italic:true,color:{argb:'FF3A5A70'}};
 sheet.getCell('I2').numFmt='dd/mm/yyyy';
 sheet.getColumn(3).width=33;
 sheet.getRow(2).height=29;
@@ -164,6 +165,8 @@ try{
   assert.equal(inventory.getCell('C2').fill?.fgColor?.argb,'FFFFE0AA');
   assert.equal(inventory.getCell('C2').border?.bottom?.color?.argb,'FF123456');
   assert.equal(inventory.getCell('I2').numFmt,'dd/mm/yyyy');
+  assert.equal(inventory.getCell('C'+unchangedOther.physicalRow).font?.size,14,'Style must follow unchanged catalogue line when its row moves');
+  assert.equal(inventory.getCell('C'+unchangedOther.physicalRow).font?.italic,true);
   assert.match(await transactionZip.file(sf).async('string'),
     /<c r="F2"[^>]*><f>1-1<\/f><v>0<\/v><\/c>/,
     'Unchanged cached zero and formula must survive all three movements');
