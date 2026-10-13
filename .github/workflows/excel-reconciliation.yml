@@ -2,11 +2,11 @@ name: Excel reconciliation regression
 
 on:
   push:
-    branches: [main, "fix/excel-r31-100", "fix/excel-r31-101", "qa/**"]
+    branches: [main, "fix/excel-r31-100", "fix/excel-r31-101", "qa/**", "fix/performance-r31-103"]
     paths:
       - index.html
       - tests/excel-reconciliation.mjs
-      - tests/excel-styled-master.mjs
+      - tests/excel-styled-master.mjs\n      - tests/stock-search-site-cache.mjs
       - .github/workflows/excel-reconciliation.yml
   workflow_dispatch:
 
@@ -39,4 +39,4 @@ jobs:
       - name: Exercise import and export reconciliation
         run: node tests/excel-reconciliation.mjs
       - name: Verify styled original master and printer metadata
-        run: node tests/excel-styled-master.mjs
+        run: node tests/excel-styled-master.mjs\n      - name: Verify global search index and stock isolation across sites\n        run: node tests/stock-search-site-cache.mjs
