@@ -19020,7 +19020,7 @@ class ExcelService{
     const out=await book.xlsx.writeBuffer();return new Uint8Array(out)
   }
   async buildExportBytes(){
-    await ensureXlsx();await ensureJsZip();this.exportTableRanges=new Map();this.exportTableHeaders=new Map();this.exportFreezeRows=new Map();this.lastGeneratedSheets=[];this.tableBlueprints=[];
+    await ensureXlsx();await ensureJsZip();this.exportTableRanges=new Map();this.exportTableHeaders=new Map();this.exportFreezeRows=new Map();this.lastGeneratedSheets=[];this.tableBlueprints=[];this.exportMasterRowOrigins=new Map();this.exportMasterStyleTemplates=new Map();
     const bytes=await this.originalBytes(),wb=bytes?X().read(bytes,{type:'array',cellDates:true,cellStyles:true,bookVBA:true}):X().utils.book_new();this.exportStyles=this.#captureExportStyles(wb);
     this.#removeSheet(wb,'APP_DATI');this.#removeSheet(wb,'REGISTRO_MOVIMENTI');if(this.#activeLedgerDeltas().size===0)this.#preserveUnchangedMagazine(wb);else this.updateMagazine(wb);this.updateSearchData(wb);
     this.replaceSheet(wb,'MOVIMENTI',this.movementSheet(),{keepAutofilter:true});this.replaceSheet(wb,'SCARICHI',this.issueSheet(),{keepAutofilter:true});this.replaceSheet(wb,'ENTRATE_MERCI',this.receiptSheet(),{keepAutofilter:true});this.replaceSheet(wb,'RICHIESTE',this.requestSheet(),{keepAutofilter:true});this.replaceSheet(wb,'REGISTRO',this.registrySheet(),{keepAutofilter:true});this.replaceSheet(wb,'AUDIT',this.auditSheet(),{keepAutofilter:true});
@@ -19245,18 +19245,82 @@ class ExcelService{
       zip.file(output.path,this.#xmlString(sdoc));
       fixes.push('MAGAZZINO: celle, formule, cache e formattazione originali conservate senza movimenti')
     }else{
-      // With recorded movements, keep the newly reconciled stock cells, but
-      // restore the original layout, worksheet properties and printer settings.
+      // The original source styles are immutable and must be mapped back to
+      // each physical source row even if a movement inserts a new catalogue row.
+      // Copy original styles without replacing new SOMA styles: append each
+      // primitive style family and remap all dependent indexes.
+      const stylePath='xl/styles.xml',sourceStyle=sourceZip.file(stylePath),outStyle=zip.file(stylePath);
+      if(sourceStyle&&outStyle){
+        const orig=this.#parseXml(await sourceStyle.async('string'),stylePath,errors),dest=this.#parseXml(await outStyle.async('string'),stylePath,errors),sr=orig.documentElement,dr=dest.documentElement;
+        const families=['numFmts','fonts','fills','borders','cellStyleXfs','cellXfs','cellStyles','dxfs','tableStyles','colors','extLst'];
+        const getFamily=(root,name)=>findChild(root,name);
+        const ensure=name=>{let e=getFamily(dr,name);if(e)return e;e=dest.createElementNS(dr.namespaceURI,name);e.setAttribute('count','0');const next=[...dr.children].find(n=>families.indexOf(n.localName)>families.indexOf(name));next?dr.insertBefore(e,next):dr.appendChild(e);return e};
+        const shifts={};for(const name of ['fonts','fills','borders','cellStyleXfs','cellXfs','dxfs']){const family=ensure(name);shifts[name]=family.children.length}
+        const numDest=ensure('numFmts'),numSource=getFamily(sr,'numFmts'),numMap=new Map();
+        let nextNum=Math.max(163,...[...numDest.children].map(x=>Number(x.getAttribute('numFmtId')||0)))+1;
+        for(const node of numSource?[...numSource.children]:[]){const v=Number(node.getAttribute('numFmtId'));if(!Number.isFinite(v))continue;const newId=nextNum++;numMap.set(v,newId);const copy=cloneTo(dest,node);copy.setAttribute('numFmtId',String(newId));numDest.appendChild(copy)}
+        numDest.setAttribute('count',String(numDest.children.length));
+        const remapXf=node=>{
+          for(const [attr,family] of [['fontId','fonts'],['fillId','fills'],['borderId','borders']]){
+            if(node.hasAttribute(attr))node.setAttribute(attr,String(Number(node.getAttribute(attr))+shifts[family]))
+          }
+          if(node.hasAttribute('numFmtId')){const old=Number(node.getAttribute('numFmtId'));if(numMap.has(old))node.setAttribute('numFmtId',String(numMap.get(old)))}
+          if(node.hasAttribute('xfId'))node.setAttribute('xfId',String(Number(node.getAttribute('xfId'))+shifts.cellStyleXfs))
+        };
+        for(const name of ['fonts','fills','borders','cellStyleXfs','cellXfs','dxfs']){
+          const src=getFamily(sr,name);if(!src)continue;const dst=ensure(name);
+          for(const node of [...src.children]){
+            const fresh=cloneTo(dest,node);
+            if(name==='cellXfs'||name==='cellStyleXfs')remapXf(fresh);
+            dst.appendChild(fresh)
+          }
+          dst.setAttribute('count',String(dst.children.length))
+        }
+        const remapStyle=el=>{if(el.hasAttribute('s'))el.setAttribute('s',String(Number(el.getAttribute('s'))+shifts.cellXfs));if(el.hasAttribute('style'))el.setAttribute('style',String(Number(el.getAttribute('style'))+shifts.cellXfs))};
+        for(const c of sdoc.getElementsByTagNameNS('*','c'))remapStyle(c);
+        for(const row of sdoc.getElementsByTagNameNS('*','row'))if(row.hasAttribute('s'))remapStyle(row);
+        for(const col of sdoc.getElementsByTagNameNS('*','col'))if(col.hasAttribute('style'))remapStyle(col);
+        for(const cf of sdoc.getElementsByTagNameNS('*','cfRule'))if(cf.hasAttribute('dxfId'))cf.setAttribute('dxfId',String(Number(cf.getAttribute('dxfId'))+shifts.dxfs));
+        zip.file(stylePath,this.#xmlString(dest))
+      }
       const srcCells=new Map([...sdoc.getElementsByTagNameNS('*','c')].map(c=>[c.getAttribute('r'),c]));
+      const origins=this.exportMasterRowOrigins||new Map(),templates=this.exportMasterStyleTemplates||new Map();
+      const physicalOrigin=(destIndex,allowTemplate=false)=>{
+        if(origins.has(destIndex))return origins.get(destIndex);
+        if(allowTemplate&&templates.has(destIndex))return templates.get(destIndex);
+        // Long-format exports do not reconstruct or reorder physical rows.
+        return origins.size===0?destIndex:null
+      };
+      const addressPattern=/^([A-Z]+)([0-9]+)$/;
       for(const c of odoc.getElementsByTagNameNS('*','c')){
-        const orig=srcCells.get(c.getAttribute('r'));if(!orig)continue;
-        const originalFormula=findChild(orig,'f'),exportedFormula=findChild(c,'f');
+        const match=addressPattern.exec(c.getAttribute('r')||'');if(!match)continue;
+        const destRow=Number(match[2])-1,originRow=physicalOrigin(destRow),styleRow=physicalOrigin(destRow,true);
+        if(styleRow!=null){
+          const styleCell=srcCells.get(match[1]+(styleRow+1));
+          if(styleCell?.hasAttribute('s'))c.setAttribute('s',styleCell.getAttribute('s'));
+          else if(originRow!=null)c.removeAttribute('s')
+        }
+        if(originRow==null)continue;
+        const oldCell=srcCells.get(match[1]+(originRow+1));if(!oldCell)continue;
+        const originalFormula=findChild(oldCell,'f'),exportedFormula=findChild(c,'f');
         if(!originalFormula||!exportedFormula||originalFormula.textContent!==exportedFormula.textContent)continue;
-        const cached=findChild(orig,'v'),current=findChild(c,'v');
+        const cached=findChild(oldCell,'v'),current=findChild(c,'v');
         if(cached&&!current)c.appendChild(cloneTo(odoc,cached))
       }
+      const srcRows=new Map([...sdoc.getElementsByTagNameNS('*','row')].map(r=>[Number(r.getAttribute('r'))-1,r]));
+      for(const r of odoc.getElementsByTagNameNS('*','row')){
+        const destRow=Number(r.getAttribute('r'))-1,originRow=physicalOrigin(destRow);
+        const sourceRow=srcRows.get(originRow);if(!sourceRow)continue;
+        if(sourceRow.hasAttribute('s'))r.setAttribute('s',sourceRow.getAttribute('s'));else r.removeAttribute('s')
+      }
+      const sourceColumns=[...sdoc.getElementsByTagNameNS('*','col')];
+      const destColumns=[...odoc.getElementsByTagNameNS('*','col')];
+      for(let i=0;i<destColumns.length;i++){
+        const corresponding=sourceColumns.find(src=>src.getAttribute('min')===destColumns[i].getAttribute('min')&&src.getAttribute('max')===destColumns[i].getAttribute('max'));
+        if(corresponding?.hasAttribute('style'))destColumns[i].setAttribute('style',corresponding.getAttribute('style'))
+      }
       zip.file(output.path,this.#xmlString(odoc));
-      fixes.push('MAGAZZINO: dimensioni, larghezze e impostazioni stampa originali preservate')
+      fixes.push('MAGAZZINO: stili originali ripristinati con mappatura righe; formule e stampa preservate')
     }
     zip.file(sheetRelsPath,this.#xmlString(relDoc));
   }
@@ -19357,11 +19421,11 @@ class ExcelService{
       for(const state of CONFIG.states){const targetQ=Number(target?.states?.[state]||0),c=cols[state];if(c<0){if(targetQ>0)throw new Error(`Export Excel bloccato: lo stato ${state} di ${g.id.article}${g.id.size?' · '+g.id.size:''} ha ${targetQ} pezzi ma il Master non contiene la relativa colonna.`);continue}const before=Number(baselineStates[state]||0),expectedDelta=targetQ-before,stateKey=fullIdentity({...g.id,state}),ops=deltas.get(stateKey)||[],opSum=ops.reduce((n,x)=>n+Number(x.delta||0),0);if(Math.abs(opSum-expectedDelta)>1e-9)throw new Error(`Export Excel bloccato: storico quantità non coerente per ${g.id.article}${g.id.size?' · '+g.id.size:''} · ${state}. Master ${before}, NOVA ${targetQ}, movimenti ${opSum>=0?'+':''}${opSum}.`);this.#applyOpsToRows(g.rows,c,ops,template.cells[c],report);const after=g.rows.reduce((n,row)=>n+qCellNumber(row.cells[c]),0);if(Math.abs(after-targetQ)>1e-9)throw new Error(`Export Excel bloccato: controllo quantità fallito per ${g.id.article}${g.id.size?' · '+g.id.size:''} · ${state} (${after} ≠ ${targetQ}).`)}
       // Keep source catalog rows, including rows whose quantity has reached zero.
     }
-    const newRows=[];for(const [key,target] of currentMap){if(groups.has(key))continue;const sameArticleTemplate=dataRows.find(r=>r._novaIdentity?.article===target.article)||template,row=styledBlankRow(sameArticleTemplate,sheetMaxCol);row._novaIdentity={article:target.article,size:target.size,location:target.location,pallet:target.pallet,key};this.#setSnapshotIdentity(row,cols,target,sameArticleTemplate);for(const state of CONFIG.states){const q=Number(target.states[state]||0),c=cols[state];if(c<0){if(q>0)throw new Error(`Export Excel bloccato: nuovo record ${target.article}${target.size?' · '+target.size:''} usa lo stato ${state}, ma il Master non contiene la colonna.`);continue}const ops=deltas.get(fullIdentity({...target,state}))||[],opSum=ops.reduce((n,x)=>n+Number(x.delta||0),0);if(Math.abs(opSum-q)>1e-9)throw new Error(`Export Excel bloccato: nuovo record ${target.article}${target.size?' · '+target.size:''} · ${state} non è ricostruibile dai movimenti (${opSum} ≠ ${q}).`);this.#applyOpsToRows([row],c,ops,sameArticleTemplate.cells[c],report);if(Math.abs(qCellNumber(row.cells[c])-q)>1e-9)throw new Error(`Export Excel bloccato: quantità nuova non coerente per ${target.article} · ${state}.`)}newRows.push(row);report.rowsAdded++}
+    const newRows=[];for(const [key,target] of currentMap){if(groups.has(key))continue;const sameArticleTemplate=dataRows.find(r=>r._novaIdentity?.article===target.article)||template,row=styledBlankRow(sameArticleTemplate,sheetMaxCol);row._novaIdentity={article:target.article,size:target.size,location:target.location,pallet:target.pallet,key};row._novaStyleSourceRow=sameArticleTemplate?.sourceRow??null;this.#setSnapshotIdentity(row,cols,target,sameArticleTemplate);for(const state of CONFIG.states){const q=Number(target.states[state]||0),c=cols[state];if(c<0){if(q>0)throw new Error(`Export Excel bloccato: nuovo record ${target.article}${target.size?' · '+target.size:''} usa lo stato ${state}, ma il Master non contiene la colonna.`);continue}const ops=deltas.get(fullIdentity({...target,state}))||[],opSum=ops.reduce((n,x)=>n+Number(x.delta||0),0);if(Math.abs(opSum-q)>1e-9)throw new Error(`Export Excel bloccato: nuovo record ${target.article}${target.size?' · '+target.size:''} · ${state} non è ricostruibile dai movimenti (${opSum} ≠ ${q}).`);this.#applyOpsToRows([row],c,ops,sameArticleTemplate.cells[c],report);if(Math.abs(qCellNumber(row.cells[c])-q)>1e-9)throw new Error(`Export Excel bloccato: quantità nuova non coerente per ${target.article} · ${state}.`)}newRows.push(row);report.rowsAdded++}
     const finalRows=dataRows.slice();for(const row of newRows){const article=row._novaIdentity?.article||'',idx=(()=>{for(let i=finalRows.length-1;i>=0;i--)if(finalRows[i]._novaIdentity?.article===article)return i;return-1})();if(idx>=0)finalRows.splice(idx+1,0,row);else finalRows.push(row)}
     // Ricostruzione atomica: ogni riga viene spostata come blocco completo, con formule, note, data, stile, commenti e hyperlink.
-    const oldRowsMeta=ws['!rows']?clone(ws['!rows']):[],oldMerges=ws['!merges']?clone(ws['!merges']):[];for(const addr of Object.keys(ws)){if(addr[0]==='!')continue;let pos;try{pos=XLSX.utils.decode_cell(addr)}catch{continue}if(pos.r>=dataStart)delete ws[addr]}
-    const newRowsMeta=oldRowsMeta.slice(0,dataStart),writeSnap=(snap,r)=>{for(let c=0;c<=sheetMaxCol;c++){const cell=snap.cells[c];if(cell)ws[XLSX.utils.encode_cell({r,c})]=clone(cell)}if(snap.rowMeta)newRowsMeta[r]=clone(snap.rowMeta)};let rr=dataStart;for(const row of finalRows){if(row.sourceRow!=null&&row.sourceRow!==rr){const risky=row.cells.some(cell=>cell?.f&&formulaUsesA1Ref(cell.f));if(risky)throw new Error(`Export Excel bloccato: la riga ${row.sourceRow+1} contiene una formula con riferimenti di cella e dovrebbe essere spostata. NOVA non la sposta per evitare riferimenti errati.`);report.rowMoves++}writeSnap(row,rr);rr++}const newDataEnd=rr-1;for(const row of suffixRows){if(row.sourceRow!=null&&row.sourceRow!==rr&&row.cells.some(cell=>cell?.f&&formulaUsesA1Ref(cell.f)))throw new Error(`Export Excel bloccato: una riga sotto la tabella contiene formule con riferimenti e dovrebbe essere spostata.`);writeSnap(row,rr);rr++}ws['!rows']=newRowsMeta;
+    for(let rr=0;rr<dataStart;rr++)this.exportMasterRowOrigins.set(rr,rr);const oldRowsMeta=ws['!rows']?clone(ws['!rows']):[],oldMerges=ws['!merges']?clone(ws['!merges']):[];for(const addr of Object.keys(ws)){if(addr[0]==='!')continue;let pos;try{pos=XLSX.utils.decode_cell(addr)}catch{continue}if(pos.r>=dataStart)delete ws[addr]}
+    const newRowsMeta=oldRowsMeta.slice(0,dataStart),writeSnap=(snap,r)=>{if(Number.isInteger(snap.sourceRow))this.exportMasterRowOrigins.set(r,snap.sourceRow);else if(Number.isInteger(snap._novaStyleSourceRow))this.exportMasterStyleTemplates.set(r,snap._novaStyleSourceRow);for(let c=0;c<=sheetMaxCol;c++){const cell=snap.cells[c];if(cell)ws[XLSX.utils.encode_cell({r,c})]=clone(cell)}if(snap.rowMeta)newRowsMeta[r]=clone(snap.rowMeta)};let rr=dataStart;for(const row of finalRows){if(row.sourceRow!=null&&row.sourceRow!==rr){const risky=row.cells.some(cell=>cell?.f&&formulaUsesA1Ref(cell.f));if(risky)throw new Error(`Export Excel bloccato: la riga ${row.sourceRow+1} contiene una formula con riferimenti di cella e dovrebbe essere spostata. NOVA non la sposta per evitare riferimenti errati.`);report.rowMoves++}writeSnap(row,rr);rr++}const newDataEnd=rr-1;for(const row of suffixRows){if(row.sourceRow!=null&&row.sourceRow!==rr&&row.cells.some(cell=>cell?.f&&formulaUsesA1Ref(cell.f)))throw new Error(`Export Excel bloccato: una riga sotto la tabella contiene formule con riferimenti e dovrebbe essere spostata.`);writeSnap(row,rr);rr++}ws['!rows']=newRowsMeta;
     const rowDelta=finalRows.length-dataRows.length;if(rowDelta&&oldMerges.length){for(const m of oldMerges){if(m.s.r>dataEnd){m.s.r+=rowDelta;m.e.r+=rowDelta}else if(m.e.r>dataEnd)throw new Error('Export Excel bloccato: intervallo unito attraversa il limite della tabella MAGAZZINO.')}ws['!merges']=oldMerges}
     const newSheetEnd=Math.max(meta.headerRow||0,rr-1);ws['!ref']=XLSX.utils.encode_range({s:sheetRange.s,e:{r:newSheetEnd,c:sheetMaxCol}});const tableRef=XLSX.utils.encode_range({s:tableRange.s,e:{r:newDataEnd,c:tableMaxCol}});this.exportTableRanges.set(sheetName,tableRef);const headers=[];for(let c=tableRange.s.c;c<=tableMaxCol;c++)headers.push(String(snapshotValue(headerSnap,c)??`COLONNA ${c-tableRange.s.c+1}`));this.exportTableHeaders.set(sheetName,headers);delete ws['!autofilter'];
     this.#appendEliminatedRows(wb,removedRows,headerSnap,tableMaxCol);
