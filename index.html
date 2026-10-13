@@ -1,13 +1,13 @@
 <!doctype html>
 <html lang="it">
 <head>
-<meta name="soma-build" content="R31.101-20261013">
+<meta name="soma-build" content="R31.102-20261013">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
 <script id="soma-build-freshness">
 (() => {
-  const CURRENT_BUILD='R31.101-20261013',CHECK_KEY='soma:last-build-refresh';
+  const CURRENT_BUILD='R31.102-20261013',CHECK_KEY='soma:last-build-refresh';
   globalThis.SOMA_BUILD=CURRENT_BUILD;
   const check=async()=>{
     try{
@@ -19030,7 +19030,7 @@ class ExcelService{
   }
   async export(){
     const out=await this.buildExportBytes();
-    const stamp=new Date().toISOString().slice(0,16).replace(/[:T]/g,'-'),stem=(this.store.db.master.filename||'MAGAZZINO').replace(/\.xlsx$/i,'').replace(/_(?:NOVA|SOMA)_.*/i,''),name=`${stem}_SOMA_R31_101_${stamp}.xlsx`;
+    const stamp=new Date().toISOString().slice(0,16).replace(/[:T]/g,'-'),stem=(this.store.db.master.filename||'MAGAZZINO').replace(/\.xlsx$/i,'').replace(/_(?:NOVA|SOMA)_.*/i,''),name=`${stem}_SOMA_R31_102_${stamp}.xlsx`;
     this.#download(out,name);
     const exportedAudit=this.domain.audit.record('MASTER_EXPORTED','MASTER',name,null,{name,validation:this.lastValidation,generatedSheets:this.lastGeneratedSheets});this.store.db.settings.lastExportAt=exportedAudit.at;this.store.db.settings.lastExportName=name;this.store.save('master:export:baseline');return name
   }
@@ -21245,6 +21245,6 @@ try{globalThis.__NOVA_LEGACY_AVAILABLE=!!localStorage.getItem(CONFIG.legacyStora
 const switchSite=async siteId=>{await ui.selectSite(siteId);return auth.site()};
 globalThis.NOVA=Object.freeze({version:CONFIG.appVersion,schema:CONFIG.version,identityVersion:CONFIG.identityVersion,store,auth,router,domain,excel,requestDocs,ui,sounds,sites:SITES,operators:OPERATORS,roles:ROLE_DEFS,saveIdentityRegistry,capabilities:Object.freeze({operational:ALL_CAPS,master:MASTER_CAPS,administration:ADMIN_CAPS,globalAdmin:GLOBAL_ADMIN_CAPS}),identityValidation:IDENTITY_VALIDATION,switchSite});
 ui.render();</script>
-<!-- SOMA_BUILD:R31.101-20261013 -->
+<!-- SOMA_BUILD:R31.102-20261013 -->
 </body>
 </html>
