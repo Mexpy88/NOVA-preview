@@ -1,13 +1,13 @@
 <!doctype html>
 <html lang="it">
 <head>
-<meta name="soma-build" content="R31.100-20261013">
+<meta name="soma-build" content="R31.101-20261013">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
 <script id="soma-build-freshness">
 (() => {
-  const CURRENT_BUILD='R31.100-20261013',CHECK_KEY='soma:last-build-refresh';
+  const CURRENT_BUILD='R31.101-20261013',CHECK_KEY='soma:last-build-refresh';
   globalThis.SOMA_BUILD=CURRENT_BUILD;
   const check=async()=>{
     try{
@@ -18993,7 +18993,7 @@ class ExcelService{
     const widths={MAGAZZINO:[20,17,24,11,12,14,12,28,22],MOVIMENTI:[23,19,17,16,21,11,15,12,20,17,20,17,22,18,36,19],SCARICHI:[21,19,16,21,21,21,11,15,12,12,20,17,38],ENTRATE_MERCI:[21,25,21,16,19,16,21,11,15,15,17,13,13,19,19,28,19,19,17],RICHIESTE:[21,19,21,16,23,17,21,11,19,17,17,17,11,38],REGISTRO:[19,16,17,29,25,58],AUDIT:[19,16,29,15,26,21,11,15,20,17,12,12,12,25,25,62],CONTEGGI:[25,19,16,29,21,11,15,20,17,12,12,12,23,40,56],ELIMINATI:[20,17,24,11,12,14,12,28,22,19,16,30,30]};
     let tableIndex=1;
     for(const ws of book.worksheets){
-      ws.views=[{state:'normal',showGridLines:false,zoomScale:90}];const w=widths[ws.name];if(w)w.forEach((x,i)=>{ws.getColumn(i+1).width=x});
+      if(ws.name!=='MAGAZZINO')ws.views=[{state:'normal',showGridLines:false,zoomScale:90}];const w=ws.name==='MAGAZZINO'?null:widths[ws.name];if(w)w.forEach((x,i)=>{ws.getColumn(i+1).width=x});
       if(ws.name==='GIACENZE_RICERCA_DATI'||ws.name==='NOVA_DATI'){ws.state='veryHidden';continue}
       if(ws.name==='CERCA_GIACENZE'){
         ws.views=[{state:'frozen',ySplit:15,showGridLines:false,zoomScale:90}];ws.getRow(1).height=30;ws.getRow(2).height=24;
@@ -19002,10 +19002,10 @@ class ExcelService{
         for(let c=1;c<=2;c++){const h=ws.getCell(6,c);h.fill={type:'pattern',pattern:'solid',fgColor:{argb:c===1?C.blue:C.purple}};h.font={name:'Calibri',size:11,bold:true,color:{argb:C.white}};h.border=border;h.alignment={horizontal:'center'}}
         for(let r=7;r<=12;r++)for(let c=1;c<=2;c++){const z=ws.getCell(r,c);z.fill={type:'pattern',pattern:'solid',fgColor:{argb:c===1?C.pink:C.ice}};z.font={name:'Calibri',size:10.5,bold:r===12,color:{argb:C.ink}};z.border=border;z.alignment={horizontal:'center'}}
         for(let c=1;c<=7;c++){const n=ws.getCell(13,c);n.fill={type:'pattern',pattern:'solid',fgColor:{argb:C.greenSoft}};n.font={name:'Calibri',size:9.5,bold:true,color:{argb:C.green}}}
-        const last=Math.max(16,ws.actualRowCount||ws.rowCount||16),rg=tableRange(ws,15,1,7,last,'CERCA_GIACENZE',tableIndex++);styleTable(ws,rg);[19,18,29,12,16,14,38].forEach((x,i)=>ws.getColumn(i+1).width=x);continue
+        const expected=this.exportTableRanges.get(ws.name),range=expected?X().utils.decode_range(expected):null,last=Math.max(16,range?range.e.r+1:ws.rowCount||16),rg=tableRange(ws,15,1,7,last,'CERCA_GIACENZE',tableIndex++);styleTable(ws,rg);[19,18,29,12,16,14,38].forEach((x,i)=>ws.getColumn(i+1).width=x);continue
       }
       if(['MAGAZZINO','MOVIMENTI','SCARICHI','ENTRATE_MERCI','RICHIESTE','REGISTRO','AUDIT','CONTEGGI','ELIMINATI'].includes(ws.name)){
-        ws.views=[{state:'frozen',ySplit:1,showGridLines:false,zoomScale:90}];const lastCol=Math.max(1,ws.actualColumnCount||ws.columnCount||1),lastRow=Math.max(1,ws.actualRowCount||ws.rowCount||1),rg=tableRange(ws,1,1,lastCol,lastRow,ws.name,tableIndex++);styleTable(ws,rg)
+        if(ws.name!=='MAGAZZINO')ws.views=[{state:'frozen',ySplit:1,showGridLines:false,zoomScale:90}];const expected=this.exportTableRanges.get(ws.name),range=expected?X().utils.decode_range(expected):null,lastCol=Math.max(1,range?range.e.c+1:ws.columnCount||1),lastRow=Math.max(1,range?range.e.r+1:ws.rowCount||1),rg=tableRange(ws,1,1,lastCol,lastRow,ws.name,tableIndex++);if(ws.name!=='MAGAZZINO')styleTable(ws,rg)
       }
     }
     const out=await book.xlsx.writeBuffer();return new Uint8Array(out)
@@ -19017,11 +19017,11 @@ class ExcelService{
     this.replaceSheet(wb,'MOVIMENTI',this.movementSheet(),{keepAutofilter:true});this.replaceSheet(wb,'SCARICHI',this.issueSheet(),{keepAutofilter:true});this.replaceSheet(wb,'ENTRATE_MERCI',this.receiptSheet(),{keepAutofilter:true});this.replaceSheet(wb,'RICHIESTE',this.requestSheet(),{keepAutofilter:true});this.replaceSheet(wb,'REGISTRO',this.registrySheet(),{keepAutofilter:true});this.replaceSheet(wb,'AUDIT',this.auditSheet(),{keepAutofilter:true});
     const counts=this.countSheet();if(counts)this.replaceSheet(wb,'CONTEGGI',counts,{keepAutofilter:true});else this.#removeSheet(wb,'CONTEGGI');this.buildDataSheet(wb);
     const visible=['MAGAZZINO','CERCA_GIACENZE','MOVIMENTI','SCARICHI','ENTRATE_MERCI','RICHIESTE','REGISTRO','AUDIT',...(counts?['CONTEGGI']:[])];this.lastGeneratedSheets=visible;this.#orderExportSheets(wb,[...visible,'GIACENZE_RICERCA_DATI','NOVA_DATI','ELIMINATI']);this.#dropSheetFilterNames(wb);
-    const raw=X().write(wb,{type:'array',bookType:'xlsx',compression:true,cellStyles:true,bookSST:false}),polished=await this.#polishExportWithExcelJs(raw);return await this.#normalizeAndValidatePackage(polished)
+    const raw=X().write(wb,{type:'array',bookType:'xlsx',compression:true,cellStyles:true,bookSST:false}),polished=await this.#polishExportWithExcelJs(raw);return await this.#normalizeAndValidatePackage(polished,bytes)
   }
   async export(){
     const out=await this.buildExportBytes();
-    const stamp=new Date().toISOString().slice(0,16).replace(/[:T]/g,'-'),stem=(this.store.db.master.filename||'MAGAZZINO').replace(/\.xlsx$/i,'').replace(/_(?:NOVA|SOMA)_.*/i,''),name=`${stem}_SOMA_R31_100_${stamp}.xlsx`;
+    const stamp=new Date().toISOString().slice(0,16).replace(/[:T]/g,'-'),stem=(this.store.db.master.filename||'MAGAZZINO').replace(/\.xlsx$/i,'').replace(/_(?:NOVA|SOMA)_.*/i,''),name=`${stem}_SOMA_R31_101_${stamp}.xlsx`;
     this.#download(out,name);
     const exportedAudit=this.domain.audit.record('MASTER_EXPORTED','MASTER',name,null,{name,validation:this.lastValidation,generatedSheets:this.lastGeneratedSheets});this.store.db.settings.lastExportAt=exportedAudit.at;this.store.db.settings.lastExportName=name;this.store.save('master:export:baseline');return name
   }
@@ -19114,9 +19114,10 @@ class ExcelService{
   async #applyFreezePanes(zip,pkg,errors,fixes){
     for(const [sheetName,rowsRaw] of this.exportFreezeRows||[]){const rows=Math.max(1,Number(rowsRaw)||1),info=pkg.sheets.get(sheetName);if(!info)continue;const sf=zip.file(info.path);if(!sf)continue;const doc=this.#parseXml(await sf.async('string'),info.path,errors),root=doc.documentElement,ns=root.namespaceURI;let views=[...root.children].find(n=>n.localName==='sheetViews');if(!views){views=doc.createElementNS(ns,'sheetViews');const before=[...root.children].find(n=>['sheetFormatPr','cols','sheetData'].includes(n.localName));before?root.insertBefore(views,before):root.appendChild(views)}let view=[...views.children].find(n=>n.localName==='sheetView');if(!view){view=doc.createElementNS(ns,'sheetView');view.setAttribute('workbookViewId','0');views.appendChild(view)}[...view.children].filter(n=>n.localName==='pane').forEach(n=>n.remove());const pane=doc.createElementNS(ns,'pane');pane.setAttribute('ySplit',String(rows));pane.setAttribute('topLeftCell',`A${rows+1}`);pane.setAttribute('activePane','bottomLeft');pane.setAttribute('state','frozen');const selection=[...view.children].find(n=>n.localName==='selection');selection?view.insertBefore(pane,selection):view.appendChild(pane);zip.file(info.path,this.#xmlString(doc));fixes.push(`${sheetName}: intestazione bloccata (${rows} righe)`)}
   }
-  async #normalizeAndValidatePackage(raw){
+  async #normalizeAndValidatePackage(raw,originalBytes=null){
     const zip=await globalThis.JSZip.loadAsync(raw),errors=[],fixes=[],pkg=await this.#packageSheets(zip,errors);if(!pkg.wbDoc)throw new Error('Export Excel non valido: workbook non disponibile.');
     await this.#restoreBlueprintTables(zip,pkg,errors,fixes);await this.#applyFreezePanes(zip,pkg,errors,fixes);
+    if(originalBytes)await this.#preserveMagazineFormat(zip,pkg,originalBytes,errors,fixes);
     // Remove stale Excel filter database names from every sheet backed by a real table.
     const tableSheetIds=new Set(this.tableBlueprints.map(b=>pkg.sheets.get(b.sheetName)?.index).filter(Number.isInteger));const defined=[...pkg.wbDoc.getElementsByTagNameNS('*','definedName')];for(const n of defined){if(n.getAttribute('name')==='_xlnm._FilterDatabase'&&tableSheetIds.has(Number(n.getAttribute('localSheetId')))){const idx=Number(n.getAttribute('localSheetId')),name=pkg.sheetNodes[idx]?.getAttribute('name')||'Foglio';fixes.push(`${name}: rimosso _FilterDatabase ridondante`);n.remove()}}
     const dn=[...pkg.wbDoc.getElementsByTagNameNS('*','definedNames')][0];if(dn&&!dn.children.length)dn.remove();
@@ -21034,6 +21035,6 @@ try{globalThis.__NOVA_LEGACY_AVAILABLE=!!localStorage.getItem(CONFIG.legacyStora
 const switchSite=async siteId=>{await ui.selectSite(siteId);return auth.site()};
 globalThis.NOVA=Object.freeze({version:CONFIG.appVersion,schema:CONFIG.version,identityVersion:CONFIG.identityVersion,store,auth,router,domain,excel,requestDocs,ui,sounds,sites:SITES,operators:OPERATORS,roles:ROLE_DEFS,saveIdentityRegistry,capabilities:Object.freeze({operational:ALL_CAPS,master:MASTER_CAPS,administration:ADMIN_CAPS,globalAdmin:GLOBAL_ADMIN_CAPS}),identityValidation:IDENTITY_VALIDATION,switchSite});
 ui.render();</script>
-<!-- SOMA_BUILD:R31.100-20261013 -->
+<!-- SOMA_BUILD:R31.101-20261013 -->
 </body>
 </html>
