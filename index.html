@@ -18803,12 +18803,41 @@ const aliases={article:['CODICE SAP','CODICE ARTICOLO','ARTICOLO','CODICE'],size
 function findCol(headers,names){const set=new Set(names.map(headerNorm));return headers.findIndex(h=>set.has(headerNorm(h)))}
 function detectHeader(matrix){let best={row:0,score:-1,cols:{}};for(let r=0;r<Math.min(matrix.length,30);r++){const headers=matrix[r]||[],cols={};for(const [k,names] of Object.entries(aliases))cols[k]=findCol(headers,names);const score=(cols.article>=0?6:0)+(cols.size>=0?1:0)+(cols.location>=0||cols.fila>=0?2:0)+(cols.pallet>=0?1:0)+(cols.state>=0&&cols.quantity>=0?4:0)+CONFIG.states.filter(s=>cols[s]>=0).length;if(score>best.score)best={row:r,score,cols}}if(best.cols.article<0)throw new Error('Colonna CODICE SAP / ARTICOLO non trovata nel Master.');return best}
 function readLocation(row,cols){if(cols.location>=0)return norm(row[cols.location]);return [cols.fila>=0?norm(row[cols.fila]):'',cols.scaffale>=0?norm(row[cols.scaffale]):''].filter(Boolean).join('/')}
-function parseMaster(wb){const sheetName=wb.SheetNames.find(n=>headerNorm(n)==='MAGAZZINO');if(!sheetName)throw new Error('Foglio MAGAZZINO non trovato. Per importare in SOMA HUB basta un workbook con il solo foglio MAGAZZINO.');const ws=wb.Sheets[sheetName],matrix=X().utils.sheet_to_json(ws,{header:1,defval:'',raw:true,blankrows:false}),det=detectHeader(matrix),mode=det.cols.state>=0&&det.cols.quantity>=0?'long':'wide',rows=[];
-  for(let r=det.row+1;r<matrix.length;r++){const row=matrix[r]||[],article=normalizeArticle(row[det.cols.article]);if(!article)continue;const size=det.cols.size>=0?norm(row[det.cols.size]):'',location=readLocation(row,det.cols),pallet=det.cols.pallet>=0?norm(row[det.cols.pallet]):'',description=det.cols.description>=0?String(row[det.cols.description]||'').trim():'';
-    if(mode==='long'){const state=norm(row[det.cols.state]),quantity=Number(row[det.cols.quantity]||0)||0;if(state&&quantity)rows.push({article,size,state,quantity,location,pallet,description,sourceRow:r})}
-    else for(const state of CONFIG.states){const c=det.cols[state];if(c<0)continue;const quantity=Number(row[c]||0)||0;if(quantity)rows.push({article,size,state,quantity,location,pallet,description,sourceRow:r})}
+function parseMaster(wb){
+  const sheetName=wb.SheetNames.find(n=>headerNorm(n)==='MAGAZZINO');
+  if(!sheetName)throw new Error('Foglio MAGAZZINO non trovato. SOMA HUB richiede solamente il foglio MAGAZZINO.');
+  const ws=wb.Sheets[sheetName],matrix=X().utils.sheet_to_json(ws,{header:1,defval:'',raw:true,blankrows:false}),det=detectHeader(matrix),mode=det.cols.state>=0&&det.cols.quantity>=0?'long':'wide',rows=[];
+  let catalogRowCount=0,zeroRowCount=0;
+  const readQty=(value,rowNumber,state)=>{
+    if(value==null||String(value).trim()==='')return 0;
+    const n=Number(value);
+    if(!Number.isSafeInteger(n)||n<0)throw new Error('MAGAZZINO, riga '+rowNumber+', '+state+': quantità non valida ('+String(value)+'). Inserire un numero intero maggiore o uguale a zero.');
+    return n;
+  };
+  for(let r=det.row+1;r<matrix.length;r++){
+    const row=matrix[r]||[],article=normalizeArticle(row[det.cols.article]);
+    if(!article)continue;
+    catalogRowCount++;
+    const size=det.cols.size>=0?norm(row[det.cols.size]):'',location=readLocation(row,det.cols),pallet=det.cols.pallet>=0?norm(row[det.cols.pallet]):'',description=det.cols.description>=0?String(row[det.cols.description]||'').trim():'';
+    let hasPositive=false;
+    if(mode==='long'){
+      const state=norm(row[det.cols.state]),quantity=readQty(row[det.cols.quantity],r+1,state||'QUANTITÀ');
+      if(state&&!CONFIG.states.includes(state))throw new Error('MAGAZZINO, riga '+(r+1)+': stato merce non riconosciuto ('+state+').');
+      if(quantity>0&&!state)throw new Error('MAGAZZINO, riga '+(r+1)+': specificare lo stato merce.');
+      if(state){rows.push({article,size,state,quantity,location,pallet,description,sourceRow:r});hasPositive=quantity>0}
+    }else{
+      for(const state of CONFIG.states){
+        const c=det.cols[state];if(c<0)continue;
+        const quantity=readQty(row[c],r+1,state);
+        if(quantity>0){rows.push({article,size,state,quantity,location,pallet,description,sourceRow:r});hasPositive=true}
+      }
+    }
+    if(!hasPositive){
+      zeroRowCount++;
+      if(mode!=='long'||!norm(row[det.cols.state]))rows.push({article,size,state:'NUOVO',quantity:0,location,pallet,description,sourceRow:r});
+    }
   }
-  return{rows:normalizeMasterRows(rows),sheetName,headerRow:det.row,columns:det.cols,mode,rowCount:Math.max(0,matrix.length-det.row-1)}
+  return {rows:normalizeMasterRows(rows),sheetName,headerRow:det.row,columns:det.cols,mode,rowCount:Math.max(0,matrix.length-det.row-1),catalogRowCount,zeroRowCount}
 }
 function readChunkSheet(wb,name,magic){const ws=wb.Sheets[name];if(!ws)return null;const rows=X().utils.sheet_to_json(ws,{header:1,defval:'',raw:false});if(String(rows?.[0]?.[0]||'')!==magic)return null;const chunks=[];for(let i=4;i<rows.length;i++)if(rows[i]?.[0])chunks.push(String(rows[i][0]));if(!chunks.length)return null;try{return JSON.parse(chunks.join(''))}catch{return null}}
 const identity=r=>[normalizeArticle(r.article),norm(r.size),norm(r.location),norm(r.pallet)].join('|');
@@ -18835,38 +18864,25 @@ class ExcelService{
     if(!bytes&&norm(this.store.siteId)===CONFIG.defaultSiteId){const legacy=await idbGet(MASTER_KEY_LEGACY).catch(()=>null);if(legacy){bytes=legacy;await idbPut(this.masterKey(),legacy).catch(()=>{})}}
     return bytes
   }
-  async importFile(file,{restoreHistory=false}={}){
+  async importFile(file){
     await ensureXlsx();
-    const bytes=await file.arrayBuffer(),wb=X().read(bytes,{type:'array',cellDates:true,cellStyles:true}),parsed=parseMaster(wb),nova=restoreHistory?readChunkSheet(wb,'NOVA_DATI','SO_MAGAZZINO_NOVA_V1'):null,legacy=restoreHistory?readChunkSheet(wb,'APP_DATI','SO_WAREHOUSE_APP_DATA_V3'):null;
-    if(!parsed.rows.length)throw new Error('Il foglio MAGAZZINO non contiene righe con quantità valide. Nessun dato è stato modificato.');
-    let next;
-    if(restoreHistory&&nova?.db){
-      next={...createEmptyDb(),...clone(nova.db)};
-      next.ledger=(next.ledger||[]).map(e=>({...e,affectsStock:false}));
-      // V28: il foglio MAGAZZINO visibile e importato è sempre la baseline autorevole.
-      // Lo storico NOVA viene ripristinato, ma i vecchi movimenti diventano history-only per evitare doppie applicazioni.
-      // In questo modo eventuali correzioni manuali fatte al Master da PC non vengono ignorate da NOVA_DATI.
-      next.master={...createEmptyDb().master,...(next.master||{}),rows:parsed.rows,excelRows:parsed.rows,filename:file.name,sheetName:parsed.sheetName,importedAt:nowIso(),headerRow:parsed.headerRow,columns:parsed.columns,mode:parsed.mode,source:'NOVA_REIMPORT_VISIBLE_MASTER'};
-    }else if(restoreHistory&&legacy?.db){
-      next=migrateLegacyDb(legacy.db,{historyOnly:true});
-      next.master={...next.master,rows:parsed.rows,excelRows:parsed.rows,filename:file.name,sheetName:parsed.sheetName,importedAt:nowIso(),headerRow:parsed.headerRow,columns:parsed.columns,mode:parsed.mode,source:'REMOTO_XLSX_MIGRATION'};
-      this.#reconcileMigratedReceipts(next);
-    }else{
-      next=createEmptyDb();
-      next.master={...next.master,rows:parsed.rows,excelRows:parsed.rows,filename:file.name,sheetName:parsed.sheetName,importedAt:nowIso(),headerRow:parsed.headerRow,columns:parsed.columns,mode:parsed.mode,source:'FRESH_IMPORT'};
-    }
-    next.master.importedBy=this.domain?.audit?.auth?.user||'';next.master.siteId=this.store.siteId;
+    const bytes=await file.arrayBuffer(),wb=X().read(bytes,{type:'array',cellDates:true,cellStyles:true}),parsed=parseMaster(wb);
+    if(!parsed.catalogRowCount)throw new Error('Il foglio MAGAZZINO non contiene articoli validi. Nessun dato è stato modificato.');
+    // DEMO: MAGAZZINO è l'unica fonte. APP_DATI, NOVA_DATI e i fogli di ricerca non vengono letti.
+    // Il database operativo riparte vuoto; le funzionalità di storico per i nuovi test restano attive.
+    const next=createEmptyDb(this.store.siteId);
+    next.master={...next.master,rows:parsed.rows,excelRows:parsed.rows,filename:file.name,sheetName:parsed.sheetName,importedAt:nowIso(),headerRow:parsed.headerRow,columns:parsed.columns,mode:parsed.mode,source:'DEMO_MAGAZZINO_ONLY',catalogRowCount:parsed.catalogRowCount,zeroRowCount:parsed.zeroRowCount};
+    next.master.importedBy=this.domain?.audit?.auth?.user||'';
     next.settings={...(next.settings||{}),lastExportAt:null,lastExportName:''};
     const previousDb=this.store.snapshot(),previousFile=await idbGet(this.masterKey());
     let replaced=false,fileSaved=false;
     try{
-      replaced=true;
-      this.store.replace(next,'master:import');
+      replaced=true;this.store.replace(next,'master:import');
       await idbPut(this.masterKey(),bytes);fileSaved=true;
-      const importedAudit=this.domain.audit.record('MASTER_IMPORTED','MASTER',file.name,null,{rows:parsed.rows.length,source:next.master.source});
+      const importedAudit=this.domain.audit.record('MASTER_IMPORTED','MASTER',file.name,null,{rows:parsed.rows.length,catalogRows:parsed.catalogRowCount,zeroRows:parsed.zeroRowCount,source:next.master.source});
       this.store.db.settings.lastExportAt=importedAudit.at;
       this.store.save('master:import:baseline');
-      return{rows:parsed.rows.length,source:next.master.source,filename:file.name,restored:!!(nova||legacy)}
+      return {rows:parsed.rows.length,catalogRows:parsed.catalogRowCount,zeroRows:parsed.zeroRowCount,source:next.master.source,filename:file.name,ignoredSheets:wb.SheetNames.filter(n=>n!==parsed.sheetName),restored:false}
     }catch(e){
       let rollbackIssue='';
       if(replaced){
@@ -18993,7 +19009,7 @@ class ExcelService{
   }
   async export(){
     const out=await this.buildExportBytes();
-    const stamp=new Date().toISOString().slice(0,16).replace(/[:T]/g,'-'),stem=(this.store.db.master.filename||'MAGAZZINO').replace(/\.xlsx$/i,'').replace(/_(?:NOVA|SOMA)_.*/i,''),name=`${stem}_SOMA_R31_94_${stamp}.xlsx`;
+    const stamp=new Date().toISOString().slice(0,16).replace(/[:T]/g,'-'),stem=(this.store.db.master.filename||'MAGAZZINO').replace(/\.xlsx$/i,'').replace(/_(?:NOVA|SOMA)_.*/i,''),name=`${stem}_SOMA_R31_97_${stamp}.xlsx`;
     this.#download(out,name);
     const exportedAudit=this.domain.audit.record('MASTER_EXPORTED','MASTER',name,null,{name,validation:this.lastValidation,generatedSheets:this.lastGeneratedSheets});this.store.db.settings.lastExportAt=exportedAudit.at;this.store.db.settings.lastExportName=name;this.store.save('master:export:baseline');return name
   }
@@ -19633,7 +19649,7 @@ class UI{
 
   master(){
     if(!this.require('MASTER_VIEW'))return'';const m=this.store.db.master,ready=this.masterReady(),hasLegacy=this.excel.legacyAvailable(),site=this.auth.site(),dirty=this.excel.dirtyCount(),desktop=document.body.classList.contains('desktop-mode'),canRemove=desktop&&ready&&this.auth.can('MASTER_IMPORT');
-    if(!ready)return `<section class="master-page-clean"><section class="master-empty-panel">${phIcon('microsoft-excel-logo')}<h2>Master non caricato</h2><p>Per ${esc(site.name)} non è ancora presente un file Excel.</p>${this.auth.can('MASTER_IMPORT')?`<button class="primary" data-action="master-import">${phIcon('upload-simple')} IMPORTA MASTER EXCEL</button>`:''}${!ready&&hasLegacy&&site.id===CONFIG.defaultSiteId&&this.auth.can('MASTER_IMPORT')?`<button class="soft" data-action="legacy-migrate">MIGRA DATI REMOTO</button>`:''}</section></section>`;
+    if(!ready)return `<section class="master-page-clean"><section class="master-empty-panel">${phIcon('microsoft-excel-logo')}<h2>Master non caricato</h2><p>Per ${esc(site.name)} non è ancora presente un file Excel.</p>${this.auth.can('MASTER_IMPORT')?`<button class="primary" data-action="master-import">${phIcon('upload-simple')} IMPORTA MASTER EXCEL</button>`:''}</section></section>`;
     const rows=this.domain.stock.positive(),sizes=[...new Set(rows.map(r=>r.size).filter(Boolean))].sort((a,b)=>a.localeCompare(b,'it',{numeric:true})),canQuick=this.auth.can('REQUEST_CREATE');
     return `<section class="master-page-clean ${this.masterRequestMode?'master-request-active':''}"><section class="master-summary-card master-summary-card-clean"><div class="master-file-identity"><span>${phIcon('microsoft-excel-logo')}</span><div><small>FILE MASTER</small><b>${esc(m.filename)}</b><p>${rows.length} giacenze attive · Foglio ${esc(m.sheetName||'MAGAZZINO')}</p></div></div><div class="master-summary-meta"><div><small>CARICATO</small><b>${fmtDateTime(m.importedAt)}</b></div><div><small>OPERATORE</small><b>${esc(m.importedBy||'—')}</b></div><div><small>MODIFICHE DA ESPORTARE</small><b class="${dirty?'warn-text':''}">${dirty}</b></div></div><div class="master-summary-actions">${canRemove?`<button class="master-remove-trigger master-remove-trigger-summary" data-action="master-remove-open">${phRegular('trash')} RIMUOVI MASTER</button>`:''}${this.auth.can('MASTER_IMPORT')?`<button class="soft" data-action="master-import">${phIcon('arrows-clockwise')} AGGIORNA MASTER</button>`:''}${this.auth.can('MASTER_EXPORT')?`<button class="success" data-action="master-export">${phIcon('microsoft-excel-logo')} ESPORTA AGGIORNATO</button>`:''}</div></section><section class="master-workspace master-workspace-clean"><div class="master-toolbar"><div class="master-search-box">${phIcon('magnifying-glass')}<input id="masterQuery" autocomplete="off" placeholder="${this.masterRequestMode?'Cerca articolo, taglia o descrizione…':'Ricerca libera: articolo, taglia, stato, descrizione…'}" value="${esc(this.masterView.query)}"></div><div class="master-filter-grid"><label>Articolo<input id="masterFilterArticle" autocomplete="off" value="${esc(this.masterView.article)}" placeholder="Es. SZ242"></label><label>Taglia<select id="masterFilterSize"><option value="">TUTTE</option>${sizes.map(x=>`<option value="${esc(x)}" ${this.masterView.size===x?'selected':''}>${esc(x)}</option>`).join('')}</select></label><label>POSIZIONE - FILA - SCAFFALE<input id="masterFilterLocation" autocomplete="off" value="${esc(this.masterView.location)}" placeholder="Es. STANZONE CDS FERRI"></label><label>Bancale<input id="masterFilterPallet" autocomplete="off" value="${esc(this.masterView.pallet)}" placeholder="Es. DISMESSI 19"></label><label class="master-filter-sort">Ordina<select id="masterSort"><option value="article" ${this.masterView.sort==='article'?'selected':''}>Articolo</option><option value="qty_desc" ${this.masterView.sort==='qty_desc'?'selected':''}>Quantità ↓</option><option value="qty_asc" ${this.masterView.sort==='qty_asc'?'selected':''}>Quantità ↑</option><option value="location" ${this.masterView.sort==='location'?'selected':''}>Posizione - Fila - Scaffale</option><option value="pallet" ${this.masterView.sort==='pallet'?'selected':''}>Bancale</option></select></label></div><div class="master-toolbar-foot"><span>${phIcon('funnel-simple')} ${this.masterRequestMode?'Ricerca per articolo e taglia · disponibilità aggregata':'Tutti i filtri sono combinabili'}</span><div class="master-toolbar-actions"><button data-action="master-filter-reset">AZZERA FILTRI</button>${canQuick?`<button class="master-request-toggle ${this.masterRequestMode?'active':''}" data-action="master-request-toggle">${phRegular(this.masterRequestMode?'x':'check-square')}<span>${this.masterRequestMode?'ESCI DA RICHIESTA':'CREA RICHIESTA'}</span></button>`:''}</div></div>${canQuick&&this.masterRequestMode?`<div class="master-request-mode-banner">${phRegular('clipboard-text')}<div><b>Modalità richiesta rapida</b><small>Una riga per articolo + taglia: vedi subito il totale disponibile e la composizione per stato. Le posizioni restano consultabili solo quando servono.</small></div></div>`:''}</div><div class="master-permission-note">${phIcon(this.auth.can('MASTER_EDIT_STOCK')?'shield-check':'eye')}<span>${this.auth.can('MASTER_EDIT_STOCK')?'Puoi modificare le quantità. SOMA registra solo la variazione e preserva le formule Excel originali.':'Visualizzazione in sola lettura per il tuo ruolo.'}</span></div><div id="masterViewerMeta" class="master-viewer-meta"></div><div id="masterViewerBody"></div></section>${canQuick?`<div id="masterRequestDock"></div><dialog id="masterRequestDialog" class="dialog master-request-dialog" aria-labelledby="masterRequestDialogTitle"><div class="master-request-dialog-head"><div><small>RICHIESTA RAPIDA</small><h2 id="masterRequestDialogTitle">Rivedi richiesta</h2><p>Controlla articoli e cartoni prima dell'invio.</p></div><button type="button" data-action="master-request-review-close" aria-label="Chiudi">${phRegular('x')}</button></div><div id="masterRequestDialogBody" class="master-request-dialog-body"></div><div class="master-request-dialog-actions"><button class="soft" data-action="master-request-review-close">${phRegular('arrow-left')} TORNA ALLE GIACENZE</button><button class="primary master-request-send-dialog" data-action="master-request-send">${phRegular('paper-plane-tilt')} INVIA RICHIESTA</button></div></dialog>`:''}</section>`
   }
@@ -20907,15 +20923,20 @@ class UI{
   async importMaster(input){
     const file=input.files?.[0];input.value='';
     if(!file||this.excelImportBusy)return;
-    if(!/\.xls(?:x|m)$/i.test(file.name))throw new Error('Seleziona un file Excel .xlsx o .xlsm.');
+    if(!/\\.xls(?:x|m)$/i.test(file.name))throw new Error('Seleziona un file Excel .xlsx o .xlsm.');
     if(file.size===0)throw new Error('Il file Excel selezionato è vuoto.');
     if(!this.auth.can('MASTER_IMPORT'))throw new Error('Operatore non autorizzato all’importazione del Master.');
-    if(this.masterReady()&&this.excel.dirtyCount()&&!confirm(`Ci sono ${this.excel.dirtyCount()} modifiche non esportate. Importare comunque?`))return;
-    this.excelImportBusy=true;this.toast('Lettura e verifica del Master Excel in corso…');
+    const db=this.store.db,history={movimenti:db.ledger?.length||0,entrate:db.receipts?.length||0,richieste:db.requests?.length||0,scarichi:db.issues?.length||0,audit:db.audits?.length||0};
+    if(this.masterReady()||Object.values(history).some(Boolean)){
+      const summary=Object.entries(history).filter(([,n])=>n>0).map(([name,n])=>name+': '+n).join(', ')||'nessuna operazione';
+      if(!confirm('IMPORTAZIONE DEMO - SOLO MAGAZZINO\\n\\nIl nuovo Excel sostituirà il Master di questa sede e azzererà tutti gli storici della demo ('+summary+').\\n\\nI fogli APP_DATI, NOVA_DATI e GIACENZE_RICERCA_DATI saranno ignorati.\\n\\nSe vuoi conservare le operazioni attuali, esportale prima.\\n\\nConfermi il ripristino della demo?'))return;
+    }
+    this.excelImportBusy=true;this.toast('Lettura e verifica del foglio MAGAZZINO in corso…');
     try{
-      const r=await this.excel.importFile(file,{restoreHistory:true});
-      this.countDraft=this.loadCountSession();this.rectDraft=null;
-      this.toast(`${r.filename} importato · ${r.rows} righe.`);this.router.home()
+      const result=await this.excel.importFile(file);
+      this.clearCountSession();this.clearVoiceInventoryDraft();this.voiceInventoryOpen=false;this.rectDraft=null;
+      this.toast('Demo pulita · '+result.catalogRows+' righe MAGAZZINO · '+result.zeroRows+' righe senza giacenza. Storici precedenti non importati.');
+      this.router.home()
     }finally{this.excelImportBusy=false}
   }
   addDdtFiles(input){for(const f of input.files||[])this.ddtFiles.push(f);input.value='';this.renderView()}
@@ -20958,6 +20979,6 @@ try{globalThis.__NOVA_LEGACY_AVAILABLE=!!localStorage.getItem(CONFIG.legacyStora
 const switchSite=async siteId=>{await ui.selectSite(siteId);return auth.site()};
 globalThis.NOVA=Object.freeze({version:CONFIG.appVersion,schema:CONFIG.version,identityVersion:CONFIG.identityVersion,store,auth,router,domain,excel,requestDocs,ui,sounds,sites:SITES,operators:OPERATORS,roles:ROLE_DEFS,saveIdentityRegistry,capabilities:Object.freeze({operational:ALL_CAPS,master:MASTER_CAPS,administration:ADMIN_CAPS,globalAdmin:GLOBAL_ADMIN_CAPS}),identityValidation:IDENTITY_VALIDATION,switchSite});
 ui.render();</script>
-<!-- SOMA_BUILD:R31.96-20261008 -->
+<!-- SOMA_BUILD:R31.97-20261013 -->
 </body>
 </html>
