@@ -16,6 +16,13 @@ try{
   await page.goto('http://127.0.0.1:'+server.address().port+'/');
   await page.waitForFunction(()=>!!window.NOVA?.ui?.globalSearchEntries);
   const result=await page.evaluate(()=>{
+    const assert={
+      equal(a,b,m='equal'){if(!Object.is(a,b))throw Error(m+': '+String(a)+' !== '+String(b))},
+      strictEqual(a,b,m='strictEqual'){if(!Object.is(a,b))throw Error(m+': unexpected identity')},
+      notStrictEqual(a,b,m='notStrictEqual'){if(Object.is(a,b))throw Error(m+': references identical')},
+      ok(value,m='assert.ok'){if(!value)throw Error(m)},
+      match(value,pattern,m='assert.match'){if(!pattern.test(String(value)))throw Error(m+': '+String(value))}
+    };
     const {store,ui,domain,auth}=window.NOVA;
     const originalCan=auth.can.bind(auth),originalLina=auth.isLina.bind(auth);
     auth.can=cap=>cap==='STOCK_VIEW'||cap==='MOVE';
