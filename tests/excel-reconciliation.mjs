@@ -113,7 +113,7 @@ try{
 
   const integrity=await page.evaluate(async()=>{
     const db=window.NOVA.store.db;
-    const row=db.master.rows.find(r=>r.article==='CASACCA BIANCA/VERDE'&&r.state==='NUOVO');
+    const row=db.master.rows.find(r=>r.article==='CASACCABIANCA/VERDE'&&r.state==='NUOVO');
     row.quantity+=1;
     window.NOVA.domain.stock.invalidate();
     try{await window.NOVA.excel.buildExportBytes();return {blocked:false}}
