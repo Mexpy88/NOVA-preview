@@ -19009,7 +19009,7 @@ class ExcelService{
   }
   async export(){
     const out=await this.buildExportBytes();
-    const stamp=new Date().toISOString().slice(0,16).replace(/[:T]/g,'-'),stem=(this.store.db.master.filename||'MAGAZZINO').replace(/\.xlsx$/i,'').replace(/_(?:NOVA|SOMA)_.*/i,''),name=`${stem}_SOMA_R31_97_${stamp}.xlsx`;
+    const stamp=new Date().toISOString().slice(0,16).replace(/[:T]/g,'-'),stem=(this.store.db.master.filename||'MAGAZZINO').replace(/\.xlsx$/i,'').replace(/_(?:NOVA|SOMA)_.*/i,''),name=`${stem}_SOMA_R31_98_${stamp}.xlsx`;
     this.#download(out,name);
     const exportedAudit=this.domain.audit.record('MASTER_EXPORTED','MASTER',name,null,{name,validation:this.lastValidation,generatedSheets:this.lastGeneratedSheets});this.store.db.settings.lastExportAt=exportedAudit.at;this.store.db.settings.lastExportName=name;this.store.save('master:export:baseline');return name
   }
@@ -20923,13 +20923,13 @@ class UI{
   async importMaster(input){
     const file=input.files?.[0];input.value='';
     if(!file||this.excelImportBusy)return;
-    if(!/\\.xls(?:x|m)$/i.test(file.name))throw new Error('Seleziona un file Excel .xlsx o .xlsm.');
+    if(!/\.xls(?:x|m)$/i.test(file.name))throw new Error('Seleziona un file Excel .xlsx o .xlsm.');
     if(file.size===0)throw new Error('Il file Excel selezionato è vuoto.');
     if(!this.auth.can('MASTER_IMPORT'))throw new Error('Operatore non autorizzato all’importazione del Master.');
     const db=this.store.db,history={movimenti:db.ledger?.length||0,entrate:db.receipts?.length||0,richieste:db.requests?.length||0,scarichi:db.issues?.length||0,audit:db.audits?.length||0};
     if(this.masterReady()||Object.values(history).some(Boolean)){
       const summary=Object.entries(history).filter(([,n])=>n>0).map(([name,n])=>name+': '+n).join(', ')||'nessuna operazione';
-      if(!confirm('IMPORTAZIONE DEMO - SOLO MAGAZZINO\\n\\nIl nuovo Excel sostituirà il Master di questa sede e azzererà tutti gli storici della demo ('+summary+').\\n\\nI fogli APP_DATI, NOVA_DATI e GIACENZE_RICERCA_DATI saranno ignorati.\\n\\nSe vuoi conservare le operazioni attuali, esportale prima.\\n\\nConfermi il ripristino della demo?'))return;
+      if(!confirm('IMPORTAZIONE DEMO - SOLO MAGAZZINO\n\nIl nuovo Excel sostituirà il Master di questa sede e azzererà tutti gli storici della demo ('+summary+').\n\nI fogli APP_DATI, NOVA_DATI e GIACENZE_RICERCA_DATI saranno ignorati.\n\nSe vuoi conservare le operazioni attuali, esportale prima.\n\nConfermi il ripristino della demo?'))return;
     }
     this.excelImportBusy=true;this.toast('Lettura e verifica del foglio MAGAZZINO in corso…');
     try{
@@ -20979,6 +20979,6 @@ try{globalThis.__NOVA_LEGACY_AVAILABLE=!!localStorage.getItem(CONFIG.legacyStora
 const switchSite=async siteId=>{await ui.selectSite(siteId);return auth.site()};
 globalThis.NOVA=Object.freeze({version:CONFIG.appVersion,schema:CONFIG.version,identityVersion:CONFIG.identityVersion,store,auth,router,domain,excel,requestDocs,ui,sounds,sites:SITES,operators:OPERATORS,roles:ROLE_DEFS,saveIdentityRegistry,capabilities:Object.freeze({operational:ALL_CAPS,master:MASTER_CAPS,administration:ADMIN_CAPS,globalAdmin:GLOBAL_ADMIN_CAPS}),identityValidation:IDENTITY_VALIDATION,switchSite});
 ui.render();</script>
-<!-- SOMA_BUILD:R31.97-20261013 -->
+<!-- SOMA_BUILD:R31.98-20261013 -->
 </body>
 </html>
