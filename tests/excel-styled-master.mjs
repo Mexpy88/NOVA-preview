@@ -115,7 +115,7 @@ try{
   const inventory=transactionBook.getWorksheet('MAGAZZINO');
   const numberValue=cell=>{
     const value=cell.value;
-    return typeof value==='object'&&value!==null?Number(value.result):Number(value||0)
+    return typeof value==='object'&&value!==null?Number(value.result??0):Number(value||0)
   };
   const catalogueRows=[];
   inventory.eachRow({includeEmpty:false},(r,number)=>{
