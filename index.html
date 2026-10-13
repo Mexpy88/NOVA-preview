@@ -19114,6 +19114,142 @@ class ExcelService{
   async #applyFreezePanes(zip,pkg,errors,fixes){
     for(const [sheetName,rowsRaw] of this.exportFreezeRows||[]){const rows=Math.max(1,Number(rowsRaw)||1),info=pkg.sheets.get(sheetName);if(!info)continue;const sf=zip.file(info.path);if(!sf)continue;const doc=this.#parseXml(await sf.async('string'),info.path,errors),root=doc.documentElement,ns=root.namespaceURI;let views=[...root.children].find(n=>n.localName==='sheetViews');if(!views){views=doc.createElementNS(ns,'sheetViews');const before=[...root.children].find(n=>['sheetFormatPr','cols','sheetData'].includes(n.localName));before?root.insertBefore(views,before):root.appendChild(views)}let view=[...views.children].find(n=>n.localName==='sheetView');if(!view){view=doc.createElementNS(ns,'sheetView');view.setAttribute('workbookViewId','0');views.appendChild(view)}[...view.children].filter(n=>n.localName==='pane').forEach(n=>n.remove());const pane=doc.createElementNS(ns,'pane');pane.setAttribute('ySplit',String(rows));pane.setAttribute('topLeftCell',`A${rows+1}`);pane.setAttribute('activePane','bottomLeft');pane.setAttribute('state','frozen');const selection=[...view.children].find(n=>n.localName==='selection');selection?view.insertBefore(pane,selection):view.appendChild(pane);zip.file(info.path,this.#xmlString(doc));fixes.push(`${sheetName}: intestazione bloccata (${rows} righe)`)}
   }
+  async #preserveMagazineFormat(zip,pkg,originalBytes,errors,fixes){
+    // R31.101: keep the original physical Master as source of truth for formatting.
+    // No-op: preserve complete worksheet XML (cell caches, print settings, widths,
+    // annotations, hidden rows, protection) while rebasing OOXML style/string ids.
+    // With movements: preserve worksheet presentation and unchanged formula caches.
+    const sourceZip=await globalThis.JSZip.loadAsync(originalBytes);
+    const sourcePkg=await this.#packageSheets(sourceZip,errors);
+    const original=sourcePkg.sheets.get('MAGAZZINO'),output=pkg.sheets.get('MAGAZZINO');
+    if(!original||!output)throw new Error('Export Excel bloccato: MAGAZZINO mancante durante il ripristino dello stile.');
+    const sourceSheetFile=sourceZip.file(original.path),outSheetFile=zip.file(output.path);
+    if(!sourceSheetFile||!outSheetFile)throw new Error('Export Excel bloccato: foglio sorgente non leggibile.');
+    const sdoc=this.#parseXml(await sourceSheetFile.async('string'),original.path,errors);
+    const odoc=this.#parseXml(await outSheetFile.async('string'),output.path,errors);
+    const unchanged=this.#activeLedgerDeltas().size===0;
+    const findChild=(root,name)=>[...root.children].find(n=>n.localName===name);
+    const sourceRoot=sdoc.documentElement,outputRoot=odoc.documentElement;
+    const cloneTo=(doc,node)=>doc.importNode?doc.importNode(node,true):node.cloneNode(true);
+    // Preserve original printer settings binary and link, independent of worksheet index.
+    const sourceRelsPath=this.#relsPath(original.path),originalRel=sourceZip.file(sourceRelsPath);
+    const sheetRelsPath=this.#relsPath(output.path),destRel=zip.file(sheetRelsPath);
+    const relDoc=this.#ensureRelationshipsDoc(destRel?await destRel.async('string'):'');
+    const relRoot=relDoc.documentElement,relNs=relRoot.namespaceURI;
+    if(originalRel){
+      const oldRelDoc=this.#parseXml(await originalRel.async('string'),sourceRelsPath,errors);
+      const printRel=[...oldRelDoc.getElementsByTagNameNS('*','Relationship')].find(r=>(r.getAttribute('Type')||'').endsWith('/printerSettings'));
+      if(printRel){
+        const srcPrinterPath=this.#xmlPath(original.path,printRel.getAttribute('Target'));
+        const printerFile=sourceZip.file(srcPrinterPath);
+        if(!printerFile)throw new Error('Export Excel: stampante originale non trovata nel pacchetto.');
+        const destinationPrinter='xl/printerSettings/somaMasterPrinter.bin';
+        zip.file(destinationPrinter,await printerFile.async('uint8array'));
+        [...relRoot.getElementsByTagNameNS('*','Relationship')].filter(r=>(r.getAttribute('Type')||'').endsWith('/printerSettings')).forEach(r=>r.remove());
+        const rel=relDoc.createElementNS(relNs,'Relationship');
+        rel.setAttribute('Id','rIdSomaMasterPrinter');rel.setAttribute('Type',printRel.getAttribute('Type'));rel.setAttribute('Target','../printerSettings/somaMasterPrinter.bin');relRoot.appendChild(rel);
+        const ctFile=zip.file('[Content_Types].xml');
+        const ctDoc=this.#parseXml(await ctFile.async('string'),'[Content_Types].xml',errors);
+        const ctRoot=ctDoc.documentElement,ctNs=ctRoot.namespaceURI;
+        if(![...ctDoc.getElementsByTagNameNS('*','Default')].some(n=>n.getAttribute('Extension')==='bin')){
+          const def=ctDoc.createElementNS(ctNs,'Default');def.setAttribute('Extension','bin');
+          def.setAttribute('ContentType','application/vnd.openxmlformats-officedocument.spreadsheetml.printerSettings');ctRoot.insertBefore(def,ctRoot.firstChild)
+        }
+        zip.file('[Content_Types].xml',this.#xmlString(ctDoc));
+        const originalSetup=findChild(sourceRoot,'pageSetup');
+        if(originalSetup)originalSetup.setAttributeNS('http://schemas.openxmlformats.org/officeDocument/2006/relationships','r:id','rIdSomaMasterPrinter');
+      }
+    }
+    const presentation=['sheetPr','sheetFormatPr','cols','sheetProtection','phoneticPr','printOptions','pageMargins','pageSetup','headerFooter'];
+    const sheetOrder=['sheetPr','dimension','sheetViews','sheetFormatPr','cols','sheetData','sheetCalcPr','sheetProtection','protectedRanges','scenarios','autoFilter','sortState','dataConsolidate','customSheetViews','mergeCells','phoneticPr','conditionalFormatting','dataValidations','hyperlinks','printOptions','pageMargins','pageSetup','headerFooter','rowBreaks','colBreaks','customProperties','cellWatches','ignoredErrors','smartTags','drawing','legacyDrawing','legacyDrawingHF','picture','oleObjects','controls','webPublishItems','tableParts','extLst'];
+    const order=n=>{const i=sheetOrder.indexOf(n.localName);return i<0?999:i};
+    for(const name of presentation){
+      const src=findChild(sourceRoot,name),previous=findChild(outputRoot,name);
+      if(previous)outputRoot.removeChild(previous);
+      if(!src)continue;
+      const fresh=cloneTo(odoc,src),later=[...outputRoot.children].find(n=>order(n)>order(fresh));
+      if(later)outputRoot.insertBefore(fresh,later);else outputRoot.appendChild(fresh)
+    }
+    if(unchanged){
+      // The no-op case must be lossless. Rebase original shared-string entries
+      // so other new SOMA sheets keep their own shared-string indices unchanged.
+      const sharedPath='xl/sharedStrings.xml',sourceShared=sourceZip.file(sharedPath),outShared=zip.file(sharedPath);
+      if(sourceShared){
+        if(!outShared)throw new Error('Export Excel bloccato: dizionario stringhe originale non ricostruibile.');
+        const oldStrings=this.#parseXml(await sourceShared.async('string'),sharedPath,errors),newStrings=this.#parseXml(await outShared.async('string'),sharedPath,errors),sroot=oldStrings.documentElement,droot=newStrings.documentElement;
+        const shift=[...droot.children].filter(n=>n.localName==='si').length;
+        for(const entry of [...sroot.children].filter(n=>n.localName==='si'))droot.appendChild(cloneTo(newStrings,entry));
+        const unique=[...droot.children].filter(n=>n.localName==='si').length;
+        droot.setAttribute('uniqueCount',String(unique));
+        droot.setAttribute('count',String(Number(droot.getAttribute('count')||0)+Number(sroot.getAttribute('count')||0)));
+        for(const cell of sdoc.getElementsByTagNameNS('*','c'))if(cell.getAttribute('t')==='s'){
+          const v=findChild(cell,'v');if(v&&v.textContent!==''&&Number.isSafeInteger(Number(v.textContent)))v.textContent=String(shift+Number(v.textContent))
+        }
+        zip.file(sharedPath,this.#xmlString(newStrings))
+      }
+      // Copy original styles without replacing new SOMA styles: append each
+      // primitive style family and remap all dependent indexes.
+      const stylePath='xl/styles.xml',sourceStyle=sourceZip.file(stylePath),outStyle=zip.file(stylePath);
+      if(sourceStyle&&outStyle){
+        const orig=this.#parseXml(await sourceStyle.async('string'),stylePath,errors),dest=this.#parseXml(await outStyle.async('string'),stylePath,errors),sr=orig.documentElement,dr=dest.documentElement;
+        const families=['numFmts','fonts','fills','borders','cellStyleXfs','cellXfs','cellStyles','dxfs','tableStyles','colors','extLst'];
+        const getFamily=(root,name)=>findChild(root,name);
+        const ensure=name=>{let e=getFamily(dr,name);if(e)return e;e=dest.createElementNS(dr.namespaceURI,name);e.setAttribute('count','0');const next=[...dr.children].find(n=>families.indexOf(n.localName)>families.indexOf(name));next?dr.insertBefore(e,next):dr.appendChild(e);return e};
+        const shifts={};for(const name of ['fonts','fills','borders','cellStyleXfs','cellXfs','dxfs']){const family=ensure(name);shifts[name]=family.children.length}
+        const numDest=ensure('numFmts'),numSource=getFamily(sr,'numFmts'),numMap=new Map();
+        let nextNum=Math.max(163,...[...numDest.children].map(x=>Number(x.getAttribute('numFmtId')||0)))+1;
+        for(const node of numSource?[...numSource.children]:[]){const v=Number(node.getAttribute('numFmtId'));if(!Number.isFinite(v))continue;const newId=nextNum++;numMap.set(v,newId);const copy=cloneTo(dest,node);copy.setAttribute('numFmtId',String(newId));numDest.appendChild(copy)}
+        numDest.setAttribute('count',String(numDest.children.length));
+        const remapXf=node=>{
+          for(const [attr,family] of [['fontId','fonts'],['fillId','fills'],['borderId','borders']]){
+            if(node.hasAttribute(attr))node.setAttribute(attr,String(Number(node.getAttribute(attr))+shifts[family]))
+          }
+          if(node.hasAttribute('numFmtId')){const old=Number(node.getAttribute('numFmtId'));if(numMap.has(old))node.setAttribute('numFmtId',String(numMap.get(old)))}
+          if(node.hasAttribute('xfId'))node.setAttribute('xfId',String(Number(node.getAttribute('xfId'))+shifts.cellStyleXfs))
+        };
+        for(const name of ['fonts','fills','borders','cellStyleXfs','cellXfs','dxfs']){
+          const src=getFamily(sr,name);if(!src)continue;const dst=ensure(name);
+          for(const node of [...src.children]){
+            const fresh=cloneTo(dest,node);
+            if(name==='cellXfs'||name==='cellStyleXfs')remapXf(fresh);
+            dst.appendChild(fresh)
+          }
+          dst.setAttribute('count',String(dst.children.length))
+        }
+        const remapStyle=el=>{if(el.hasAttribute('s'))el.setAttribute('s',String(Number(el.getAttribute('s'))+shifts.cellXfs));if(el.hasAttribute('style'))el.setAttribute('style',String(Number(el.getAttribute('style'))+shifts.cellXfs))};
+        for(const c of sdoc.getElementsByTagNameNS('*','c'))remapStyle(c);
+        for(const row of sdoc.getElementsByTagNameNS('*','row'))if(row.hasAttribute('s'))remapStyle(row);
+        for(const col of sdoc.getElementsByTagNameNS('*','col'))if(col.hasAttribute('style'))remapStyle(col);
+        for(const cf of sdoc.getElementsByTagNameNS('*','cfRule'))if(cf.hasAttribute('dxfId'))cf.setAttribute('dxfId',String(Number(cf.getAttribute('dxfId'))+shifts.dxfs));
+        zip.file(stylePath,this.#xmlString(dest))
+      }
+      // Restore original physical cells, formulas, cached zeros, notes,
+      // dimensions, print settings and outline metadata, not just their values.
+      const originalTableParts=findChild(sourceRoot,'tableParts'),restoredParts=findChild(outputRoot,'tableParts');
+      if(originalTableParts&&restoredParts){
+        const tables=[...restoredParts.getElementsByTagNameNS('*','tablePart')].map(t=>t.getAttributeNS('http://schemas.openxmlformats.org/officeDocument/2006/relationships','id')||t.getAttribute('r:id'));
+        const origParts=[...originalTableParts.getElementsByTagNameNS('*','tablePart')];
+        if(tables.length!==origParts.length)throw new Error('Export Excel bloccato: numero di tabelle originali non coerente.');
+        origParts.forEach((p,i)=>p.setAttributeNS('http://schemas.openxmlformats.org/officeDocument/2006/relationships','r:id',tables[i]));
+      }
+      zip.file(output.path,this.#xmlString(sdoc));
+      fixes.push('MAGAZZINO: celle, formule, cache e formattazione originali conservate senza movimenti')
+    }else{
+      // With recorded movements, keep the newly reconciled stock cells, but
+      // restore the original layout, worksheet properties and printer settings.
+      const srcCells=new Map([...sdoc.getElementsByTagNameNS('*','c')].map(c=>[c.getAttribute('r'),c]));
+      for(const c of odoc.getElementsByTagNameNS('*','c')){
+        const orig=srcCells.get(c.getAttribute('r'));if(!orig)continue;
+        const originalFormula=findChild(orig,'f'),exportedFormula=findChild(c,'f');
+        if(!originalFormula||!exportedFormula||originalFormula.textContent!==exportedFormula.textContent)continue;
+        const cached=findChild(orig,'v'),current=findChild(c,'v');
+        if(cached&&!current)c.appendChild(cloneTo(odoc,cached))
+      }
+      zip.file(output.path,this.#xmlString(odoc));
+      fixes.push('MAGAZZINO: dimensioni, larghezze e impostazioni stampa originali preservate')
+    }
+    zip.file(sheetRelsPath,this.#xmlString(relDoc));
+  }
   async #normalizeAndValidatePackage(raw,originalBytes=null){
     const zip=await globalThis.JSZip.loadAsync(raw),errors=[],fixes=[],pkg=await this.#packageSheets(zip,errors);if(!pkg.wbDoc)throw new Error('Export Excel non valido: workbook non disponibile.');
     await this.#restoreBlueprintTables(zip,pkg,errors,fixes);await this.#applyFreezePanes(zip,pkg,errors,fixes);
