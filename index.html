@@ -18854,6 +18854,15 @@ function snapshotValue(row,c){return row?.cells?.[c]?.v}
 function setSnapshotValue(row,c,value,templateCell){const old=row.cells[c]||{},cell={...old,v:value,t:typeof value==='number'?'n':'s'};delete cell.f;delete cell.F;delete cell.D;delete cell.w;if(cell.s==null&&templateCell?.s!=null)cell.s=clone(templateCell.s);if(cell.z==null&&templateCell?.z!=null)cell.z=templateCell.z;row.cells[c]=cell}
 function appendDeltaToSnapshotCell(row,c,delta,templateCell){delta=Number(delta)||0;if(!delta)return;const old=row.cells[c]||{},oldValue=qCellNumber(old),cell={...old},hadFormula=old.f!=null&&String(old.f).trim(),hadValue=old.v!=null&&old.v!=='';if(cell.s==null&&templateCell?.s!=null)cell.s=clone(templateCell.s);if(cell.z==null&&templateCell?.z!=null)cell.z=templateCell.z;const base=hadFormula?String(old.f).trim().replace(/^=/,''):hadValue?String(oldValue):'';cell.f=base?`${base}${signedTerm(delta)}`:delta>0?String(delta):`0${signedTerm(delta)}`;cell.v=oldValue+delta;cell.t='n';delete cell.F;delete cell.D;delete cell.w;row.cells[c]=cell}
 function rowIdentityFromSnapshot(row,cols){const get=c=>Number.isInteger(c)&&c>=0?snapshotValue(row,c):'';const article=normalizeArticle(get(cols.article));if(!article)return null;const size=cols.size>=0?norm(get(cols.size)):'',pallet=cols.pallet>=0?norm(get(cols.pallet)):'';let location='';if(cols.location>=0)location=norm(get(cols.location));else location=[cols.fila>=0?norm(get(cols.fila)):'',cols.scaffale>=0?norm(get(cols.scaffale)):''].filter(Boolean).join('/');return{article,size,location,pallet,key:identity({article,size,location,pallet})}}
+function magazineHeaderLastCol(ws,headerRow=0){
+  const XLSX=X(),used=XLSX.utils.decode_range(ws['!ref']||'A1');
+  let last=0;
+  for(let c=0;c<=used.e.c;c++){
+    const cell=ws[XLSX.utils.encode_cell({r:headerRow,c})];
+    if(cell?.v!=null&&String(cell.v).trim())last=c
+  }
+  return last
+}
 function magazinePhysicalDataEnd(ws,cols,headerRow=0){
   // The workbook used-range can extend beyond the structured stock table (notes, footer, styles).
   // Find the last physical article row instead of trusting missing/stale import metadata.
@@ -19330,7 +19339,7 @@ class ExcelService{
     const meta=this.store.db.master,current=this.domain.stock.positive(),sheetName=meta.sheetName||'MAGAZZINO';let ws=wb.Sheets[sheetName];
     if(!ws||!meta.columns||meta.columns.article==null){this.#replaceSimpleMagazine(wb,sheetName,current);this.lastIntegrity={ok:true,mode:'fallback',warning:'Master senza struttura riconosciuta'};return}
     const XLSX=X(),cols=meta.columns,mode=meta.mode||'wide';if(mode!=='wide'){this.#updateMagazineLong(wb,ws,meta,current,sheetName);return}
-    const bp=this.tableBlueprints.find(x=>x.sheetName===sheetName),sheetRange=XLSX.utils.decode_range(ws['!ref']||'A1'),physicalEnd=magazinePhysicalDataEnd(ws,cols,meta.headerRow||0),tableRange=bp?.ref?XLSX.utils.decode_range(bp.ref):{s:{r:meta.headerRow||0,c:0},e:{r:physicalEnd,c:Math.max(...Object.values(cols).filter(x=>Number.isInteger(x)&&x>=0),0)}},dataStart=(meta.headerRow||0)+1,dataEnd=Math.max(physicalEnd,tableRange.e.r),tableMaxCol=Math.max(tableRange.e.c,...Object.values(cols).filter(x=>Number.isInteger(x)&&x>=0)),sheetMaxCol=Math.max(sheetRange.e.c,tableMaxCol),sheetMaxRow=Math.max(sheetRange.e.r,dataEnd),headerSnap=snapshotRow(ws,meta.headerRow||0,tableMaxCol),dataRows=[];
+    const bp=this.tableBlueprints.find(x=>x.sheetName===sheetName),sheetRange=XLSX.utils.decode_range(ws['!ref']||'A1'),physicalEnd=magazinePhysicalDataEnd(ws,cols,meta.headerRow||0),tableRange=bp?.ref?XLSX.utils.decode_range(bp.ref):{s:{r:meta.headerRow||0,c:0},e:{r:physicalEnd,c:Math.max(magazineHeaderLastCol(ws,meta.headerRow||0),...Object.values(cols).filter(x=>Number.isInteger(x)&&x>=0),0)}},dataStart=(meta.headerRow||0)+1,dataEnd=Math.max(physicalEnd,tableRange.e.r),tableMaxCol=Math.max(tableRange.e.c,...Object.values(cols).filter(x=>Number.isInteger(x)&&x>=0)),sheetMaxCol=Math.max(sheetRange.e.c,tableMaxCol),sheetMaxRow=Math.max(sheetRange.e.r,dataEnd),headerSnap=snapshotRow(ws,meta.headerRow||0,tableMaxCol),dataRows=[];
     for(let r=dataStart;r<=dataEnd;r++)dataRows.push(snapshotRow(ws,r,sheetMaxCol));
     const suffixRows=[];for(let r=dataEnd+1;r<=sheetMaxRow;r++)suffixRows.push(snapshotRow(ws,r,sheetMaxCol));
     const groups=new Map();for(const row of dataRows){const id=rowIdentityFromSnapshot(row,cols);row._novaIdentity=id;if(!id)continue;if(!groups.has(id.key))groups.set(id.key,{id,rows:[]});groups.get(id.key).rows.push(row)}
